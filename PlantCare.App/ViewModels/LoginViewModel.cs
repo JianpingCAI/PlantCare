@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PlantCare.App.ViewModels.Base;
 
 namespace PlantCare.App.ViewModels;
 
-public partial class LoginViewModel : BaseViewModel
+public partial class LoginViewModel : ViewModelBase
 {
     [ObservableProperty]
     private string email;

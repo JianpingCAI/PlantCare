@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
+<views:ContentPageBase
     x:Class="PlantCare.App.Views.PlantOverviewView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     Title="Home"
     x:DataType="vm:PlantListOverviewViewModel">
@@ -72,4 +73,4 @@
             HorizontalOptions="Center"
             Text="Add New Plant" />
     </VerticalStackLayout>
-</ContentPage>
+</views:ContentPageBase>

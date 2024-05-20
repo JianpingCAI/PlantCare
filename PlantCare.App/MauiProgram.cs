@@ -5,6 +5,7 @@ using PlantCare.App.Services;
 using PlantCare.App.ViewModels;
 using PlantCare.App.Views;
 using CommunityToolkit.Maui;
+using PlantCare.Data;
 
 namespace PlantCare.App;
 
@@ -26,7 +27,7 @@ public static class MauiProgram
         // Configure services
 
         // Database context
-        string dbPath = Path.Combine(FileSystem.AppDataDirectory, "PlantCareApp.db");
+        string dbPath = Path.Combine(FileSystem.AppDataDirectory, Consts.DatabaseFileName);
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite($"Data Source={dbPath}"));
@@ -60,8 +61,8 @@ public static class MauiProgram
 
     private static void registerViewWithViewModels(MauiAppBuilder builder)
     {
-        builder.Services.AddTransient<PlantOverviewView>();
-        builder.Services.AddTransient<PlantListOverviewViewModel>();
+        builder.Services.AddSingleton<PlantOverviewView>();
+        builder.Services.AddSingleton<PlantListOverviewViewModel>();
 
         builder.Services.AddTransient<PlantDetailView>();
         builder.Services.AddTransient<PlantDetailViewModel>();

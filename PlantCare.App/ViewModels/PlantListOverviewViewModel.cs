@@ -7,8 +7,9 @@ using PlantCare.App.Services;
 
 using System.Collections.ObjectModel;
 using CommunityToolkit.Maui.Core.Extensions;
+using PlantCare.App.ViewModels.Base;
 
-public partial class PlantListOverviewViewModel : BaseViewModel
+public partial class PlantListOverviewViewModel : ViewModelBase
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
@@ -26,41 +27,40 @@ public partial class PlantListOverviewViewModel : BaseViewModel
     {
         _plantService = plantService;
         _navigationService = navigationService;
-        LoadPlants();
     }
 
-    [RelayCommand]
-    private async void LoadPlants()
-    {
-        if (IsBusy)
-            return;
+    //[RelayCommand]
+    //private async void LoadPlants()
+    //{
+    //    if (IsBusy)
+    //        return;
 
-        try
-        {
-            List<Plant> plants = await _plantService.GetAllPlantsAsync();
-            List<PlantListItemViewModel> viewModels = [];
-            if (plants.Count == 0)
-            {
-                viewModels.Add(MapToViewModel(new Plant
-                {
-                    Name = "Plant1",
-                    Species = "species",
-                    PhotoPath = "https://picsum.photos/200/300"
-                }));
-                viewModels.Add(MapToViewModel(new Plant
-                {
-                    Name = "Plant2",
-                    Species = "species",
-                    PhotoPath = "https://picsum.photos/200/300"
-                }));
-            }
-            Plants = viewModels.ToObservableCollection();
-        }
-        finally
-        {
-            IsBusy = false;
-        }
-    }
+    //    try
+    //    {
+    //        List<Plant> plants = await _plantService.GetAllPlantsAsync();
+    //        List<PlantListItemViewModel> viewModels = [];
+    //        if (plants.Count == 0)
+    //        {
+    //            viewModels.Add(MapToViewModel(new Plant
+    //            {
+    //                Name = "Plant1",
+    //                Species = "species",
+    //                PhotoPath = "https://picsum.photos/200/300"
+    //            }));
+    //            viewModels.Add(MapToViewModel(new Plant
+    //            {
+    //                Name = "Plant2",
+    //                Species = "species",
+    //                PhotoPath = "https://picsum.photos/200/300"
+    //            }));
+    //        }
+    //        Plants = viewModels.ToObservableCollection();
+    //    }
+    //    finally
+    //    {
+    //        IsBusy = false;
+    //    }
+    //}
 
     [RelayCommand]
     private async void SelectPlant()
@@ -82,6 +82,40 @@ public partial class PlantListOverviewViewModel : BaseViewModel
         {
             IsBusy = false;
         }
+    }
+
+    // Override
+    public override async Task LoadAsync()
+    {
+        if (Plants.Count == 0)
+        {
+            await Loading(GetPlants);
+        }
+    }
+
+    private async Task GetPlants()
+    {
+        List<Plant> plants = await _plantService.GetAllPlantsAsync();
+
+        List<PlantListItemViewModel> viewModels = [];
+        if (plants.Count == 0)
+        {
+            viewModels.Add(MapToViewModel(new Plant
+            {
+                Name = "Plant1",
+                Species = "species",
+                PhotoPath = "https://picsum.photos/200/300"
+            }));
+            viewModels.Add(MapToViewModel(new Plant
+            {
+                Name = "Plant2",
+                Species = "species",
+                PhotoPath = "https://picsum.photos/200/300"
+            }));
+        }
+
+        Plants.Clear();
+        Plants = viewModels.ToObservableCollection();
     }
 
     [RelayCommand]

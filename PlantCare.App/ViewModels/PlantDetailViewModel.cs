@@ -1,13 +1,17 @@
 ﻿namespace PlantCare.App.ViewModels;
 
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using PlantCare.App.Messaging;
 using PlantCare.App.Services;
+using PlantCare.App.ViewModels.Base;
 using PlantCare.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public partial class PlantDetailViewModel : BaseViewModel, IQueryAttributable
+public partial class PlantDetailViewModel : ViewModelBase, IQueryAttributable
 {
     private readonly IPlantService _plantService;
 
@@ -34,6 +38,14 @@ public partial class PlantDetailViewModel : BaseViewModel, IQueryAttributable
         _plantService = plantService;
     }
 
+    [RelayCommand]
+    private async Task ChangeStatus()
+    {
+        await Task.Delay(100);
+        WeakReferenceMessenger.Default.Send(new StatusChangedMessage(Id, Name, WateredStatus.Watered));
+    }
+
+    // Implement IQueryAttributable
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         var eventId = query["PlantId"].ToString();
@@ -41,8 +53,16 @@ public partial class PlantDetailViewModel : BaseViewModel, IQueryAttributable
         {
             Id = selectedId;
 
-            await GetPlantDetailAsync(selectedId);
+            //await GetPlantDetailAsync(selectedId);
         }
+    }
+
+    public override async Task LoadAsync()
+    {
+        await Loading(async () =>
+        {
+            await GetPlantDetailAsync(Id);
+        });
     }
 
     private async Task GetPlantDetailAsync(Guid plantId)

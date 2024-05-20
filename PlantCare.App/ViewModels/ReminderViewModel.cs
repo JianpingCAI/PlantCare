@@ -5,8 +5,9 @@ using CommunityToolkit.Mvvm.Input;
 using PlantCare.Data.Models;
 using PlantCare.App.Services;
 using System.Collections.ObjectModel;
+using PlantCare.App.ViewModels.Base;
 
-public partial class ReminderViewModel : BaseViewModel
+public partial class ReminderViewModel : ViewModelBase
 {
     private readonly IReminderService _reminderService;
 

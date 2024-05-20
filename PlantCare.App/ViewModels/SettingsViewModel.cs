@@ -5,8 +5,9 @@ using CommunityToolkit.Mvvm.Input;
 
 using System.Threading.Tasks;
 using PlantCare.App.Services;
+using PlantCare.App.ViewModels.Base;
 
-public partial class SettingsViewModel : BaseViewModel
+public partial class SettingsViewModel : ViewModelBase
 {
     private readonly ISettingsService _settingsService;
 
