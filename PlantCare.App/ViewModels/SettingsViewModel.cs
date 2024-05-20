@@ -1,0 +1,52 @@
+﻿namespace PlantCare.App.ViewModels;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
+using System.Threading.Tasks;
+using PlantCare.App.Services;
+
+public partial class SettingsViewModel : BaseViewModel
+{
+    private readonly ISettingsService _settingsService;
+
+    [ObservableProperty]
+    private bool enableNotifications;
+
+    [ObservableProperty]
+    private string theme;
+
+    public SettingsViewModel(ISettingsService settingsService)
+    {
+        _settingsService = settingsService;
+    }
+
+    [RelayCommand]
+    private async Task LoadSettingsAsync()
+    {
+        if (IsBusy) return;
+
+        try
+        {
+            EnableNotifications = await _settingsService.GetNotificationSettingAsync();
+            Theme = await _settingsService.GetThemeSettingAsync();
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task SaveSettingsAsync()
+    {
+        if (IsBusy) return;
+
+        try
+        {
+            await _settingsService.SetNotificationSettingAsync(EnableNotifications);
+            await _settingsService.SetThemeSettingAsync(Theme);
+        }
+        finally { IsBusy = false; }
+    }
+}

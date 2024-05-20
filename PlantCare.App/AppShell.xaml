@@ -3,13 +3,48 @@
     x:Class="PlantCare.App.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:PlantCare.App"
-    Shell.FlyoutBehavior="Disabled"
-    Title="PlantCare.App">
+    xmlns:views="clr-namespace:PlantCare.App.Views"
+    Title="PlantCare.App"
+    Shell.FlyoutBehavior="Disabled">
+
+    <!--<FlyoutItem>
+        <Tab>
+            <ShellContent
+                Title="Home1"
+                ContentTemplate="{DataTemplate views:HomeView}"
+                Route="overview" />
+            <ShellContent
+                Title="Home2"
+                ContentTemplate="{DataTemplate views:HomeView}"
+                Route="overview" />
+        </Tab>
+    </FlyoutItem>-->
+
+    <!--<Shell.TitleView>
+        <views:LogoView />
+    </Shell.TitleView>-->
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        ContentTemplate="{DataTemplate views:PlantOverviewView}"
+        Route="overview" />
 
+    <!--<TabBar>
+        <Tab Title="item1">
+            <ShellContent
+                Title="Home1"
+                ContentTemplate="{DataTemplate views:HomeView}"
+                Route="overview" />
+            <ShellContent
+                Title="Home2"
+                ContentTemplate="{DataTemplate views:HomeView}"
+                Route="overview" />
+        </Tab>
+        <Tab Title="item2">
+            <ShellContent
+                Title="Home3"
+                ContentTemplate="{DataTemplate views:HomeView}"
+                Route="overview" />
+        </Tab>
+    </TabBar>-->
 </Shell>

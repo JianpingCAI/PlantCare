@@ -15,8 +15,8 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlite("Filename=PlantCareApp.db");
-    }
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    optionsBuilder.UseSqlite("Filename=PlantCareApp.db");
+    //}
 }

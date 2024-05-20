@@ -2,11 +2,10 @@
 
 public class Plant
 {
-    public string Id { get; set; }
-    public string UserId { get; set; }
-    public string Species { get; set; }
-    public string Nickname { get; set; }
-    public string Age { get; set; }
-    public string LastWatered { get; set; }
-    public string PhotoPath { get; set; }
+    public Guid Id { get; set; }
+    public string? Name { get; set; }
+    public string? Species { get; set; } = string.Empty;
+    public int Age { get; set; }
+    public string? LastWatered { get; set; }
+    public string? PhotoPath { get; set; }
 }

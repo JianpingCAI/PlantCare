@@ -3,9 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34902.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlantCare.App", "PlantCare.App\PlantCare.App.csproj", "{0A4C56C9-88D3-48F4-98C8-F4C6D560FCAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlantCare.App", "PlantCare.App\PlantCare.App.csproj", "{0A4C56C9-88D3-48F4-98C8-F4C6D560FCAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlantCare.Data", "PlantCare.Data\PlantCare.Data.csproj", "{DE04DDB9-6B84-4CC8-8FA8-FC27F285ED3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlantCare.Data", "PlantCare.Data\PlantCare.Data.csproj", "{DE04DDB9-6B84-4CC8-8FA8-FC27F285ED3A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documents", "documents", "{5D69017E-E8FD-4F57-9B81-A8CB3F071C47}"
+	ProjectSection(SolutionItems) = preProject
+		documents\design_document.md = documents\design_document.md
+		documents\design_document_v2.md = documents\design_document_v2.md
+		documents\require_document.md = documents\require_document.md
+		documents\notes.md = documents\notes.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
