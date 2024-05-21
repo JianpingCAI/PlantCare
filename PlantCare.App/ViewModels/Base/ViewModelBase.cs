@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace PlantCare.App.ViewModels.Base;
 
-public abstract partial class ViewModelBase : ObservableObject, IViewModelBase
+public abstract partial class ViewModelBase : ObservableValidator/*ObservableObject*/, IViewModelBase
 {
     [ObservableProperty]
     private bool _isBusy;

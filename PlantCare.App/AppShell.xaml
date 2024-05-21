@@ -24,27 +24,15 @@
         <views:LogoView />
     </Shell.TitleView>-->
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:PlantOverviewView}"
-        Route="overview" />
+    <TabBar>
 
-    <!--<TabBar>
-        <Tab Title="item1">
-            <ShellContent
-                Title="Home1"
-                ContentTemplate="{DataTemplate views:HomeView}"
-                Route="overview" />
-            <ShellContent
-                Title="Home2"
-                ContentTemplate="{DataTemplate views:HomeView}"
-                Route="overview" />
-        </Tab>
-        <Tab Title="item2">
-            <ShellContent
-                Title="Home3"
-                ContentTemplate="{DataTemplate views:HomeView}"
-                Route="overview" />
-        </Tab>
-    </TabBar>-->
+        <ShellContent
+            Title="My Plants"
+            ContentTemplate="{DataTemplate views:PlantOverviewView}"
+            Route="overview" />
+        <ShellContent Title="Reminders" ContentTemplate="{DataTemplate views:ReminderView}" />
+        <!--  Icon="reminders.png"  -->
+        <ShellContent Title="Settings" ContentTemplate="{DataTemplate views:SettingsView}" />
+        <!--  Icon="settings.png"  -->
+    </TabBar>
 </Shell>

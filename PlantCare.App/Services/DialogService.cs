@@ -1,21 +1,10 @@
-﻿using PlantCare.Data.Models;
-
-namespace PlantCare.App.Services;
+﻿namespace PlantCare.App.Services;
 
 public class DialogService : IDialogService
 {
-    public Task<Plant> OpenAddPlantDialog()
-    {
-        return null;
-    }
+    public Task<bool> Ask(string title, string message, string trueButtonText = "Yes", string falseButtonText = "No")
+        => Shell.Current.DisplayAlert(title, message, trueButtonText, falseButtonText);
 
-    public async Task ShowAlertAsync(string title, string message, string cancel)
-    {
-        await Application.Current.MainPage.DisplayAlert(title, message, cancel);
-    }
-
-    public async Task<bool> ShowConfirmAsync(string title, string message, string accept, string cancel)
-    {
-        return await Application.Current.MainPage.DisplayAlert(title, message, accept, cancel);
-    }
+    public Task Notify(string title, string message, string buttonText = "OK")
+        => Shell.Current.DisplayAlert(title, message, buttonText);
 }

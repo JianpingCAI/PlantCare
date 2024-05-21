@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -32,11 +31,12 @@ namespace PlantCare.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Species = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Species = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Age = table.Column<int>(type: "INTEGER", nullable: false),
-                    LastWatered = table.Column<string>(type: "TEXT", nullable: true),
-                    PhotoPath = table.Column<string>(type: "TEXT", nullable: true)
+                    LastWatered = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    PhotoPath = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    WateringFrequencyInHours = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

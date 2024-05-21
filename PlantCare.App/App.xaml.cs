@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PlantCare.App.Utils;
 using PlantCare.Data.Repositories;
 
 namespace PlantCare.App
@@ -8,6 +9,8 @@ namespace PlantCare.App
         public App(IServiceProvider serviceProvider)
         {
             InitializeComponent();
+
+            //FileHelper.DeleteDatabaseFile();
 
             // Apply migrations at startup
             using (var scope = serviceProvider.CreateScope())

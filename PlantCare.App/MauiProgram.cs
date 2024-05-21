@@ -6,6 +6,7 @@ using PlantCare.App.ViewModels;
 using PlantCare.App.Views;
 using CommunityToolkit.Maui;
 using PlantCare.Data;
+using PlantCare.App.Utils;
 
 namespace PlantCare.App;
 
@@ -22,6 +23,7 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIconsRegular");
             });
 
         // Configure services
@@ -52,6 +54,9 @@ public static class MauiProgram
         // Register the dialog service
         builder.Services.AddSingleton<IDialogService, DialogService>();
 
+        // Register AutoMapper
+        builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
@@ -66,6 +71,9 @@ public static class MauiProgram
 
         builder.Services.AddTransient<PlantDetailView>();
         builder.Services.AddTransient<PlantDetailViewModel>();
+
+        builder.Services.AddTransient<PlantAddEditView>();
+        builder.Services.AddTransient<PlantAddEditViewModel>();
 
         builder.Services.AddTransient<LoginViewModel>();
         builder.Services.AddTransient<ReminderViewModel>();

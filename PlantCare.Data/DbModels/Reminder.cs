@@ -1,4 +1,4 @@
-﻿namespace PlantCare.Data.Models;
+﻿namespace PlantCare.Data.DbModels;
 
 public class Reminder
 {

@@ -1,12 +1,8 @@
-﻿using PlantCare.Data.Models;
-
-namespace PlantCare.App.Services;
+﻿namespace PlantCare.App.Services;
 
 public interface IDialogService
 {
-    Task<Plant> OpenAddPlantDialog();
+    Task<bool> Ask(string title, string message, string trueButtonText = "Yes", string falseButtonText = "No");
 
-    Task ShowAlertAsync(string title, string message, string cancel);
-
-    Task<bool> ShowConfirmAsync(string title, string message, string accept, string cancel);
+    Task Notify(string title, string message, string buttonText = "OK");
 }

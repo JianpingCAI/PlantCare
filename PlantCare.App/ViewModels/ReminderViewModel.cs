@@ -2,10 +2,10 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using PlantCare.Data.Models;
 using PlantCare.App.Services;
 using System.Collections.ObjectModel;
 using PlantCare.App.ViewModels.Base;
+using PlantCare.Data.DbModels;
 
 public partial class ReminderViewModel : ViewModelBase
 {

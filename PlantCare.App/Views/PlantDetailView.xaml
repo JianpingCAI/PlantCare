@@ -12,10 +12,22 @@
         <ScrollView>
             <StackLayout Padding="20">
                 <Image Aspect="AspectFit" Source="{Binding PhotoPath}" />
-                <Label
-                    FontAttributes="Bold"
-                    FontSize="Large"
-                    Text="{Binding Name}" />
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="Large"
+                        Text="{Binding Name}" />
+                    <Button
+                        Grid.Column="1"
+                        Margin="5"
+                        Command="{Binding NavigateToEditPlantCommand}"
+                        FontFamily="MaterialIconsRegular"
+                        FontSize="20"
+                        HorizontalOptions="End"
+                        Text="&#xe3c9;"
+                        WidthRequest="50" />
+                </Grid>
+
                 <Label FontSize="Medium" Text="{Binding Species}" />
                 <Label Text="{Binding LastWatered, StringFormat='Last watered on: {0:MM/dd/yyyy}'}" />
                 <!--<Label Text="{Binding Notes}" />-->

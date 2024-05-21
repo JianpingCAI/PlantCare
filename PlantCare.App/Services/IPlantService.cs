@@ -1,18 +1,19 @@
-﻿using PlantCare.Data.Models;
+﻿using PlantCare.Data.DbModels;
+using PlantCare.Data.Models;
 
 namespace PlantCare.App.Services;
 
 public interface IPlantService
 {
-    Task AddPlantAsync(Plant plant);
+    Task CreatePlantAsync(PlantDbModel plant);
 
-    Task DeletePlantAsync(Plant plant);
+    Task DeletePlantAsync(PlantDbModel plant);
 
     Task<List<Plant>> GetAllPlantsAsync();
 
-    Task<Plant> GetPlantByIdAsync(Guid id);
+    Task<PlantDbModel> GetPlantByIdAsync(Guid id);
 
-    Task UpdatePlantAsync(Plant plant);
+    Task UpdatePlantAsync(PlantDbModel plant);
 
     Task<IEnumerable<object>> SearchPlantsAsync(string searchText);
 }

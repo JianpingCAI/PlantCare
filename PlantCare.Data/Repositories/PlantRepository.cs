@@ -1,8 +1,8 @@
-﻿using PlantCare.Data.Models;
+﻿using PlantCare.Data.DbModels;
 
 namespace PlantCare.Data.Repositories;
 
-public class PlantRepository : GenericRepository<Plant>, IPlantRepository
+public class PlantRepository : GenericRepository<PlantDbModel>, IPlantRepository
 {
     public PlantRepository(ApplicationDbContext context) : base(context)
     {

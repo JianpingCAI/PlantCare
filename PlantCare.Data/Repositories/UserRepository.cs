@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PlantCare.Data.Models;
+using PlantCare.Data.DbModels;
 
 namespace PlantCare.Data.Repositories;
 

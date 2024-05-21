@@ -1,16 +1,16 @@
-﻿using PlantCare.App.ViewModels;
+﻿using PlantCare.Data.DbModels;
 
 namespace PlantCare.App.Services;
 
 public interface INavigationService
 {
-    Task GotoPlantDetail(Guid plantId);
+    Task GoToPlantDetail(Guid plantId);
 
-    Task GotoAddPlant();
+    Task GoToAddPlant();
 
-    Task GoToEditPlant(PlantDetailViewModel plant);
+    Task GoToEditPlant(PlantDbModel plant);
 
-    Task GoToOverview();
+    Task GoToPlantsOverview();
 
     Task GoBack();
 }

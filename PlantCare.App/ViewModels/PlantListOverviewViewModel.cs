@@ -2,17 +2,28 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using PlantCare.Data.Models;
 using PlantCare.App.Services;
 
 using System.Collections.ObjectModel;
 using CommunityToolkit.Maui.Core.Extensions;
 using PlantCare.App.ViewModels.Base;
+using CommunityToolkit.Mvvm.Messaging;
+using PlantCare.App.Messaging;
+using PlantCare.Data.Models;
 
-public partial class PlantListOverviewViewModel : ViewModelBase
+public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<PlantAddedOrChangedMessage>, IRecipient<PlantDeletedMessage>
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
+
+    public PlantListOverviewViewModel(IPlantService plantService, INavigationService navigationService)
+    {
+        _plantService = plantService;
+        _navigationService = navigationService;
+
+        WeakReferenceMessenger.Default.Register<PlantAddedOrChangedMessage>(this);
+        WeakReferenceMessenger.Default.Register<PlantDeletedMessage>(this);
+    }
 
     [ObservableProperty]
     private ObservableCollection<PlantListItemViewModel> plants = [];
@@ -22,45 +33,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase
 
     [ObservableProperty]
     private PlantListItemViewModel? _selectedPlant = null;
-
-    public PlantListOverviewViewModel(IPlantService plantService, INavigationService navigationService)
-    {
-        _plantService = plantService;
-        _navigationService = navigationService;
-    }
-
-    //[RelayCommand]
-    //private async void LoadPlants()
-    //{
-    //    if (IsBusy)
-    //        return;
-
-    //    try
-    //    {
-    //        List<Plant> plants = await _plantService.GetAllPlantsAsync();
-    //        List<PlantListItemViewModel> viewModels = [];
-    //        if (plants.Count == 0)
-    //        {
-    //            viewModels.Add(MapToViewModel(new Plant
-    //            {
-    //                Name = "Plant1",
-    //                Species = "species",
-    //                PhotoPath = "https://picsum.photos/200/300"
-    //            }));
-    //            viewModels.Add(MapToViewModel(new Plant
-    //            {
-    //                Name = "Plant2",
-    //                Species = "species",
-    //                PhotoPath = "https://picsum.photos/200/300"
-    //            }));
-    //        }
-    //        Plants = viewModels.ToObservableCollection();
-    //    }
-    //    finally
-    //    {
-    //        IsBusy = false;
-    //    }
-    //}
 
     [RelayCommand]
     private async void SelectPlant()
@@ -73,7 +45,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase
             // Navigate to details view with selected plant
             if (SelectedPlant is not null)
             {
-                await _navigationService.GotoPlantDetail(_selectedPlant.Id);
+                await _navigationService.GoToPlantDetail(_selectedPlant.Id);
 
                 SelectedPlant = null;
             }
@@ -113,6 +85,13 @@ public partial class PlantListOverviewViewModel : ViewModelBase
                 PhotoPath = "https://picsum.photos/200/300"
             }));
         }
+        else
+        {
+            foreach (var plant in plants)
+            {
+                viewModels.Add(MapToViewModel(plant));
+            }
+        }
 
         Plants.Clear();
         Plants = viewModels.ToObservableCollection();
@@ -126,13 +105,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase
 
         try
         {
-            //// Simulate opening a dialog to get new plant details
-            //var newPlant = await DialogService.OpenAddPlantDialog();
-            //if (newPlant != null)
-            //{
-            //    await _plantService.AddPlantAsync(newPlant);
-            //    Plants.Add(newPlant); // Add to observable collection to update UI
-            //}
+            _navigationService.GoToAddPlant();
         }
         finally
         {
@@ -175,5 +148,21 @@ public partial class PlantListOverviewViewModel : ViewModelBase
             LastWatered = plant.LastWatered,
             PhotoPath = plant.PhotoPath
         };
+    }
+
+    async void IRecipient<PlantAddedOrChangedMessage>.Receive(PlantAddedOrChangedMessage message)
+    {
+        Plants.Clear();
+
+        await GetPlants();
+    }
+
+    void IRecipient<PlantDeletedMessage>.Receive(PlantDeletedMessage message)
+    {
+        PlantListItemViewModel? deletedPlant = Plants.FirstOrDefault(e => e.Id == message.PlantId);
+        if (deletedPlant != null)
+        {
+            Plants.Remove(deletedPlant);
+        }
     }
 }

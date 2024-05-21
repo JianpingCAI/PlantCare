@@ -1,16 +1,16 @@
-﻿using PlantCare.Data.Models;
+﻿using PlantCare.Data.DbModels;
 
 namespace PlantCare.Data.Repositories;
 
 public interface IPlantRepository
 {
-    Task<List<Plant>> GetAllAsync();
+    Task<List<PlantDbModel>> GetAllAsync();
 
-    Task<Plant> GetByIdAsync(Guid id);
+    Task<PlantDbModel> GetByIdAsync(Guid id);
 
-    Task AddAsync(Plant plant);
+    Task AddAsync(PlantDbModel plant);
 
-    Task UpdateAsync(Plant plant);
+    Task UpdateAsync(PlantDbModel plant);
 
-    Task DeleteAsync(Plant plant);
+    Task DeleteAsync(PlantDbModel plant);
 }

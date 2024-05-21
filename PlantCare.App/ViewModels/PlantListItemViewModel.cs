@@ -21,7 +21,7 @@ public partial class PlantListItemViewModel : ViewModelBase, IRecipient<StatusCh
     private int _age;
 
     [ObservableProperty]
-    private string _lastWatered = string.Empty;
+    private DateTime _lastWatered;
 
     [ObservableProperty]
     private string _photoPath = string.Empty;

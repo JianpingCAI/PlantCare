@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PlantCare.Data.Models;
+using PlantCare.Data.DbModels;
 
 namespace PlantCare.Data.Repositories;
 
 public class ApplicationDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
-    public DbSet<Plant> Plants { get; set; }
+    public DbSet<PlantDbModel> Plants { get; set; }
     public DbSet<Reminder> Reminders { get; set; }
     public DbSet<Log> Logs { get; set; }
 

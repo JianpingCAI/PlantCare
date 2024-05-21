@@ -3,9 +3,10 @@
     x:Class="PlantCare.App.Views.PlantOverviewView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:layouts="clr-namespace:PlantCare.App.Layouts"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="Home"
+    Title="My Plants"
     x:DataType="vm:PlantListOverviewViewModel">
     <ContentPage.Resources>
         <Style TargetType="Grid">
@@ -25,52 +26,74 @@
     </ContentPage.Resources>
 
     <!--  Main Layout  -->
-    <VerticalStackLayout Padding="15" Spacing="15">
+    <ScrollView>
+        <VerticalStackLayout Padding="5" Spacing="10">
 
-        <!--  Search Bar for quick filtering  -->
-        <SearchBar
-            Placeholder="Search plants..."
-            SearchCommand="{Binding SearchCommand}"
-            Text="{Binding SearchText}" />
+            <!--  Search Bar for quick filtering  -->
+            <SearchBar
+                Placeholder="Search plants..."
+                SearchCommand="{Binding SearchCommand}"
+                Text="{Binding SearchText}" />
 
-        <!--  Plants Collection View  -->
-        <CollectionView
-            EmptyView="No plants found. Add a new plant to get started!"
-            ItemsSource="{Binding Plants}"
-            SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
-            SelectionChangedCommand="{Binding SelectPlantCommand}"
-            SelectionMode="Single">
-            <CollectionView.ItemTemplate>
+            <!--  Plants Collection View  -->
+            <CollectionView
+                EmptyView="No plants found. Add a new plant to get started!"
+                ItemsSource="{Binding Plants}"
+                SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
+                SelectionChangedCommand="{Binding SelectPlantCommand}"
+                SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PlantListItemViewModel">
+                        <Frame
+                            Padding="10"
+                            BorderColor="ForestGreen"
+                            HorizontalOptions="Center"
+                            InputTransparent="True"
+                            VerticalOptions="Center">
+                            <VerticalStackLayout HorizontalOptions="Center">
+                                <Image
+                                    Aspect="AspectFill"
+                                    HeightRequest="100"
+                                    Source="{Binding PhotoPath}"
+                                    WidthRequest="100" />
+                                <Label FontAttributes="Bold" Text="{Binding Name}" />
+                                <Label Text="{Binding Species}" />
+                                <Label FontSize="12" Text="{Binding LastWatered, StringFormat='Last watered on {0:d}'}" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="3" />
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+
+            <!--<FlexLayout BindableLayout.ItemsSource="{Binding Plants}">
+            <BindableLayout.ItemTemplate>
                 <DataTemplate x:DataType="vm:PlantListItemViewModel">
-                    <Grid Padding="10" ColumnSpacing="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <!--  Plant Image  -->
-                        <Image
-                            Aspect="AspectFill"
-                            HeightRequest="150"
-                            Source="{Binding PhotoPath}"
-                            WidthRequest="150" />
-                        <!--  Plant Details  -->
-                        <VerticalStackLayout Grid.Column="1" Spacing="5">
-                            <Label
-                                FontAttributes="Bold"
-                                FontSize="16"
-                                Text="{Binding Name}" />
-                            <Label FontSize="14" Text="{Binding Species}" />
-                            <Label FontSize="12" Text="{Binding LastWatered, StringFormat='Last watered on {0:d}'}" />
+                    <Grid>
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <Image
+                                Aspect="AspectFill"
+                                HeightRequest="100"
+                                Source="{Binding PhotoPath}"
+                                WidthRequest="100" />
+                            <Label FontAttributes="Bold" Text="{Binding Name}" />
+                            <Label Text="{Binding Species}" />
+                            <Label Text="{Binding LastWatered, StringFormat='Last watered on {0:d}'}" />
                         </VerticalStackLayout>
                     </Grid>
                 </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+            </BindableLayout.ItemTemplate>
+        </FlexLayout>-->
 
-        <!--  Add Plant Button  -->
-        <Button
-            Command="{Binding AddPlantCommand}"
-            HorizontalOptions="Center"
-            Text="Add New Plant" />
-    </VerticalStackLayout>
+            <!--  Add Plant Button  -->
+            <Button
+                Command="{Binding AddPlantCommand}"
+                HorizontalOptions="Center"
+                Text="Add plant" />
+        </VerticalStackLayout>
+
+    </ScrollView>
 </views:ContentPageBase>

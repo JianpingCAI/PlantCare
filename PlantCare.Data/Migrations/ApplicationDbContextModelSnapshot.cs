@@ -47,7 +47,7 @@ namespace PlantCare.Data.Migrations
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("PlantCare.Data.Models.Plant", b =>
+            modelBuilder.Entity("PlantCare.Data.Models.PlantDbModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,17 +56,26 @@ namespace PlantCare.Data.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("LastWatered")
+                    b.Property<DateTime>("LastWatered")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhotoPath")
+                        .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Species")
+                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("WateringFrequencyInHours")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

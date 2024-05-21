@@ -1,31 +1,31 @@
-﻿using PlantCare.App.ViewModels;
+﻿using PlantCare.Data.DbModels;
 
 namespace PlantCare.App.Services;
 
 public class NavigationService : INavigationService
 {
-    public async Task GotoPlantDetail(Guid id)
+    public async Task GoToPlantDetail(Guid id)
     {
         var parameters = new Dictionary<string, object> { { "PlantId", id } };
         await Shell.Current.GoToAsync("plant", parameters);
     }
 
-    public Task GotoAddPlant()
+    public Task GoToAddPlant()
     {
         return Shell.Current.GoToAsync("plant/add");
     }
 
-    public async Task GoToEditPlant(PlantDetailViewModel detailModel)
+    public async Task GoToEditPlant(PlantDbModel plant)
     {
         var navigationParameter = new ShellNavigationQueryParameters
         {
-            { "Plant", detailModel }
+            { "Plant", plant }
         };
 
         await Shell.Current.GoToAsync("plant/edit", navigationParameter);
     }
 
-    public Task GoToOverview()
+    public Task GoToPlantsOverview()
     {
         return Shell.Current.GoToAsync("//overview");
     }

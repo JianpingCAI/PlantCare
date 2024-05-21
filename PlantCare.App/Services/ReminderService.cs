@@ -1,4 +1,4 @@
-﻿using PlantCare.Data.Models;
+﻿using PlantCare.Data.DbModels;
 using PlantCare.Data.Repositories;
 
 namespace PlantCare.App.Services;

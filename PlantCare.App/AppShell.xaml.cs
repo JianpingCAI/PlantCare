@@ -9,6 +9,8 @@ namespace PlantCare.App
             InitializeComponent();
 
             Routing.RegisterRoute("plant", typeof(PlantDetailView));
+            Routing.RegisterRoute("plant/edit", typeof(PlantAddEditView));
+            Routing.RegisterRoute("plant/add", typeof(PlantAddEditView));
         }
     }
 }
