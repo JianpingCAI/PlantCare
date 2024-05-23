@@ -44,11 +44,17 @@
                 SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="vm:PlantListItemViewModel">
-                        <Frame
+                        <!--<Frame
                             Padding="10"
                             BorderColor="ForestGreen"
                             HorizontalOptions="Center"
                             InputTransparent="True"
+                            VerticalOptions="Center">-->
+                        <Border
+                            Padding="10"
+                            HorizontalOptions="Center"
+                            Stroke="ForestGreen"
+                            StrokeShape="RoundRectangle 10"
                             VerticalOptions="Center">
                             <VerticalStackLayout HorizontalOptions="Center">
                                 <Image
@@ -60,7 +66,8 @@
                                 <Label Text="{Binding Species}" />
                                 <Label FontSize="12" Text="{Binding LastWatered, StringFormat='Last watered on {0:d}'}" />
                             </VerticalStackLayout>
-                        </Frame>
+                        </Border>
+                        <!--</Frame>-->
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
 
@@ -94,6 +101,5 @@
                 HorizontalOptions="Center"
                 Text="Add plant" />
         </VerticalStackLayout>
-
     </ScrollView>
 </views:ContentPageBase>

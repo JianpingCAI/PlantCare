@@ -27,12 +27,16 @@
     <TabBar>
 
         <ShellContent
-            Title="My Plants"
+            Title="Home"
             ContentTemplate="{DataTemplate views:PlantOverviewView}"
+            Icon="tab_home.png"
             Route="overview" />
         <ShellContent Title="Reminders" ContentTemplate="{DataTemplate views:ReminderView}" />
         <!--  Icon="reminders.png"  -->
-        <ShellContent Title="Settings" ContentTemplate="{DataTemplate views:SettingsView}" />
+        <ShellContent
+            Title="Settings"
+            ContentTemplate="{DataTemplate views:SettingsView}"
+            Icon="tab_settings.png" />
         <!--  Icon="settings.png"  -->
     </TabBar>
 </Shell>

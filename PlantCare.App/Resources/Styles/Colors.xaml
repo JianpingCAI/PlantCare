@@ -26,6 +26,15 @@
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
 
+    <!--  light theme alternatives  -->
+    <Color x:Key="DarkGray">#212125</Color>
+    <Color x:Key="MidGray">#CFCFD3</Color>
+    <Color x:Key="LightGray">#EFEFEF</Color>
+
+    <Color x:Key="Background_Dark">#081B25</Color>
+    <Color x:Key="Background_Mid">#152C39</Color>
+
+
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}" />
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}" />

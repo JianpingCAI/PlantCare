@@ -2,25 +2,24 @@
 using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
 
-namespace PlantCare.App.Utils
+namespace PlantCare.App.Utils;
+
+public class MappingProfile : Profile
 {
-    public class MappingProfile : Profile
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<PlantDbModel, Plant>()
-                .ForMember(dest => dest.NextWateringDate, opt => opt.Ignore())
-                .ForMember(dest => dest.WateringFrequencyInHours, opt => opt.Ignore())
-                .ForMember(dest => dest.WateringProgress, opt => opt.Ignore());
+        CreateMap<PlantDbModel, Plant>()
+            .ForMember(dest => dest.NextWateringDate, opt => opt.Ignore())
+            .ForMember(dest => dest.WateringFrequencyInHours, opt => opt.Ignore())
+            .ForMember(dest => dest.WateringProgress, opt => opt.Ignore());
 
-            CreateMap<Plant, PlantDbModel>();
+        CreateMap<Plant, PlantDbModel>();
 
-            //CreateMap<PlantDto, Plant>()
-            //    .ForMember(dest => dest.NextWateringDate, opt => opt.Ignore())
-            //    .ForMember(dest => dest.DaysUntilNextWatering, opt => opt.Ignore())
-            //    .ForMember(dest => dest.WateringProgress, opt => opt.Ignore());
+        //CreateMap<PlantDto, Plant>()
+        //    .ForMember(dest => dest.NextWateringDate, opt => opt.Ignore())
+        //    .ForMember(dest => dest.DaysUntilNextWatering, opt => opt.Ignore())
+        //    .ForMember(dest => dest.WateringProgress, opt => opt.Ignore());
 
-            //CreateMap<Plant, PlantDto>();
-        }
+        //CreateMap<Plant, PlantDto>();
     }
 }

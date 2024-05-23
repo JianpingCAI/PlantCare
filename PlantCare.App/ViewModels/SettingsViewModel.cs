@@ -17,9 +17,34 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     private string theme;
 
+    [ObservableProperty]
+    private AppTheme _selectedTheme;
+
+    //public AppTheme SelectedTheme
+    //{
+    //    get => _selectedTheme;
+    //    set
+    //    {
+    //        if (_selectedTheme != value)
+    //        {
+    //            _selectedTheme = value;
+    //            OnPropertyChanged();
+    //        }
+    //    }
+    //}
+
     public SettingsViewModel(ISettingsService settingsService)
     {
         _settingsService = settingsService;
+    }
+
+    [RelayCommand]
+    private void SelectTheme(RadioButton selectedRadioButton)
+    {
+        if (selectedRadioButton != null)
+        {
+            selectedRadioButton.IsChecked = true;
+        }
     }
 
     [RelayCommand]

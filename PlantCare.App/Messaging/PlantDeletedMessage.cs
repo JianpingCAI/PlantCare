@@ -1,7 +1,6 @@
-﻿namespace PlantCare.App.Messaging
+﻿namespace PlantCare.App.Messaging;
+
+internal class PlantDeletedMessage
 {
-    internal class PlantDeletedMessage
-    {
-        public Guid PlantId { get; internal set; }
-    }
+    public Guid PlantId { get; internal set; }
 }

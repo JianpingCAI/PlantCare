@@ -1,9 +1,8 @@
-﻿namespace PlantCare.App.Messaging
+﻿namespace PlantCare.App.Messaging;
+
+internal class PlantAddedOrChangedMessage
 {
-    internal class PlantAddedOrChangedMessage
+    public PlantAddedOrChangedMessage()
     {
-        public PlantAddedOrChangedMessage()
-        {
-        }
     }
 }
