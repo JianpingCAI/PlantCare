@@ -1,8 +1,7 @@
-﻿namespace PlantCare.App.ViewModels;
-
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using PlantCare.App.ViewModels.Base;
-using System;
+
+namespace PlantCare.App.ViewModels;
 
 public partial class PlantViewModelBase : ViewModelBase
 {

@@ -1,8 +1,8 @@
-﻿namespace PlantCare.App.ViewModels;
-
+﻿
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 
+namespace PlantCare.App.ViewModels;
 public partial class PlantListItemViewModel : PlantViewModelBase, IRecipient<StatusChangedMessage>
 {
     public PlantListItemViewModel()

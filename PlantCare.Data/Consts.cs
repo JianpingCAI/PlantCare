@@ -1,7 +1,6 @@
-﻿namespace PlantCare.Data
+﻿namespace PlantCare.Data;
+
+public static class Consts
 {
-    public static class Consts
-    {
-        public const string DatabaseFileName = "PlantCareApp.db";
-    }
+    public const string DatabaseFileName = "PlantCareApp.db";
 }

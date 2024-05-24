@@ -1,17 +1,13 @@
-﻿namespace PlantCare.App.ViewModels;
-
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
 using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributable, IRecipient<PlantAddedOrChangedMessage>
+namespace PlantCare.App.ViewModels;
+
+public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributable
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
@@ -20,7 +16,6 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
     {
         _plantService = plantService;
         _navigationService = navigationService;
-        WeakReferenceMessenger.Default.Register<PlantAddedOrChangedMessage>(this);
     }
 
     [RelayCommand]
@@ -111,15 +106,5 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
             PhotoPath = plantDetailViewModel.PhotoPath,
             WateringFrequencyInHours = plantDetailViewModel.HoursUntilNextWatering
         };
-    }
-
-    async void IRecipient<PlantAddedOrChangedMessage>.Receive(PlantAddedOrChangedMessage message)
-    {
-        //if (message.PlantId is null)
-        //{
-        //    return;
-        //}
-        //Id = message.PlantId.Value;
-        //await LoadAsync();
     }
 }

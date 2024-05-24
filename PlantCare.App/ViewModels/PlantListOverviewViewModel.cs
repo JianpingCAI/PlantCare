@@ -1,6 +1,4 @@
-﻿namespace PlantCare.App.ViewModels;
-
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PlantCare.App.Services;
 
@@ -10,6 +8,8 @@ using PlantCare.App.ViewModels.Base;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.Data.Models;
+
+namespace PlantCare.App.ViewModels;
 
 public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<PlantAddedOrChangedMessage>, IRecipient<PlantDeletedMessage>
 {

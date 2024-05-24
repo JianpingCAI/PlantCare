@@ -1,12 +1,10 @@
-﻿namespace PlantCare.App.ViewModels;
-
+﻿
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
-using System.Threading.Tasks;
 using PlantCare.App.Services;
 using PlantCare.App.ViewModels.Base;
 
+namespace PlantCare.App.ViewModels;
 public partial class SettingsViewModel : ViewModelBase
 {
     private readonly ISettingsService _settingsService;
