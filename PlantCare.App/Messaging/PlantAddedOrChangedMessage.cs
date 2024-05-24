@@ -2,7 +2,5 @@
 
 internal class PlantAddedOrChangedMessage
 {
-    public PlantAddedOrChangedMessage()
-    {
-    }
+    public Guid? PlantId { get; set; }
 }

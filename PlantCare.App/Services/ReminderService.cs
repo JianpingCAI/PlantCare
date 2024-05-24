@@ -17,7 +17,7 @@ public class ReminderService : IReminderService
         return await _reminderRepository.GetAllAsync();
     }
 
-    public async Task<Reminder> GetReminderByIdAsync(Guid id)
+    public async Task<Reminder?> GetReminderByIdAsync(Guid id)
     {
         return await _reminderRepository.GetByIdAsync(id);
     }
@@ -32,8 +32,8 @@ public class ReminderService : IReminderService
         await _reminderRepository.UpdateAsync(reminder);
     }
 
-    public async Task DeleteReminderAsync(Reminder reminder)
+    public async Task<bool> DeleteReminderAsync(Guid reminderId)
     {
-        await _reminderRepository.DeleteAsync(reminder);
+        return await _reminderRepository.DeleteAsync(reminderId);
     }
 }

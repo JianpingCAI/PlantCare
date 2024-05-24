@@ -7,13 +7,13 @@ public interface IPlantService
 {
     Task CreatePlantAsync(PlantDbModel plant);
 
-    Task DeletePlantAsync(PlantDbModel plant);
+    Task DeletePlantAsync(Guid plantId);
 
     Task<List<Plant>> GetAllPlantsAsync();
 
-    Task<PlantDbModel> GetPlantByIdAsync(Guid id);
+    Task<Plant> GetPlantByIdAsync(Guid id);
 
-    Task UpdatePlantAsync(PlantDbModel plant);
+    Task<bool> UpdatePlantAsync(PlantDbModel plant);
 
     Task<IEnumerable<object>> SearchPlantsAsync(string searchText);
 }

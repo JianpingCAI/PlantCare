@@ -4,9 +4,15 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
+    xmlns:local="clr-namespace:PlantCare.App.Utils"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="PlantAddEditView">
-    <Grid>
+    Title="{Binding Name}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:StringToIntConverter x:Key="StringToIntConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid x:DataType="vm:PlantAddEditViewModel">
         <ScrollView>
             <Grid x:DataType="vm:PlantAddEditViewModel">
                 <VerticalStackLayout Padding="10">
@@ -15,65 +21,42 @@
                         Text="{Binding PageTitle}"
                         TextColor="{StaticResource Primary}" />
 
-                    <Grid RowDefinitions="Auto,*">
-                        <Grid
-                            ColumnDefinitions=".3*,.7*"
-                            ColumnSpacing="5"
-                            RowDefinitions="*,*,*,*,*,*,*,*"
-                            RowSpacing="10">
+                    <HorizontalStackLayout>
+                        <Label Text="Name" />
+                        <Entry Text="{Binding Name, Mode=TwoWay}" VerticalOptions="End" />
+                    </HorizontalStackLayout>
 
-                            <!--  Row 1 Name  -->
-                            <Label
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Text="Name" />
-                            <Entry
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                Text="{Binding Name, Mode=TwoWay}"
-                                VerticalOptions="End" />
+                    <Image Aspect="AspectFit" Source="{Binding PhotoPath, TargetNullValue=fallback.jpg}" />
 
-                            <!--  Row 2 Image  -->
-                            <Label
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Text="Image-url"
-                                VerticalOptions="Start" />
-                            <Grid
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                RowDefinitions="35, Auto">
-                                <Image
-                                    Grid.Row="1"
-                                    HeightRequest="100"
-                                    Source="{Binding PhotoPath, TargetNullValue=fallback.jpg}" />
-                            </Grid>
+                    <HorizontalStackLayout>
+                        <Button Command="{Binding UploadImageCommand}" Text="Upload Image" />
+                        <Button Command="{Binding TakePhotoCommand}" Text="Take Photo" />
+                    </HorizontalStackLayout>
 
-                            <!--  Row 3 Species  -->
-                            <Label
-                                Grid.Row="2"
-                                Grid.Column="0"
-                                Text="Species" />
-                            <Grid
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                ColumnDefinitions="*, Auto"
-                                HeightRequest="45">
-                                <Entry Text="{Binding Species, Mode=TwoWay}" VerticalOptions="Start" />
-                            </Grid>
+                    <HorizontalStackLayout>
+                        <Label Text="Species" />
+                        <Entry Text="{Binding Species, Mode=TwoWay}" VerticalOptions="Start" />
+                    </HorizontalStackLayout>
 
-                            <!--  Row 4 Image  -->
-                            <Button
-                                Grid.Row="2"
-                                Command="{Binding UploadImageCommand}"
-                                Text="Upload Image" />
-                            <Button
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Command="{Binding TakePhotoCommand}"
-                                Text="Take Photo" />
-                        </Grid>
-                    </Grid>
+                    <HorizontalStackLayout>
+                        <Label Text="Age" />
+                        <Entry Text="{Binding Age, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}" VerticalOptions="End" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout>
+                        <Label Text="Last Watering Time" />
+                        <!--<Entry Text="{Binding LastWatered, Mode=TwoWay}" VerticalOptions="End" />-->
+                        <DatePicker Date="{Binding LastWateredDate}" />
+                        <TimePicker Time="{Binding LastWateredTime}" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout>
+                        <Label Text="Next Waterting Time" />
+                        <Entry Text="{Binding WateringFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}" VerticalOptions="End" />
+                        <Label Text="Days" />
+                        <Entry Text="{Binding WateringFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}" VerticalOptions="End" />
+                        <Label Text="Hours" />
+                    </HorizontalStackLayout>
 
                     <VerticalStackLayout Margin="0,10,0,0" BindableLayout.ItemsSource="{Binding Errors}">
                         <BindableLayout.ItemTemplate>
@@ -86,6 +69,7 @@
                     <Button
                         Margin="0,10,0,25"
                         Command="{Binding SubmitCommand}"
+                        HorizontalOptions="Center"
                         Text="Submit" />
                 </VerticalStackLayout>
             </Grid>

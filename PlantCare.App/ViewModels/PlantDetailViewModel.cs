@@ -5,13 +5,13 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
-using PlantCare.App.ViewModels.Base;
 using PlantCare.Data.DbModels;
+using PlantCare.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public partial class PlantDetailViewModel : ViewModelBase, IQueryAttributable
+public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributable, IRecipient<PlantAddedOrChangedMessage>
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
@@ -20,25 +20,8 @@ public partial class PlantDetailViewModel : ViewModelBase, IQueryAttributable
     {
         _plantService = plantService;
         _navigationService = navigationService;
+        WeakReferenceMessenger.Default.Register<PlantAddedOrChangedMessage>(this);
     }
-
-    [ObservableProperty]
-    private Guid _id;
-
-    [ObservableProperty]
-    private string _species = string.Empty;
-
-    [ObservableProperty]
-    private string _name = string.Empty;
-
-    [ObservableProperty]
-    private int _age;
-
-    [ObservableProperty]
-    private DateTime _lastWatered;
-
-    [ObservableProperty]
-    private string _photoPath = string.Empty;
 
     [RelayCommand]
     private async Task ChangeStatus()
@@ -51,27 +34,48 @@ public partial class PlantDetailViewModel : ViewModelBase, IQueryAttributable
     private async Task NavigateToEditPlant()
     {
         PlantDbModel plant = MapToPlantModel(this);
-        _navigationService.GoToEditPlant(plant);
+        await _navigationService.GoToEditPlant(plant);
     }
 
-    // Implement IQueryAttributable
-    public async void ApplyQueryAttributes(IDictionary<string, object> query)
+    [RelayCommand]
+    private async Task DeletePlant()
+    {
+        try
+        {
+            await _plantService.DeletePlantAsync(Id);
+        }
+        catch (Exception ex)
+        {
+            return;
+        }
+
+        try
+        {
+            WeakReferenceMessenger.Default.Send(new PlantDeletedMessage { PlantId = Id });
+        }
+        catch (Exception)
+        {
+            return;
+        }
+
+        await _navigationService.GoBack();
+    }
+
+    void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (!query.ContainsKey("PlantId"))
             return;
 
-        var eventId = query["PlantId"].ToString();
-        if (Guid.TryParse(eventId, out var selectedId))
+        var plantId = query["PlantId"].ToString();
+        if (Guid.TryParse(plantId, out var selectedId))
         {
             Id = selectedId;
-
-            //await GetPlantDetailAsync(selectedId);
         }
     }
 
-    public override async Task LoadAsync()
+    public override async Task LoadDataWhenViewAppearingAsync()
     {
-        await Loading(async () =>
+        await LoadingDataWhenViewAppearing(async () =>
         {
             await GetPlantDetailAsync(Id);
         });
@@ -79,20 +83,11 @@ public partial class PlantDetailViewModel : ViewModelBase, IQueryAttributable
 
     private async Task GetPlantDetailAsync(Guid plantId)
     {
-        //Plant plant = await _plantService.GetPlantByIdAsync(plantId);
-        await Task.Delay(1000);
-
-        PlantDbModel plant = new PlantDbModel
-        {
-            Name = "Plant3",
-            Species = "species",
-            PhotoPath = "https://picsum.photos/200/300"
-        };
-
+        Plant plant = await _plantService.GetPlantByIdAsync(plantId);
         MapPlantData(plant);
     }
 
-    private void MapPlantData(PlantDbModel plant)
+    private void MapPlantData(Plant plant)
     {
         Id = plant.Id;
         Species = plant.Species;
@@ -100,6 +95,8 @@ public partial class PlantDetailViewModel : ViewModelBase, IQueryAttributable
         Age = plant.Age;
         LastWatered = plant.LastWatered;
         PhotoPath = plant.PhotoPath;
+
+        WateringFrequencyInHours = plant.WateringFrequencyInHours;
     }
 
     private PlantDbModel MapToPlantModel(PlantDetailViewModel plantDetailViewModel)
@@ -112,6 +109,17 @@ public partial class PlantDetailViewModel : ViewModelBase, IQueryAttributable
             Age = plantDetailViewModel.Age,
             LastWatered = plantDetailViewModel.LastWatered,
             PhotoPath = plantDetailViewModel.PhotoPath,
+            WateringFrequencyInHours = plantDetailViewModel.HoursUntilNextWatering
         };
+    }
+
+    async void IRecipient<PlantAddedOrChangedMessage>.Receive(PlantAddedOrChangedMessage message)
+    {
+        //if (message.PlantId is null)
+        //{
+        //    return;
+        //}
+        //Id = message.PlantId.Value;
+        //await LoadAsync();
     }
 }

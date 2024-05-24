@@ -70,8 +70,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<PlantOverviewView>();
         builder.Services.AddSingleton<PlantListOverviewViewModel>();
 
-        builder.Services.AddTransient<PlantDetailView>();
-        builder.Services.AddTransient<PlantDetailViewModel>();
+        builder.Services.AddSingleton<PlantDetailView>();
+        builder.Services.AddSingleton<PlantDetailViewModel>();
 
         builder.Services.AddTransient<PlantAddEditView>();
         builder.Services.AddTransient<PlantAddEditViewModel>();

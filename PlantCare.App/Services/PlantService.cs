@@ -18,13 +18,14 @@ public class PlantService : IPlantService
 
     public async Task<List<Plant>> GetAllPlantsAsync()
     {
-        var dbModels = await _plantRepository.GetAllAsync();
+        List<PlantDbModel> dbModels = await _plantRepository.GetAllAsync();
         return _mapper.Map<List<Plant>>(dbModels);
     }
 
-    public async Task<PlantDbModel> GetPlantByIdAsync(Guid id)
+    public async Task<Plant> GetPlantByIdAsync(Guid id)
     {
-        return await _plantRepository.GetByIdAsync(id);
+        PlantDbModel dbModel = await _plantRepository.GetByIdAsync(id);
+        return _mapper.Map<Plant>(dbModel);
     }
 
     public async Task CreatePlantAsync(PlantDbModel plant)
@@ -32,14 +33,14 @@ public class PlantService : IPlantService
         await _plantRepository.AddAsync(plant);
     }
 
-    public async Task UpdatePlantAsync(PlantDbModel plant)
+    public async Task<bool> UpdatePlantAsync(PlantDbModel plant)
     {
-        await _plantRepository.UpdateAsync(plant);
+        return await _plantRepository.UpdateAsync(plant);
     }
 
-    public async Task DeletePlantAsync(PlantDbModel plant)
+    public async Task DeletePlantAsync(Guid plantId)
     {
-        await _plantRepository.DeleteAsync(plant);
+        await _plantRepository.DeleteAsync(plantId);
     }
 
     public Task<IEnumerable<object>> SearchPlantsAsync(string searchText)

@@ -62,9 +62,14 @@
                                     HeightRequest="100"
                                     Source="{Binding PhotoPath}"
                                     WidthRequest="100" />
-                                <Label FontAttributes="Bold" Text="{Binding Name}" />
-                                <Label Text="{Binding Species}" />
-                                <Label FontSize="12" Text="{Binding LastWatered, StringFormat='Last watered on {0:d}'}" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Name}" />
+                                <HorizontalStackLayout HorizontalOptions="Start">
+                                    <Label Text="State" />
+                                    <Label Text="{Binding WaterState}" />
+                                </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </Border>
                         <!--</Frame>-->
@@ -75,25 +80,6 @@
                     <GridItemsLayout Orientation="Vertical" Span="3" />
                 </CollectionView.ItemsLayout>
             </CollectionView>
-
-            <!--<FlexLayout BindableLayout.ItemsSource="{Binding Plants}">
-            <BindableLayout.ItemTemplate>
-                <DataTemplate x:DataType="vm:PlantListItemViewModel">
-                    <Grid>
-                        <VerticalStackLayout HorizontalOptions="Center">
-                            <Image
-                                Aspect="AspectFill"
-                                HeightRequest="100"
-                                Source="{Binding PhotoPath}"
-                                WidthRequest="100" />
-                            <Label FontAttributes="Bold" Text="{Binding Name}" />
-                            <Label Text="{Binding Species}" />
-                            <Label Text="{Binding LastWatered, StringFormat='Last watered on {0:d}'}" />
-                        </VerticalStackLayout>
-                    </Grid>
-                </DataTemplate>
-            </BindableLayout.ItemTemplate>
-        </FlexLayout>-->
 
             <!--  Add Plant Button  -->
             <Button

@@ -8,10 +8,5 @@ public class ReminderRepository : GenericRepository<Reminder>, IReminderReposito
     {
     }
 
-    Task<List<Reminder>> IReminderRepository.GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
-
     // Additional reminder-specific methods can be added here if needed
 }

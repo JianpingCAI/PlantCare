@@ -10,9 +10,5 @@
 
         public DateTime LastWatered { get; set; } = DateTime.Now;
         public int WateringFrequencyInHours { get; set; }
-
-        public DateTime NextWateringDate => LastWatered.AddHours(WateringFrequencyInHours);
-        public int HoursUntilNextWatering => (int)(NextWateringDate - DateTime.Now).TotalHours;
-        public double WateringProgress => Math.Max(0, 1 - (double)HoursUntilNextWatering / (double)WateringFrequencyInHours);
     }
 }

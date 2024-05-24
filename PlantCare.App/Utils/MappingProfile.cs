@@ -8,10 +8,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<PlantDbModel, Plant>()
-            .ForMember(dest => dest.NextWateringDate, opt => opt.Ignore())
-            .ForMember(dest => dest.WateringFrequencyInHours, opt => opt.Ignore())
-            .ForMember(dest => dest.WateringProgress, opt => opt.Ignore());
+        CreateMap<PlantDbModel, Plant>();
+        //.ForMember(dest => dest.NextWateringTime, opt => opt.Ignore())
+        //.ForMember(dest => dest.WaterState, opt => opt.Ignore());
 
         CreateMap<Plant, PlantDbModel>();
 

@@ -35,7 +35,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
     private PlantListItemViewModel? _selectedPlant = null;
 
     [RelayCommand]
-    private async void SelectPlant()
+    private async Task SelectPlant()
     {
         if (IsBusy)
             return;
@@ -45,7 +45,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
             // Navigate to details view with selected plant
             if (SelectedPlant is not null)
             {
-                await _navigationService.GoToPlantDetail(_selectedPlant.Id);
+                await _navigationService.GoToPlantDetail(SelectedPlant.Id);
 
                 SelectedPlant = null;
             }
@@ -57,11 +57,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
     }
 
     // Override
-    public override async Task LoadAsync()
+    public override async Task LoadDataWhenViewAppearingAsync()
     {
+        // Load only once
         if (Plants.Count == 0)
         {
-            await Loading(GetPlants);
+            await LoadingDataWhenViewAppearing(GetPlants);
         }
     }
 
@@ -70,31 +71,28 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
         List<Plant> plants = await _plantService.GetAllPlantsAsync();
 
         List<PlantListItemViewModel> viewModels = [];
-        if (plants.Count == 0)
+        foreach (Plant plant in plants)
         {
-            viewModels.Add(MapToViewModel(new Plant
-            {
-                Name = "Plant1",
-                Species = "species",
-                PhotoPath = "https://picsum.photos/200/300"
-            }));
-            viewModels.Add(MapToViewModel(new Plant
-            {
-                Name = "Plant2",
-                Species = "species",
-                PhotoPath = "https://picsum.photos/200/300"
-            }));
+            viewModels.Add(MapToViewModel(plant));
         }
-        else
-        {
-            foreach (var plant in plants)
-            {
-                viewModels.Add(MapToViewModel(plant));
-            }
-        }
-
         Plants.Clear();
         Plants = viewModels.ToObservableCollection();
+
+        //if (plants.Count == 0)
+        //{
+        //    viewModels.Add(MapToViewModel(new Plant
+        //    {
+        //        Name = "Plant1",
+        //        Species = "species",
+        //        PhotoPath = "https://picsum.photos/200/300"
+        //    }));
+        //    viewModels.Add(MapToViewModel(new Plant
+        //    {
+        //        Name = "Plant2",
+        //        Species = "species",
+        //        PhotoPath = "https://picsum.photos/200/300"
+        //    }));
+        //}
     }
 
     [RelayCommand]
@@ -145,8 +143,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
             Species = plant.Species,
             Name = plant.Name,
             Age = plant.Age,
+            PhotoPath = plant.PhotoPath,
+
             LastWatered = plant.LastWatered,
-            PhotoPath = plant.PhotoPath
+            WateringFrequencyInHours = plant.WateringFrequencyInHours,
         };
     }
 

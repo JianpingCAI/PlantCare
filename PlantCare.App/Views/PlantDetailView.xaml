@@ -6,17 +6,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="{Binding Species}"
+    Title="{Binding Name}"
     x:DataType="vm:PlantDetailViewModel">
     <Grid>
         <ScrollView>
-            <StackLayout Padding="20">
+            <StackLayout Padding="10">
                 <Image Aspect="AspectFit" Source="{Binding PhotoPath}" />
                 <Grid ColumnDefinitions="*,Auto">
                     <Label
                         FontAttributes="Bold"
                         FontSize="Large"
-                        Text="{Binding Name}" />
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Name}"
+                        VerticalTextAlignment="Center" />
                     <Button
                         Grid.Column="1"
                         Margin="5"
@@ -29,9 +31,28 @@
                 </Grid>
 
                 <Label FontSize="Medium" Text="{Binding Species}" />
-                <Label Text="{Binding LastWatered, StringFormat='Last watered on: {0:MM/dd/yyyy}'}" />
-                <!--<Label Text="{Binding Notes}" />-->
-                <VerticalStackLayout Grid.Row="1">
+                <HorizontalStackLayout>
+                    <Label Text="Age: " />
+                    <Label Text="{Binding Age}" />
+                </HorizontalStackLayout>
+
+                <Label Text="{Binding LastWatered, StringFormat='Last watering on: {0:MM/dd/yyyy HH:mm}'}" />
+                <Label Text="{Binding NextWateringTime, StringFormat='Next watering on: {0:MM/dd/yyyy HH:mm}'}" />
+
+                <HorizontalStackLayout>
+                    <Label Text="Next watering in " />
+                    <Label Text="{Binding HoursUntilNextWatering}" />
+                    <Label Text=" hours" />
+                </HorizontalStackLayout>
+
+                <Button
+                    Margin="0,10,0,0"
+                    Command="{Binding DeletePlantCommand}"
+                    HorizontalOptions="Center"
+                    Text="Delete Plant" />
+
+                <!--<VerticalStackLayout Grid.Row="1">
+
                     <Button
                         Margin="0,10,0,0"
                         Command="{Binding ChangeStatusCommand}"
@@ -41,7 +62,7 @@
                         Margin="0,10,0,0"
                         BackgroundColor="{StaticResource Error}"
                         Text="Delete Plant" />
-                </VerticalStackLayout>
+                </VerticalStackLayout>-->
             </StackLayout>
         </ScrollView>
         <Grid BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" IsVisible="{Binding IsLoading}">

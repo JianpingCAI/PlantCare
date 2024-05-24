@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PlantCare.App.Utils;
 using PlantCare.Data.Repositories;
 
 namespace PlantCare.App

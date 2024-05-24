@@ -10,7 +10,7 @@ public interface IPlantRepository
 
     Task AddAsync(PlantDbModel plant);
 
-    Task UpdateAsync(PlantDbModel plant);
+    Task<bool> UpdateAsync(PlantDbModel plant);
 
-    Task DeleteAsync(PlantDbModel plant);
+    Task<bool> DeleteAsync(Guid plantId);
 }
