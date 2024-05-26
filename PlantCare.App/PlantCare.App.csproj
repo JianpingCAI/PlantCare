@@ -41,9 +41,12 @@
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<!--<MauiImage Include="Resources\AppIcon\appicon2.png" Color="#512BD4"/>-->
+
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />-->
+		<MauiSplashScreen Include="Resources\Splash\mysplash.png" Color="#512BD4" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -57,12 +60,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Fonts\fa-solid-900.ttf" />
-	  <None Remove="Resources\Fonts\MaterialIcons-Regular.ttf" />
-	  <None Remove="Resources\Images\tab_home.svg" />
-	  <None Remove="Resources\Images\tab_home_on.svg" />
-	  <None Remove="Resources\Images\tab_settings.svg" />
-	  <None Remove="Resources\Images\tab_settings_on.svg" />
+		<None Remove="Resources\Fonts\fa-solid-900.ttf" />
+		<None Remove="Resources\Fonts\MaterialIcons-Regular.ttf" />
+		<None Remove="Resources\Images\tab_home.svg" />
+		<None Remove="Resources\Images\tab_home_on.svg" />
+		<None Remove="Resources\Images\tab_settings.svg" />
+		<None Remove="Resources\Images\tab_settings_on.svg" />
+		<None Remove="Resources\Splash\mysplash.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<MauiImage Include="Resources\Splash\mysplash.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -77,43 +85,43 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\PlantCare.Data\PlantCare.Data.csproj" />
+		<ProjectReference Include="..\PlantCare.Data\PlantCare.Data.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\PlantOverviewView.xaml.cs">
-	    <DependentUpon>PlantOverviewView.xaml</DependentUpon>
-	  </Compile>
+		<Compile Update="Views\PlantOverviewView.xaml.cs">
+			<DependentUpon>PlantOverviewView.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\NotificationPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\PlantAddEditView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\PlantOverviewView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LogoView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\PlantDetailView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\RegisterView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\ReminderView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\SettingsView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="Views\NotificationPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\PlantAddEditView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\PlantOverviewView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\LoginView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\LogoView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\PlantDetailView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\RegisterView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\ReminderView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\SettingsView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 </Project>
