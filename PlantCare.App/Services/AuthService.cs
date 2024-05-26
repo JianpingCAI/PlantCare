@@ -1,5 +1,7 @@
 ﻿using PlantCare.Data.DbModels;
+using PlantCare.Data.Models;
 using PlantCare.Data.Repositories;
+using Plugin.LocalNotification;
 
 //using BCrypt.Net;
 

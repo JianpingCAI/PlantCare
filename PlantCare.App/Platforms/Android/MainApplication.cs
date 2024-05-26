@@ -15,6 +15,12 @@ using Android.Runtime;
 [assembly: UsesFeature("android.hardware.camera", Required = true)]
 [assembly: UsesFeature("android.hardware.camera.autofocus", Required = true)]
 
+// Needed for Notification
+[assembly: UsesPermission(Android.Manifest.Permission.PostNotifications)]
+[assembly: UsesPermission(Android.Manifest.Permission.WakeLock)]
+[assembly: UsesPermission(Android.Manifest.Permission.ReceiveBootCompleted)]
+[assembly: UsesPermission(Android.Manifest.Permission.Vibrate)]
+
 namespace PlantCare.App
 {
     [Application]

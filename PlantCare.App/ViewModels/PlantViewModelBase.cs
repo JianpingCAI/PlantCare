@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using PlantCare.App.ViewModels.Base;
+using PlantCare.Data.Models;
 
 namespace PlantCare.App.ViewModels;
 
@@ -36,4 +37,18 @@ public partial class PlantViewModelBase : ViewModelBase
     public int HoursUntilNextWatering => (int)(LastWatered.AddHours(WateringFrequencyInHours) - DateTime.Now).TotalHours;
 
     public double WaterState => Math.Max(0, (NextWateringTime - DateTime.Now).TotalMinutes / (WateringFrequencyInHours * 60.0));
+
+    public Plant MapToModel()
+    {
+        return new Plant
+        {
+            Id = this.Id,
+            Species = this.Species,
+            Name = this.Name,
+            Age = this.Age,
+            LastWatered = this.LastWatered,
+            PhotoPath = this.PhotoPath,
+            WateringFrequencyInHours = this.HoursUntilNextWatering
+        };
+    }
 }
