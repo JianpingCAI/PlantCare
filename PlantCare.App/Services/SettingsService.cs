@@ -1,17 +1,25 @@
-﻿namespace PlantCare.App.Services;
+﻿using PlantCare.Data;
+
+namespace PlantCare.App.Services;
 
 public class SettingsService : ISettingsService
 {
-    public async Task<bool> GetNotificationSettingAsync()
+    public async Task<bool> GetWateringNotificationSettingAsync()
     {
+        string? value = await SecureStorage.GetAsync(Consts.EnableWateringNotification);
+        if (value is null)
+        {
+            return true;
+        }
+
         // Assume settings are stored with a key-value pair locally
-        return await SecureStorage.GetAsync("EnableNotifications") == "true";
+        return value == "true";
     }
 
-    public async Task SetNotificationSettingAsync(bool isEnabled)
+    public async Task SetWateringNotificationSettingAsync(bool isEnabled)
     {
         // Save the setting locally
-        await SecureStorage.SetAsync("EnableNotifications", isEnabled.ToString());
+        await SecureStorage.SetAsync(Consts.EnableWateringNotification, isEnabled.ToString());
     }
 
     public async Task<string> GetThemeSettingAsync()

@@ -1,10 +1,14 @@
+using PlantCare.App.ViewModels;
+
 namespace PlantCare.App.Views;
 
 public partial class SettingsView : ContentPage
 {
-    public SettingsView()
+    public SettingsView(SettingsViewModel viewModel)
     {
         InitializeComponent();
+
+        BindingContext = viewModel;
     }
 
     private void RadioButton_CheckedChanged(System.Object sender, CheckedChangedEventArgs e)

@@ -87,8 +87,8 @@
                 HorizontalOptions="Center"
                 Text="Add plant" />
 
-            <Button Command="{Binding SetWateringReminderCommand}" Text="Set Reminder" />
-            <Button Command="{Binding CancelWateringReminderCommand}" Text="Cancel Reminder" />
+            <!--<Button Command="{Binding SetWateringReminderCommand}" Text="Set Reminder" />-->
+            <!--<Button Command="{Binding CancelWateringReminderCommand}" Text="Cancel Reminder" />-->
         </VerticalStackLayout>
     </ScrollView>
 </views:ContentPageBase>

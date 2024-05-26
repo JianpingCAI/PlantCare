@@ -145,6 +145,8 @@ public static class MauiProgram
 
         builder.Services.AddTransient<LoginViewModel>();
         builder.Services.AddTransient<ReminderViewModel>();
+
+        builder.Services.AddTransient<SettingsView>();
         builder.Services.AddTransient<SettingsViewModel>();
     }
 }

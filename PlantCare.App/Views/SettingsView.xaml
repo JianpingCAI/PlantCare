@@ -7,7 +7,8 @@
     xmlns:am="clr-namespace:Microsoft.Maui.ApplicationModel;assembly=Microsoft.Maui.Essentials"
     xmlns:local="clr-namespace:PlantCare.App.Resources.Styles"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="Settings">
+    Title="Settings"
+    x:DataType="vm:SettingsViewModel">
     <ContentPage.Resources>
         <ControlTemplate x:Key="ThemeRadioTemplate">
             <!--<Frame
@@ -78,17 +79,19 @@
             </Border>
         </ControlTemplate>
     </ContentPage.Resources>
-    <Grid ColumnDefinitions="*" RowDefinitions="*,*,*">
-
-        <StackLayout Padding="20">
+    <VerticalStackLayout Padding="20">
+        <Grid ColumnDefinitions="2*,1*">
             <Label
-                FontAttributes="Bold"
-                FontSize="Medium"
-                Text="App Settings" />
-            <Switch x:Name="notificationsSwitch" IsToggled="{Binding EnableNotifications}" />
-            <Label Text="Enable Notifications" />
-            <Button Command="{Binding SaveSettingsCommand}" Text="Save Settings" />
-        </StackLayout>
+                HorizontalTextAlignment="Start"
+                Text="Enable Watering Notification"
+                VerticalTextAlignment="Center" />
+            <Switch
+                x:Name="notificationsSwitch"
+                Grid.Column="1"
+                HorizontalOptions="Start"
+                IsToggled="{Binding IsWateringNotificationEnabled}"
+                VerticalOptions="Center" />
+        </Grid>
 
         <BoxView Grid.Row="1" class="HRule" />
 
@@ -172,5 +175,5 @@
                 </StackLayout>
             </VerticalStackLayout>
         </Grid>
-    </Grid>
+    </VerticalStackLayout>
 </ContentPage>

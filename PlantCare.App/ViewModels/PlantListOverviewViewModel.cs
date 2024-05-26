@@ -16,29 +16,40 @@ using System.Text.Json;
 using Plugin.LocalNotification.EventArgs;
 using System.Text.Json.Serialization;
 using System.Text;
+using System.Diagnostics;
 
 namespace PlantCare.App.ViewModels;
 
-public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<PlantAddedOrChangedMessage>, IRecipient<PlantDeletedMessage>
+public partial class PlantListOverviewViewModel : ViewModelBase,
+    IRecipient<PlantAddedOrChangedMessage>,
+    IRecipient<PlantDeletedMessage>,
+    IRecipient<WateringNotificationChangedMessage>
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
     private readonly IDialogService _dialogService;
+    private readonly ISettingsService _settingsService;
 
-    public PlantListOverviewViewModel(IPlantService plantService, INavigationService navigationService, INotificationService notificationService, IDialogService dialogService)
+    public PlantListOverviewViewModel(IPlantService plantService, INavigationService navigationService, INotificationService notificationService, IDialogService dialogService, ISettingsService settingsService)
     {
         _plantService = plantService;
         _navigationService = navigationService;
         _notificationService = notificationService;
         _dialogService = dialogService;
-
-        //_notificationService.NotificationReceiving = OnNotificationReceiving;
-        _notificationService.NotificationReceived += ShowCustomAlertFromNotification;
-        _notificationService.NotificationActionTapped += Current_NotificationActionTapped;
+        _settingsService = settingsService;
 
         WeakReferenceMessenger.Default.Register<PlantAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantDeletedMessage>(this);
+
+        if (_notificationService.IsSupported)
+        {
+            WeakReferenceMessenger.Default.Register<WateringNotificationChangedMessage>(this);
+
+            //_notificationService.NotificationReceiving = OnNotificationReceiving;
+            _notificationService.NotificationReceived += ShowCustomAlertFromNotification;
+            _notificationService.NotificationActionTapped += CurrentNotificationActionTapped;
+        }
     }
 
     [ObservableProperty]
@@ -78,11 +89,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
         // Load only once
         if (Plants.Count == 0)
         {
-            await LoadingDataWhenViewAppearing(GetPlants);
+            await LoadingDataWhenViewAppearing(LoadAllPlants);
         }
     }
 
-    private async Task GetPlants()
+    private async Task LoadAllPlants()
     {
         List<Plant> plants = await _plantService.GetAllPlantsAsync();
 
@@ -102,13 +113,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
         //        Species = "species",
         //        PhotoPath = "https://picsum.photos/200/300"
         //    }));
-        //    viewModels.Add(MapToViewModel(new Plant
-        //    {
-        //        Name = "Plant2",
-        //        Species = "species",
-        //        PhotoPath = "https://picsum.photos/200/300"
-        //    }));
         //}
+
+        if (await _settingsService.GetWateringNotificationSettingAsync())
+        {
+            await ScheduleWateringNotifications();
+        }
     }
 
     [RelayCommand]
@@ -151,24 +161,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
         }
     }
 
-    [RelayCommand]
-    public async void SetWateringReminder()
-    {
-        for (int i = 0; i < Plants.Count; i++)
-        {
-            PlantListItemViewModel viewModel = Plants[i];
-            //_notificationService.ScheduleNotification(i, viewModel.MapToModel());
-
-            await ScheduleNotification("my test", 10);
-        }
-    }
-
-    [RelayCommand]
-    public void CancelWateringReminder()
-    {
-        //_notificationService.CancelNotification(1);
-    }
-
     public static PlantListItemViewModel MapToViewModel(Plant plant)
     {
         return new PlantListItemViewModel
@@ -188,7 +180,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
     {
         Plants.Clear();
 
-        await GetPlants();
+        await LoadAllPlants();
     }
 
     void IRecipient<PlantDeletedMessage>.Receive(PlantDeletedMessage message)
@@ -200,31 +192,69 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
         }
     }
 
-    private int _tapCount = 0;
+    #region Deal with watering notification
 
-    private async Task ScheduleNotification(string title, double seconds)
+    async void IRecipient<WateringNotificationChangedMessage>.Receive(WateringNotificationChangedMessage message)
     {
-        _tapCount++;
-        var notificationId = (int)DateTime.Now.Ticks;
+        switch (message.IsWateringNotificationEnabled)
+        {
+            case true:
+                {
+                    _notificationService.CancelAll();
+
+                    await ScheduleWateringNotifications();
+                }
+                break;
+
+            case false:
+                {
+                    _notificationService.CancelAll();
+                }
+                break;
+
+            default:
+        }
+    }
+
+    private async Task ScheduleWateringNotifications()
+    {
+        if (!_notificationService.IsSupported)
+            return;
+
+        foreach (PlantListItemViewModel plant in Plants)
+        {
+            await ScheduleWateringNotification(plant, 10);
+        }
+    }
+
+    private async Task ScheduleWateringNotification(PlantListItemViewModel plant, double seconds)
+    {
+        string title = $"Remember to Water Your Plant: {plant.Name}";
+
+        //DateTime waterTime = plant.NextWateringTime;
+        DateTime waterTime = DateTime.Now.AddSeconds(5);
+
+        int notificationId = (int)DateTime.Now.Ticks;
+
+        // Data to be returned by the notification
         var list = new List<string>
             {
                 typeof(NotificationPage).FullName ?? "NotificationPage",
                 notificationId.ToString(),
-                title,
-                _tapCount.ToString()
+                plant.Id.ToString(),
             };
-        var serializeReturningData = JsonSerializer.Serialize(list);
+        string serializeReturningData = JsonSerializer.Serialize(list);
 
-        var notification = new NotificationRequest
+        var notificationRequest = new NotificationRequest
         {
             NotificationId = notificationId,
             Title = title,
-            Description = $"Tap Count: {_tapCount}",
+            Description = $"Planed Watering Time: {plant.NextWateringTime}",
             ReturningData = serializeReturningData,
             Group = AndroidOptions.DefaultGroupId,
             Schedule =
                 {
-                    NotifyTime = DateTime.Now.AddSeconds(seconds),
+                    NotifyTime = waterTime,
                     //RepeatType = NotificationRepeat.TimeInterval,
                     //NotifyRepeatInterval = TimeSpan.FromSeconds(10),
                 }
@@ -234,7 +264,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
         {
             await _notificationService.RequestNotificationPermission();
         }
-        await _notificationService.Show(notification);
+        await _notificationService.Show(notificationRequest);
     }
 
     private void ShowCustomAlertFromNotification(NotificationEventArgs e)
@@ -243,8 +273,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
         {
             return;
         }
-
-        System.Diagnostics.Debug.WriteLine(e);
 
         MainThread.BeginInvokeOnMainThread(() =>
         {
@@ -258,11 +286,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
                 NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
             });
 
-            _dialogService.Notify(e.Request.Title, requestJson, "OK");
+            //_dialogService.Notify(e.Request.Title, requestJson, "OK");
         });
     }
 
-    private async void Current_NotificationActionTapped(NotificationActionEventArgs e)
+    private void CurrentNotificationActionTapped(NotificationActionEventArgs e)
     {
         if (IsBusy)
         {
@@ -273,6 +301,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
             var log = new StringBuilder();
             log.AppendLine($"{Environment.NewLine}ActionId {e.ActionId} {DateTime.Now}");
 
+            // Notification is cancelled
             if (e.IsDismissed)
             {
                 log.AppendLine($"{Environment.NewLine}Dismissed {DateTime.Now}");
@@ -283,6 +312,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
                 return;
             }
 
+            // Notification is tapped
             if (e.IsTapped)
             {
                 log.AppendLine($"{Environment.NewLine}Tapped {DateTime.Now}");
@@ -297,7 +327,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
 
                 // No need to use NotificationSerializer, you can use your own one.
                 var list = JsonSerializer.Deserialize<List<string>>(e.Request.ReturningData);
-                if (list is null || list.Count != 4)
+                if (list is null || list.Count != 3)
                 {
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
@@ -315,17 +345,19 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
                     return;
                 }
 
-                var id = list[1];
-                var message = list[2];
-                var tapCount = list[3];
+                var notificationId = list[1];
+                var plantId = list[2];
 
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await ((NavigationPage)App.Current.MainPage).Navigation.PushModalAsync(
-                    new NotificationPage(_notificationService,
-                    int.Parse(id),
-                    message,
-                    int.Parse(tapCount)));
+                    try
+                    {
+                        await _navigationService.GoToPlantDetail(Guid.Parse(plantId));
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
                 });
                 return;
             }
@@ -356,4 +388,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase, IRecipient<Plan
             IsBusy = false;
         }
     }
+
+    #endregion Deal with watering notification
 }

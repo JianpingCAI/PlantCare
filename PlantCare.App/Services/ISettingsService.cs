@@ -2,11 +2,11 @@
 
 public interface ISettingsService
 {
-    Task<bool> GetNotificationSettingAsync();
+    Task<bool> GetWateringNotificationSettingAsync();
 
     Task<string> GetThemeSettingAsync();
 
-    Task SetNotificationSettingAsync(bool isEnabled);
+    Task SetWateringNotificationSettingAsync(bool isEnabled);
 
     Task SetThemeSettingAsync(string theme);
 }
