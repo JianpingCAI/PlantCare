@@ -11,11 +11,13 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
+    private readonly IDialogService _dialogService;
 
-    public PlantDetailViewModel(IPlantService plantService, INavigationService navigationService)
+    public PlantDetailViewModel(IPlantService plantService, INavigationService navigationService, IDialogService dialogService)
     {
         _plantService = plantService;
         _navigationService = navigationService;
+        _dialogService = dialogService;
     }
 
     [RelayCommand]
@@ -28,8 +30,15 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
     [RelayCommand]
     private async Task NavigateToEditPlant()
     {
-        PlantDbModel plant = MapToPlantModel(this);
-        await _navigationService.GoToEditPlant(plant);
+        try
+        {
+            PlantDbModel plant = MapToPlantModel(this);
+            await _navigationService.GoToEditPlant(plant);
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify("Error", ex.Message);
+        }
     }
 
     [RelayCommand]
@@ -38,23 +47,16 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
         try
         {
             await _plantService.DeletePlantAsync(Id);
+
+            WeakReferenceMessenger.Default.Send(new PlantDeletedMessage { PlantId = Id });
+
+            //await _navigationService.GoBack();
+            await _navigationService.GoToPlantsOverview();
         }
         catch (Exception ex)
         {
-            return;
+            await _dialogService.Notify("Error", ex.Message);
         }
-
-        try
-        {
-            WeakReferenceMessenger.Default.Send(new PlantDeletedMessage { PlantId = Id });
-        }
-        catch (Exception)
-        {
-            return;
-        }
-
-        //await _navigationService.GoBack();
-        await _navigationService.GoToPlantsOverview();
     }
 
     void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)

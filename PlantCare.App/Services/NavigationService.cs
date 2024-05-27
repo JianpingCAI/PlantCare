@@ -8,12 +8,12 @@ public class NavigationService : INavigationService
     public async Task GoToPlantDetail(Guid id)
     {
         var parameters = new Dictionary<string, object> { { "PlantId", id } };
-        await Shell.Current.GoToAsync("plant", parameters);
+        await Shell.Current.GoToAsync("//overview/plant", parameters);
     }
 
     public async Task GoToAddPlant()
     {
-        await Shell.Current.GoToAsync("add");
+        await Shell.Current.GoToAsync("//overview/add");
     }
 
     public async Task GoToEditPlant(PlantDbModel plant)
@@ -23,7 +23,7 @@ public class NavigationService : INavigationService
             { "Plant", plant }
         };
 
-        await Shell.Current.GoToAsync("edit", navigationParameter);
+        await Shell.Current.GoToAsync("//overview/edit", navigationParameter);
     }
 
     public async Task GoToPlantsOverview()
@@ -31,15 +31,15 @@ public class NavigationService : INavigationService
         await Shell.Current.GoToAsync("//overview");
     }
 
-    public async Task GoBack()
-    {
-        try
-        {
-            await Shell.Current.GoToAsync("..");
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.Message);
-        }
-    }
+    //public async Task GoBack()
+    //{
+    //    try
+    //    {
+    //        await Shell.Current.GoToAsync("..");
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Debug.WriteLine(ex.Message);
+    //    }
+    //}
 }

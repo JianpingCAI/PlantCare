@@ -11,5 +11,5 @@ public interface ISettingsService
     Task SetThemeSettingAsync(string theme);
 
     Task<bool> GetDebugSettingAsync();
-    void SetDebugSettingAsync(bool isEnabled);
+    Task SetDebugSettingAsync(bool isEnabled);
 }

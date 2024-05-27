@@ -12,5 +12,5 @@ public interface INavigationService
 
     Task GoToPlantsOverview();
 
-    Task GoBack();
+    //Task GoBack();
 }

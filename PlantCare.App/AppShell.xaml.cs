@@ -1,4 +1,5 @@
 ﻿using PlantCare.App.Views;
+using System.Diagnostics;
 
 namespace PlantCare.App
 {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlantCare.Data.Repositories;
+using System.Diagnostics;
 
 namespace PlantCare.App
 {
@@ -20,6 +21,23 @@ namespace PlantCare.App
 
             MainPage = new AppShell();
             //MainPage = new NavigationPage(serviceProvider.GetRequiredService<HomeView>());
+
+            // Add navigation event handlers
+            RegisterNavigationEventHandlers();
+        }
+
+        private void RegisterNavigationEventHandlers()
+        {
+            if (Shell.Current != null)
+            {
+                Shell.Current.Navigating += (sender, args) => {
+                    Debug.WriteLine("?????????????Navigating to: " + args.Target.Location.ToString());
+                };
+
+                Shell.Current.Navigated += (sender, args) => {
+                    Debug.WriteLine("?????????????Navigated to: " + args.Current.Location.ToString());
+                };
+            }
         }
     }
 }

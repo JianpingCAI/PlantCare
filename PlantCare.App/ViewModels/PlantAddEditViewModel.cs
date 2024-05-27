@@ -256,7 +256,7 @@ namespace PlantCare.App.ViewModels
             WateringFrequencyHours = plant.WateringFrequencyInHours % 24;
         }
 
-        internal async void NavigateBack()
+        internal async Task NavigateBack()
         {
             if (Id == default)
             {

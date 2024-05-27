@@ -46,7 +46,7 @@ public class SettingsService : ISettingsService
         return value == "True";
     }
 
-    public async void SetDebugSettingAsync(bool isEnabled)
+    public async Task SetDebugSettingAsync(bool isEnabled)
     {
         await SecureStorage.SetAsync(Consts.IsDebugMode, isEnabled.ToString());
     }
