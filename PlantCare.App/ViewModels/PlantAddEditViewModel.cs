@@ -5,9 +5,11 @@ using PlantCare.App.Messaging;
 using PlantCare.App.Services;
 using PlantCare.App.ViewModels.Base;
 using PlantCare.Data.DbModels;
+using PlantCare.Data.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 
 namespace PlantCare.App.ViewModels
 {
@@ -28,7 +30,7 @@ namespace PlantCare.App.ViewModels
         [ObservableProperty]
         private string _pageTitle = default!;
 
-        private Guid Id { get; set; }
+        private Guid Id { get; set; } = default;
 
         [ObservableProperty]
         [Required]
@@ -78,54 +80,63 @@ namespace PlantCare.App.ViewModels
         [RelayCommand]
         private async Task Submit()
         {
-            ValidateAllProperties();
-
-            if (Errors.Any())
+            try
             {
-                return;
-            }
+                ValidateAllProperties();
 
-            PlantDbModel plant = MapToPlantModel();
-
-            // Add/Create a plant
-            if (Id == Guid.Empty)
-            {
-                try
+                if (Errors.Any())
                 {
-                    await _plantService.CreatePlantAsync(plant);
-                }
-                catch (Exception)
-                {
-                    await _dialogService.Notify("Failed", "Adding the plant failed.");
+                    return;
                 }
 
-                WeakReferenceMessenger.Default.Send(new PlantAddedOrChangedMessage());
+                PlantDbModel plant = MapToPlantModel();
 
-                await _dialogService.Notify("Success", "The plant is added.");
-                await _navigationService.GoToPlantsOverview();
-            }
-            // Edit/Update a plant
-            else
-            {
-                bool updated = false;
-                try
+                // Add/Create a plant
+                if (Id == Guid.Empty)
                 {
-                    updated = await _plantService.UpdatePlantAsync(plant);
-                }
-                catch (Exception e)
-                {
-                }
+                    try
+                    {
+                        await _plantService.CreatePlantAsync(plant);
+                    }
+                    catch (Exception)
+                    {
+                        await _dialogService.Notify("Failed", "Adding the plant failed.");
+                    }
 
-                if (!updated)
-                {
-                    await _dialogService.Notify("Failed", "Editing the plant failed.");
+                    WeakReferenceMessenger.Default.Send(new PlantAddedOrChangedMessage());
+
+                    await _dialogService.Notify("Success", "The plant is added.");
+                    await _navigationService.GoToPlantsOverview();
                 }
+                // Edit/Update a plant
                 else
                 {
-                    WeakReferenceMessenger.Default.Send(new PlantAddedOrChangedMessage { PlantId = Id });
-                    await _dialogService.Notify("Success", "The plant is updated.");
-                    await _navigationService.GoBack();
+                    bool updated = false;
+                    try
+                    {
+                        updated = await _plantService.UpdatePlantAsync(plant);
+                    }
+                    catch (Exception e)
+                    {
+                        await _dialogService.Notify("Error", e.Message);
+                    }
+
+                    if (!updated)
+                    {
+                        await _dialogService.Notify("Failed", "Editing the plant failed.");
+                    }
+                    else
+                    {
+                        WeakReferenceMessenger.Default.Send(new PlantAddedOrChangedMessage { PlantId = Id });
+                        await _dialogService.Notify("Success", "The plant is updated.");
+                        //await _navigationService.GoBack();
+                        await _navigationService.GoToPlantDetail(plant.Id);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.Notify("Error", ex.Message);
             }
         }
 
@@ -243,6 +254,18 @@ namespace PlantCare.App.ViewModels
 
             WateringFrequencyDays = plant.WateringFrequencyInHours / 24;
             WateringFrequencyHours = plant.WateringFrequencyInHours % 24;
+        }
+
+        internal async void NavigateBack()
+        {
+            if (Id == default)
+            {
+                await _navigationService.GoToPlantsOverview();
+            }
+            else
+            {
+                await _navigationService.GoToPlantDetail(Id);
+            }
         }
     }
 }

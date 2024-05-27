@@ -6,20 +6,24 @@
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
     xmlns:local="clr-namespace:PlantCare.App.Utils"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="{Binding Name}">
+    Title="{Binding Name}"
+    x:DataType="vm:PlantAddEditViewModel">
     <ContentPage.Resources>
         <ResourceDictionary>
             <local:StringToIntConverter x:Key="StringToIntConverter" />
+            <!--<Style TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>-->
         </ResourceDictionary>
     </ContentPage.Resources>
-    <Grid x:DataType="vm:PlantAddEditViewModel">
+    <Grid>
         <ScrollView>
-            <Grid x:DataType="vm:PlantAddEditViewModel">
+            <Grid>
                 <VerticalStackLayout Padding="10">
-                    <Label
+                    <!--<Label
                         Style="{StaticResource TitleLabelStyle}"
                         Text="{Binding PageTitle}"
-                        TextColor="{StaticResource Primary}" />
+                        TextColor="{StaticResource Primary}" />-->
 
                     <HorizontalStackLayout>
                         <Label Text="Name" />
@@ -61,7 +65,8 @@
                     <VerticalStackLayout Margin="0,10,0,0" BindableLayout.ItemsSource="{Binding Errors}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="dataAnnotations:ValidationResult">
-                                <Label Style="{StaticResource ErrorLabelStyle}" Text="{Binding ErrorMessage}" />
+                                <!--<Label Style="{StaticResource ErrorLabelStyle}" Text="{Binding ErrorMessage}" />-->
+                                <Label Text="{Binding ErrorMessage}" />
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </VerticalStackLayout>
@@ -70,7 +75,7 @@
                         Margin="0,10,0,25"
                         Command="{Binding SubmitCommand}"
                         HorizontalOptions="Center"
-                        Text="Submit" />
+                        Text="Save" />
                 </VerticalStackLayout>
             </Grid>
         </ScrollView>

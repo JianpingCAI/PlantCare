@@ -12,51 +12,20 @@ public partial class SettingsViewModel : ViewModelBase
 {
     private readonly ISettingsService _settingsService;
 
-    [ObservableProperty]
-    private bool _isWateringNotificationEnabled = true;
-
-    [ObservableProperty]
-    private string theme;
-
-    [ObservableProperty]
-    private AppTheme _selectedTheme;
-
-    //public AppTheme SelectedTheme
-    //{
-    //    get => _selectedTheme;
-    //    set
-    //    {
-    //        if (_selectedTheme != value)
-    //        {
-    //            _selectedTheme = value;
-    //            OnPropertyChanged();
-    //        }
-    //    }
-    //}
-
     public SettingsViewModel(ISettingsService settingsService)
     {
         _settingsService = settingsService;
 
     }
 
-    partial void OnIsWateringNotificationEnabledChanged(bool isNotificationEnabled)
-    {
-        // Handle additional logic when the switch is toggled
-        // For example, update some other properties or call a service
-        Debug.WriteLine($"{isNotificationEnabled}");
-        WeakReferenceMessenger.Default.Send(new WateringNotificationChangedMessage { IsWateringNotificationEnabled = isNotificationEnabled });
+    [ObservableProperty]
+    private bool _isWateringNotificationEnabled = true;
 
-    }
+    [ObservableProperty]
+    private bool _isDebugModeEnabled = true;
 
-    [RelayCommand]
-    private void SelectTheme(RadioButton selectedRadioButton)
-    {
-        if (selectedRadioButton != null)
-        {
-            selectedRadioButton.IsChecked = true;
-        }
-    }
+    [ObservableProperty]
+    private string theme;
 
     [RelayCommand]
     private async Task LoadSettingsAsync()
@@ -85,5 +54,29 @@ public partial class SettingsViewModel : ViewModelBase
             await _settingsService.SetThemeSettingAsync(Theme);
         }
         finally { IsBusy = false; }
+    }
+
+    partial void OnIsWateringNotificationEnabledChanged(bool isEnabled)
+    {
+        WeakReferenceMessenger.Default.Send(new WateringNotificationChangedMessage { IsWateringNotificationEnabled = isEnabled });
+
+        _settingsService.SetWateringNotificationSettingAsync(isEnabled);
+    }
+
+    partial void OnIsDebugModeEnabledChanged(bool isEnabled)
+    {
+        _settingsService.SetDebugSettingAsync(isEnabled);
+    }
+
+    public override async Task LoadDataWhenViewAppearingAsync()
+    {
+        await LoadingDataWhenViewAppearing(LoadSettings);
+        
+    }
+
+    private async Task LoadSettings()
+    {
+        IsDebugModeEnabled = await _settingsService.GetDebugSettingAsync();
+        IsWateringNotificationEnabled = await _settingsService.GetWateringNotificationSettingAsync();
     }
 }

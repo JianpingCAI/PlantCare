@@ -10,4 +10,13 @@ public partial class PlantDetailView : ContentPageBase
 
         BindingContext = viewModel;
     }
+
+    protected override bool OnBackButtonPressed()
+    {
+        if (BindingContext is PlantDetailViewModel viewModel)
+        {
+            viewModel.NavidateBack();
+        }
+        return base.OnBackButtonPressed();
+    }
 }

@@ -95,41 +95,60 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task LoadAllPlants()
     {
-        List<Plant> plants = await _plantService.GetAllPlantsAsync();
-
-        List<PlantListItemViewModel> viewModels = [];
-        foreach (Plant plant in plants)
+        try
         {
-            viewModels.Add(MapToViewModel(plant));
+            List<Plant> plants = await _plantService.GetAllPlantsAsync();
+
+            List<PlantListItemViewModel> viewModels = [];
+            foreach (Plant plant in plants)
+            {
+                viewModels.Add(MapToViewModel(plant));
+            }
+            Plants.Clear();
+            Plants = viewModels.ToObservableCollection();
+
+            //if (plants.Count == 0)
+            //{
+            //    viewModels.Add(MapToViewModel(new Plant
+            //    {
+            //        Name = "Plant1",
+            //        Species = "species",
+            //        PhotoPath = "https://picsum.photos/200/300"
+            //    }));
+            //}
+
+            if (await _settingsService.GetWateringNotificationSettingAsync())
+            {
+                await ScheduleWateringNotifications();
+            }
         }
-        Plants.Clear();
-        Plants = viewModels.ToObservableCollection();
-
-        //if (plants.Count == 0)
-        //{
-        //    viewModels.Add(MapToViewModel(new Plant
-        //    {
-        //        Name = "Plant1",
-        //        Species = "species",
-        //        PhotoPath = "https://picsum.photos/200/300"
-        //    }));
-        //}
-
-        if (await _settingsService.GetWateringNotificationSettingAsync())
+        catch (Exception ex)
         {
-            await ScheduleWateringNotifications();
+            Debug.WriteLine(ex.Message);
         }
     }
 
     [RelayCommand]
-    private void AddPlant()
+    private async Task AddPlant()
     {
         if (IsBusy)
             return;
 
         try
         {
-            _navigationService.GoToAddPlant();
+            await _navigationService.GoToAddPlant();
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                await _dialogService.Notify("Error", ex.Message);
+                await _navigationService.GoToPlantsOverview();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
         finally
         {
@@ -221,50 +240,62 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         if (!_notificationService.IsSupported)
             return;
 
-        foreach (PlantListItemViewModel plant in Plants)
+        for (int i = 0; i < Plants.Count; i++)
         {
-            await ScheduleWateringNotification(plant, 10);
+            PlantListItemViewModel plant = Plants[i];
+            await ScheduleWateringNotification(plant, i, 10);
         }
     }
 
-    private async Task ScheduleWateringNotification(PlantListItemViewModel plant, double seconds)
+    private async Task ScheduleWateringNotification(PlantListItemViewModel plant, int plantIndex, double seconds)
     {
-        string title = $"Remember to Water Your Plant: {plant.Name}";
+        try
+        {
+            string title = $"Remember to Water Your Plant: {plant.Name}";
 
-        //DateTime waterTime = plant.NextWateringTime;
-        DateTime waterTime = DateTime.Now.AddSeconds(5);
+            DateTime waterTime = plant.NextWateringTime;
 
-        int notificationId = (int)DateTime.Now.Ticks;
+            if (await _settingsService.GetDebugSettingAsync())
+            {
+                waterTime = DateTime.Now.AddSeconds((plantIndex + 1) * 5);
+            }
 
-        // Data to be returned by the notification
-        var list = new List<string>
+            int notificationId = plant.Id.GetHashCode();
+
+            // Data to be returned by the notification
+            var list = new List<string>
             {
                 typeof(NotificationPage).FullName ?? "NotificationPage",
                 notificationId.ToString(),
                 plant.Id.ToString(),
             };
-        string serializeReturningData = JsonSerializer.Serialize(list);
+            string serializeReturningData = JsonSerializer.Serialize(list);
 
-        var notificationRequest = new NotificationRequest
-        {
-            NotificationId = notificationId,
-            Title = title,
-            Description = $"Planed Watering Time: {plant.NextWateringTime}",
-            ReturningData = serializeReturningData,
-            Group = AndroidOptions.DefaultGroupId,
-            Schedule =
+            var notificationRequest = new NotificationRequest
+            {
+                NotificationId = notificationId,
+                Title = title,
+                Description = $"Planed Watering Time: {plant.NextWateringTime}",
+                ReturningData = serializeReturningData,
+                Group = AndroidOptions.DefaultGroupId,
+                Schedule =
                 {
                     NotifyTime = waterTime,
                     //RepeatType = NotificationRepeat.TimeInterval,
                     //NotifyRepeatInterval = TimeSpan.FromSeconds(10),
                 }
-        };
+            };
 
-        if (await _notificationService.AreNotificationsEnabled() == false)
-        {
-            await _notificationService.RequestNotificationPermission();
+            if (await _notificationService.AreNotificationsEnabled() == false)
+            {
+                await _notificationService.RequestNotificationPermission();
+            }
+            await _notificationService.Show(notificationRequest);
         }
-        await _notificationService.Show(notificationRequest);
+        catch (Exception ex)
+        {
+            await _dialogService.Notify("Error", ex.Message);
+        }
     }
 
     private void ShowCustomAlertFromNotification(NotificationEventArgs e)

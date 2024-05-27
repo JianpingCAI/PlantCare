@@ -13,7 +13,7 @@ public class SettingsService : ISettingsService
         }
 
         // Assume settings are stored with a key-value pair locally
-        return value == "true";
+        return value == "True";
     }
 
     public async Task SetWateringNotificationSettingAsync(bool isEnabled)
@@ -32,5 +32,22 @@ public class SettingsService : ISettingsService
     {
         // Save the theme setting locally
         await SecureStorage.SetAsync("AppTheme", theme);
+    }
+
+    public async Task<bool> GetDebugSettingAsync()
+    {
+        string? value = await SecureStorage.GetAsync(Consts.IsDebugMode);
+        if (value is null)
+        {
+            return true;
+        }
+
+        // Assume settings are stored with a key-value pair locally
+        return value == "True";
+    }
+
+    public async void SetDebugSettingAsync(bool isEnabled)
+    {
+        await SecureStorage.SetAsync(Consts.IsDebugMode, isEnabled.ToString());
     }
 }

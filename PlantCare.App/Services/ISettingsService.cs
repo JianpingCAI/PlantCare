@@ -9,4 +9,7 @@ public interface ISettingsService
     Task SetWateringNotificationSettingAsync(bool isEnabled);
 
     Task SetThemeSettingAsync(string theme);
+
+    Task<bool> GetDebugSettingAsync();
+    void SetDebugSettingAsync(bool isEnabled);
 }

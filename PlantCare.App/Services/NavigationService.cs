@@ -1,4 +1,5 @@
 ﻿using PlantCare.Data.DbModels;
+using System.Diagnostics;
 
 namespace PlantCare.App.Services;
 
@@ -10,9 +11,9 @@ public class NavigationService : INavigationService
         await Shell.Current.GoToAsync("plant", parameters);
     }
 
-    public Task GoToAddPlant()
+    public async Task GoToAddPlant()
     {
-        return Shell.Current.GoToAsync("plant/add");
+        await Shell.Current.GoToAsync("add");
     }
 
     public async Task GoToEditPlant(PlantDbModel plant)
@@ -22,16 +23,23 @@ public class NavigationService : INavigationService
             { "Plant", plant }
         };
 
-        await Shell.Current.GoToAsync("plant/edit", navigationParameter);
+        await Shell.Current.GoToAsync("edit", navigationParameter);
     }
 
-    public Task GoToPlantsOverview()
+    public async Task GoToPlantsOverview()
     {
-        return Shell.Current.GoToAsync("//overview");
+        await Shell.Current.GoToAsync("//overview");
     }
 
-    public Task GoBack()
+    public async Task GoBack()
     {
-        return Shell.Current.GoToAsync("..");
+        try
+        {
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
     }
 }

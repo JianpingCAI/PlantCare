@@ -2,7 +2,7 @@ using PlantCare.App.ViewModels;
 
 namespace PlantCare.App.Views;
 
-public partial class SettingsView : ContentPage
+public partial class SettingsView : ContentPageBase
 {
     public SettingsView(SettingsViewModel viewModel)
     {

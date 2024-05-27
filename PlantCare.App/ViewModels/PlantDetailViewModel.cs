@@ -53,7 +53,8 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
             return;
         }
 
-        await _navigationService.GoBack();
+        //await _navigationService.GoBack();
+        await _navigationService.GoToPlantsOverview();
     }
 
     void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
@@ -79,6 +80,11 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
     private async Task GetPlantDetailAsync(Guid plantId)
     {
         Plant plant = await _plantService.GetPlantByIdAsync(plantId);
+        if (plant is null)
+        {
+            return;
+        }
+
         MapPlantData(plant);
     }
 
@@ -106,5 +112,10 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
             PhotoPath = plantDetailViewModel.PhotoPath,
             WateringFrequencyInHours = plantDetailViewModel.HoursUntilNextWatering
         };
+    }
+
+    internal async void NavidateBack()
+    {
+        await _navigationService.GoToPlantsOverview();
     }
 }
