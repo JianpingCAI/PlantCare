@@ -14,6 +14,4 @@ public interface IPlantService
     Task<Plant> GetPlantByIdAsync(Guid id);
 
     Task<bool> UpdatePlantAsync(PlantDbModel plant);
-
-    Task<IEnumerable<object>> SearchPlantsAsync(string searchText);
 }

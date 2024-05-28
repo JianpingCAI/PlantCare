@@ -31,9 +31,11 @@
 
             <!--  Search Bar for quick filtering  -->
             <SearchBar
+                CancelButtonColor="Red"
                 Placeholder="Search plants..."
                 SearchCommand="{Binding SearchCommand}"
-                Text="{Binding SearchText}" />
+                Text="{Binding SearchText}"
+                TextChanged="SearchBar_TextChanged" />
 
             <!--  Plants Collection View  -->
             <CollectionView
@@ -50,10 +52,7 @@
                             HorizontalOptions="Center"
                             InputTransparent="True"
                             VerticalOptions="Center">-->
-                        <Border
-                            Padding="10"
-                            HorizontalOptions="Center"
-                            VerticalOptions="Center">
+                        <Border HorizontalOptions="Center" VerticalOptions="Center">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="10" />
                             </Border.StrokeShape>

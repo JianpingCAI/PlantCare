@@ -107,6 +107,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             Plants.Clear();
             Plants = viewModels.ToObservableCollection();
 
+            _allPlantsBackUped.AddRange(Plants);
+
             //if (plants.Count == 0)
             //{
             //    viewModels.Add(MapToViewModel(new Plant
@@ -156,8 +158,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
+    private List<PlantListItemViewModel> _allPlantsBackUped = [];
+
     [RelayCommand]
-    private void Search()
+    private async Task Search()
     {
         if (IsBusy)
             return;
@@ -166,18 +170,58 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             if (!string.IsNullOrEmpty(SearchText))
             {
-                //var searchResults = await _plantService.SearchPlantsAsync(SearchText);
-                //Plants.Clear();
-                //foreach (var plant in searchResults)
-                //{
-                //    Plants.Add(plant);
-                //}
+                var searchResults = await FilterPlantsAsync(Plants, SearchText);
+
+                Plants.Clear();
+                foreach (PlantListItemViewModel plant in searchResults)
+                {
+                    Plants.Add(plant);
+                }
+            }
+            else
+            {
+                ResetSearch();
             }
         }
         finally
         {
             IsBusy = false;
         }
+    }
+
+    internal void ResetSearch()
+    {
+        if (_allPlantsBackUped.Count == 0)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(SearchText.Trim()))
+        {
+            Plants.Clear();
+
+            foreach (var item in _allPlantsBackUped)
+            {
+                Plants.Add(item);
+            }
+        }
+    }
+
+    private Task<List<PlantListItemViewModel>> FilterPlantsAsync(ObservableCollection<PlantListItemViewModel> plants, string searchText)
+    {
+        return Task.Run(() =>
+        {
+            List<PlantListItemViewModel> filtered = [];
+            foreach (PlantListItemViewModel item in plants)
+            {
+                if (item.Name.ToLower().Contains(searchText.Trim().ToLower()))
+                {
+                    filtered.Add(item);
+                }
+            }
+
+            return filtered;
+        });
     }
 
     public static PlantListItemViewModel MapToViewModel(Plant plant)
@@ -419,6 +463,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             IsBusy = false;
         }
     }
+
+ 
 
     #endregion Deal with watering notification
 }

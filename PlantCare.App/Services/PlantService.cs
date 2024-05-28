@@ -42,9 +42,4 @@ public class PlantService : IPlantService
     {
         await _plantRepository.DeleteAsync(plantId);
     }
-
-    public Task<IEnumerable<object>> SearchPlantsAsync(string searchText)
-    {
-        throw new NotImplementedException();
-    }
 }
