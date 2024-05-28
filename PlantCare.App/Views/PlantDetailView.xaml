@@ -11,8 +11,24 @@
     <Grid>
         <ScrollView>
             <StackLayout Padding="10">
-                <Image Aspect="AspectFit" Source="{Binding PhotoPath}" />
+                <Border
+                    HorizontalOptions="Center"
+                    Stroke="Transparent"
+                    StrokeThickness="0"
+                    VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="50" />
+                    </Border.StrokeShape>
+                    <Image
+                        Aspect="AspectFit"
+                        HorizontalOptions="Center"
+                        MaximumWidthRequest="{OnIdiom Phone=300,
+                                                      Default=500}"
+                        Source="{Binding PhotoPath}"
+                        VerticalOptions="Center" />
+                </Border>
                 <Grid ColumnDefinitions="*,Auto">
+
                     <Label
                         FontAttributes="Bold"
                         FontSize="Large"

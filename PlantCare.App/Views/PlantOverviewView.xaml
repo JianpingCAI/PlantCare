@@ -53,15 +53,27 @@
                         <Border
                             Padding="10"
                             HorizontalOptions="Center"
-                            Stroke="ForestGreen"
-                            StrokeShape="RoundRectangle 10"
                             VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
                             <VerticalStackLayout HorizontalOptions="Center">
-                                <Image
-                                    Aspect="AspectFill"
-                                    HeightRequest="100"
-                                    Source="{Binding PhotoPath}"
-                                    WidthRequest="100" />
+                                <Border
+                                    HorizontalOptions="Center"
+                                    Stroke="Transparent"
+                                    StrokeThickness="0"
+                                    VerticalOptions="Center">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HeightRequest="100"
+                                        HorizontalOptions="Center"
+                                        Source="{Binding PhotoPath}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="100" />
+                                </Border>
                                 <Label
                                     FontAttributes="Bold"
                                     HorizontalOptions="Center"
@@ -77,15 +89,17 @@
                 </CollectionView.ItemTemplate>
 
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="3" />
+                    <GridItemsLayout
+                        HorizontalItemSpacing="5"
+                        Orientation="Vertical"
+                        Span="{OnIdiom Phone=3,
+                                       Desktop=4}"
+                        VerticalItemSpacing="5" />
                 </CollectionView.ItemsLayout>
             </CollectionView>
 
             <!--  Add Plant Button  -->
-            <Button
-                Command="{Binding AddPlantCommand}"
-                HorizontalOptions="Center"
-                Text="Add plant" />
+            <Button Command="{Binding AddPlantCommand}" Text="Add plant" />
 
             <!--<Button Command="{Binding SetWateringReminderCommand}" Text="Set Reminder" />-->
             <!--<Button Command="{Binding CancelWateringReminderCommand}" Text="Cancel Reminder" />-->

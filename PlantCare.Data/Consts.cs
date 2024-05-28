@@ -7,4 +7,6 @@ public static class Consts
     public const string EnableWateringNotification = "EnableWateringNotification";
 
     public const string IsDebugMode = "IsDebugMode";
+
+    public const string DefaultPhotoPath = "default_plant.png";
 }

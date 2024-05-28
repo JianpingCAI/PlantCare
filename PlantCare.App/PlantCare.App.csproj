@@ -40,7 +40,7 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" ForegroundScale="0.65"/>
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" ForegroundScale="0.65" />
 
 		<!-- Splash Screen -->
 		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />-->
@@ -60,6 +60,7 @@
 	<ItemGroup>
 		<None Remove="Resources\Fonts\fa-solid-900.ttf" />
 		<None Remove="Resources\Fonts\MaterialIcons-Regular.ttf" />
+		<None Remove="Resources\Images\default_plant.png" />
 		<None Remove="Resources\Images\tab_home.svg" />
 		<None Remove="Resources\Images\tab_home_on.svg" />
 		<None Remove="Resources\Images\tab_settings.svg" />

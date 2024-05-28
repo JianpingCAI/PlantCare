@@ -11,9 +11,6 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <local:StringToIntConverter x:Key="StringToIntConverter" />
-            <!--<Style TargetType="Label">
-                <Setter Property="VerticalOptions" Value="Center" />
-            </Style>-->
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid>
@@ -24,43 +21,125 @@
                         Style="{StaticResource TitleLabelStyle}"
                         Text="{Binding PageTitle}"
                         TextColor="{StaticResource Primary}" />-->
+                    <Border
+                        HorizontalOptions="Center"
+                        Stroke="Transparent"
+                        StrokeThickness="0"
+                        VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="50" />
+                        </Border.StrokeShape>
+                        <Image
+                            Aspect="AspectFit"
+                            HorizontalOptions="Center"
+                            MaximumWidthRequest="{OnIdiom Phone=300,
+                                                          Default=500}"
+                            Source="{Binding PhotoPath}"
+                            VerticalOptions="Center" />
+                        <!--  TargetNullValue=defaut_plant.png, FallbackValue=defaut_plant.png  -->
+                    </Border>
 
-                    <HorizontalStackLayout>
+                    <HorizontalStackLayout HorizontalOptions="Center">
+                        <Button
+                            Margin="5,5"
+                            Command="{Binding UploadImageCommand}"
+                            MinimumWidthRequest="150"
+                            Text="Upload Photo" />
+                        <Button
+                            Margin="5,5"
+                            Command="{Binding TakePhotoCommand}"
+                            MinimumWidthRequest="150"
+                            Text="Take Photo" />
+                    </HorizontalStackLayout>
+
+
+                    <Grid
+                        ColumnDefinitions="*,*"
+                        HorizontalOptions="Start"
+                        RowDefinitions="*,*,*">
+
                         <Label Text="Name" />
-                        <Entry Text="{Binding Name, Mode=TwoWay}" VerticalOptions="End" />
-                    </HorizontalStackLayout>
+                        <Entry
+                            Grid.Column="1"
+                            Margin="5,0,0,0"
+                            Text="{Binding Name, Mode=TwoWay}"
+                            VerticalOptions="End" />
 
-                    <Image Aspect="AspectFit" Source="{Binding PhotoPath, TargetNullValue=fallback.jpg}" />
+                        <Label Grid.Row="1" Text="Species" />
+                        <Entry
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="5,0,0,0"
+                            Text="{Binding Species, Mode=TwoWay}"
+                            VerticalOptions="Start" />
 
-                    <HorizontalStackLayout>
-                        <Button Command="{Binding UploadImageCommand}" Text="Upload Image" />
-                        <Button Command="{Binding TakePhotoCommand}" Text="Take Photo" />
-                    </HorizontalStackLayout>
+                        <Label Grid.Row="2" Text="Age" />
+                        <HorizontalStackLayout Grid.Row="2" Grid.Column="1">
+                            <Entry
+                                Margin="5,0,0,0"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Age, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
+                                VerticalOptions="End" />
+                            <Stepper
+                                Increment="1"
+                                Maximum="3000"
+                                MaximumWidthRequest="{OnIdiom Phone=120,
+                                                              Default=200}"
+                                Minimum="0"
+                                Value="{Binding Age, Mode=TwoWay}" />
+                        </HorizontalStackLayout>
+                    </Grid>
 
-                    <HorizontalStackLayout>
-                        <Label Text="Species" />
-                        <Entry Text="{Binding Species, Mode=TwoWay}" VerticalOptions="Start" />
-                    </HorizontalStackLayout>
+                    <Grid
+                        ColumnDefinitions="*,*"
+                        HorizontalOptions="Start"
+                        RowDefinitions="*,*">
+                        <Label Text="Last Watering" />
 
-                    <HorizontalStackLayout>
-                        <Label Text="Age" />
-                        <Entry Text="{Binding Age, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}" VerticalOptions="End" />
-                    </HorizontalStackLayout>
+                        <HorizontalStackLayout Grid.Column="1" Margin="5,0,0,0">
+                            <DatePicker Date="{Binding LastWateredDate}" VerticalOptions="End" />
+                            <TimePicker Time="{Binding LastWateredTime}" VerticalOptions="End" />
+                        </HorizontalStackLayout>
 
-                    <HorizontalStackLayout>
-                        <Label Text="Last Watering Time" />
-                        <!--<Entry Text="{Binding LastWatered, Mode=TwoWay}" VerticalOptions="End" />-->
-                        <DatePicker Date="{Binding LastWateredDate}" />
-                        <TimePicker Time="{Binding LastWateredTime}" />
-                    </HorizontalStackLayout>
+                        <Label Grid.Row="1" Text="Waterting &#10; Interval" />
 
-                    <HorizontalStackLayout>
-                        <Label Text="Next Waterting Time" />
-                        <Entry Text="{Binding WateringFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}" VerticalOptions="End" />
-                        <Label Text="Days" />
-                        <Entry Text="{Binding WateringFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}" VerticalOptions="End" />
-                        <Label Text="Hours" />
-                    </HorizontalStackLayout>
+                        <VerticalStackLayout
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="5,0,0,0">
+                            <HorizontalStackLayout>
+                                <Entry
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding WateringFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
+                                    VerticalOptions="Center" />
+                                <Stepper
+                                    Increment="1"
+                                    Maximum="365"
+                                    MaximumWidthRequest="{OnIdiom Phone=120,
+                                                                  Default=200}"
+                                    Minimum="0"
+                                    Value="{Binding WateringFrequencyDays, Mode=TwoWay}" />
+                                <Label Margin="5,0,10,0" Text="Days" />
+
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout>
+                                <Entry
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding WateringFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
+                                    VerticalOptions="Center" />
+                                <Stepper
+                                    Increment="1"
+                                    Maximum="23"
+                                    MaximumWidthRequest="{OnIdiom Phone=120,
+                                                                  Default=200}"
+                                    Minimum="0"
+                                    Value="{Binding WateringFrequencyHours, Mode=TwoWay}" />
+                                <Label Margin="5,0,0,0" Text="Hours" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+
+                    </Grid>
 
                     <VerticalStackLayout Margin="0,10,0,0" BindableLayout.ItemsSource="{Binding Errors}">
                         <BindableLayout.ItemTemplate>
@@ -72,9 +151,10 @@
                     </VerticalStackLayout>
 
                     <Button
-                        Margin="0,10,0,25"
+                        Margin="0,10,0,0"
                         Command="{Binding SubmitCommand}"
-                        HorizontalOptions="Center"
+                        HorizontalOptions="CenterAndExpand"
+                        MinimumWidthRequest="150"
                         Text="Save" />
                 </VerticalStackLayout>
             </Grid>

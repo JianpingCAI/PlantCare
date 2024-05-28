@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
 using PlantCare.App.ViewModels.Base;
+using PlantCare.Data;
 using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
 using System.Collections.ObjectModel;
@@ -75,7 +76,7 @@ namespace PlantCare.App.ViewModels
         public DateTime NextWateringTime => LastWatered.AddDays(WateringFrequencyDays).AddHours(WateringFrequencyHours);
 
         [ObservableProperty]
-        private string _photoPath = string.Empty;
+        private string _photoPath = Consts.DefaultPhotoPath;
 
         [RelayCommand]
         private async Task Submit()
@@ -168,7 +169,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                // Handle exceptions
+                await _dialogService.Notify("Error", ex.Message, "Error");
             }
         }
 
@@ -197,7 +198,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                // Handle exceptions
+                await _dialogService.Notify("Error", ex.Message, "Error");
             }
         }
 

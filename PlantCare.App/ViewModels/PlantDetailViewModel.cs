@@ -112,7 +112,7 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
             Age = plantDetailViewModel.Age,
             LastWatered = plantDetailViewModel.LastWatered,
             PhotoPath = plantDetailViewModel.PhotoPath,
-            WateringFrequencyInHours = plantDetailViewModel.HoursUntilNextWatering
+            WateringFrequencyInHours = plantDetailViewModel.WateringFrequencyInHours
         };
     }
 
