@@ -34,7 +34,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     public PlantListOverviewViewModel(IPlantService plantService, INavigationService navigationService, INotificationService notificationService, IDialogService dialogService, ISettingsService settingsService)
     {
         _plantService = plantService;
-        
+
         _navigationService = navigationService;
         _notificationService = notificationService;
         _dialogService = dialogService;
@@ -48,8 +48,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             WeakReferenceMessenger.Default.Register<WateringNotificationChangedMessage>(this);
 
             //_notificationService.NotificationReceiving = OnNotificationReceiving;
-            _notificationService.NotificationReceived += ShowCustomAlertFromNotification;
-            _notificationService.NotificationActionTapped += CurrentNotificationActionTapped;
+            //_notificationService.NotificationReceived += OnNotificationReceived;
+            _notificationService.NotificationActionTapped += OnNotificationActionTapped;
         }
     }
 
@@ -305,20 +305,18 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 waterTime = DateTime.Now.AddSeconds((plantIndex + 1) * 5);
             }
 
-            int notificationId = plant.Id.GetHashCode();
-
             // Data to be returned by the notification
             var list = new List<string>
             {
                 typeof(NotificationPage).FullName ?? "NotificationPage",
-                notificationId.ToString(),
+                plant.Id.GetHashCode().ToString(),
                 plant.Id.ToString(),
             };
             string serializeReturningData = JsonSerializer.Serialize(list);
 
             var notificationRequest = new NotificationRequest
             {
-                NotificationId = notificationId,
+                NotificationId = plant.Id.GetHashCode(),
                 Title = title,
                 Description = $"Planed Watering Time: {plant.NextWateringTime}",
                 ReturningData = serializeReturningData,
@@ -335,63 +333,66 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 await _notificationService.RequestNotificationPermission();
             }
+
+            // Send a local notification to the device
             await _notificationService.Show(notificationRequest);
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify("Error", ex.Message, "OK");
         }
     }
 
-    private void ShowCustomAlertFromNotification(NotificationEventArgs e)
-    {
-        if (e.Request is null)
-        {
-            return;
-        }
+    //private void OnNotificationReceived(NotificationEventArgs e)
+    //{
+    //    if (e.Request is null)
+    //    {
+    //        return;
+    //    }
 
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            // TODO
-            //if (!CustomAlert.IsToggled)
-            //{
-            //    return;
-            //}
-            var requestJson = JsonSerializer.Serialize(e.Request, new JsonSerializerOptions
-            {
-                NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
-            });
+    //    MainThread.BeginInvokeOnMainThread(() =>
+    //    {
+    //        // TODO
+    //        //if (!CustomAlert.IsToggled)
+    //        //{
+    //        //    return;
+    //        //}
+    //        var requestJson = JsonSerializer.Serialize(e.Request, new JsonSerializerOptions
+    //        {
+    //            NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
+    //        });
 
-            //_dialogService.Notify(e.Request.Title, requestJson, "OK");
-        });
-    }
+    //        //_dialogService.Notify(e.Request.Title, requestJson, "OK");
+    //    });
+    //}
 
-    private void CurrentNotificationActionTapped(NotificationActionEventArgs e)
+    private async void OnNotificationActionTapped(NotificationActionEventArgs e)
     {
         if (IsBusy)
         {
             return;
         }
+
         try
         {
-            var log = new StringBuilder();
-            log.AppendLine($"{Environment.NewLine}ActionId {e.ActionId} {DateTime.Now}");
+            //var logMessage = new StringBuilder();
+            //logMessage.AppendLine($"{Environment.NewLine}ActionId {e.ActionId} {DateTime.Now}");
 
             // Notification is cancelled
             if (e.IsDismissed)
             {
-                log.AppendLine($"{Environment.NewLine}Dismissed {DateTime.Now}");
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    _dialogService.Notify(e.Request.Title, "User Dismissed Notification", "OK");
-                });
+                //logMessage.AppendLine($"{Environment.NewLine}Dismissed {DateTime.Now}");
+                //MainThread.BeginInvokeOnMainThread(() =>
+                //{
+                await _dialogService.Notify("Notification Dismissed", e.Request.Title, "OK");
+                //});
                 return;
             }
 
             // Notification is tapped
             if (e.IsTapped)
             {
-                log.AppendLine($"{Environment.NewLine}Tapped {DateTime.Now}");
+                //logMessage.AppendLine($"{Environment.NewLine}Tapped {DateTime.Now}");
                 if (e.Request is null)
                 {
                     MainThread.BeginInvokeOnMainThread(() =>
@@ -405,67 +406,53 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 var list = JsonSerializer.Deserialize<List<string>>(e.Request.ReturningData);
                 if (list is null || list.Count != 3)
                 {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        _dialogService.Notify(e.Request.Title, $"No ReturningData {e.Request.ReturningData}", "OK");
-                    });
+                    await _dialogService.Notify(e.Request.Title, $"No ReturningData {e.Request.ReturningData}", "OK");
                     return;
                 }
 
                 if (list[0] != typeof(NotificationPage).FullName)
                 {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        _dialogService.Notify(e.Request.Title, $"Not NotificationPage", "OK");
-                    });
+                    await _dialogService.Notify(e.Request.Title, $"Not NotificationPage", "OK");
                     return;
                 }
 
                 var notificationId = list[1];
                 var plantId = list[2];
 
-                MainThread.BeginInvokeOnMainThread(async () =>
-                {
-                    try
-                    {
-                        await _navigationService.GoToPlantDetail(Guid.Parse(plantId));
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex);
-                    }
-                });
+                await _navigationService.GoToPlantDetail(Guid.Parse(plantId));
+
                 return;
             }
 
-            switch (e.ActionId)
-            {
-                case 100:
-                    log.AppendLine($"{Environment.NewLine}Hello {DateTime.Now}");
+            //switch (e.ActionId)
+            //{
+            //    case 100:
+            //        //logMessage.AppendLine($"{Environment.NewLine}Hello {DateTime.Now}");
 
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        _dialogService.Notify(e.Request.Title, "Hello Button was Tapped", "OK");
-                    });
+            //        MainThread.BeginInvokeOnMainThread(() =>
+            //        {
+            //            _dialogService.Notify(e.Request.Title, "Hello Button was Tapped", "OK");
+            //        });
 
-                    _notificationService.Cancel(e.Request.NotificationId);
-                    break;
+            //        _notificationService.Cancel(e.Request.NotificationId);
+            //        break;
 
-                case 101:
-                    log.AppendLine($"{Environment.NewLine}Cancel {DateTime.Now}");
-                    _notificationService.Cancel(e.Request.NotificationId);
-                    break;
-            }
+            //    case 101:
+            //        //logMessage.AppendLine($"{Environment.NewLine}Cancel {DateTime.Now}");
+            //        _notificationService.Cancel(e.Request.NotificationId);
+            //        break;
+            //}
 
             //await File.AppendAllTextAsync(_cacheFilePath, $"{Environment.NewLine}Cancel {DateTime.Now}");
+        }catch(Exception ex)
+        {
+            await _dialogService.Notify("Error", ex.Message);
         }
         finally
         {
             IsBusy = false;
         }
     }
-
- 
 
     #endregion Deal with watering notification
 }

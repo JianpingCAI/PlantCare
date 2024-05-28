@@ -28,68 +28,70 @@ public static class MauiProgram
                 fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIconsRegular");
                 fonts.AddFont("fa-solid-900.ttf", "FontAwesome");
             })
-            .UseLocalNotification(config =>
-            {
-                config.AddCategory(new NotificationCategory(NotificationCategoryType.Status)
-                {
-                    ActionList = new HashSet<NotificationAction>(new List<NotificationAction>()
-                        {
-                            new(100)
-                            {
-                                Title = "Hello",
-                                Android =
-                                {
-                                    LaunchAppWhenTapped = true,
-                                    IconName =
-                                    {
-                                        ResourceName = "i2"
-                                    }
-                                },
-                                IOS =
-                                {
-                                    Action = Plugin.LocalNotification.iOSOption.iOSActionType.Foreground
-                                },
-                                Windows =
-                                {
-                                    LaunchAppWhenTapped = true
-                                }
-                            },
-                            new(101)
-                            {
-                                Title = "Close",
-                                Android =
-                                {
-                                    LaunchAppWhenTapped = false,
-                                    IconName =
-                                    {
-                                        ResourceName = "i3"
-                                    }
-                                },
-                                IOS =
-                                {
-                                    Action = Plugin.LocalNotification.iOSOption.iOSActionType.Destructive
-                                },
-                                Windows =
-                                {
-                                    LaunchAppWhenTapped = false
-                                }
-                            }
-                        })
-                })
-                .AddAndroid(android =>
-                {
-                    android.AddChannel(new NotificationChannelRequest
-                    {
-                        Sound = "good_things_happen"
-                    });
-                })
-                .AddiOS(iOS =>
-                {
-#if IOS
-                    //iOS.SetCustomUserNotificationCenterDelegate(new CustomUserNotificationCenterDelegate());
-#endif
-                });
-            });
+            .UseLocalNotification();
+
+        //            .UseLocalNotification(config =>
+        //            {
+        //                config.AddCategory(new NotificationCategory(NotificationCategoryType.Status)
+        //                {
+        //                    ActionList = new HashSet<NotificationAction>(new List<NotificationAction>()
+        //                        {
+        //                            new(100)
+        //                            {
+        //                                Title = "Hello",
+        //                                Android =
+        //                                {
+        //                                    LaunchAppWhenTapped = true,
+        //                                    IconName =
+        //                                    {
+        //                                        ResourceName = "i2"
+        //                                    }
+        //                                },
+        //                                IOS =
+        //                                {
+        //                                    Action = Plugin.LocalNotification.iOSOption.iOSActionType.Foreground
+        //                                },
+        //                                Windows =
+        //                                {
+        //                                    LaunchAppWhenTapped = true
+        //                                }
+        //                            },
+        //                            new(101)
+        //                            {
+        //                                Title = "Close",
+        //                                Android =
+        //                                {
+        //                                    LaunchAppWhenTapped = false,
+        //                                    IconName =
+        //                                    {
+        //                                        ResourceName = "i3"
+        //                                    }
+        //                                },
+        //                                IOS =
+        //                                {
+        //                                    Action = Plugin.LocalNotification.iOSOption.iOSActionType.Destructive
+        //                                },
+        //                                Windows =
+        //                                {
+        //                                    LaunchAppWhenTapped = false
+        //                                }
+        //                            }
+        //                        })
+        //                })
+        //                .AddAndroid(android =>
+        //                {
+        //                    android.AddChannel(new NotificationChannelRequest
+        //                    {
+        //                        Sound = "good_things_happen"
+        //                    });
+        //                })
+        //                .AddiOS(iOS =>
+        //                {
+        //#if IOS
+        //                    //iOS.SetCustomUserNotificationCenterDelegate(new CustomUserNotificationCenterDelegate());
+        //#endif
+        //                });
+        //            });
 
         // Configure services
 

@@ -63,6 +63,7 @@
 		<None Remove="Resources\Images\default_plant.png" />
 		<None Remove="Resources\Images\tab_home.svg" />
 		<None Remove="Resources\Images\tab_home_on.svg" />
+		<None Remove="Resources\Images\tab_notifications.svg" />
 		<None Remove="Resources\Images\tab_settings.svg" />
 		<None Remove="Resources\Images\tab_settings_on.svg" />
 		<None Remove="Resources\Splash\mysplash.png" />

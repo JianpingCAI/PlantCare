@@ -6,7 +6,7 @@
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
     xmlns:local="clr-namespace:PlantCare.App.Utils"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="{Binding Name}"
+    Title="{Binding Name, StringFormat='Edit: {0}'}"
     x:DataType="vm:PlantAddEditViewModel">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -17,10 +17,6 @@
         <ScrollView>
             <Grid>
                 <VerticalStackLayout Padding="10">
-                    <!--<Label
-                        Style="{StaticResource TitleLabelStyle}"
-                        Text="{Binding PageTitle}"
-                        TextColor="{StaticResource Primary}" />-->
                     <Border
                         HorizontalOptions="Center"
                         Stroke="Transparent"
@@ -97,8 +93,13 @@
                         <Label Text="Last Watering" />
 
                         <HorizontalStackLayout Grid.Column="1" Margin="5,0,0,0">
-                            <DatePicker Date="{Binding LastWateredDate}" VerticalOptions="End" />
-                            <TimePicker Time="{Binding LastWateredTime}" VerticalOptions="End" />
+                            <DatePicker Date="{Binding LastWateredDate, Mode=TwoWay}" VerticalOptions="End" />
+                            <TimePicker Time="{Binding LastWateredTime, Mode=TwoWay}" VerticalOptions="End" />
+                            <Button
+                                Margin="10,0,0,0"
+                                Command="{Binding SetCurrentTimeAsLastWateredCommand}"
+                                Text="Now"
+                                VerticalOptions="Center" />
                         </HorizontalStackLayout>
 
                         <Label Grid.Row="1" Text="Waterting &#10; Interval" />

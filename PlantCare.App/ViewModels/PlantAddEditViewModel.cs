@@ -79,6 +79,23 @@ namespace PlantCare.App.ViewModels
         private string _photoPath = Consts.DefaultPhotoPath;
 
         [RelayCommand]
+        private async Task SetCurrentTimeAsLastWatered()
+        {
+            try
+            {
+                await Task.Run(() =>
+                    {
+                        LastWateredDate = DateTime.Now.Date;
+                        LastWateredTime = DateTime.Now.TimeOfDay;
+                    });
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.Notify("Error", ex.Message, "OK");
+            }
+        }
+
+        [RelayCommand]
         private async Task Submit()
         {
             try
@@ -169,7 +186,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message, "Error");
+                await _dialogService.Notify("Error", ex.Message, "OK");
             }
         }
 
@@ -198,7 +215,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message, "Error");
+                await _dialogService.Notify("Error", ex.Message, "OK");
             }
         }
 

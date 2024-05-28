@@ -20,12 +20,6 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
         _dialogService = dialogService;
     }
 
-    [RelayCommand]
-    private async Task ChangeStatus()
-    {
-        await Task.Delay(100);
-        WeakReferenceMessenger.Default.Send(new StatusChangedMessage(Id, Name, WateredStatus.Watered));
-    }
 
     [RelayCommand]
     private async Task NavigateToEditPlant()
@@ -46,11 +40,17 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
     {
         try
         {
+            bool isConfirmed = await _dialogService.Ask("Confirm", $"Are you sure to delete {Name}?");
+
+            if (!isConfirmed)
+            {
+                return;
+            }
+
             await _plantService.DeletePlantAsync(Id);
 
             WeakReferenceMessenger.Default.Send(new PlantDeletedMessage { PlantId = Id });
 
-            //await _navigationService.GoBack();
             await _navigationService.GoToPlantsOverview();
         }
         catch (Exception ex)

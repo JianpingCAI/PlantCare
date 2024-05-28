@@ -14,5 +14,12 @@ namespace PlantCare.App
             Routing.RegisterRoute("edit", typeof(PlantAddEditView));
             Routing.RegisterRoute("add", typeof(PlantAddEditView));
         }
+
+        protected override void OnNavigated(ShellNavigatedEventArgs args)
+        {
+            base.OnNavigated(args);
+
+            pageTitle.Text = Current.CurrentPage.Title;
+        }
     }
 }

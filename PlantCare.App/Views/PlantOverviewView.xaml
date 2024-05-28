@@ -10,7 +10,7 @@
     Title="My Plants"
     x:DataType="vm:PlantListOverviewViewModel">
     <ContentPage.Resources>
-        <Style TargetType="Grid">
+        <!--<Style TargetType="Grid">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup x:Name="CommonStates">
@@ -23,18 +23,31 @@
                     </VisualStateGroup>
                 </VisualStateGroupList>
             </Setter>
-        </Style>
+        </Style>-->
         <utils:ProgressToColorConverter x:Key="ProgressToColorConverter" />
     </ContentPage.Resources>
-
     <!--  Main Layout  -->
     <ScrollView>
         <VerticalStackLayout Padding="5" Spacing="10">
+            <!--  Add Plant Button  -->
+            <Button
+                Margin="20,0"
+                Command="{Binding AddPlantCommand}"
+                Text="Add plant" />
+
+
+            <!--<Label
+                Grid.ColumnSpan="2"
+                Margin="32,0,0,0"
+                FontFamily="JosefinSansBold"
+                FontSize="32"
+                Text="All Products"
+                TextColor="#FFFFFF"
+                VerticalOptions="Center" />-->
 
             <!--  Search Bar for quick filtering  -->
             <SearchBar
-                CancelButtonColor="Red"
-                Placeholder="Search plants..."
+                Placeholder="Search plants by name"
                 SearchCommand="{Binding SearchCommand}"
                 Text="{Binding SearchText}"
                 TextChanged="SearchBar_TextChanged" />
@@ -92,6 +105,19 @@
                                         Progress="{Binding WaterState}"
                                         ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
                                 </Grid>
+                                <Grid Margin="0,0,0,5" ColumnDefinitions="15,*">
+                                    <Label
+                                        FontFamily="MaterialIconsRegular"
+                                        Text="&#xe761;"
+                                        TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
+                                    <!--<Label Text="{Binding WaterState}" />-->
+                                    <!--<ProgressBar
+                                        Grid.Column="1"
+                                        Margin="0,0,5,0"
+                                        HeightRequest="10"
+                                        Progress="{Binding WaterState}"
+                                        ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />-->
+                                </Grid>
                             </VerticalStackLayout>
                         </Border>
                         <!--</Frame>-->
@@ -108,11 +134,7 @@
                 </CollectionView.ItemsLayout>
             </CollectionView>
 
-            <!--  Add Plant Button  -->
-            <Button Command="{Binding AddPlantCommand}" Text="Add plant" />
 
-            <!--<Button Command="{Binding SetWateringReminderCommand}" Text="Set Reminder" />-->
-            <!--<Button Command="{Binding CancelWateringReminderCommand}" Text="Cancel Reminder" />-->
         </VerticalStackLayout>
     </ScrollView>
 </views:ContentPageBase>
