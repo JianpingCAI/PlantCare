@@ -34,6 +34,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     public PlantListOverviewViewModel(IPlantService plantService, INavigationService navigationService, INotificationService notificationService, IDialogService dialogService, ISettingsService settingsService)
     {
         _plantService = plantService;
+        
         _navigationService = navigationService;
         _notificationService = notificationService;
         _dialogService = dialogService;
@@ -107,7 +108,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             Plants.Clear();
             Plants = viewModels.ToObservableCollection();
 
-            _allPlantsBackUped.AddRange(Plants);
+            _allPlantsBackup.AddRange(Plants);
 
             //if (plants.Count == 0)
             //{
@@ -158,7 +159,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    private List<PlantListItemViewModel> _allPlantsBackUped = [];
+    private readonly List<PlantListItemViewModel> _allPlantsBackup = [];
 
     [RelayCommand]
     private async Task Search()
@@ -191,7 +192,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     internal void ResetSearch()
     {
-        if (_allPlantsBackUped.Count == 0)
+        if (_allPlantsBackup.Count == 0)
         {
             return;
         }
@@ -200,7 +201,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             Plants.Clear();
 
-            foreach (var item in _allPlantsBackUped)
+            foreach (var item in _allPlantsBackup)
             {
                 Plants.Add(item);
             }
