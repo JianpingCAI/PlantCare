@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
@@ -20,6 +21,11 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
         _dialogService = dialogService;
     }
 
+    [ObservableProperty]
+    private string _species = string.Empty;
+
+    [ObservableProperty]
+    private int _age;
 
     [RelayCommand]
     private async Task NavigateToEditPlant()
@@ -90,16 +96,24 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
         MapPlantData(plant);
     }
 
+    internal async void NavidateBack()
+    {
+        await _navigationService.GoToPlantsOverview();
+    }
+
     private void MapPlantData(Plant plant)
     {
         Id = plant.Id;
         Species = plant.Species;
         Name = plant.Name;
         Age = plant.Age;
-        LastWatered = plant.LastWatered;
         PhotoPath = plant.PhotoPath;
 
+        LastWatered = plant.LastWatered;
         WateringFrequencyInHours = plant.WateringFrequencyInHours;
+
+        LastFertilized = plant.LastFertilized;
+        FertilizeFrequencyInHours = plant.FertilizeFrequencyInHours;
     }
 
     private PlantDbModel MapToPlantModel(PlantDetailViewModel plantDetailViewModel)
@@ -110,14 +124,12 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
             Species = plantDetailViewModel.Species,
             Name = plantDetailViewModel.Name,
             Age = plantDetailViewModel.Age,
-            LastWatered = plantDetailViewModel.LastWatered,
             PhotoPath = plantDetailViewModel.PhotoPath,
-            WateringFrequencyInHours = plantDetailViewModel.WateringFrequencyInHours
-        };
-    }
 
-    internal async void NavidateBack()
-    {
-        await _navigationService.GoToPlantsOverview();
+            LastWatered = plantDetailViewModel.LastWatered,
+            WateringFrequencyInHours = plantDetailViewModel.WateringFrequencyInHours,
+            LastFertilized = plantDetailViewModel.LastFertilized,
+            FertilizeFrequencyInHours = plantDetailViewModel.FertilizeFrequencyInHours
+        };
     }
 }

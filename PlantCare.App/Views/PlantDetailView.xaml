@@ -27,6 +27,8 @@
                         Source="{Binding PhotoPath}"
                         VerticalOptions="Center" />
                 </Border>
+
+                <!--  Edit button  -->
                 <Button
                     Margin="0,5"
                     Command="{Binding NavigateToEditPlantCommand}"
@@ -34,10 +36,9 @@
                     FontSize="20"
                     HorizontalOptions="Center"
                     Text="&#xe3c9;"
-                    ToolTipProperties.Text="Edit the details"
-                    WidthRequest="50" />
+                    ToolTipProperties.Text="Edit the details" />
 
-                <Grid ColumnDefinitions="140,*" RowDefinitions="*,*,*,*,*">
+                <Grid ColumnDefinitions="auto,*" RowDefinitions="*,*,*,*,*,*,*,*">
 
                     <Label
                         Margin="0,0,10,0"
@@ -61,6 +62,7 @@
                     <Label
                         Grid.Row="1"
                         Grid.Column="1"
+                        FontSize="Medium"
                         Text="{Binding Age}" />
 
                     <Label
@@ -91,12 +93,49 @@
 
                     <Label
                         Grid.Row="4"
+                        Margin="0,0,10,0"
+                        FontAttributes="Bold"
+                        FontSize="Medium"
+                        HorizontalTextAlignment="End"
+                        Text="Last fertilization" />
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        FontSize="Medium"
+                        Text="{Binding LastFertilized, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+
+                    <Label
+                        Grid.Row="5"
+                        Margin="0,0,10,0"
+                        FontAttributes="Bold"
+                        FontSize="Medium"
+                        HorizontalTextAlignment="End"
+                        Text="Next fertilization" />
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        FontSize="Medium"
+                        Text="{Binding NextFertilizeTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+
+
+                    <Label
+                        Grid.Row="6"
                         Grid.ColumnSpan="2"
                         Margin="20,10,0,0"
                         FontAttributes="Bold"
                         FontSize="Medium"
                         HorizontalTextAlignment="Start"
                         Text="{Binding HoursUntilNextWatering, StringFormat='Next watering in {0:0.00} hours'}"
+                        TextColor="DeepSkyBlue" />
+
+                    <Label
+                        Grid.Row="7"
+                        Grid.ColumnSpan="2"
+                        Margin="20,10,0,0"
+                        FontAttributes="Bold"
+                        FontSize="Medium"
+                        HorizontalTextAlignment="Start"
+                        Text="{Binding HoursUntilNextFertilize, StringFormat='Next fertilization in {0:0.00} hours'}"
                         TextColor="DeepSkyBlue" />
 
                 </Grid>

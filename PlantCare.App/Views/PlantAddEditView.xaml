@@ -48,7 +48,6 @@
                             Text="Take Photo" />
                     </HorizontalStackLayout>
 
-
                     <Grid
                         ColumnDefinitions="*,*"
                         HorizontalOptions="Start"
@@ -121,7 +120,6 @@
                                     Minimum="0"
                                     Value="{Binding WateringFrequencyDays, Mode=TwoWay}" />
                                 <Label Margin="5,0,10,0" Text="Days" />
-
                             </HorizontalStackLayout>
 
                             <HorizontalStackLayout>
@@ -139,7 +137,61 @@
                                 <Label Margin="5,0,0,0" Text="Hours" />
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
+                    </Grid>
 
+                    <!--  Fertilization  -->
+                    <Grid
+                        ColumnDefinitions="*,*"
+                        HorizontalOptions="Start"
+                        RowDefinitions="*,*">
+                        <Label Text="Last Watering" />
+
+                        <HorizontalStackLayout Grid.Column="1" Margin="5,0,0,0">
+                            <DatePicker Date="{Binding LastFertilizationDate, Mode=TwoWay}" VerticalOptions="End" />
+                            <TimePicker Time="{Binding LastFertilizationTime, Mode=TwoWay}" VerticalOptions="End" />
+                            <Button
+                                Margin="10,0,0,0"
+                                Command="{Binding SetCurrentTimeAsLastFertilizationCommand}"
+                                Text="Now"
+                                VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Label Grid.Row="1" Text="Waterting &#10; Interval" />
+
+                        <VerticalStackLayout
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="5,0,0,0">
+                            <HorizontalStackLayout>
+                                <Entry
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding FertilizationFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
+                                    VerticalOptions="Center" />
+                                <Stepper
+                                    Increment="1"
+                                    Maximum="365"
+                                    MaximumWidthRequest="{OnIdiom Phone=120,
+                                                                  Default=200}"
+                                    Minimum="0"
+                                    Value="{Binding FertilizationFrequencyDays, Mode=TwoWay}" />
+                                <Label Margin="5,0,10,0" Text="Days" />
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout>
+                                <Entry
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding FertilizationFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
+                                    VerticalOptions="Center" />
+                                <Stepper
+                                    Increment="1"
+                                    Maximum="23"
+                                    MaximumWidthRequest="{OnIdiom Phone=120,
+                                                                  Default=200}"
+                                    Minimum="0"
+                                    Value="{Binding FertilizationFrequencyHours, Mode=TwoWay}" />
+                                <Label Margin="5,0,0,0" Text="Hours" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
                     </Grid>
 
                     <VerticalStackLayout Margin="0,10,0,0" BindableLayout.ItemsSource="{Binding Errors}">

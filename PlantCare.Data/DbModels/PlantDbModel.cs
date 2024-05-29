@@ -20,13 +20,20 @@ public class PlantDbModel
     [Range(1, 2400)]
     public int Age { get; set; }
 
-    [Required]
-    public DateTime LastWatered { get; set; } = DateTime.Now;
-
     [MaxLength(200)]
     public string PhotoPath { get; set; } = string.Empty;
 
     [Required]
-    [Range(1, 2400)]
+    public DateTime LastWatered { get; set; } = DateTime.Now;
+
+    [Required]
+    [Range(1, 8760)]
     public int WateringFrequencyInHours { get; set; }
+
+    [Required]
+    public DateTime LastFertilized { get; set; } = DateTime.Now;
+
+    [Required]
+    [Range(1, 8760)]
+    public int FertilizeFrequencyInHours { get; set; }
 }

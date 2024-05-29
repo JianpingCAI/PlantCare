@@ -47,6 +47,8 @@ namespace PlantCare.App.ViewModels
         [Range(0, 3000)]
         private int _age = 1;
 
+        #region Watering
+
         [ObservableProperty]
         [Required]
         private DateTime _lastWateredDate = DateTime.Now.Date;
@@ -60,20 +62,54 @@ namespace PlantCare.App.ViewModels
         [ObservableProperty]
         [Required]
         [Range(0, 365)]
-        [NotifyPropertyChangedFor(nameof(NextWateringTime))]
+        //[NotifyPropertyChangedFor(nameof(NextWateringTime))]
         [NotifyPropertyChangedFor(nameof(WateringFrequencyInHours))]
         private int _wateringFrequencyDays = 0;
 
         [ObservableProperty]
         [Required]
         [Range(0, 24)]
-        [NotifyPropertyChangedFor(nameof(NextWateringTime))]
+        //[NotifyPropertyChangedFor(nameof(NextWateringTime))]
         [NotifyPropertyChangedFor(nameof(WateringFrequencyInHours))]
         private int _wateringFrequencyHours = 0;
 
         public int WateringFrequencyInHours => 24 * WateringFrequencyDays + WateringFrequencyHours;
 
-        public DateTime NextWateringTime => LastWatered.AddDays(WateringFrequencyDays).AddHours(WateringFrequencyHours);
+        //public DateTime NextWateringTime => LastWatered.AddDays(WateringFrequencyDays).AddHours(WateringFrequencyHours);
+
+        #endregion Watering
+
+        #region Fertilization
+
+        [ObservableProperty]
+        [Required]
+        private DateTime _lastFertilizationDate = DateTime.Now.Date;
+
+        [ObservableProperty]
+        [Required]
+        private TimeSpan _lastFertilizationTime = DateTime.Now.TimeOfDay;
+
+        public DateTime LastFertilization => LastFertilizationDate + LastFertilizationTime;
+
+        [ObservableProperty]
+        [Required]
+        [Range(0, 365)]
+        //[NotifyPropertyChangedFor(nameof(NextWateringTime))]
+        [NotifyPropertyChangedFor(nameof(FertilizationFrequencyInHours))]
+        private int _fertilizationFrequencyDays = 0;
+
+        [ObservableProperty]
+        [Required]
+        [Range(0, 24)]
+        //[NotifyPropertyChangedFor(nameof(NextWateringTime))]
+        [NotifyPropertyChangedFor(nameof(WateringFrequencyInHours))]
+        private int _fertilizationFrequencyHours = 0;
+
+        public int FertilizationFrequencyInHours => 24 * FertilizationFrequencyDays + FertilizationFrequencyHours;
+
+        //public DateTime NextWateringTime => LastWatered.AddDays(WateringFrequencyDays).AddHours(WateringFrequencyHours);
+
+        #endregion Fertilization
 
         [ObservableProperty]
         private string _photoPath = Consts.DefaultPhotoPath;
@@ -88,6 +124,23 @@ namespace PlantCare.App.ViewModels
                         LastWateredDate = DateTime.Now.Date;
                         LastWateredTime = DateTime.Now.TimeOfDay;
                     });
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.Notify("Error", ex.Message, "OK");
+            }
+        }
+
+        [RelayCommand]
+        private async Task SetCurrentTimeAsLastFertilization()
+        {
+            try
+            {
+                await Task.Run(() =>
+                {
+                    LastFertilizationDate = DateTime.Now.Date;
+                    LastFertilizationTime = DateTime.Now.TimeOfDay;
+                });
             }
             catch (Exception ex)
             {
@@ -221,20 +274,6 @@ namespace PlantCare.App.ViewModels
 
         #endregion Photo related
 
-        private PlantDbModel MapToPlantModel()
-        {
-            return new PlantDbModel
-            {
-                Id = Id,
-                Name = Name,
-                Species = Species,
-                Age = Age,
-                LastWatered = LastWatered,
-                PhotoPath = PhotoPath,
-                WateringFrequencyInHours = WateringFrequencyInHours,
-            };
-        }
-
         #region Data Validation
 
         public ObservableCollection<ValidationResult> Errors { get; } = new();
@@ -259,21 +298,6 @@ namespace PlantCare.App.ViewModels
             MapPlantData(plant);
         }
 
-        private void MapPlantData(PlantDbModel plant)
-        {
-            Id = plant.Id;
-            Name = plant.Name;
-            Species = plant.Species;
-            PhotoPath = plant.PhotoPath;
-            Age = plant.Age;
-
-            LastWateredDate = plant.LastWatered.Date;
-            LastWateredTime = plant.LastWatered.TimeOfDay;
-
-            WateringFrequencyDays = plant.WateringFrequencyInHours / 24;
-            WateringFrequencyHours = plant.WateringFrequencyInHours % 24;
-        }
-
         internal async Task NavigateBack()
         {
             if (Id == default)
@@ -284,6 +308,43 @@ namespace PlantCare.App.ViewModels
             {
                 await _navigationService.GoToPlantDetail(Id);
             }
+        }
+
+        private PlantDbModel MapToPlantModel()
+        {
+            return new PlantDbModel
+            {
+                Id = Id,
+                Name = Name,
+                Species = Species,
+                Age = Age,
+                PhotoPath = PhotoPath,
+
+                LastWatered = LastWatered,
+                WateringFrequencyInHours = WateringFrequencyInHours,
+
+                LastFertilized = LastFertilization,
+                FertilizeFrequencyInHours = FertilizationFrequencyInHours
+            };
+        }
+
+        private void MapPlantData(PlantDbModel plant)
+        {
+            Id = plant.Id;
+            Name = plant.Name;
+            Species = plant.Species;
+            PhotoPath = plant.PhotoPath;
+            Age = plant.Age;
+
+            LastWateredDate = plant.LastWatered.Date;
+            LastWateredTime = plant.LastWatered.TimeOfDay;
+            WateringFrequencyDays = plant.WateringFrequencyInHours / 24;
+            WateringFrequencyHours = plant.WateringFrequencyInHours % 24;
+
+            LastFertilizationDate = plant.LastFertilized.Date;
+            LastFertilizationTime = plant.LastFertilized.TimeOfDay;
+            FertilizationFrequencyDays = plant.FertilizeFrequencyInHours / 24;
+            FertilizationFrequencyHours = plant.FertilizeFrequencyInHours % 24;
         }
     }
 }

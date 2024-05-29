@@ -9,9 +9,6 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<PlantDbModel, Plant>();
-        //.ForMember(dest => dest.NextWateringTime, opt => opt.Ignore())
-        //.ForMember(dest => dest.WaterState, opt => opt.Ignore());
-
         CreateMap<Plant, PlantDbModel>();
 
         //CreateMap<PlantDto, Plant>()

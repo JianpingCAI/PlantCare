@@ -10,20 +10,21 @@
     Title="My Plants"
     x:DataType="vm:PlantListOverviewViewModel">
     <ContentPage.Resources>
-        <!--<Style TargetType="Grid">
+        <!--  Style used by the CollectionView selection  -->
+        <Style TargetType="Grid">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup x:Name="CommonStates">
                         <VisualState x:Name="Normal" />
                         <VisualState x:Name="Selected">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
                 </VisualStateGroupList>
             </Setter>
-        </Style>-->
+        </Style>
         <utils:ProgressToColorConverter x:Key="ProgressToColorConverter" />
     </ContentPage.Resources>
     <!--  Main Layout  -->
@@ -34,16 +35,6 @@
                 Margin="20,0"
                 Command="{Binding AddPlantCommand}"
                 Text="Add plant" />
-
-
-            <!--<Label
-                Grid.ColumnSpan="2"
-                Margin="32,0,0,0"
-                FontFamily="JosefinSansBold"
-                FontSize="32"
-                Text="All Products"
-                TextColor="#FFFFFF"
-                VerticalOptions="Center" />-->
 
             <!--  Search Bar for quick filtering  -->
             <SearchBar
@@ -67,70 +58,74 @@
                             HorizontalOptions="Center"
                             InputTransparent="True"
                             VerticalOptions="Center">-->
-                        <Border HorizontalOptions="Center" VerticalOptions="Center">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="10" />
-                            </Border.StrokeShape>
-                            <VerticalStackLayout HorizontalOptions="Center">
-                                <Border
-                                    HorizontalOptions="Center"
-                                    Stroke="Transparent"
-                                    StrokeThickness="0"
-                                    VerticalOptions="Center">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="10" />
-                                    </Border.StrokeShape>
-                                    <Image
-                                        Aspect="AspectFill"
-                                        HeightRequest="100"
-                                        HorizontalOptions="Center"
-                                        Source="{Binding PhotoPath}"
-                                        VerticalOptions="Center"
-                                        WidthRequest="100" />
-                                </Border>
-                                <Label
-                                    FontAttributes="Bold"
-                                    HorizontalOptions="Center"
-                                    Text="{Binding Name}" />
-                                <Grid Margin="0,0,0,5" ColumnDefinitions="15,*">
-                                    <Label
-                                        FontFamily="MaterialIconsRegular"
-                                        Text="&#xe798;"
-                                        TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
-                                    <!--<Label Text="{Binding WaterState}" />-->
-                                    <ProgressBar
-                                        Grid.Column="1"
-                                        Margin="0,0,5,0"
-                                        HeightRequest="10"
-                                        Progress="{Binding WaterState}"
-                                        ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
-                                </Grid>
-                                <Grid Margin="0,0,0,5" ColumnDefinitions="15,*">
-                                    <Label
-                                        FontFamily="MaterialIconsRegular"
-                                        Text="&#xe761;"
-                                        TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
-                                    <!--<Label Text="{Binding WaterState}" />-->
-                                    <!--<ProgressBar
-                                        Grid.Column="1"
-                                        Margin="0,0,5,0"
-                                        HeightRequest="10"
-                                        Progress="{Binding WaterState}"
-                                        ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />-->
-                                </Grid>
-                            </VerticalStackLayout>
-                        </Border>
                         <!--</Frame>-->
+                        <Grid>
+                            <Border
+                                HorizontalOptions="Center"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Padding="0,0,0,10" HorizontalOptions="Center">
+                                    <Border
+                                        HorizontalOptions="Center"
+                                        Stroke="Transparent"
+                                        StrokeThickness="0"
+                                        VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" />
+                                        </Border.StrokeShape>
+                                        <Image
+                                            Aspect="AspectFill"
+                                            HeightRequest="100"
+                                            HorizontalOptions="Center"
+                                            Source="{Binding PhotoPath}"
+                                            VerticalOptions="Center"
+                                            WidthRequest="100" />
+                                    </Border>
+                                    <Label
+                                        FontAttributes="Bold"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Name}" />
+                                    <Grid Margin="0,0,0,5" ColumnDefinitions="15,*">
+                                        <Label
+                                            FontFamily="MaterialIconsRegular"
+                                            Text="&#xe798;"
+                                            TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
+                                        <ProgressBar
+                                            Grid.Column="1"
+                                            Margin="0,0,5,0"
+                                            HeightRequest="5"
+                                            Progress="{Binding WaterState}"
+                                            ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
+                                    </Grid>
+                                    <Grid Margin="0,0,0,5" ColumnDefinitions="15,*">
+                                        <Label
+                                            FontFamily="MaterialIconsRegular"
+                                            Text="&#xe761;"
+                                            TextColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}" />
+                                        <ProgressBar
+                                            Grid.Column="1"
+                                            Margin="0,0,5,0"
+                                            HeightRequest="5"
+                                            Progress="{Binding FertilizeState}"
+                                            ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Border>
+
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
 
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
-                        HorizontalItemSpacing="5"
+                        HorizontalItemSpacing="0"
                         Orientation="Vertical"
                         Span="{OnIdiom Phone=3,
                                        Desktop=4}"
-                        VerticalItemSpacing="5" />
+                        VerticalItemSpacing="3" />
                 </CollectionView.ItemsLayout>
             </CollectionView>
 

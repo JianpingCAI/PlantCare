@@ -26,14 +26,15 @@
     <Shell.TitleView>
         <Grid ColumnDefinitions="auto,*">
             <Border
+                Margin="10,0,0,0"
                 HorizontalOptions="Center"
                 Stroke="Transparent"
                 StrokeThickness="0"
                 VerticalOptions="Center">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="50" />
+                    <RoundRectangle CornerRadius="40" />
                 </Border.StrokeShape>
-                <Image HeightRequest="50" Source="default_plant.png" />
+                <Image HeightRequest="40" Source="default_plant.png" />
             </Border>
 
             <Label
@@ -42,7 +43,7 @@
                 Margin="15,0,0,0"
                 FontSize="Large"
                 HorizontalOptions="Start"
-                VerticalTextAlignment="End" />
+                VerticalTextAlignment="Center" />
         </Grid>
     </Shell.TitleView>
 

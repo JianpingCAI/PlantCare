@@ -10,4 +10,7 @@ public class Plant
 
     public DateTime LastWatered { get; set; } = DateTime.Now;
     public int WateringFrequencyInHours { get; set; }
+
+    public DateTime LastFertilized { get; set; } = DateTime.Now;
+    public int FertilizeFrequencyInHours { get; set; }
 }

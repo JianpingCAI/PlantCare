@@ -11,11 +11,8 @@ using PlantCare.Data.Models;
 using Plugin.LocalNotification;
 using PlantCare.App.Views;
 using Plugin.LocalNotification.AndroidOption;
-using System.Security.Principal;
 using System.Text.Json;
 using Plugin.LocalNotification.EventArgs;
-using System.Text.Json.Serialization;
-using System.Text;
 using System.Diagnostics;
 
 namespace PlantCare.App.ViewModels;
@@ -225,21 +222,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         });
     }
 
-    public static PlantListItemViewModel MapToViewModel(Plant plant)
-    {
-        return new PlantListItemViewModel
-        {
-            Id = plant.Id,
-            Species = plant.Species,
-            Name = plant.Name,
-            Age = plant.Age,
-            PhotoPath = plant.PhotoPath,
-
-            LastWatered = plant.LastWatered,
-            WateringFrequencyInHours = plant.WateringFrequencyInHours,
-        };
-    }
-
     async void IRecipient<PlantAddedOrChangedMessage>.Receive(PlantAddedOrChangedMessage message)
     {
         Plants.Clear();
@@ -444,7 +426,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             //}
 
             //await File.AppendAllTextAsync(_cacheFilePath, $"{Environment.NewLine}Cancel {DateTime.Now}");
-        }catch(Exception ex)
+        }
+        catch (Exception ex)
         {
             await _dialogService.Notify("Error", ex.Message);
         }
@@ -455,4 +438,20 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     }
 
     #endregion Deal with watering notification
+
+    public static PlantListItemViewModel MapToViewModel(Plant plant)
+    {
+        return new PlantListItemViewModel
+        {
+            Id = plant.Id,
+            Name = plant.Name,
+            PhotoPath = plant.PhotoPath,
+
+            LastWatered = plant.LastWatered,
+            WateringFrequencyInHours = plant.WateringFrequencyInHours,
+
+            LastFertilized = plant.LastFertilized,
+            FertilizeFrequencyInHours = plant.FertilizeFrequencyInHours
+        };
+    }
 }
