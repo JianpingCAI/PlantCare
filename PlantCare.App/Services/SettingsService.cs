@@ -22,6 +22,24 @@ public class SettingsService : ISettingsService
         await SecureStorage.SetAsync(Consts.EnableWateringNotification, isEnabled.ToString());
     }
 
+    public async Task<bool> GetFertilizationNotificationSettingAsync()
+    {
+        string? value = await SecureStorage.GetAsync(Consts.EnableFertilizationNotification);
+        if (value is null)
+        {
+            return true;
+        }
+
+        // Assume settings are stored with a key-value pair locally
+        return value == "True";
+    }
+
+    public async Task SetFertilizationNotificationSettingAsync(bool isEnabled)
+    {
+        // Save the setting locally
+        await SecureStorage.SetAsync(Consts.EnableFertilizationNotification, isEnabled.ToString());
+    }
+
     public async Task<string> GetThemeSettingAsync()
     {
         // Retrieve the theme setting

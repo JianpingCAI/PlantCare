@@ -15,11 +15,13 @@ public partial class SettingsViewModel : ViewModelBase
     public SettingsViewModel(ISettingsService settingsService)
     {
         _settingsService = settingsService;
-
     }
 
     [ObservableProperty]
     private bool _isWateringNotificationEnabled = true;
+
+    [ObservableProperty]
+    private bool _isFertilizationNotificationEnabled = true;
 
     [ObservableProperty]
     private bool _isDebugModeEnabled = true;
@@ -27,21 +29,23 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     private string theme;
 
-    [RelayCommand]
-    private async Task LoadSettingsAsync()
-    {
-        if (IsBusy) return;
+    //[RelayCommand]
+    //private async Task LoadSettingsAsync()
+    //{
+    //    if (IsBusy) return;
 
-        try
-        {
-            IsWateringNotificationEnabled = await _settingsService.GetWateringNotificationSettingAsync();
-            Theme = await _settingsService.GetThemeSettingAsync();
-        }
-        finally
-        {
-            IsBusy = false;
-        }
-    }
+    //    try
+    //    {
+    //        IsWateringNotificationEnabled = await _settingsService.GetWateringNotificationSettingAsync();
+    //        IsFertilizationNotificationEnabled = await _settingsService.GetFertilizationNotificationSettingAsync();
+
+    //        Theme = await _settingsService.GetThemeSettingAsync();
+    //    }
+    //    finally
+    //    {
+    //        IsBusy = false;
+    //    }
+    //}
 
     [RelayCommand]
     private async Task SaveSettingsAsync()
@@ -58,9 +62,16 @@ public partial class SettingsViewModel : ViewModelBase
 
     partial void OnIsWateringNotificationEnabledChanged(bool isEnabled)
     {
-        WeakReferenceMessenger.Default.Send(new WateringNotificationChangedMessage { IsWateringNotificationEnabled = isEnabled });
+        WeakReferenceMessenger.Default.Send(new IsWateringNotificationEnabledMessage { IsWateringNotificationEnabled = isEnabled });
 
         _settingsService.SetWateringNotificationSettingAsync(isEnabled);
+    }
+
+    partial void OnIsFertilizationNotificationEnabledChanged(bool isEnabled)
+    {
+        WeakReferenceMessenger.Default.Send(new IsFertilizationNotificationEnabledMessage { IsFertilizationNotificationEnabled = isEnabled });
+
+        _settingsService.SetFertilizationNotificationSettingAsync(isEnabled);
     }
 
     partial void OnIsDebugModeEnabledChanged(bool isEnabled)
@@ -70,13 +81,24 @@ public partial class SettingsViewModel : ViewModelBase
 
     public override async Task LoadDataWhenViewAppearingAsync()
     {
-        await LoadingDataWhenViewAppearing(LoadSettings);
-        
+        await LoadingDataWhenViewAppearing(LoadSettingsAsync);
     }
 
-    private async Task LoadSettings()
+    private async Task LoadSettingsAsync()
     {
-        IsDebugModeEnabled = await _settingsService.GetDebugSettingAsync();
-        IsWateringNotificationEnabled = await _settingsService.GetWateringNotificationSettingAsync();
+        try
+        {
+            IsWateringNotificationEnabled = await _settingsService.GetWateringNotificationSettingAsync();
+            IsFertilizationNotificationEnabled = await _settingsService.GetFertilizationNotificationSettingAsync();
+
+            Theme = await _settingsService.GetThemeSettingAsync();
+
+            IsDebugModeEnabled = await _settingsService.GetDebugSettingAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception thrown: {ex.Message}");
+            throw;
+        }
     }
 }

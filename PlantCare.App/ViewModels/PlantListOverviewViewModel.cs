@@ -20,7 +20,7 @@ namespace PlantCare.App.ViewModels;
 public partial class PlantListOverviewViewModel : ViewModelBase,
     IRecipient<PlantAddedOrChangedMessage>,
     IRecipient<PlantDeletedMessage>,
-    IRecipient<WateringNotificationChangedMessage>
+    IRecipient<IsWateringNotificationEnabledMessage>
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
@@ -42,7 +42,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         if (_notificationService.IsSupported)
         {
-            WeakReferenceMessenger.Default.Register<WateringNotificationChangedMessage>(this);
+            WeakReferenceMessenger.Default.Register<IsWateringNotificationEnabledMessage>(this);
 
             //_notificationService.NotificationReceiving = OnNotificationReceiving;
             //_notificationService.NotificationReceived += OnNotificationReceived;
@@ -240,7 +240,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     #region Deal with watering notification
 
-    async void IRecipient<WateringNotificationChangedMessage>.Receive(WateringNotificationChangedMessage message)
+    async void IRecipient<IsWateringNotificationEnabledMessage>.Receive(IsWateringNotificationEnabledMessage message)
     {
         switch (message.IsWateringNotificationEnabled)
         {
@@ -270,11 +270,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         for (int i = 0; i < Plants.Count; i++)
         {
             PlantListItemViewModel plant = Plants[i];
-            await ScheduleWateringNotification(plant, i, 10);
+            await ScheduleWateringNotification(plant, i);
         }
     }
 
-    private async Task ScheduleWateringNotification(PlantListItemViewModel plant, int plantIndex, double seconds)
+    private async Task ScheduleWateringNotification(PlantListItemViewModel plant, int plantIndex)
     {
         try
         {

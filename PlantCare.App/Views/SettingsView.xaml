@@ -81,111 +81,133 @@
             </Border>
         </ControlTemplate>
     </ContentPage.Resources>
-    <VerticalStackLayout Padding="20">
-        <Grid ColumnDefinitions="2*,1*">
-            <Label
-                HorizontalTextAlignment="Start"
-                Text="Enable Watering Notification"
-                VerticalTextAlignment="Center" />
-            <Switch
-                Grid.Column="1"
-                HorizontalOptions="Start"
-                IsToggled="{Binding IsWateringNotificationEnabled}"
-                VerticalOptions="Center" />
-        </Grid>
+    <Grid>
+        <VerticalStackLayout Padding="20">
+            <!--  IsWateringNotificationEnabled  -->
+            <Grid ColumnDefinitions="2*,1*" RowDefinitions="*,*,*">
+                <Label
+                    HorizontalTextAlignment="Start"
+                    Text="Watering Notification"
+                    VerticalTextAlignment="Center" />
+                <Switch
+                    Grid.Column="1"
+                    HorizontalOptions="Start"
+                    IsToggled="{Binding IsWateringNotificationEnabled}"
+                    VerticalOptions="Center" />
 
-        <Grid ColumnDefinitions="2*,1*">
-            <Label
-                HorizontalTextAlignment="Start"
-                Text="Enable Debug Mode"
-                VerticalTextAlignment="Center" />
-            <Switch
-                Grid.Column="1"
-                HorizontalOptions="Start"
-                IsToggled="{Binding IsDebugModeEnabled, Mode=TwoWay}"
-                VerticalOptions="Center" />
-        </Grid>
+                <!--  IsFertilizationNotificationEnabled  -->
+                <Label
+                    Grid.Row="1"
+                    HorizontalTextAlignment="Start"
+                    Text="Fertilization Notification"
+                    VerticalTextAlignment="Center" />
+                <Switch
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalOptions="Start"
+                    IsToggled="{Binding IsFertilizationNotificationEnabled}"
+                    VerticalOptions="Center" />
+            </Grid>
 
-        <BoxView class="HRule" />
+            <Grid ColumnDefinitions="2*,1*">
+                <Label
+                    HorizontalTextAlignment="Start"
+                    Text="Enable Debug Mode"
+                    VerticalTextAlignment="Center" />
+                <Switch
+                    Grid.Column="1"
+                    HorizontalOptions="Start"
+                    IsToggled="{Binding IsDebugModeEnabled, Mode=TwoWay}"
+                    VerticalOptions="Center" />
+            </Grid>
 
-        <VerticalStackLayout>
-            <Label Text="Theme" class="Subhead" />
-            <StackLayout
-                HorizontalOptions="Start"
-                Orientation="Horizontal"
-                RadioButtonGroup.GroupName="AppTheme"
-                Spacing="10">
-                <!--  RadioButtonGroup.SelectedValue="{Binding SelectedTheme}"  -->
+            <BoxView class="HRule" />
 
-                <StackLayout.Resources>
-                    <Style TargetType="RadioButton">
-                        <Setter Property="ControlTemplate" Value="{StaticResource ThemeRadioTemplate}" />
-                    </Style>
-                </StackLayout.Resources>
-                <RadioButton
-                    CheckedChanged="RadioButton_CheckedChanged"
-                    IsChecked="True"
-                    Value="{x:Static am:AppTheme.Unspecified}">
-                    <RadioButton.Content>
-                        <Grid RowDefinitions="4*,1*">
-                            <!--  Color={StaticResource NeutralDark},  -->
-                            <Image
-                                HorizontalOptions="Center"
-                                Source="{FontImage FontFamily=FontAwesome,
-                                                   Glyph={x:Static local:IconFont.Mobile},
-                                                   Size=32}"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Row="1"
-                                HorizontalOptions="Center"
-                                Text="Default"
-                                VerticalOptions="Center" />
-                        </Grid>
-                    </RadioButton.Content>
-                </RadioButton>
-                <RadioButton CheckedChanged="RadioButton_CheckedChanged" Value="{x:Static am:AppTheme.Dark}">
-                    <RadioButton.Content>
-                        <Grid RowDefinitions="4*,1*">
-                            <Image
-                                HorizontalOptions="Center"
-                                Source="{FontImage FontFamily=FontAwesome,
-                                                   Glyph={x:Static local:IconFont.Lightbulb},
-                                                   Color=Black,
-                                                   Size=32}"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Row="1"
-                                HorizontalOptions="Center"
-                                Text="Dark"
-                                VerticalOptions="Center" />
-                        </Grid>
-                    </RadioButton.Content>
-                    <!--<RadioButton.GestureRecognizers>
+            <VerticalStackLayout>
+                <Label Text="Theme" class="Subhead" />
+                <StackLayout
+                    HorizontalOptions="Start"
+                    Orientation="Horizontal"
+                    RadioButtonGroup.GroupName="AppTheme"
+                    Spacing="10">
+                    <!--  RadioButtonGroup.SelectedValue="{Binding SelectedTheme}"  -->
+
+                    <StackLayout.Resources>
+                        <Style TargetType="RadioButton">
+                            <Setter Property="ControlTemplate" Value="{StaticResource ThemeRadioTemplate}" />
+                        </Style>
+                    </StackLayout.Resources>
+                    <RadioButton
+                        CheckedChanged="RadioButton_CheckedChanged"
+                        IsChecked="True"
+                        Value="{x:Static am:AppTheme.Unspecified}">
+                        <RadioButton.Content>
+                            <Grid RowDefinitions="4*,1*">
+                                <!--  Color={StaticResource NeutralDark},  -->
+                                <Image
+                                    HorizontalOptions="Center"
+                                    Source="{FontImage FontFamily=FontAwesome,
+                                                       Glyph={x:Static local:IconFont.Mobile},
+                                                       Size=32}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="1"
+                                    HorizontalOptions="Center"
+                                    Text="Default"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </RadioButton.Content>
+                    </RadioButton>
+                    <RadioButton CheckedChanged="RadioButton_CheckedChanged" Value="{x:Static am:AppTheme.Dark}">
+                        <RadioButton.Content>
+                            <Grid RowDefinitions="4*,1*">
+                                <Image
+                                    HorizontalOptions="Center"
+                                    Source="{FontImage FontFamily=FontAwesome,
+                                                       Glyph={x:Static local:IconFont.Lightbulb},
+                                                       Color=Black,
+                                                       Size=32}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="1"
+                                    HorizontalOptions="Center"
+                                    Text="Dark"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </RadioButton.Content>
+                        <!--<RadioButton.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SettingsViewModel}}, Path=SelectThemeCommand}" CommandParameter="{x:Reference Name}" />
                     </RadioButton.GestureRecognizers>-->
-                </RadioButton>
-                <RadioButton CheckedChanged="RadioButton_CheckedChanged" Value="{x:Static am:AppTheme.Light}">
-                    <RadioButton.Content>
-                        <Grid RowDefinitions="4*,1*">
-                            <Image
-                                HorizontalOptions="Center"
-                                Source="{FontImage FontFamily=FontAwesome,
-                                                   Glyph={x:Static local:IconFont.Lightbulb},
-                                                   Color=White,
-                                                   Size=32}"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Row="1"
-                                HorizontalOptions="Center"
-                                Text="Light"
-                                VerticalOptions="Center" />
-                        </Grid>
-                    </RadioButton.Content>
-                    <!--<RadioButton.GestureRecognizers>
+                    </RadioButton>
+                    <RadioButton CheckedChanged="RadioButton_CheckedChanged" Value="{x:Static am:AppTheme.Light}">
+                        <RadioButton.Content>
+                            <Grid RowDefinitions="4*,1*">
+                                <Image
+                                    HorizontalOptions="Center"
+                                    Source="{FontImage FontFamily=FontAwesome,
+                                                       Glyph={x:Static local:IconFont.Lightbulb},
+                                                       Color=White,
+                                                       Size=32}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="1"
+                                    HorizontalOptions="Center"
+                                    Text="Light"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </RadioButton.Content>
+                        <!--<RadioButton.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SettingsViewModel}}, Path=SelectThemeCommand}" CommandParameter="{x:Reference Name}" />
                     </RadioButton.GestureRecognizers>-->
-                </RadioButton>
-            </StackLayout>
+                    </RadioButton>
+                </StackLayout>
+            </VerticalStackLayout>
         </VerticalStackLayout>
-    </VerticalStackLayout>
+        <Grid BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" IsVisible="{Binding IsLoading}">
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsLoading}"
+                VerticalOptions="Center" />
+        </Grid>
+    </Grid>
 </views:ContentPageBase>

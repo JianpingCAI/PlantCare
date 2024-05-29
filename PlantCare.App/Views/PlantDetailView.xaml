@@ -28,16 +28,6 @@
                         VerticalOptions="Center" />
                 </Border>
 
-                <!--  Edit button  -->
-                <Button
-                    Margin="0,5"
-                    Command="{Binding NavigateToEditPlantCommand}"
-                    FontFamily="MaterialIconsRegular"
-                    FontSize="20"
-                    HorizontalOptions="Center"
-                    Text="&#xe3c9;"
-                    ToolTipProperties.Text="Edit the details" />
-
                 <Grid ColumnDefinitions="auto,*" RowDefinitions="*,*,*,*,*,*,*,*">
 
                     <Label
@@ -140,15 +130,31 @@
 
                 </Grid>
 
-                <Button
-                    Margin="0,20,0,0"
-                    Command="{Binding DeletePlantCommand}"
-                    HorizontalOptions="Center"
-                    Text="Delete Plant" />
+                <Grid Margin="5,10" ColumnDefinitions="*,*">
+                    <!--  Edit button  -->
+                    <Button
+                        Command="{Binding NavigateToEditPlantCommand}"
+                        HorizontalOptions="Center"
+                        MinimumWidthRequest="100"
+                        Text="Edit"
+                        ToolTipProperties.Text="Edit the details" />
+                    <!--  FontFamily="MaterialIconsRegular"  -->
+                    <!--  Text="&#xe3c9;"  -->
+                    <Button
+                        Grid.Column="1"
+                        Command="{Binding DeletePlantCommand}"
+                        HorizontalOptions="Center"
+                        MinimumWidthRequest="100"
+                        Text="Delete" />
+                </Grid>
+
             </StackLayout>
         </ScrollView>
         <Grid BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" IsVisible="{Binding IsLoading}">
-            <ActivityIndicator IsRunning="{Binding IsLoading}" />
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsLoading}"
+                VerticalOptions="Center" />
         </Grid>
     </Grid>
 </views:ContentPageBase>

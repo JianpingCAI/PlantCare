@@ -29,107 +29,113 @@
     </ContentPage.Resources>
     <!--  Main Layout  -->
     <ScrollView>
-        <VerticalStackLayout Padding="5" Spacing="10">
-            <!--  Add Plant Button  -->
-            <Button
-                Margin="20,0"
-                Command="{Binding AddPlantCommand}"
-                Text="Add plant" />
+        <Grid>
+            <VerticalStackLayout Padding="5" Spacing="10">
+                <!--  Add Plant Button  -->
+                <Button
+                    Margin="20,0"
+                    Command="{Binding AddPlantCommand}"
+                    Text="Add a New Plant" />
 
-            <!--  Search Bar for quick filtering  -->
-            <SearchBar
-                Placeholder="Search plants by name"
-                SearchCommand="{Binding SearchCommand}"
-                Text="{Binding SearchText}"
-                TextChanged="SearchBar_TextChanged" />
+                <!--  Search Bar for quick filtering  -->
+                <SearchBar
+                    Placeholder="Search plants by name"
+                    SearchCommand="{Binding SearchCommand}"
+                    Text="{Binding SearchText}"
+                    TextChanged="SearchBar_TextChanged" />
 
-            <!--  Plants Collection View  -->
-            <CollectionView
-                EmptyView="No plants found. Add a new plant to get started!"
-                ItemsSource="{Binding Plants}"
-                SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
-                SelectionChangedCommand="{Binding SelectPlantCommand}"
-                SelectionMode="Single">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:PlantListItemViewModel">
-                        <!--<Frame
+                <!--  Plants Collection View  -->
+                <CollectionView
+                    EmptyView="No plants found. Add a new plant to get started!"
+                    ItemsSource="{Binding Plants}"
+                    SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
+                    SelectionChangedCommand="{Binding SelectPlantCommand}"
+                    SelectionMode="Single">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:PlantListItemViewModel">
+                            <!--<Frame
                             Padding="10"
                             BorderColor="ForestGreen"
                             HorizontalOptions="Center"
                             InputTransparent="True"
                             VerticalOptions="Center">-->
-                        <!--</Frame>-->
-                        <Grid>
-                            <Border
-                                HorizontalOptions="Center"
-                                StrokeThickness="0"
-                                VerticalOptions="Center">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="10" />
-                                </Border.StrokeShape>
-                                <VerticalStackLayout Padding="0,0,0,10" HorizontalOptions="Center">
-                                    <Border
-                                        HorizontalOptions="Center"
-                                        Stroke="Transparent"
-                                        StrokeThickness="0"
-                                        VerticalOptions="Center">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="10" />
-                                        </Border.StrokeShape>
-                                        <Image
-                                            Aspect="AspectFill"
-                                            HeightRequest="100"
+                            <!--</Frame>-->
+                            <Grid>
+                                <Border
+                                    HorizontalOptions="Center"
+                                    StrokeThickness="0"
+                                    VerticalOptions="Center">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+                                    <VerticalStackLayout Padding="0,0,0,10" HorizontalOptions="Center">
+                                        <Border
                                             HorizontalOptions="Center"
-                                            Source="{Binding PhotoPath}"
-                                            VerticalOptions="Center"
-                                            WidthRequest="100" />
-                                    </Border>
-                                    <Label
-                                        FontAttributes="Bold"
-                                        HorizontalOptions="Center"
-                                        Text="{Binding Name}" />
-                                    <Grid Margin="0,0,0,5" ColumnDefinitions="15,*">
+                                            Stroke="Transparent"
+                                            StrokeThickness="0"
+                                            VerticalOptions="Center">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <Image
+                                                Aspect="AspectFill"
+                                                HeightRequest="100"
+                                                HorizontalOptions="Center"
+                                                Source="{Binding PhotoPath}"
+                                                VerticalOptions="Center"
+                                                WidthRequest="100" />
+                                        </Border>
                                         <Label
-                                            FontFamily="MaterialIconsRegular"
-                                            Text="&#xe798;"
-                                            TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
-                                        <ProgressBar
-                                            Grid.Column="1"
-                                            Margin="0,0,5,0"
-                                            HeightRequest="5"
-                                            Progress="{Binding WaterState}"
-                                            ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
-                                    </Grid>
-                                    <Grid Margin="0,0,0,5" ColumnDefinitions="15,*">
-                                        <Label
-                                            FontFamily="MaterialIconsRegular"
-                                            Text="&#xe761;"
-                                            TextColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}" />
-                                        <ProgressBar
-                                            Grid.Column="1"
-                                            Margin="0,0,5,0"
-                                            HeightRequest="5"
-                                            Progress="{Binding FertilizeState}"
-                                            ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}" />
-                                    </Grid>
-                                </VerticalStackLayout>
-                            </Border>
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Name}" />
+                                        <Grid Margin="0,0,0,5" ColumnDefinitions="15,*">
+                                            <Label
+                                                FontFamily="MaterialIconsRegular"
+                                                Text="&#xe798;"
+                                                TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
+                                            <ProgressBar
+                                                Grid.Column="1"
+                                                Margin="0,0,5,0"
+                                                HeightRequest="5"
+                                                Progress="{Binding WaterState}"
+                                                ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
+                                        </Grid>
+                                        <Grid Margin="0,0,0,5" ColumnDefinitions="15,*">
+                                            <Label
+                                                FontFamily="MaterialIconsRegular"
+                                                Text="&#xe761;"
+                                                TextColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}" />
+                                            <ProgressBar
+                                                Grid.Column="1"
+                                                Margin="0,0,5,0"
+                                                HeightRequest="5"
+                                                Progress="{Binding FertilizeState}"
+                                                ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}" />
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
 
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="0"
+                            Orientation="Vertical"
+                            Span="{OnIdiom Phone=3,
+                                           Desktop=4}"
+                            VerticalItemSpacing="3" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+            </VerticalStackLayout>
 
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout
-                        HorizontalItemSpacing="0"
-                        Orientation="Vertical"
-                        Span="{OnIdiom Phone=3,
-                                       Desktop=4}"
-                        VerticalItemSpacing="3" />
-                </CollectionView.ItemsLayout>
-            </CollectionView>
-
-
-        </VerticalStackLayout>
+            <Grid BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" IsVisible="{Binding IsLoading}">
+                <ActivityIndicator
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsLoading}"
+                    VerticalOptions="Center" />
+            </Grid>
+        </Grid>
     </ScrollView>
 </views:ContentPageBase>
