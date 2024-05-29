@@ -124,6 +124,12 @@ public static class MauiProgram
         // Register AutoMapper
         builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+        // Register background service
+        //builder.Services.AddHostedService<PlantStateCheckingService>();
+
+        builder.Services.AddHostedService<TestBackGroundService>();
+
+
 #if DEBUG
         builder.Logging.AddDebug();
 

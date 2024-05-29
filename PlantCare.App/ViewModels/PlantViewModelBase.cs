@@ -30,8 +30,19 @@ public partial class PlantViewModelBase : ViewModelBase
 
     public double HoursUntilNextWatering => (LastWatered.AddHours(WateringFrequencyInHours) - DateTime.Now).TotalHours;
 
-    public double WaterState => Math.Max(0, (NextWateringTime - DateTime.Now).TotalMinutes / (WateringFrequencyInHours * 60.0));
+    private double _waterState;
+    public double WaterState
+    {
+        get
+        {
+            return Math.Max(0, (NextWateringTime - DateTime.Now).TotalMinutes / (WateringFrequencyInHours * 60.0));
+        }
 
+        set
+        {
+            SetProperty(ref _waterState, value);
+        }
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(NextFertilizeTime))]
@@ -49,5 +60,17 @@ public partial class PlantViewModelBase : ViewModelBase
 
     public double HoursUntilNextFertilize => (LastWatered.AddHours(FertilizeFrequencyInHours) - DateTime.Now).TotalHours;
 
-    public double FertilizeState => Math.Max(0, (NextFertilizeTime - DateTime.Now).TotalMinutes / (FertilizeFrequencyInHours * 60.0));
+    public double _fertilizeState;
+
+    public double FertilizeState
+    {
+        get
+        {
+            return Math.Max(0, (NextFertilizeTime - DateTime.Now).TotalMinutes / (FertilizeFrequencyInHours * 60.0));
+        }
+        set
+        {
+            SetProperty(ref _fertilizeState, value);
+        }
+    }
 }

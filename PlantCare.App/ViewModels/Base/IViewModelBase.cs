@@ -4,5 +4,5 @@ namespace PlantCare.App.ViewModels.Base;
 
 public interface IViewModelBase
 {
-    IAsyncRelayCommand InitializeAsyncCommand { get; }
+    IAsyncRelayCommand OnViewAppearingCommand { get; }
 }

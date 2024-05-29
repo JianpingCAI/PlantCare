@@ -15,20 +15,27 @@ public abstract partial class ViewModelBase : ObservableValidator/*ObservableObj
 
     #region For the loading indicator
 
-    public IAsyncRelayCommand InitializeAsyncCommand { get; }
+    public IAsyncRelayCommand OnViewAppearingCommand { get; }
 
     public ViewModelBase()
     {
-        InitializeAsyncCommand = new AsyncRelayCommand(
+        OnViewAppearingCommand = new AsyncRelayCommand(
             async () =>
             {
                 IsLoading = true;
-                await LoadingDataWhenViewAppearing(LoadDataWhenViewAppearingAsync);
+                await LoadingDataWhenViewAppearingAsync(LoadDataWhenViewAppearingAsync);
                 IsLoading = false;
+
+                await OnDataLoadedWhenViewAppearingAsync();
             });
     }
 
-    protected async Task LoadingDataWhenViewAppearing(Func<Task> workFunc)
+    public virtual Task OnDataLoadedWhenViewAppearingAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    protected async Task LoadingDataWhenViewAppearingAsync(Func<Task> workFunc)
     {
         await workFunc();
     }

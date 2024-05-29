@@ -1,6 +1,6 @@
 ﻿namespace PlantCare.App.Messaging
 {
-    internal class IsWateringNotificationEnabledMessage
+    internal class IsWateringNotifyEnabledMessage
     {
         public bool IsWateringNotificationEnabled { get; set; }
     }

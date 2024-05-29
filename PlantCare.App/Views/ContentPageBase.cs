@@ -8,11 +8,11 @@ public class ContentPageBase : ContentPage
     {
         base.OnAppearing();
 
-        if (BindingContext is not IViewModelBase ivmb)
+        if (BindingContext is not IViewModelBase viewModel)
         {
             return;
         }
 
-        await ivmb.InitializeAsyncCommand.ExecuteAsync(null);
+        await viewModel.OnViewAppearingCommand.ExecuteAsync(null);
     }
 }

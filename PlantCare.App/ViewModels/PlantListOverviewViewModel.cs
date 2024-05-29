@@ -20,7 +20,7 @@ namespace PlantCare.App.ViewModels;
 public partial class PlantListOverviewViewModel : ViewModelBase,
     IRecipient<PlantAddedOrChangedMessage>,
     IRecipient<PlantDeletedMessage>,
-    IRecipient<IsWateringNotificationEnabledMessage>
+    IRecipient<IsWateringNotifyEnabledMessage>
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
@@ -42,7 +42,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         if (_notificationService.IsSupported)
         {
-            WeakReferenceMessenger.Default.Register<IsWateringNotificationEnabledMessage>(this);
+            WeakReferenceMessenger.Default.Register<IsWateringNotifyEnabledMessage>(this);
 
             //_notificationService.NotificationReceiving = OnNotificationReceiving;
             //_notificationService.NotificationReceived += OnNotificationReceived;
@@ -81,41 +81,45 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
+    #region For data loading
+
+    private List<Plant> _plantList;
+
     // Override
     public override async Task LoadDataWhenViewAppearingAsync()
     {
         // Load only once
         if (Plants.Count == 0)
         {
-            await LoadingDataWhenViewAppearing(LoadAllPlants);
+            await LoadAllPlantsFromDatabase();
         }
     }
 
-    private async Task LoadAllPlants()
+    public override async Task OnDataLoadedWhenViewAppearingAsync()
+    {
+        if (Plants.Count == 0)
+        {
+            await SetAllPlants();
+        }
+    }
+
+    private async Task LoadAllPlantsFromDatabase()
+    {
+        _plantList = await _plantService.GetAllPlantsAsync();
+        _plantList = _plantList.OrderBy(x => x.Name).ToList();
+    }
+
+    private async Task SetAllPlants()
     {
         try
         {
-            List<Plant> plants = await _plantService.GetAllPlantsAsync();
-
-            List<PlantListItemViewModel> viewModels = [];
-            foreach (Plant plant in plants)
-            {
-                viewModels.Add(MapToViewModel(plant));
-            }
             Plants.Clear();
-            Plants = viewModels.ToObservableCollection();
+            foreach (Plant plant in _plantList)
+            {
+                Plants.Add(MapToViewModel(plant));
+            }
 
             _allPlantsBackup.AddRange(Plants);
-
-            //if (plants.Count == 0)
-            //{
-            //    viewModels.Add(MapToViewModel(new Plant
-            //    {
-            //        Name = "Plant1",
-            //        Species = "species",
-            //        PhotoPath = "https://picsum.photos/200/300"
-            //    }));
-            //}
 
             if (await _settingsService.GetWateringNotificationSettingAsync())
             {
@@ -124,9 +128,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
+            //Debug.WriteLine(ex.Message);
+            await _dialogService.Notify("Error", ex.Message);
         }
     }
+
+    #endregion For data loading
 
     [RelayCommand]
     private async Task AddPlant()
@@ -224,9 +231,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     async void IRecipient<PlantAddedOrChangedMessage>.Receive(PlantAddedOrChangedMessage message)
     {
-        Plants.Clear();
-
-        await LoadAllPlants();
+        await LoadAllPlantsFromDatabase();
+        await SetAllPlants();
     }
 
     void IRecipient<PlantDeletedMessage>.Receive(PlantDeletedMessage message)
@@ -240,7 +246,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     #region Deal with watering notification
 
-    async void IRecipient<IsWateringNotificationEnabledMessage>.Receive(IsWateringNotificationEnabledMessage message)
+    async void IRecipient<IsWateringNotifyEnabledMessage>.Receive(IsWateringNotifyEnabledMessage message)
     {
         switch (message.IsWateringNotificationEnabled)
         {

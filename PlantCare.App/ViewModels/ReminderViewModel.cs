@@ -25,7 +25,7 @@ public partial class ReminderViewModel : ViewModelBase
     {
         try
         {
-            await LoadingDataWhenViewAppearing(LoadAllReminders);
+            await LoadingDataWhenViewAppearingAsync(LoadAllReminders);
         }
         catch (Exception ex)
         {

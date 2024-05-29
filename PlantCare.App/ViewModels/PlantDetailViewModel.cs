@@ -79,7 +79,7 @@ public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributab
 
     public override async Task LoadDataWhenViewAppearingAsync()
     {
-        await LoadingDataWhenViewAppearing(async () =>
+        await LoadingDataWhenViewAppearingAsync(async () =>
         {
             await GetPlantDetailAsync(Id);
         });

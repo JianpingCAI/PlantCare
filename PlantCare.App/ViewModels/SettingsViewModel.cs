@@ -11,10 +11,12 @@ namespace PlantCare.App.ViewModels;
 public partial class SettingsViewModel : ViewModelBase
 {
     private readonly ISettingsService _settingsService;
+    private readonly IDialogService _dialogService;
 
-    public SettingsViewModel(ISettingsService settingsService)
+    public SettingsViewModel(ISettingsService settingsService, IDialogService dialogService)
     {
         _settingsService = settingsService;
+        _dialogService = dialogService;
     }
 
     [ObservableProperty]
@@ -27,25 +29,9 @@ public partial class SettingsViewModel : ViewModelBase
     private bool _isDebugModeEnabled = true;
 
     [ObservableProperty]
-    private string theme;
+    private string _theme;
 
-    //[RelayCommand]
-    //private async Task LoadSettingsAsync()
-    //{
-    //    if (IsBusy) return;
-
-    //    try
-    //    {
-    //        IsWateringNotificationEnabled = await _settingsService.GetWateringNotificationSettingAsync();
-    //        IsFertilizationNotificationEnabled = await _settingsService.GetFertilizationNotificationSettingAsync();
-
-    //        Theme = await _settingsService.GetThemeSettingAsync();
-    //    }
-    //    finally
-    //    {
-    //        IsBusy = false;
-    //    }
-    //}
+    private bool _isSettingsLoaded = false;
 
     [RelayCommand]
     private async Task SaveSettingsAsync()
@@ -62,7 +48,7 @@ public partial class SettingsViewModel : ViewModelBase
 
     partial void OnIsWateringNotificationEnabledChanged(bool isEnabled)
     {
-        WeakReferenceMessenger.Default.Send(new IsWateringNotificationEnabledMessage { IsWateringNotificationEnabled = isEnabled });
+        WeakReferenceMessenger.Default.Send(new IsWateringNotifyEnabledMessage { IsWateringNotificationEnabled = isEnabled });
 
         _settingsService.SetWateringNotificationSettingAsync(isEnabled);
     }
@@ -81,7 +67,21 @@ public partial class SettingsViewModel : ViewModelBase
 
     public override async Task LoadDataWhenViewAppearingAsync()
     {
-        await LoadingDataWhenViewAppearing(LoadSettingsAsync);
+        if (_isSettingsLoaded)
+        {
+            return;
+        }
+
+        try
+        {
+            await LoadSettingsAsync();
+            _isSettingsLoaded = true;
+        }
+        catch (Exception ex)
+        {
+            _isSettingsLoaded = false;
+            await _dialogService.Notify("Error", ex.Message);
+        }
     }
 
     private async Task LoadSettingsAsync()
