@@ -11,6 +11,8 @@ public interface IPlantService
 
     Task<List<Plant>> GetAllPlantsAsync();
 
+    Task<List<Plant>> GetPlantsToWater();
+
     Task<Plant> GetPlantByIdAsync(Guid id);
 
     Task<bool> UpdatePlantAsync(PlantDbModel plant);

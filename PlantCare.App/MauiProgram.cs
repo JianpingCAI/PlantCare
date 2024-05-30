@@ -152,6 +152,8 @@ public static class MauiProgram
         builder.Services.AddTransient<PlantAddEditViewModel>();
 
         builder.Services.AddTransient<LoginViewModel>();
+
+        builder.Services.AddTransient<ReminderView>();
         builder.Services.AddTransient<ReminderViewModel>();
 
         builder.Services.AddSingleton<SettingsView>();

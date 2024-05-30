@@ -107,7 +107,6 @@
                         FontSize="Medium"
                         Text="{Binding NextFertilizeTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
 
-
                     <Label
                         Grid.Row="6"
                         Grid.ColumnSpan="2"
@@ -127,7 +126,6 @@
                         HorizontalTextAlignment="Start"
                         Text="{Binding HoursUntilNextFertilize, StringFormat='Next fertilization in {0:0.00} hours'}"
                         TextColor="DeepSkyBlue" />
-
                 </Grid>
 
                 <Grid Margin="5,10" ColumnDefinitions="*,*">
@@ -147,7 +145,6 @@
                         MinimumWidthRequest="100"
                         Text="Delete" />
                 </Grid>
-
             </StackLayout>
         </ScrollView>
         <Grid BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" IsVisible="{Binding IsLoading}">

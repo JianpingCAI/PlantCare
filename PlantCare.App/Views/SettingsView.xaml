@@ -28,9 +28,11 @@
                 HeightRequest="120"
                 HorizontalOptions="Start"
                 Stroke="Transparent"
-                StrokeShape="RoundRectangle 10"
                 VerticalOptions="Start"
                 WidthRequest="100">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
                 <Grid Margin="8">
                     <Grid
                         HeightRequest="18"

@@ -13,4 +13,6 @@ public interface IPlantRepository
     Task<bool> UpdateAsync(PlantDbModel plant);
 
     Task<bool> DeleteAsync(Guid plantId);
+
+    Task<List<PlantDbModel>> GetPlantsToWater();
 }

@@ -58,7 +58,7 @@
             Title="Reminders"
             ContentTemplate="{DataTemplate views:ReminderView}"
             Icon="tab_notifications.png"
-            Route="notifications" />
+            Route="reminders" />
         <!--  Icon="reminders.png"  -->
         <ShellContent
             Title="Settings"

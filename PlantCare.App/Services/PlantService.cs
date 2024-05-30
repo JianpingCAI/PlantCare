@@ -42,4 +42,11 @@ public class PlantService : IPlantService
     {
         await _plantRepository.DeleteAsync(plantId);
     }
+
+    public async Task<List<Plant>> GetPlantsToWater()
+    {
+        var dbModels = await _plantRepository.GetPlantsToWater();
+
+        return _mapper.Map<List<Plant>>(dbModels);
+    }
 }

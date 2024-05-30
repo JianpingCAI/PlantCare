@@ -8,8 +8,10 @@ public class ProgressToColorConverter : IValueConverter
     {
         if (value is double progress)
         {
-            if (progress < 0.2)
+            if (progress < 0.01)
                 return Colors.Red;
+            else if (progress < 0.2)
+                return Colors.Orange;
             else if (progress < 0.5)
                 return Colors.Yellow;
             else

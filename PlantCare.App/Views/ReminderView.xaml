@@ -4,15 +4,140 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:PlantCare.App.Views"
-    Title="Reminders">
-    <CollectionView ItemsSource="{Binding Reminders}">
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <StackLayout Padding="10">
-                    <Label FontSize="Medium" Text="{Binding Description}" />
-                    <Label FontSize="Small" Text="{Binding ScheduledDate, StringFormat='Scheduled: {0:MM/dd/yyyy}'}" />
-                </StackLayout>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+    xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
+    Title="Reminders"
+    x:DataType="vm:ReminderViewModel">
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="LightSkyBlue" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+    <Grid Padding="5,0">
+
+        <Grid HorizontalOptions="Fill" RowDefinitions="auto,*">
+            <Grid ColumnDefinitions="200, *">
+                <Label FontSize="Medium" Text="Remember to Watering" />
+                <!--<Picker
+                    Title="Select a monkey"
+                    ItemDisplayBinding="{Binding}"
+                    ItemsSource="{Binding}"
+                    SelectedItem="{Binding}" />-->
+                <Button
+                    Grid.Column="1"
+                    Margin="0,0,0,2"
+                    Command="{Binding SelectAllWateringRemindersCommand, Mode=TwoWay}"
+                    HorizontalOptions="Center"
+                    Text="{Binding SelectAllButtonText, Mode=OneWay}"
+                    VerticalOptions="Center" />
+            </Grid>
+            <CollectionView
+                x:Name="wateringCollection"
+                Grid.Row="1"
+                ItemsSource="{Binding WateringReminders}"
+                SelectedItems="{Binding SelectedWateringReminders}"
+                SelectionChangedCommand="{Binding SelectedWateringReminderChangedCommand}"
+                SelectionMode="Multiple">
+                <CollectionView.Shadow>
+                    <Shadow
+                        Brush="{AppThemeBinding Light={StaticResource White},
+                                                Dark={StaticResource Black}}"
+                        Opacity="0.3"
+                        Radius="3" />
+                </CollectionView.Shadow>
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        Orientation="Vertical"
+                        Span="1"
+                        VerticalItemSpacing="2" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ReminderItemViewModel">
+                        <Grid>
+                            <SwipeView>
+                                <SwipeView.LeftItems>
+                                    <SwipeItems>
+                                        <SwipeItem
+                                            BackgroundColor="LightPink"
+                                            Command="{Binding Source={x:Reference wateringCollection}, Path=BindingContext.SetWateredCommand}"
+                                            CommandParameter="{Binding Source={x:Reference wateringCollection}, Path=BindingContext.SelectedWateringReminder}"
+                                            IconImageSource="delete.png"
+                                            Text="Delete" />
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+
+                                <Border BackgroundColor="Transparent" HorizontalOptions="Fill">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+                                    <Grid ColumnDefinitions="70,*,*" HorizontalOptions="Fill">
+                                        <!--<CheckBox HorizontalOptions="Start" IsChecked="{Binding IsSelected}" />-->
+                                        <Border
+                                            Padding="1"
+                                            BackgroundColor="Transparent"
+                                            HorizontalOptions="Center"
+                                            StrokeThickness="0"
+                                            VerticalOptions="Center">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <Image
+                                                Aspect="AspectFill"
+                                                HeightRequest="60"
+                                                HorizontalOptions="Center"
+                                                Source="{Binding PhotoPath}"
+                                                WidthRequest="60" />
+                                        </Border>
+                                        <Label
+                                            FontFamily="MaterialIconsRegular"
+                                            HorizontalOptions="Start"
+                                            IsVisible="{Binding IsSelected}"
+                                            Text="&#xe86c;"
+                                            TextColor="Green"
+                                            VerticalOptions="Start"
+                                            VerticalTextAlignment="Start" />
+                                        <Label Grid.Column="1" Text="{Binding Name}" />
+                                        <Label Grid.Column="2" Text="{Binding ExpectedTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+                                    </Grid>
+                                </Border>
+                            </SwipeView>
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+        <Grid BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" IsVisible="{Binding IsLoading}">
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsLoading}"
+                VerticalOptions="Center" />
+        </Grid>
+        <Button
+            Margin="0,0,20,20"
+            CornerRadius="50"
+            FontFamily="MaterialIconsRegular"
+            FontSize="30"
+            HorizontalOptions="End"
+            Text="&#xe877;"
+            VerticalOptions="End">
+            <Button.Shadow>
+                <Shadow
+                    Brush="DeepSkyBlue"
+                    Opacity="0.8"
+                    Radius="15"
+                    Offset="5,5" />
+            </Button.Shadow>
+        </Button>
+    </Grid>
 </views:ContentPageBase>

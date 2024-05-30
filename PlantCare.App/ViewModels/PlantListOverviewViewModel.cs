@@ -106,7 +106,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private async Task LoadAllPlantsFromDatabase()
     {
         _plantList = await _plantService.GetAllPlantsAsync();
-        _plantList = _plantList.OrderBy(x => x.Name).ToList();
+        _plantList = [.. _plantList.OrderBy(x => x.Name)];
     }
 
     private async Task SetAllPlants()
