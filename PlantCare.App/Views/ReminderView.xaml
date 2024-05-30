@@ -26,7 +26,8 @@
     <Grid Padding="5,0">
 
         <Grid HorizontalOptions="Fill" RowDefinitions="auto,*">
-            <Grid ColumnDefinitions="200, *">
+            <Grid ColumnDefinitions="220, *">
+                <!--  Reminder Type  -->
                 <Grid ColumnDefinitions="auto,*">
                     <Label
                         FontSize="Small"
@@ -37,12 +38,15 @@
                         Grid.Column="1"
                         FontAttributes="Bold"
                         FontSize="Medium"
-                        HorizontalOptions="Start"
+                        HorizontalOptions="End"
+                        HorizontalTextAlignment="Center"
                         ItemsSource="{Binding ReminderTypes}"
                         SelectedItem="{Binding SelectedReminderType}"
                         TextColor="DeepSkyBlue"
                         VerticalTextAlignment="Center" />
                 </Grid>
+
+                <!--  Select  -->
                 <Button
                     Grid.Column="1"
                     Margin="0,0,10,2"
@@ -92,11 +96,11 @@
                                         <RoundRectangle CornerRadius="10" />
                                     </Border.StrokeShape>
                                     <Grid ColumnDefinitions="70,*,*" HorizontalOptions="Fill">
-                                        <!--<CheckBox HorizontalOptions="Start" IsChecked="{Binding IsSelected}" />-->
+                                        <!--  photo  -->
                                         <Border
-                                            Padding="1"
+                                            Padding="0"
                                             BackgroundColor="Transparent"
-                                            HorizontalOptions="Center"
+                                            HorizontalOptions="Start"
                                             StrokeThickness="0"
                                             VerticalOptions="Center">
                                             <Border.StrokeShape>
@@ -109,14 +113,18 @@
                                                 Source="{Binding PhotoPath}"
                                                 WidthRequest="60" />
                                         </Border>
+                                        <!--  Selection Tick  -->
                                         <Label
                                             FontFamily="MaterialIconsRegular"
+                                            FontSize="20"
                                             HorizontalOptions="Start"
                                             IsVisible="{Binding IsSelected}"
                                             Text="&#xe86c;"
                                             TextColor="Green"
                                             VerticalOptions="Start"
                                             VerticalTextAlignment="Start" />
+
+                                        <!--  Name  -->
                                         <Label Grid.Column="1" Text="{Binding Name}" />
                                         <Label Grid.Column="2" Text="{Binding ExpectedTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
                                     </Grid>
@@ -134,6 +142,9 @@
                 IsRunning="{Binding IsLoading}"
                 VerticalOptions="Center" />
         </Grid>
+
+        <!--  Floating 'Done' button  -->
+        <!--<Grid>-->
         <Button
             Margin="0,0,20,20"
             Command="{Binding SetRemindersDoneCommand}"
@@ -141,6 +152,7 @@
             FontFamily="MaterialIconsRegular"
             FontSize="30"
             HorizontalOptions="End"
+            Opacity="0.95"
             Text="&#xe877;"
             VerticalOptions="End">
             <Button.Shadow>
@@ -151,5 +163,14 @@
                     Offset="5,5" />
             </Button.Shadow>
         </Button>
+
+        <!--<Label
+                Margin="0,0,31,21"
+                FontAttributes="Bold"
+                FontSize="14"
+                HorizontalOptions="End"
+                Text="Done"
+                VerticalOptions="End" />-->
+        <!--</Grid>-->
     </Grid>
 </views:ContentPageBase>

@@ -15,62 +15,77 @@
     </ContentPage.Resources>
     <Grid>
         <ScrollView>
-            <Grid>
-                <VerticalStackLayout Padding="10">
-                    <Border
-                        HorizontalOptions="Center"
-                        Stroke="Transparent"
-                        StrokeThickness="0"
-                        VerticalOptions="Center">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="50" />
-                        </Border.StrokeShape>
-                        <Image
-                            Aspect="AspectFit"
+            <Grid Padding="5,2,5,10">
+                <VerticalStackLayout>
+                    <Grid Margin="0,0,0,5">
+                        <!--  Photo  -->
+                        <Border
                             HorizontalOptions="Center"
-                            MaximumWidthRequest="{OnIdiom Phone=300,
-                                                          Default=500}"
-                            Source="{Binding PhotoPath}"
-                            VerticalOptions="Center" />
-                    </Border>
+                            Stroke="Transparent"
+                            StrokeThickness="0"
+                            VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <Image
+                                Aspect="AspectFit"
+                                HorizontalOptions="Center"
+                                MaximumWidthRequest="{OnIdiom Phone=300,
+                                                              Default=500}"
+                                Source="{Binding PhotoPath}"
+                                VerticalOptions="Center" />
+                        </Border>
 
-                    <Grid ColumnDefinitions="*,*">
-                        <Button
-                            Margin="5,5"
-                            Command="{Binding UploadImageCommand}"
-                            FontFamily="MaterialIconsRegular"
-                            FontSize="30"
-                            HorizontalOptions="Center"
-                            Text="&#xe413;"
-                            VerticalOptions="Center" />
-                        <Button
-                            Grid.Column="1"
-                            Margin="5,5"
-                            Command="{Binding TakePhotoCommand}"
-                            FontFamily="MaterialIconsRegular"
-                            FontSize="30"
-                            HorizontalOptions="Center"
-                            Text="&#xe439;"
-                            VerticalOptions="Center" />
+                        <Grid ColumnDefinitions="*,*" VerticalOptions="End">
+                            <!--  Upload image  -->
+                            <Button
+                                Margin="25,5,5,0"
+                                Command="{Binding UploadImageCommand}"
+                                CornerRadius="10"
+                                FontFamily="MaterialIconsRegular"
+                                FontSize="25"
+                                HorizontalOptions="Start"
+                                Opacity="0.75"
+                                Text="&#xe413;"
+                                VerticalOptions="Center" />
+                            <!--  Take photo  -->
+                            <Button
+                                Grid.Column="1"
+                                Margin="5,5,25,0"
+                                Command="{Binding TakePhotoCommand}"
+                                FontFamily="MaterialIconsRegular"
+                                FontSize="25"
+                                HorizontalOptions="End"
+                                Opacity="0.75"
+                                Text="&#xe439;"
+                                VerticalOptions="Center" />
+                        </Grid>
                     </Grid>
 
-                    <Border Padding="5">
+                    <!--  Basic Info  -->
+                    <Border Padding="2">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="5" />
                         </Border.StrokeShape>
                         <Grid
-                            ColumnDefinitions="*,*"
+                            ColumnDefinitions="90,*"
                             HorizontalOptions="Start"
-                            RowDefinitions="*,*,*">
+                            RowDefinitions="35,35,*">
 
-                            <Label Text="Name" />
+                            <Label
+                                Padding="3"
+                                HorizontalTextAlignment="End"
+                                Text="Name" />
                             <Entry
                                 Grid.Column="1"
                                 Margin="5,0,0,0"
                                 Text="{Binding Name, Mode=TwoWay}"
                                 VerticalOptions="End" />
 
-                            <Label Grid.Row="1" Text="Species" />
+                            <Label
+                                Grid.Row="1"
+                                HorizontalTextAlignment="End"
+                                Text="Species" />
                             <Entry
                                 Grid.Row="1"
                                 Grid.Column="1"
@@ -81,6 +96,7 @@
                             <Label
                                 Grid.Row="2"
                                 FontAttributes="Bold"
+                                HorizontalTextAlignment="End"
                                 Text="Age" />
                             <HorizontalStackLayout Grid.Row="2" Grid.Column="1">
                                 <Entry
@@ -89,6 +105,7 @@
                                     Text="{Binding Age, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
                                     VerticalOptions="End" />
                                 <Stepper
+                                    HeightRequest="50"
                                     Increment="1"
                                     Maximum="3000"
                                     MaximumWidthRequest="{OnIdiom Phone=120,
@@ -100,7 +117,7 @@
                     </Border>
 
                     <!--  Watering  -->
-                    <Border Margin="0,5" Padding="5">
+                    <Border Margin="0,5" Padding="2">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="5" />
                         </Border.StrokeShape>
@@ -108,27 +125,37 @@
                             ColumnDefinitions="90,*"
                             HorizontalOptions="Start"
                             RowDefinitions="*,*">
-                            <Label FontAttributes="Bold" Text="Last Watering" />
+                            <Label
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="End"
+                                Text="Last Watering" />
 
+                            <!--  Last watering  -->
                             <HorizontalStackLayout Grid.Column="1" Margin="5,0,0,0">
                                 <DatePicker Date="{Binding LastWateredDate, Mode=TwoWay}" VerticalOptions="End" />
                                 <TimePicker Time="{Binding LastWateredTime, Mode=TwoWay}" VerticalOptions="End" />
+                                <!--  Now button  -->
                                 <Button
-                                    Margin="10,0,0,0"
+                                    Margin="30,0,0,0"
+                                    Padding="5"
                                     Command="{Binding SetCurrentTimeAsLastWateredCommand}"
+                                    HeightRequest="35"
                                     Text="Now"
                                     VerticalOptions="Center" />
                             </HorizontalStackLayout>
 
+                            <!--  Watering Interval  -->
                             <Label
                                 Grid.Row="1"
                                 FontAttributes="Bold"
-                                Text="Waterting &#10;Interval" />
+                                HorizontalTextAlignment="End"
+                                Text="Waterting&#10;Interval" />
 
                             <VerticalStackLayout
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 Margin="5,0,0,0">
+                                <!--  Days  -->
                                 <HorizontalStackLayout>
                                     <Entry
                                         HorizontalTextAlignment="Center"
@@ -143,7 +170,7 @@
                                         Value="{Binding WateringFrequencyDays, Mode=TwoWay}" />
                                     <Label Margin="5,0,10,0" Text="Days" />
                                 </HorizontalStackLayout>
-
+                                <!--  Hours  -->
                                 <HorizontalStackLayout>
                                     <Entry
                                         HorizontalTextAlignment="Center"
@@ -163,7 +190,7 @@
                     </Border>
 
                     <!--  Fertilization  -->
-                    <Border Padding="5">
+                    <Border Padding="2">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="5" />
                         </Border.StrokeShape>
@@ -171,14 +198,19 @@
                             ColumnDefinitions="90,*"
                             HorizontalOptions="Start"
                             RowDefinitions="*,*">
-                            <Label FontAttributes="Bold" Text="Last  &#10;Fertilization" />
+                            <Label
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="End"
+                                Text="Last&#10;Fertilization" />
 
                             <HorizontalStackLayout Grid.Column="1" Margin="5,0,0,0">
                                 <DatePicker Date="{Binding LastFertilizationDate, Mode=TwoWay}" VerticalOptions="End" />
                                 <TimePicker Time="{Binding LastFertilizationTime, Mode=TwoWay}" VerticalOptions="End" />
                                 <Button
-                                    Margin="10,0,0,0"
+                                    Margin="30,0,0,0"
+                                    Padding="5"
                                     Command="{Binding SetCurrentTimeAsLastFertilizationCommand}"
+                                    HeightRequest="35"
                                     Text="Now"
                                     VerticalOptions="Center" />
                             </HorizontalStackLayout>
@@ -186,7 +218,8 @@
                             <Label
                                 Grid.Row="1"
                                 FontAttributes="Bold"
-                                Text="Fertilization &#10;Interval" />
+                                HorizontalTextAlignment="End"
+                                Text="Fertilization&#10;Interval" />
 
                             <VerticalStackLayout
                                 Grid.Row="1"
@@ -234,8 +267,8 @@
                         </BindableLayout.ItemTemplate>
                     </VerticalStackLayout>
 
+                    <!--  Save  -->
                     <Button
-                        Margin="0,10,0,0"
                         Command="{Binding SubmitCommand}"
                         HorizontalOptions="CenterAndExpand"
                         MinimumWidthRequest="150"

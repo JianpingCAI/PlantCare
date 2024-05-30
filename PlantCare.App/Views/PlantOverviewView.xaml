@@ -32,11 +32,13 @@
         <Grid Padding="5,2,5,0" RowDefinitions="auto,*">
             <!--  Search Bar for quick filtering  -->
             <SearchBar
+                Margin="0,0,0,10"
                 Placeholder="Search plants by name"
                 SearchCommand="{Binding SearchCommand}"
                 Text="{Binding SearchText}"
                 TextChanged="SearchBar_TextChanged"
-                VerticalOptions="Center" />
+                VerticalOptions="Center"
+                VerticalTextAlignment="Center" />
 
             <!--  Plants Collection View  -->
             <CollectionView
@@ -63,7 +65,10 @@
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="10" />
                                 </Border.StrokeShape>
-                                <VerticalStackLayout Padding="0,0,0,10" HorizontalOptions="Center">
+                                <Grid
+                                    Padding="0,0,0,10"
+                                    HorizontalOptions="Center"
+                                    RowDefinitions="auto,*,*">
                                     <Border
                                         HorizontalOptions="Center"
                                         Stroke="Transparent"
@@ -81,10 +86,14 @@
                                             WidthRequest="100" />
                                     </Border>
                                     <Label
+                                        Background="DarkSeaGreen"
                                         FontAttributes="Bold"
-                                        HorizontalOptions="Center"
-                                        Text="{Binding Name}" />
-                                    <Grid Margin="0,0,0,5" ColumnDefinitions="15,*">
+                                        HorizontalOptions="Fill"
+                                        HorizontalTextAlignment="Center"
+                                        Opacity="0.75"
+                                        Text="{Binding Name}"
+                                        VerticalOptions="End" />
+                                    <Grid Grid.Row="1" ColumnDefinitions="15,*">
                                         <Label
                                             FontFamily="MaterialIconsRegular"
                                             Text="&#xe798;"
@@ -96,7 +105,7 @@
                                             Progress="{Binding WaterState}"
                                             ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
                                     </Grid>
-                                    <Grid Margin="0,0,0,5" ColumnDefinitions="15,*">
+                                    <Grid Grid.Row="2" ColumnDefinitions="15,*">
                                         <Label
                                             FontFamily="MaterialIconsRegular"
                                             Text="&#xe761;"
@@ -108,7 +117,7 @@
                                             Progress="{Binding FertilizeState}"
                                             ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}" />
                                     </Grid>
-                                </VerticalStackLayout>
+                                </Grid>
                             </Border>
                         </Grid>
                     </DataTemplate>
@@ -134,6 +143,7 @@
             FontFamily="MaterialIconsRegular"
             FontSize="30"
             HorizontalOptions="End"
+            Opacity="0.95"
             Text="&#xe147;"
             VerticalOptions="End">
             <Button.Shadow>
