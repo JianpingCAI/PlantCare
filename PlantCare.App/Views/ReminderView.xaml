@@ -27,26 +27,37 @@
 
         <Grid HorizontalOptions="Fill" RowDefinitions="auto,*">
             <Grid ColumnDefinitions="200, *">
-                <Label FontSize="Medium" Text="Remember to Watering" />
-                <!--<Picker
-                    Title="Select a monkey"
-                    ItemDisplayBinding="{Binding}"
-                    ItemsSource="{Binding}"
-                    SelectedItem="{Binding}" />-->
+                <Grid ColumnDefinitions="auto,*">
+                    <Label
+                        FontSize="Small"
+                        Text="Reminder Type"
+                        VerticalOptions="Center" />
+                    <Picker
+                        Title="Select a reminder type"
+                        Grid.Column="1"
+                        FontAttributes="Bold"
+                        FontSize="Medium"
+                        HorizontalOptions="Start"
+                        ItemsSource="{Binding ReminderTypes}"
+                        SelectedItem="{Binding SelectedReminderType}"
+                        TextColor="DeepSkyBlue"
+                        VerticalTextAlignment="Center" />
+                </Grid>
                 <Button
                     Grid.Column="1"
-                    Margin="0,0,0,2"
+                    Margin="0,0,10,2"
                     Command="{Binding SelectAllWateringRemindersCommand, Mode=TwoWay}"
-                    HorizontalOptions="Center"
+                    HorizontalOptions="End"
                     Text="{Binding SelectAllButtonText, Mode=OneWay}"
-                    VerticalOptions="Center" />
+                    VerticalOptions="Start"
+                    WidthRequest="90" />
             </Grid>
             <CollectionView
                 x:Name="wateringCollection"
                 Grid.Row="1"
-                ItemsSource="{Binding WateringReminders}"
-                SelectedItems="{Binding SelectedWateringReminders}"
-                SelectionChangedCommand="{Binding SelectedWateringReminderChangedCommand}"
+                ItemsSource="{Binding Reminders}"
+                SelectedItems="{Binding SelectedReminders}"
+                SelectionChangedCommand="{Binding SelectedReminderChangedCommand}"
                 SelectionMode="Multiple">
                 <CollectionView.Shadow>
                     <Shadow
@@ -125,6 +136,7 @@
         </Grid>
         <Button
             Margin="0,0,20,20"
+            Command="{Binding SetRemindersDoneCommand}"
             CornerRadius="50"
             FontFamily="MaterialIconsRegular"
             FontSize="30"

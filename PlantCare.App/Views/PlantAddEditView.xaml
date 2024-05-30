@@ -32,21 +32,27 @@
                                                           Default=500}"
                             Source="{Binding PhotoPath}"
                             VerticalOptions="Center" />
-                        <!--  TargetNullValue=defaut_plant.png, FallbackValue=defaut_plant.png  -->
                     </Border>
 
-                    <HorizontalStackLayout HorizontalOptions="Center">
+                    <Grid ColumnDefinitions="*,*">
                         <Button
                             Margin="5,5"
                             Command="{Binding UploadImageCommand}"
-                            MinimumWidthRequest="150"
-                            Text="Upload Photo" />
+                            FontFamily="MaterialIconsRegular"
+                            FontSize="30"
+                            HorizontalOptions="Center"
+                            Text="&#xe413;"
+                            VerticalOptions="Center" />
                         <Button
+                            Grid.Column="1"
                             Margin="5,5"
                             Command="{Binding TakePhotoCommand}"
-                            MinimumWidthRequest="150"
-                            Text="Take Photo" />
-                    </HorizontalStackLayout>
+                            FontFamily="MaterialIconsRegular"
+                            FontSize="30"
+                            HorizontalOptions="Center"
+                            Text="&#xe439;"
+                            VerticalOptions="Center" />
+                    </Grid>
 
                     <Border Padding="5">
                         <Border.StrokeShape>

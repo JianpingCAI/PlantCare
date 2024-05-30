@@ -15,4 +15,5 @@ public interface IPlantRepository
     Task<bool> DeleteAsync(Guid plantId);
 
     Task<List<PlantDbModel>> GetPlantsToWater();
+    Task<List<PlantDbModel>> GetPlantsToFertilize();
 }

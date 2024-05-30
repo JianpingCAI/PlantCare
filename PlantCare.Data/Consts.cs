@@ -10,7 +10,7 @@ public static class Consts
     public const string IsDebugMode = "IsDebugMode";
 
     public const string SelectAll = "Select All";
-    public const string UnSelect = "Unselect";
+    public const string Unselect = "Unselect";
 
     public const string DefaultPhotoPath = "default_plant.png";
 }

@@ -49,4 +49,11 @@ public class PlantService : IPlantService
 
         return _mapper.Map<List<Plant>>(dbModels);
     }
+
+    public async Task<List<Plant>> GetPlantsToFertilize()
+    {
+        var dbModels = await _plantRepository.GetPlantsToFertilize();
+
+        return _mapper.Map<List<Plant>>(dbModels);
+    }
 }
