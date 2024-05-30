@@ -31,11 +31,12 @@ public partial class PlantViewModelBase : ViewModelBase
     public double HoursUntilNextWatering => (LastWatered.AddHours(WateringFrequencyInHours) - DateTime.Now).TotalHours;
 
     private double _waterState;
+
     public double WaterState
     {
         get
         {
-            return Math.Max(0, (NextWateringTime - DateTime.Now).TotalMinutes / (WateringFrequencyInHours * 60.0));
+            return Math.Min(1.0, Math.Max(0, (NextWateringTime - DateTime.Now).TotalMinutes / (10080/*7 * 24 * 60*/)));
         }
 
         set
@@ -66,7 +67,7 @@ public partial class PlantViewModelBase : ViewModelBase
     {
         get
         {
-            return Math.Max(0, (NextFertilizeTime - DateTime.Now).TotalMinutes / (FertilizeFrequencyInHours * 60.0));
+            return Math.Min(1.0, Math.Max(0, (NextFertilizeTime - DateTime.Now).TotalMinutes / (10080/*7 * 24 * 60*/)));
         }
         set
         {
