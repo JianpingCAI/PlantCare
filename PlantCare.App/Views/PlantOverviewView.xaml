@@ -77,22 +77,25 @@
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="10" />
                                         </Border.StrokeShape>
-                                        <Image
-                                            Aspect="AspectFill"
-                                            HeightRequest="100"
-                                            HorizontalOptions="Center"
-                                            Source="{Binding PhotoPath}"
-                                            VerticalOptions="Center"
-                                            WidthRequest="100" />
+                                        <Grid>
+                                            <Image
+                                                Aspect="AspectFill"
+                                                HeightRequest="100"
+                                                HorizontalOptions="Center"
+                                                Source="{Binding PhotoPath}"
+                                                VerticalOptions="Center"
+                                                WidthRequest="100" />
+                                            <Label
+                                                Background="DarkSeaGreen"
+                                                FontAttributes="Bold"
+                                                HorizontalOptions="Fill"
+                                                HorizontalTextAlignment="Center"
+                                                Opacity="0.75"
+                                                Text="{Binding Name}"
+                                                VerticalOptions="End" />
+                                        </Grid>
                                     </Border>
-                                    <Label
-                                        Background="DarkSeaGreen"
-                                        FontAttributes="Bold"
-                                        HorizontalOptions="Fill"
-                                        HorizontalTextAlignment="Center"
-                                        Opacity="0.75"
-                                        Text="{Binding Name}"
-                                        VerticalOptions="End" />
+
                                     <Grid Grid.Row="1" ColumnDefinitions="15,*">
                                         <Label
                                             FontFamily="MaterialIconsRegular"

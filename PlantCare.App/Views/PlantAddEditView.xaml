@@ -21,45 +21,46 @@
                         <!--  Photo  -->
                         <Border
                             HorizontalOptions="Center"
+                            MinimumWidthRequest="100"
                             Stroke="Transparent"
                             StrokeThickness="0"
                             VerticalOptions="Center">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="10" />
                             </Border.StrokeShape>
-                            <Image
-                                Aspect="AspectFit"
-                                HorizontalOptions="Center"
-                                MaximumWidthRequest="{OnIdiom Phone=300,
-                                                              Default=500}"
-                                Source="{Binding PhotoPath}"
-                                VerticalOptions="Center" />
-                        </Border>
+                            <Grid>
+                                <Image
+                                    Aspect="AspectFit"
+                                    HorizontalOptions="Center"
+                                    MaximumWidthRequest="{OnIdiom Phone=300,
+                                                                  Default=500}"
+                                    Source="{Binding PhotoPath}"
+                                    VerticalOptions="Center" />
 
-                        <Grid ColumnDefinitions="*,*" VerticalOptions="End">
-                            <!--  Upload image  -->
-                            <Button
-                                Margin="25,5,5,0"
-                                Command="{Binding UploadImageCommand}"
-                                CornerRadius="10"
-                                FontFamily="MaterialIconsRegular"
-                                FontSize="25"
-                                HorizontalOptions="Start"
-                                Opacity="0.75"
-                                Text="&#xe413;"
-                                VerticalOptions="Center" />
-                            <!--  Take photo  -->
-                            <Button
-                                Grid.Column="1"
-                                Margin="5,5,25,0"
-                                Command="{Binding TakePhotoCommand}"
-                                FontFamily="MaterialIconsRegular"
-                                FontSize="25"
-                                HorizontalOptions="End"
-                                Opacity="0.75"
-                                Text="&#xe439;"
-                                VerticalOptions="Center" />
-                        </Grid>
+                                <Grid ColumnDefinitions="*,*" VerticalOptions="End">
+                                    <!--  Upload image  -->
+                                    <Button
+                                        Command="{Binding UploadImageCommand}"
+                                        CornerRadius="10"
+                                        FontFamily="MaterialIconsRegular"
+                                        FontSize="25"
+                                        HorizontalOptions="Start"
+                                        Opacity="0.75"
+                                        Text="&#xe413;"
+                                        VerticalOptions="Center" />
+                                    <!--  Take photo  -->
+                                    <Button
+                                        Grid.Column="1"
+                                        Command="{Binding TakePhotoCommand}"
+                                        FontFamily="MaterialIconsRegular"
+                                        FontSize="25"
+                                        HorizontalOptions="End"
+                                        Opacity="0.75"
+                                        Text="&#xe439;"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </Grid>
+                        </Border>
                     </Grid>
 
                     <!--  Basic Info  -->

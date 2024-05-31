@@ -11,22 +11,51 @@
     <Grid>
         <ScrollView>
             <StackLayout Padding="10">
-                <Border
-                    HorizontalOptions="Center"
-                    Stroke="Transparent"
-                    StrokeThickness="0"
-                    VerticalOptions="Center">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="50" />
-                    </Border.StrokeShape>
-                    <Image
-                        Aspect="AspectFit"
+                <Grid>
+                    <!--  Photo  -->
+                    <Border
                         HorizontalOptions="Center"
-                        MaximumWidthRequest="{OnIdiom Phone=300,
-                                                      Default=500}"
-                        Source="{Binding PhotoPath}"
-                        VerticalOptions="Center" />
-                </Border>
+                        Stroke="Transparent"
+                        StrokeThickness="0"
+                        VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+
+                        <Image
+                            Aspect="AspectFit"
+                            HorizontalOptions="Center"
+                            MaximumWidthRequest="{OnIdiom Phone=300,
+                                                          Default=500}"
+                            Source="{Binding PhotoPath}"
+                            VerticalOptions="Center" />
+
+
+                    </Border>
+                    <!--  Edit button  -->
+                    <Button
+                        Margin="0,5,5,0"
+                        Command="{Binding NavigateToEditPlantCommand}"
+                        CornerRadius="50"
+                        FontFamily="MaterialIconsRegular"
+                        FontSize="30"
+                        HorizontalOptions="End"
+                        Opacity="0.95"
+                        Text="&#xe3c9;"
+                        ToolTipProperties.Text="Edit the details"
+                        VerticalOptions="End">
+                        <Button.Shadow>
+                            <Shadow
+                                Brush="DeepSkyBlue"
+                                Opacity="0.8"
+                                Radius="15"
+                                Offset="5,5" />
+                        </Button.Shadow>
+                    </Button>
+                    <!--  FontFamily="MaterialIconsRegular"  -->
+                    <!--  Text="&#xe3c9;"  -->
+                </Grid>
+
 
                 <Grid ColumnDefinitions="auto,*" RowDefinitions="*,*,*,*,*,*,*,*">
 
@@ -128,16 +157,7 @@
                         TextColor="DeepSkyBlue" />
                 </Grid>
 
-                <Grid Margin="5,10" ColumnDefinitions="*,*">
-                    <!--  Edit button  -->
-                    <Button
-                        Command="{Binding NavigateToEditPlantCommand}"
-                        HorizontalOptions="Center"
-                        MinimumWidthRequest="100"
-                        Text="Edit"
-                        ToolTipProperties.Text="Edit the details" />
-                    <!--  FontFamily="MaterialIconsRegular"  -->
-                    <!--  Text="&#xe3c9;"  -->
+                <Grid Margin="5,10">
                     <Button
                         Grid.Column="1"
                         Command="{Binding DeletePlantCommand}"

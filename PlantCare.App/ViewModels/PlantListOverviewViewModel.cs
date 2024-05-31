@@ -20,7 +20,8 @@ namespace PlantCare.App.ViewModels;
 public partial class PlantListOverviewViewModel : ViewModelBase,
     IRecipient<PlantAddedOrChangedMessage>,
     IRecipient<PlantDeletedMessage>,
-    IRecipient<IsWateringNotifyEnabledMessage>
+    IRecipient<IsWateringNotifyEnabledMessage>,
+    IRecipient<ReminderItemChangedMessage>
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
@@ -39,6 +40,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         WeakReferenceMessenger.Default.Register<PlantAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantDeletedMessage>(this);
+        WeakReferenceMessenger.Default.Register<ReminderItemChangedMessage>(this);
 
         if (_notificationService.IsSupported)
         {
@@ -51,7 +53,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     }
 
     [ObservableProperty]
-    private ObservableCollection<PlantListItemViewModel> plants = [];
+    private ObservableCollection<PlantListItemViewModel> _plants = [];
 
     [ObservableProperty]
     private string searchText = string.Empty;
@@ -459,5 +461,47 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             LastFertilized = plant.LastFertilized,
             FertilizeFrequencyInHours = plant.FertilizeFrequencyInHours
         };
+    }
+
+    /// <summary>
+    /// Mark Watering/Fertilization done
+    /// </summary>
+    /// <param name="message"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    async void IRecipient<ReminderItemChangedMessage>.Receive(ReminderItemChangedMessage message)
+    {
+        if (null == message)
+        {
+            return;
+        }
+
+        PlantListItemViewModel? updatePlant = Plants.FirstOrDefault(x => x.Id == message.PlantId);
+
+        Plant? plantFromDB = await _plantService.GetPlantByIdAsync(message.PlantId);
+        if (null == plantFromDB)
+            return;
+
+        if (updatePlant != null)
+        {
+            switch (message.ReminderType)
+            {
+                case ReminderType.Watering:
+                    {
+                        //updatePlant.LastWatered = message.UpdatedTime;
+                        updatePlant.LastWatered = plantFromDB.LastWatered;
+                    }
+                    break;
+
+                case ReminderType.Fertilization:
+                    {
+                        //updatePlant.LastFertilized = message.UpdatedTime;
+                        updatePlant.LastFertilized = plantFromDB.LastFertilized;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@ public interface IPlantRepository
 {
     Task<List<PlantDbModel>> GetAllAsync();
 
-    Task<PlantDbModel> GetByIdAsync(Guid id);
+    Task<PlantDbModel?> GetByIdAsync(Guid id);
 
     Task AddAsync(PlantDbModel plant);
 
@@ -16,4 +16,6 @@ public interface IPlantRepository
 
     Task<List<PlantDbModel>> GetPlantsToWater();
     Task<List<PlantDbModel>> GetPlantsToFertilize();
+    Task UpdateLastWateringTime(Guid plantId, DateTime time);
+    Task UpdateLastFertilizationTime(Guid plantId, DateTime time);
 }

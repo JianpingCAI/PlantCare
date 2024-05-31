@@ -51,9 +51,10 @@
                     Grid.Column="1"
                     Margin="0,0,10,2"
                     Command="{Binding SelectAllWateringRemindersCommand, Mode=TwoWay}"
+                    HeightRequest="40"
                     HorizontalOptions="End"
                     Text="{Binding SelectAllButtonText, Mode=OneWay}"
-                    VerticalOptions="Start"
+                    VerticalOptions="Center"
                     WidthRequest="90" />
             </Grid>
             <CollectionView
@@ -61,7 +62,7 @@
                 Grid.Row="1"
                 ItemsSource="{Binding Reminders}"
                 SelectedItems="{Binding SelectedReminders}"
-                SelectionChangedCommand="{Binding SelectedReminderChangedCommand}"
+                SelectionChangedCommand="{Binding SelectedReminderItemChangedCommand}"
                 SelectionMode="Multiple">
                 <CollectionView.Shadow>
                     <Shadow
@@ -72,8 +73,10 @@
                 </CollectionView.Shadow>
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
+                        HorizontalItemSpacing="2"
                         Orientation="Vertical"
-                        Span="1"
+                        Span="{OnIdiom Phone=2,
+                                       Default=6}"
                         VerticalItemSpacing="2" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
@@ -95,23 +98,32 @@
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="10" />
                                     </Border.StrokeShape>
-                                    <Grid ColumnDefinitions="70,*,*" HorizontalOptions="Fill">
+                                    <Grid HorizontalOptions="Fill" RowDefinitions="*,auto">
                                         <!--  photo  -->
                                         <Border
-                                            Padding="0"
                                             BackgroundColor="Transparent"
-                                            HorizontalOptions="Start"
+                                            HorizontalOptions="Center"
                                             StrokeThickness="0"
                                             VerticalOptions="Center">
                                             <Border.StrokeShape>
                                                 <RoundRectangle CornerRadius="10" />
                                             </Border.StrokeShape>
-                                            <Image
-                                                Aspect="AspectFill"
-                                                HeightRequest="60"
-                                                HorizontalOptions="Center"
-                                                Source="{Binding PhotoPath}"
-                                                WidthRequest="60" />
+                                            <Grid>
+                                                <Image
+                                                    Aspect="AspectFill"
+                                                    HeightRequest="90"
+                                                    HorizontalOptions="Center"
+                                                    Source="{Binding PhotoPath}"
+                                                    WidthRequest="90" />
+                                                <!--  Name  -->
+                                                <Label
+                                                    Background="DarkSeaGreen"
+                                                    HorizontalOptions="Fill"
+                                                    HorizontalTextAlignment="Center"
+                                                    Opacity="0.75"
+                                                    Text="{Binding Name}"
+                                                    VerticalOptions="End" />
+                                            </Grid>
                                         </Border>
                                         <!--  Selection Tick  -->
                                         <Label
@@ -124,9 +136,16 @@
                                             VerticalOptions="Start"
                                             VerticalTextAlignment="Start" />
 
-                                        <!--  Name  -->
-                                        <Label Grid.Column="1" Text="{Binding Name}" />
-                                        <Label Grid.Column="2" Text="{Binding ExpectedTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+
+
+                                        <!--  Reminder Time  -->
+                                        <Label
+                                            Grid.Row="1"
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding ExpectedTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+                                        <!--  {0:MM/dd/yyyy&#10;HH:mm}  -->
                                     </Grid>
                                 </Border>
                             </SwipeView>
@@ -147,11 +166,12 @@
         <!--<Grid>-->
         <Button
             Margin="0,0,20,20"
-            Command="{Binding SetRemindersDoneCommand}"
+            Command="{Binding SetSelectedRemindersDoneCommand}"
             CornerRadius="50"
             FontFamily="MaterialIconsRegular"
             FontSize="30"
             HorizontalOptions="End"
+            IsEnabled="{Binding IsSetRemindersDoneEnabled}"
             Opacity="0.95"
             Text="&#xe877;"
             VerticalOptions="End">

@@ -11,11 +11,13 @@ public interface IPlantService
 
     Task<List<Plant>> GetAllPlantsAsync();
 
-
-    Task<Plant> GetPlantByIdAsync(Guid id);
+    Task<Plant?> GetPlantByIdAsync(Guid id);
 
     Task<bool> UpdatePlantAsync(PlantDbModel plant);
 
     Task<List<Plant>> GetPlantsToWater();
     Task<List<Plant>> GetPlantsToFertilize();
+
+    Task UpdateLastWateringTime(Guid plantId, DateTime time);
+    Task UpdateLastFertilizationTime(Guid plantId, DateTime updateTime);
 }

@@ -22,9 +22,13 @@ public class PlantService : IPlantService
         return _mapper.Map<List<Plant>>(dbModels);
     }
 
-    public async Task<Plant> GetPlantByIdAsync(Guid id)
+    public async Task<Plant?> GetPlantByIdAsync(Guid id)
     {
-        PlantDbModel dbModel = await _plantRepository.GetByIdAsync(id);
+        PlantDbModel? dbModel = await _plantRepository.GetByIdAsync(id);
+        if (null == dbModel)
+        {
+            return null;
+        }
         return _mapper.Map<Plant>(dbModel);
     }
 
@@ -55,5 +59,15 @@ public class PlantService : IPlantService
         var dbModels = await _plantRepository.GetPlantsToFertilize();
 
         return _mapper.Map<List<Plant>>(dbModels);
+    }
+
+    public async Task UpdateLastWateringTime(Guid plantId, DateTime time)
+    {
+        await _plantRepository.UpdateLastWateringTime(plantId, time);
+    }
+
+    public async Task UpdateLastFertilizationTime(Guid plantId, DateTime time)
+    {
+        await _plantRepository.UpdateLastFertilizationTime(plantId, time);
     }
 }

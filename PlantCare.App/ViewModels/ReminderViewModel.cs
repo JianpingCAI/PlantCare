@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using PlantCare.App.Messaging;
 using PlantCare.App.Services;
 using PlantCare.App.ViewModels.Base;
 using PlantCare.Data;
@@ -40,12 +42,15 @@ public partial class ReminderViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<object> _selectedReminders = [];
 
+    [ObservableProperty]
+    private bool _isSetRemindersDoneEnabled = false;
+
     partial void OnSelectedReminderTypeChanged(ReminderType selectedReminderType)
     {
-        if (Reminders.Count == 0)
-        {
-            return;
-        }
+        //if (Reminders.Count == 0)
+        //{
+        //    return;
+        //}
 
         switch (selectedReminderType)
         {
@@ -63,55 +68,36 @@ public partial class ReminderViewModel : ViewModelBase
         }
     }
 
-    //partial void OnSelectedReminderTypeChangedAsync(ReminderType selectedReminderType)
-    //{
-    //    if (Reminders.Count == 0)
-    //    {
-    //        return;
-    //    }
-
-    //    switch (selectedReminderType)
-    //    {
-    //        case ReminderType.Watering:
-    //        case ReminderType.Fertilization:
-    //            {
-    //                OnViewAppearingCommand.ExecuteAsync(null);
-    //            }
-    //            break;
-
-    //        default:
-    //            break;
-    //    }
-    //}
-
     [RelayCommand]
-    public async Task SelectedReminderChanged(/*SelectionChangedEventArgs args*/object args)
+    public async void SelectedReminderItemChanged(/*SelectionChangedEventArgs args*/object args)
     {
         try
         {
-            await Task.Run(() =>
+            //await Task.Run(() =>
+            //{
+            SelectAllButtonText = SelectedReminders.Count > 0 ? Consts.Unselect : Consts.SelectAll;
+            IsSetRemindersDoneEnabled = SelectedReminders.Count > 0;
+
+            if (null == SelectedReminders)
+                return;
+
+            foreach (var item in Reminders)
             {
-                if (null == SelectedReminders)
-                    return;
+                item.IsSelected = false;
+            }
 
-                foreach (var item in Reminders)
+            foreach (var item in SelectedReminders)
+            {
+                if (item is ReminderItemViewModel wateringPlant)
                 {
-                    item.IsSelected = false;
+                    wateringPlant.IsSelected = true;
                 }
-
-                foreach (var item in SelectedReminders)
-                {
-                    if (item is ReminderItemViewModel wateringPlant)
-                    {
-                        wateringPlant.IsSelected = true;
-                    }
-                }
-
-                SelectAllButtonText = SelectedReminders.Count > 0 ? Consts.Unselect : Consts.SelectAll;
-            });
+            }
+            //});
         }
         catch (Exception ex)
         {
+            await _dialogService.Notify("Error", ex.Message);
             Debug.WriteLine(ex.Message);
         }
     }
@@ -165,11 +151,72 @@ public partial class ReminderViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public async Task SetRemindersDone()
+    public async Task SetSelectedRemindersDone()
     {
-        bool isConfirmed = await _dialogService.Ask("Confirm", "Mark the selected as done and update the last {} time as now?");
-        if (!isConfirmed)
+        if (IsBusy)
+        {
             return;
+        }
+
+        List<object> toRemovedSelections = [];
+
+        try
+        {
+            DateTime updateTime = DateTime.Now;
+
+            bool isConfirmed = await _dialogService.Ask("Confirm", $"Mark as done and update the last {SelectedReminderType} time as now {updateTime.ToShortTimeString()}?");
+            if (!isConfirmed)
+                return;
+
+            foreach (object item in SelectedReminders)
+            {
+                if (item is ReminderItemViewModel reminder)
+                {
+                    switch (SelectedReminderType)
+                    {
+                        case ReminderType.Watering:
+                            {
+                                await _plantService.UpdateLastWateringTime(reminder.PlantId, updateTime);
+                            }
+                            break;
+
+                        case ReminderType.Fertilization:
+                            {
+                                await _plantService.UpdateLastFertilizationTime(reminder.PlantId, updateTime);
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    toRemovedSelections.Add(item);
+                    Reminders.Remove(reminder);
+
+                    WeakReferenceMessenger.Default.Send<ReminderItemChangedMessage>(new ReminderItemChangedMessage
+                    {
+                        PlantId = reminder.PlantId,
+                        UpdatedTime = updateTime,
+                        ReminderType = SelectedReminderType
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify("Error", ex.Message);
+        }
+        finally
+        {
+            if (toRemovedSelections.Count > 0)
+            {
+                foreach (var item in toRemovedSelections)
+                {
+                    SelectedReminders.Remove(item);
+                }
+            }
+            IsBusy = false;
+        }
     }
 
     public override async Task LoadDataWhenViewAppearingAsync()
@@ -189,51 +236,54 @@ public partial class ReminderViewModel : ViewModelBase
         }
     }
 
-    private async Task LoadAllReminders()
+    private Task LoadAllReminders()
     {
-        try
+        return Task.Run(async () =>
         {
-            List<ReminderItemViewModel> reminderItemViewModels = [];
-            SelectedReminders.Clear();
-
-            switch (_selectedReminderType)
+            try
             {
-                case ReminderType.Watering:
-                    {
-                        List<Plant> plants = await _plantService.GetPlantsToWater();
-                        plants = [.. plants.OrderBy(x => x.Name)];
+                List<ReminderItemViewModel> reminderItemViewModels = [];
+                SelectedReminders.Clear();
 
-                        foreach (Plant plant in plants)
+                switch (SelectedReminderType)
+                {
+                    case ReminderType.Watering:
                         {
-                            reminderItemViewModels.Add(MapToReminderItem(plant, ReminderType.Watering));
+                            List<Plant> plants = await _plantService.GetPlantsToWater();
+                            plants = [.. plants.OrderBy(x => x.Name)];
+
+                            foreach (Plant plant in plants)
+                            {
+                                reminderItemViewModels.Add(MapToReminderItem(plant, ReminderType.Watering));
+                            }
                         }
-                    }
-                    break;
+                        break;
 
-                case ReminderType.Fertilization:
-                    {
-                        List<Plant> plants = await _plantService.GetPlantsToFertilize();
-                        plants = [.. plants.OrderBy(x => x.Name)];
-
-                        foreach (Plant plant in plants)
+                    case ReminderType.Fertilization:
                         {
-                            reminderItemViewModels.Add(MapToReminderItem(plant, ReminderType.Fertilization));
+                            List<Plant> plants = await _plantService.GetPlantsToFertilize();
+                            plants = [.. plants.OrderBy(x => x.Name)];
+
+                            foreach (Plant plant in plants)
+                            {
+                                reminderItemViewModels.Add(MapToReminderItem(plant, ReminderType.Fertilization));
+                            }
                         }
-                    }
-                    break;
+                        break;
+                }
+
+                Reminders.Clear();
+
+                foreach (ReminderItemViewModel reminder in reminderItemViewModels)
+                {
+                    Reminders.Add(reminder);
+                }
             }
-
-            Reminders.Clear();
-
-            foreach (ReminderItemViewModel reminder in reminderItemViewModels)
+            catch (Exception ex)
             {
-                Reminders.Add(reminder);
+                await _dialogService.Notify("Error", ex.Message, "OK");
             }
-        }
-        catch (Exception ex)
-        {
-            await _dialogService.Notify("Error", ex.Message, "OK");
-        }
+        });
     }
 
     private static ReminderItemViewModel MapToReminderItem(Plant plant, ReminderType reminderType)
