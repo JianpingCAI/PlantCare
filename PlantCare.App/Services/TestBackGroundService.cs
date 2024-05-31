@@ -6,14 +6,9 @@ using PlantCare.Data.Models;
 
 namespace PlantCare.App.Services;
 
-public class TestBackGroundService : BackgroundService
+public class TestBackGroundService(ILogger logger) : BackgroundService
 {
-    private readonly ILogger _logger;
-
-    public TestBackGroundService(ILogger logger)
-    {
-        this._logger = logger;
-    }
+    private readonly ILogger _logger = logger;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

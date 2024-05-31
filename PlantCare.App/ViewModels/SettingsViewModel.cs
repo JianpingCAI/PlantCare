@@ -8,17 +8,10 @@ using System.Diagnostics;
 
 namespace PlantCare.App.ViewModels;
 
-public partial class SettingsViewModel : ViewModelBase
+public partial class SettingsViewModel(ISettingsService settingsService, IDialogService dialogService) : ViewModelBase
 {
-    private readonly ISettingsService _settingsService;
-    private readonly IDialogService _dialogService;
-
-    public SettingsViewModel(ISettingsService settingsService, IDialogService dialogService)
-    {
-        _settingsService = settingsService;
-        _dialogService = dialogService;
-    }
-
+    private readonly ISettingsService _settingsService = settingsService;
+    private readonly IDialogService _dialogService = dialogService;
     [ObservableProperty]
     private bool _isWateringNotificationEnabled = true;
 

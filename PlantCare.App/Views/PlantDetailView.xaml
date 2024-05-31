@@ -8,9 +8,9 @@
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     Title="{Binding Name, StringFormat='{0} Details'}"
     x:DataType="vm:PlantDetailViewModel">
-    <Grid>
+    <Grid Padding="10,2,5,0">
         <ScrollView>
-            <StackLayout Padding="10">
+            <StackLayout>
                 <Grid>
                     <!--  Photo  -->
                     <Border

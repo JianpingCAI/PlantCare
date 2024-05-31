@@ -13,9 +13,9 @@
             <local:StringToIntConverter x:Key="StringToIntConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <Grid>
+    <Grid Padding="10,2,5,0">
         <ScrollView>
-            <Grid Padding="5,2,5,10">
+            <Grid>
                 <VerticalStackLayout>
                     <Grid Margin="0,0,0,5">
                         <!--  Photo  -->

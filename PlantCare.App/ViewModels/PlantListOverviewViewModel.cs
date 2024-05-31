@@ -214,14 +214,14 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    private Task<List<PlantListItemViewModel>> FilterPlantsAsync(ObservableCollection<PlantListItemViewModel> plants, string searchText)
+    private static Task<List<PlantListItemViewModel>> FilterPlantsAsync(ObservableCollection<PlantListItemViewModel> plants, string searchText)
     {
         return Task.Run(() =>
         {
             List<PlantListItemViewModel> filtered = [];
             foreach (PlantListItemViewModel item in plants)
             {
-                if (item.Name.ToLower().Contains(searchText.Trim().ToLower()))
+                if (item.Name.Contains(searchText.Trim(), StringComparison.CurrentCultureIgnoreCase))
                 {
                     filtered.Add(item);
                 }

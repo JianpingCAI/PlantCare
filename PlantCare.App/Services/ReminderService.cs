@@ -3,14 +3,9 @@ using PlantCare.Data.Repositories;
 
 namespace PlantCare.App.Services;
 
-public class ReminderService : IReminderService
+public class ReminderService(IReminderRepository reminderRepository) : IReminderService
 {
-    private readonly IReminderRepository _reminderRepository;
-
-    public ReminderService(IReminderRepository reminderRepository)
-    {
-        _reminderRepository = reminderRepository;
-    }
+    private readonly IReminderRepository _reminderRepository = reminderRepository;
 
     public async Task<List<Reminder>> GetAllRemindersAsync()
     {

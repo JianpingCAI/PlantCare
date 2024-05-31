@@ -7,14 +7,9 @@ using Plugin.LocalNotification;
 
 namespace PlantCare.App.Services;
 
-public class AuthService : IAuthService
+public class AuthService(IUserRepository userRepository) : IAuthService
 {
-    private readonly IUserRepository _userRepository;
-
-    public AuthService(IUserRepository userRepository)
-    {
-        _userRepository = userRepository;
-    }
+    private readonly IUserRepository _userRepository = userRepository;
 
     public async Task<bool> SignUpAsync(User user)
     {

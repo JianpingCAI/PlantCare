@@ -3,11 +3,8 @@ using PlantCare.Data.DbModels;
 
 namespace PlantCare.Data.Repositories;
 
-public class PlantRepository : GenericRepository<PlantDbModel>, IPlantRepository
+public class PlantRepository(ApplicationDbContext context) : GenericRepository<PlantDbModel>(context), IPlantRepository
 {
-    public PlantRepository(ApplicationDbContext context) : base(context)
-    {
-    }
 
     // Additional plant-specific methods can be added here if needed
     public async Task<List<PlantDbModel>> GetPlantsToWater()

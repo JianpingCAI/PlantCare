@@ -5,16 +5,10 @@ using PlantCare.Data.Repositories;
 
 namespace PlantCare.App.Services;
 
-public class PlantService : IPlantService
+public class PlantService(IPlantRepository plantRepository, IMapper mapper) : IPlantService
 {
-    private readonly IPlantRepository _plantRepository;
-    private readonly IMapper _mapper;
-
-    public PlantService(IPlantRepository plantRepository, IMapper mapper)
-    {
-        _plantRepository = plantRepository;
-        _mapper = mapper;
-    }
+    private readonly IPlantRepository _plantRepository = plantRepository;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<List<Plant>> GetAllPlantsAsync()
     {

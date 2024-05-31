@@ -7,19 +7,12 @@ public enum WateredStatus
     NotWatered
 }
 
-public class StatusChangedMessage
+public class StatusChangedMessage(
+    Guid id,
+    string name,
+    WateredStatus status)
 {
-    public Guid PlantId { get; }
-    public string Name { get; set; }
-    public WateredStatus Status { get; }
-
-    public StatusChangedMessage(
-        Guid id,
-        string name,
-        WateredStatus status)
-    {
-        PlantId = id;
-        Name = name;
-        Status = status;
-    }
+    public Guid PlantId { get; } = id;
+    public string Name { get; set; } = name;
+    public WateredStatus Status { get; } = status;
 }

@@ -23,8 +23,7 @@
             </Setter>
         </Style>
     </ContentPage.Resources>
-    <Grid Padding="5,0">
-
+    <Grid Padding="10,2,5,0">
         <Grid HorizontalOptions="Fill" RowDefinitions="auto,*">
             <Grid ColumnDefinitions="220, *">
                 <!--  Reminder Type  -->

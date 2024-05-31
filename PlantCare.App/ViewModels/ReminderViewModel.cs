@@ -6,25 +6,16 @@ using PlantCare.App.Messaging;
 using PlantCare.App.Services;
 using PlantCare.App.ViewModels.Base;
 using PlantCare.Data;
-using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace PlantCare.App.ViewModels;
 
-public partial class ReminderViewModel : ViewModelBase
+public partial class ReminderViewModel(IDialogService dialogService, IPlantService plantService) : ViewModelBase
 {
-    private readonly IReminderService _reminderService;
-    private readonly IDialogService _dialogService;
-    private readonly IPlantService _plantService;
-
-    public ReminderViewModel(IReminderService reminderService, IDialogService dialogService, IPlantService plantService)
-    {
-        _reminderService = reminderService;
-        _dialogService = dialogService;
-        _plantService = plantService;
-    }
+    private readonly IDialogService _dialogService = dialogService;
+    private readonly IPlantService _plantService = plantService;
 
     //public static ReminderType[] ReminderTypes => Enum.GetValues(typeof(ReminderType)).Cast<ReminderType>().ToArray();
 

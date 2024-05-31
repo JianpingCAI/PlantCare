@@ -8,17 +8,10 @@ namespace PlantCare.App.ViewModels
         Fertilization
     }
 
-    public partial class ReminderItemViewModel : ObservableObject
+    public partial class ReminderItemViewModel(ReminderType reminderType, Guid plantId) : ObservableObject
     {
-        private readonly ReminderType _reminderType;
-        private readonly Guid _plantId;
-
-        public ReminderItemViewModel(ReminderType reminderType, Guid plantId)
-        {
-            _reminderType = reminderType;
-            _plantId = plantId;
-        }
-
+        private readonly ReminderType _reminderType = reminderType;
+        private readonly Guid _plantId = plantId;
         [ObservableProperty]
         private bool _isSelected = false;
 

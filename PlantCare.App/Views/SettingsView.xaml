@@ -66,7 +66,7 @@
                                 <VisualState.Setters>
                                     <Setter Property="Stroke" Value="{StaticResource Primary}" />
                                     <!--<Setter Property="BorderColor" Value="{StaticResource Primary}" />-->
-                                    <Setter TargetName="Check" Property="Opacity" Value="1" />
+                                    <!--<Setter TargetName="Check" Property="Opacity" Value="1" />-->
                                 </VisualState.Setters>
                             </VisualState>
 
@@ -74,7 +74,7 @@
                                 <VisualState.Setters>
                                     <Setter Property="Stroke" Value="{StaticResource Secondary}" />
                                     <!--<Setter Property="BorderColor" Value="{StaticResource Background_Mid}" />-->
-                                    <Setter TargetName="Check" Property="Opacity" Value="0" />
+                                    <!--<Setter TargetName="Check" Property="Opacity" Value="0" />-->
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -83,10 +83,13 @@
             </Border>
         </ControlTemplate>
     </ContentPage.Resources>
-    <Grid>
-        <VerticalStackLayout Padding="20">
+    <Grid Padding="10,2,5,0">
+        <VerticalStackLayout>
             <!--  IsWateringNotificationEnabled  -->
-            <Grid ColumnDefinitions="2*,1*" RowDefinitions="*,*,*">
+            <Grid
+                ColumnDefinitions="2*,1*"
+                HorizontalOptions="Fill"
+                RowDefinitions="*,*,*">
                 <Label
                     HorizontalTextAlignment="Start"
                     Text="Watering Notification"
@@ -95,7 +98,7 @@
                     Grid.Column="1"
                     HorizontalOptions="Start"
                     IsToggled="{Binding IsWateringNotificationEnabled}"
-                    VerticalOptions="Center" />
+                    VerticalOptions="End" />
 
                 <!--  IsFertilizationNotificationEnabled  -->
                 <Label
@@ -108,9 +111,10 @@
                     Grid.Column="1"
                     HorizontalOptions="Start"
                     IsToggled="{Binding IsFertilizationNotificationEnabled}"
-                    VerticalOptions="Center" />
+                    VerticalOptions="End" />
             </Grid>
 
+            <!--  Debugging Mode  -->
             <Grid ColumnDefinitions="2*,1*">
                 <Label
                     HorizontalTextAlignment="Start"
@@ -120,7 +124,7 @@
                     Grid.Column="1"
                     HorizontalOptions="Start"
                     IsToggled="{Binding IsDebugModeEnabled, Mode=TwoWay}"
-                    VerticalOptions="Center" />
+                    VerticalOptions="End" />
             </Grid>
 
             <BoxView class="HRule" />

@@ -113,7 +113,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
 
         // Register Views and ViewModels
-        registerViewWithViewModels(builder);
+        RegisterViewWithViewModels(builder);
 
         // Register the navigation service
         builder.Services.AddSingleton<INavigationService, NavigationService>();
@@ -140,7 +140,7 @@ public static class MauiProgram
         return builder.Build();
     }
 
-    private static void registerViewWithViewModels(MauiAppBuilder builder)
+    private static void RegisterViewWithViewModels(MauiAppBuilder builder)
     {
         builder.Services.AddSingleton<PlantOverviewView>();
         builder.Services.AddSingleton<PlantListOverviewViewModel>();

@@ -8,19 +8,11 @@ using PlantCare.Data.Models;
 
 namespace PlantCare.App.ViewModels;
 
-public partial class PlantDetailViewModel : PlantViewModelBase, IQueryAttributable
+public partial class PlantDetailViewModel(IPlantService plantService, INavigationService navigationService, IDialogService dialogService) : PlantViewModelBase, IQueryAttributable
 {
-    private readonly IPlantService _plantService;
-    private readonly INavigationService _navigationService;
-    private readonly IDialogService _dialogService;
-
-    public PlantDetailViewModel(IPlantService plantService, INavigationService navigationService, IDialogService dialogService)
-    {
-        _plantService = plantService;
-        _navigationService = navigationService;
-        _dialogService = dialogService;
-    }
-
+    private readonly IPlantService _plantService = plantService;
+    private readonly INavigationService _navigationService = navigationService;
+    private readonly IDialogService _dialogService = dialogService;
     [ObservableProperty]
     private string _species = string.Empty;
 
