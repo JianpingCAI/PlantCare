@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
     xmlns:local="clr-namespace:PlantCare.App.Utils"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     Title="{Binding Name, StringFormat='Edit: {0}'}"
     x:DataType="vm:PlantAddEditViewModel">
@@ -81,7 +82,11 @@
                                 Grid.Column="1"
                                 Margin="5,0,0,0"
                                 Text="{Binding Name, Mode=TwoWay}"
-                                VerticalOptions="End" />
+                                VerticalOptions="End">
+                                <Entry.Behaviors>
+                                    <toolkit:SelectAllTextBehavior />
+                                </Entry.Behaviors>
+                            </Entry>
 
                             <Label
                                 Grid.Row="1"
@@ -92,7 +97,11 @@
                                 Grid.Column="1"
                                 Margin="5,0,0,0"
                                 Text="{Binding Species, Mode=TwoWay}"
-                                VerticalOptions="Start" />
+                                VerticalOptions="Start">
+                                <Entry.Behaviors>
+                                    <toolkit:SelectAllTextBehavior />
+                                </Entry.Behaviors>
+                            </Entry>
 
                             <Label
                                 Grid.Row="2"
@@ -104,7 +113,11 @@
                                     Margin="5,0,0,0"
                                     HorizontalTextAlignment="Center"
                                     Text="{Binding Age, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                    VerticalOptions="End" />
+                                    VerticalOptions="End">
+                                    <Entry.Behaviors>
+                                        <toolkit:SelectAllTextBehavior />
+                                    </Entry.Behaviors>
+                                </Entry>
                                 <Stepper
                                     HeightRequest="50"
                                     Increment="1"
@@ -161,7 +174,11 @@
                                     <Entry
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding WateringFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                        VerticalOptions="Center" />
+                                        VerticalOptions="Center">
+                                        <Entry.Behaviors>
+                                            <toolkit:SelectAllTextBehavior />
+                                        </Entry.Behaviors>
+                                    </Entry>
                                     <Stepper
                                         Increment="1"
                                         Maximum="365"
@@ -176,7 +193,11 @@
                                     <Entry
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding WateringFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                        VerticalOptions="Center" />
+                                        VerticalOptions="Center">
+                                        <Entry.Behaviors>
+                                            <toolkit:SelectAllTextBehavior />
+                                        </Entry.Behaviors>
+                                    </Entry>
                                     <Stepper
                                         Increment="1"
                                         Maximum="23"
@@ -230,7 +251,11 @@
                                     <Entry
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding FertilizationFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                        VerticalOptions="Center" />
+                                        VerticalOptions="Center">
+                                        <Entry.Behaviors>
+                                            <toolkit:SelectAllTextBehavior />
+                                        </Entry.Behaviors>
+                                    </Entry>
                                     <Stepper
                                         Increment="1"
                                         Maximum="365"
@@ -245,7 +270,11 @@
                                     <Entry
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding FertilizationFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                        VerticalOptions="Center" />
+                                        VerticalOptions="Center">
+                                        <Entry.Behaviors>
+                                            <toolkit:SelectAllTextBehavior />
+                                        </Entry.Behaviors>
+                                    </Entry>
                                     <Stepper
                                         Increment="1"
                                         Maximum="23"

@@ -56,7 +56,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private ObservableCollection<PlantListItemViewModel> _plants = [];
 
     [ObservableProperty]
-    private string searchText = string.Empty;
+    private string _searchText = string.Empty;
 
     [ObservableProperty]
     private PlantListItemViewModel? _selectedPlant = null;
@@ -177,10 +177,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             if (!string.IsNullOrEmpty(SearchText))
             {
-                var searchResults = await FilterPlantsAsync(Plants, SearchText);
+                List<PlantListItemViewModel> searchedPlants = await FilterPlantsAsync(Plants, SearchText);
 
                 Plants.Clear();
-                foreach (PlantListItemViewModel plant in searchResults)
+                foreach (PlantListItemViewModel plant in searchedPlants)
                 {
                     Plants.Add(plant);
                 }
@@ -214,7 +214,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    private static Task<List<PlantListItemViewModel>> FilterPlantsAsync(ObservableCollection<PlantListItemViewModel> plants, string searchText)
+    private static Task<List<PlantListItemViewModel>> FilterPlantsAsync(IEnumerable<PlantListItemViewModel> plants, string searchText)
     {
         return Task.Run(() =>
         {
