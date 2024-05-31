@@ -85,7 +85,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     #region For data loading
 
-    private List<Plant> _plantList;
+    private List<Plant> _plantList = [];
 
     // Override
     public override async Task LoadDataWhenViewAppearingAsync()
@@ -144,8 +144,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             return;
 
         try
-        {
-            await _navigationService.GoToAddPlant();
+        {            
+            await _navigationService.GoToAddPlant(Plants.Count + 1);
         }
         catch (Exception ex)
         {

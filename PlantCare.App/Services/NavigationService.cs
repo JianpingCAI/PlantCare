@@ -1,4 +1,5 @@
 ﻿using PlantCare.Data.DbModels;
+using PlantCare.Data.Models;
 using System.Diagnostics;
 
 namespace PlantCare.App.Services;
@@ -11,9 +12,14 @@ public class NavigationService : INavigationService
         await Shell.Current.GoToAsync("//overview/plant", parameters);
     }
 
-    public async Task GoToAddPlant()
+    public async Task GoToAddPlant(int plantCount)
     {
-        await Shell.Current.GoToAsync("//overview/add");
+        var navigationParameter = new ShellNavigationQueryParameters
+        {
+            { "PlantCount", plantCount }
+        };
+
+        await Shell.Current.GoToAsync("//overview/add", navigationParameter);
     }
 
     public async Task GoToEditPlant(PlantDbModel plant)

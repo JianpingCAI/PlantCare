@@ -8,7 +8,7 @@
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     Title="{Binding Name, StringFormat='{0} Details'}"
     x:DataType="vm:PlantDetailViewModel">
-    <Grid Padding="10,2,5,0">
+    <Grid Padding="5,2,5,0">
         <ScrollView>
             <StackLayout>
                 <Grid>
@@ -25,8 +25,8 @@
                         <Image
                             Aspect="AspectFit"
                             HorizontalOptions="Center"
-                            MaximumWidthRequest="{OnIdiom Phone=300,
-                                                          Default=500}"
+                            MaximumHeightRequest="{OnIdiom Phone=300,
+                                                           Default=500}"
                             Source="{Binding PhotoPath}"
                             VerticalOptions="Center" />
 

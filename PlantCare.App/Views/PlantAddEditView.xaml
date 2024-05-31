@@ -7,14 +7,14 @@
     xmlns:local="clr-namespace:PlantCare.App.Utils"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="{Binding Name, StringFormat='Edit: {0}'}"
+    Title="{Binding Name, StringFormat='Edit: {0}', Mode=OneWay}"
     x:DataType="vm:PlantAddEditViewModel">
     <ContentPage.Resources>
         <ResourceDictionary>
             <local:StringToIntConverter x:Key="StringToIntConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <Grid Padding="10,2,5,0">
+    <Grid Padding="5,2,5,0">
         <ScrollView>
             <Grid>
                 <VerticalStackLayout>
@@ -33,8 +33,8 @@
                                 <Image
                                     Aspect="AspectFit"
                                     HorizontalOptions="Center"
-                                    MaximumWidthRequest="{OnIdiom Phone=300,
-                                                                  Default=500}"
+                                    MaximumHeightRequest="{OnIdiom Phone=300,
+                                                                   Default=500}"
                                     Source="{Binding PhotoPath}"
                                     VerticalOptions="Center" />
 

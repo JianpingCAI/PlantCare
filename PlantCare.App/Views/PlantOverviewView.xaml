@@ -28,7 +28,7 @@
         <utils:ProgressToColorConverter x:Key="ProgressToColorConverter" />
     </ContentPage.Resources>
     <!--  Main Layout  -->
-    <Grid Padding="10,2,5,0">
+    <Grid Padding="5,2,5,0">
         <Grid RowDefinitions="auto,*">
             <!--  Search Bar for quick filtering  -->
             <SearchBar

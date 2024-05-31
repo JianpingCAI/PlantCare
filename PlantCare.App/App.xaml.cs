@@ -35,7 +35,7 @@ namespace PlantCare.App
             string? strTheme = SecureStorage.GetAsync("AppTheme").Result;
             if (string.IsNullOrEmpty(strTheme))
             {
-                App.Current.UserAppTheme = appTheme;
+                App.Current.UserAppTheme = AppTheme.Unspecified;
                 return;
             }
 

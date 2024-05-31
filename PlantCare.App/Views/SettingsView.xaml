@@ -74,7 +74,7 @@
             </Border>
         </ControlTemplate>
     </ContentPage.Resources>
-    <Grid Padding="10,2,5,0">
+    <Grid Padding="5,2,5,0">
         <VerticalStackLayout>
             <!--  IsWateringNotificationEnabled  -->
             <Grid ColumnDefinitions="2*,1*" RowDefinitions="*,*,*">

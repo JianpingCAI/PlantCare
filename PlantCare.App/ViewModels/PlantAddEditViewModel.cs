@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Linq;
 
 namespace PlantCare.App.ViewModels
 {
@@ -38,7 +39,7 @@ namespace PlantCare.App.ViewModels
         [MinLength(3)]
         [MaxLength(50)]
         [NotifyDataErrorInfo]
-        private string _name = "Unknown";
+        private string _name = "Plant";
 
         [ObservableProperty]
         private string _species = "Unknown";
@@ -64,7 +65,7 @@ namespace PlantCare.App.ViewModels
         [Range(0, 365)]
         //[NotifyPropertyChangedFor(nameof(NextWateringTime))]
         [NotifyPropertyChangedFor(nameof(WateringFrequencyInHours))]
-        private int _wateringFrequencyDays = 0;
+        private int _wateringFrequencyDays = 3;
 
         [ObservableProperty]
         [Required]
@@ -96,7 +97,7 @@ namespace PlantCare.App.ViewModels
         [Range(0, 365)]
         //[NotifyPropertyChangedFor(nameof(NextWateringTime))]
         [NotifyPropertyChangedFor(nameof(FertilizationFrequencyInHours))]
-        private int _fertilizationFrequencyDays = 0;
+        private int _fertilizationFrequencyDays = 30;
 
         [ObservableProperty]
         [Required]
@@ -289,13 +290,20 @@ namespace PlantCare.App.ViewModels
 
         void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            if (!query.ContainsKey("Plant"))
-                return;
+            // edit an existing plant
+            if (query.ContainsKey("Plant"))
+            {
+                PlantDbModel? plant = query["Plant"] as PlantDbModel;
+                if (plant == null) return;
 
-            PlantDbModel? plant = query["Plant"] as PlantDbModel;
-            if (plant == null) return;
-
-            MapPlantData(plant);
+                MapPlantData(plant);
+            }
+            // add a new plant
+            else if (query.ContainsKey("PlantCount"))
+            {
+                // give a default name according to the existing count of plants
+                Name = $"Plant {query["PlantCount"]}";
+            }
         }
 
         internal async Task NavigateBack()

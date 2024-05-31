@@ -60,7 +60,7 @@ public partial class ReminderViewModel(IDialogService dialogService, IPlantServi
     }
 
     [RelayCommand]
-    public async void SelectedReminderItemChanged(/*SelectionChangedEventArgs args*/object args)
+    public async Task SelectedReminderItemChanged(/*SelectionChangedEventArgs args*/object args)
     {
         try
         {

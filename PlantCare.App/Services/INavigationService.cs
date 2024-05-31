@@ -6,7 +6,7 @@ public interface INavigationService
 {
     Task GoToPlantDetail(Guid plantId);
 
-    Task GoToAddPlant();
+    Task GoToAddPlant(int plantCount);
 
     Task GoToEditPlant(PlantDbModel plant);
 
