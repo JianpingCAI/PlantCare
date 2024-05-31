@@ -19,6 +19,8 @@ namespace PlantCare.App
                 db.Database.Migrate();
             }
 
+            LoadTheme();
+
             MainPage = new AppShell();
             //MainPage = new NavigationPage(serviceProvider.GetRequiredService<HomeView>());
 
@@ -26,15 +28,39 @@ namespace PlantCare.App
             RegisterNavigationEventHandlers();
         }
 
+        private void LoadTheme()
+        {
+            AppTheme appTheme = AppTheme.Dark;
+
+            string? strTheme = SecureStorage.GetAsync("AppTheme").Result;
+            if (string.IsNullOrEmpty(strTheme))
+            {
+                App.Current.UserAppTheme = appTheme;
+                return;
+            }
+
+            try
+            {
+                appTheme = (AppTheme)Enum.Parse(typeof(AppTheme), strTheme, true);
+            }
+            catch (Exception)
+            {
+            }
+
+            App.Current.UserAppTheme = appTheme;
+        }
+
         private void RegisterNavigationEventHandlers()
         {
             if (Shell.Current != null)
             {
-                Shell.Current.Navigating += (sender, args) => {
+                Shell.Current.Navigating += (sender, args) =>
+                {
                     Debug.WriteLine("?????????????Navigating to: " + args.Target.Location.ToString());
                 };
 
-                Shell.Current.Navigated += (sender, args) => {
+                Shell.Current.Navigated += (sender, args) =>
+                {
                     Debug.WriteLine("?????????????Navigated to: " + args.Current.Location.ToString());
                 };
             }

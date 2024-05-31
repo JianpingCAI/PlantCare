@@ -2,19 +2,19 @@
 
 public interface ISettingsService
 {
-    Task<string> GetThemeSettingAsync();
+    Task<AppTheme> GetThemeSettingAsync();
 
     Task<bool> GetWateringNotificationSettingAsync();
 
-    Task SetWateringNotificationSettingAsync(bool isEnabled);
+    Task SaveWateringNotificationSettingAsync(bool isEnabled);
 
     Task<bool> GetFertilizationNotificationSettingAsync();
 
-    Task SetFertilizationNotificationSettingAsync(bool isEnabled);
+    Task SaveFertilizationNotificationSettingAsync(bool isEnabled);
 
-    Task SetThemeSettingAsync(string theme);
+    Task SaveThemeSettingAsync(AppTheme theme);
 
     Task<bool> GetDebugSettingAsync();
 
-    Task SetDebugSettingAsync(bool isEnabled);
+    Task SaveDebugSettingAsync(bool isEnabled);
 }

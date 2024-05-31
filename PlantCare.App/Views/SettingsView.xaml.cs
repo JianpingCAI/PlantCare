@@ -16,11 +16,11 @@ public partial class SettingsView : ContentPageBase
         if (!(sender is RadioButton button && button.Value != null))
             return;
 
-        AppTheme val = (AppTheme)((RadioButton)sender).Value;
+        AppTheme theme = (AppTheme)((RadioButton)sender).Value;
 
-        if (App.Current.UserAppTheme == val)
+        if (App.Current.UserAppTheme == theme)
             return;
 
-        App.Current.UserAppTheme = val;
+        App.Current.UserAppTheme = theme;
     }
 }

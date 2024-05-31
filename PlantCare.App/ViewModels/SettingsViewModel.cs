@@ -12,6 +12,7 @@ public partial class SettingsViewModel(ISettingsService settingsService, IDialog
 {
     private readonly ISettingsService _settingsService = settingsService;
     private readonly IDialogService _dialogService = dialogService;
+
     [ObservableProperty]
     private bool _isWateringNotificationEnabled = true;
 
@@ -22,40 +23,45 @@ public partial class SettingsViewModel(ISettingsService settingsService, IDialog
     private bool _isDebugModeEnabled = true;
 
     [ObservableProperty]
-    private string _theme;
+    private AppTheme _selectedTheme = AppTheme.Unspecified;
 
     private bool _isSettingsLoaded = false;
 
-    [RelayCommand]
-    private async Task SaveSettingsAsync()
-    {
-        if (IsBusy) return;
+    //[RelayCommand]
+    //private async Task SaveSettingsAsync()
+    //{
+    //    if (IsBusy) return;
 
-        try
-        {
-            await _settingsService.SetWateringNotificationSettingAsync(IsWateringNotificationEnabled);
-            await _settingsService.SetThemeSettingAsync(Theme);
-        }
-        finally { IsBusy = false; }
-    }
+    //    try
+    //    {
+    //        await _settingsService.SetWateringNotificationSettingAsync(IsWateringNotificationEnabled);
+    //        await _settingsService.SetThemeSettingAsync(Theme);
+    //    }
+    //    finally { IsBusy = false; }
+    //}
 
     partial void OnIsWateringNotificationEnabledChanged(bool isEnabled)
     {
         WeakReferenceMessenger.Default.Send(new IsWateringNotifyEnabledMessage { IsWateringNotificationEnabled = isEnabled });
 
-        _settingsService.SetWateringNotificationSettingAsync(isEnabled);
+        _settingsService.SaveWateringNotificationSettingAsync(isEnabled);
     }
 
     partial void OnIsFertilizationNotificationEnabledChanged(bool isEnabled)
     {
         WeakReferenceMessenger.Default.Send(new IsFertilizationNotificationEnabledMessage { IsFertilizationNotificationEnabled = isEnabled });
 
-        _settingsService.SetFertilizationNotificationSettingAsync(isEnabled);
+        _settingsService.SaveFertilizationNotificationSettingAsync(isEnabled);
     }
 
     partial void OnIsDebugModeEnabledChanged(bool isEnabled)
     {
-        _settingsService.SetDebugSettingAsync(isEnabled);
+        _settingsService.SaveDebugSettingAsync(isEnabled);
+    }
+
+    partial void OnSelectedThemeChanged(AppTheme value)
+    {
+        _settingsService.SaveThemeSettingAsync(value);
     }
 
     public override async Task LoadDataWhenViewAppearingAsync()
@@ -84,7 +90,7 @@ public partial class SettingsViewModel(ISettingsService settingsService, IDialog
             IsWateringNotificationEnabled = await _settingsService.GetWateringNotificationSettingAsync();
             IsFertilizationNotificationEnabled = await _settingsService.GetFertilizationNotificationSettingAsync();
 
-            Theme = await _settingsService.GetThemeSettingAsync();
+            SelectedTheme = await _settingsService.GetThemeSettingAsync();
 
             IsDebugModeEnabled = await _settingsService.GetDebugSettingAsync();
         }

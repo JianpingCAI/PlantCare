@@ -16,7 +16,7 @@ public class SettingsService : ISettingsService
         return value == "True";
     }
 
-    public async Task SetWateringNotificationSettingAsync(bool isEnabled)
+    public async Task SaveWateringNotificationSettingAsync(bool isEnabled)
     {
         // Save the setting locally
         await SecureStorage.SetAsync(Consts.EnableWateringNotification, isEnabled.ToString());
@@ -34,22 +34,36 @@ public class SettingsService : ISettingsService
         return value == "True";
     }
 
-    public async Task SetFertilizationNotificationSettingAsync(bool isEnabled)
+    public async Task SaveFertilizationNotificationSettingAsync(bool isEnabled)
     {
         // Save the setting locally
         await SecureStorage.SetAsync(Consts.EnableFertilizationNotification, isEnabled.ToString());
     }
 
-    public async Task<string> GetThemeSettingAsync()
+    public async Task<AppTheme> GetThemeSettingAsync()
     {
         // Retrieve the theme setting
-        return await SecureStorage.GetAsync("AppTheme");
+        string? strTheme = await SecureStorage.GetAsync("AppTheme");
+        if (string.IsNullOrEmpty(strTheme))
+        {
+            return AppTheme.Unspecified;
+        }
+
+        try
+        {
+            var theme = (AppTheme)Enum.Parse(typeof(AppTheme), strTheme, true);
+            return theme;
+        }
+        catch (Exception)
+        {
+            return AppTheme.Unspecified;
+        }
     }
 
-    public async Task SetThemeSettingAsync(string theme)
+    public async Task SaveThemeSettingAsync(AppTheme theme)
     {
         // Save the theme setting locally
-        await SecureStorage.SetAsync("AppTheme", theme);
+        await SecureStorage.SetAsync("AppTheme", theme.ToString());
     }
 
     public async Task<bool> GetDebugSettingAsync()
@@ -64,7 +78,7 @@ public class SettingsService : ISettingsService
         return value == "True";
     }
 
-    public async Task SetDebugSettingAsync(bool isEnabled)
+    public async Task SaveDebugSettingAsync(bool isEnabled)
     {
         await SecureStorage.SetAsync(Consts.IsDebugMode, isEnabled.ToString());
     }
