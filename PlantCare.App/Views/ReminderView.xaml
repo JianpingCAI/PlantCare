@@ -6,7 +6,7 @@
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="Reminders"
+    Title="Unattended Plants"
     x:DataType="vm:ReminderViewModel">
     <ContentPage.Resources>
         <Style TargetType="Grid">
@@ -74,7 +74,7 @@
                     WidthRequest="90" />
             </Grid>
             <CollectionView
-                x:Name="wateringCollection"
+                x:Name="uiCurrentCollection"
                 Grid.Row="1"
                 ItemsSource="{Binding Reminders}"
                 SelectedItems="{Binding SelectedReminders}"
@@ -103,10 +103,12 @@
                                     <SwipeItems>
                                         <SwipeItem
                                             BackgroundColor="LightPink"
-                                            Command="{Binding Source={x:Reference wateringCollection}, Path=BindingContext.SetWateredCommand}"
-                                            CommandParameter="{Binding Source={x:Reference wateringCollection}, Path=BindingContext.SelectedWateringReminder}"
                                             IconImageSource="delete.png"
                                             Text="Delete" />
+                                        <!--
+                                            Command="{Binding Source={x:Reference uiCurrentCollection}, Path=BindingContext.SetWateredCommand}"
+                                            CommandParameter="{Binding Source={x:Reference uiCurrentCollection}, Path=BindingContext.SelectedWateringReminder}"
+                                        -->
                                     </SwipeItems>
                                 </SwipeView.LeftItems>
 

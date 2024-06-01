@@ -14,6 +14,9 @@ namespace PlantCare.App
             Routing.RegisterRoute("edit", typeof(PlantAddEditView));
             Routing.RegisterRoute("add", typeof(PlantAddEditView));
             Routing.RegisterRoute("reminders", typeof(ReminderView));
+
+            Routing.RegisterRoute("calendar", typeof(ReminderCalendarView));
+
         }
 
         protected override void OnNavigated(ShellNavigatedEventArgs args)

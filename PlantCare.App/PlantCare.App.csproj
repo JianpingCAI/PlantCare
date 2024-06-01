@@ -61,6 +61,7 @@
 		<None Remove="Resources\Fonts\fa-solid-900.ttf" />
 		<None Remove="Resources\Fonts\MaterialIcons-Regular.ttf" />
 		<None Remove="Resources\Images\default_plant.png" />
+		<None Remove="Resources\Images\tab_calender.svg" />
 		<None Remove="Resources\Images\tab_home.svg" />
 		<None Remove="Resources\Images\tab_home_on.svg" />
 		<None Remove="Resources\Images\tab_notifications.svg" />
@@ -84,6 +85,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Plugin.LocalNotification" Version="11.1.2" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.6" />
+		<PackageReference Include="XCalendar.Maui" Version="4.6.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -93,6 +95,9 @@
 	<ItemGroup>
 		<Compile Update="Views\PlantOverviewView.xaml.cs">
 			<DependentUpon>PlantOverviewView.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\ReminderCalendarView.xaml.cs">
+		  <DependentUpon>ReminderCalendarView.xaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
@@ -117,6 +122,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\RegisterView.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\ReminderCalendarView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\ReminderView.xaml">
 			<Generator>MSBuild:Compile</Generator>

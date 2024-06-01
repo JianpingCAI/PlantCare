@@ -55,10 +55,17 @@
             Icon="tab_home.png"
             Route="overview" />
         <ShellContent
-            Title="Reminders"
+            Title="Missed"
             ContentTemplate="{DataTemplate views:ReminderView}"
             Icon="tab_notifications.png"
             Route="reminders" />
+
+        <ShellContent
+            Title="Calendar"
+            ContentTemplate="{DataTemplate views:ReminderCalendarView}"
+            Icon="tab_calender.png"
+            Route="calendar" />
+
         <!--  Icon="reminders.png"  -->
         <ShellContent
             Title="Settings"
