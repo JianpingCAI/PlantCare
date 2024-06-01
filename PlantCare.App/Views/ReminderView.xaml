@@ -3,6 +3,7 @@
     x:Class="PlantCare.App.Views.ReminderView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     Title="Reminders"
@@ -22,15 +23,20 @@
                 </VisualStateGroupList>
             </Setter>
         </Style>
+        <ResourceDictionary>
+            <utils:ReminderTypeIconConverter x:Key="ReminderTypeIconConverter" />
+        </ResourceDictionary>
     </ContentPage.Resources>
     <Grid Padding="5,2,5,0">
         <Grid HorizontalOptions="Fill" RowDefinitions="auto,*">
-            <Grid ColumnDefinitions="220, *">
+            <Grid ColumnDefinitions="200, *">
                 <!--  Reminder Type  -->
-                <Grid ColumnDefinitions="auto,*">
+                <Grid ColumnDefinitions="auto,*,auto">
                     <Label
+                        Margin="5,0"
+                        FontAttributes="Bold"
                         FontSize="Small"
-                        Text="Reminder Type"
+                        Text="Type"
                         VerticalOptions="Center" />
                     <Picker
                         Title="Select a reminder type"
@@ -43,6 +49,17 @@
                         SelectedItem="{Binding SelectedReminderType}"
                         TextColor="DeepSkyBlue"
                         VerticalTextAlignment="Center" />
+                    <Label
+                        Grid.Column="2"
+                        Margin="0,5,0,0"
+                        FontFamily="MaterialIconsRegular"
+                        FontSize="24"
+                        HorizontalOptions="End"
+                        HorizontalTextAlignment="End"
+                        Text="{Binding SelectedReminderType, Converter={StaticResource ReminderTypeIconConverter}}"
+                        TextColor="Red"
+                        VerticalOptions="Center"
+                        VerticalTextAlignment="End" />
                 </Grid>
 
                 <!--  Select  -->
@@ -135,8 +152,6 @@
                                             VerticalOptions="Start"
                                             VerticalTextAlignment="Start" />
 
-
-
                                         <!--  Reminder Time  -->
                                         <Label
                                             Grid.Row="1"
@@ -148,7 +163,6 @@
                                     </Grid>
                                 </Border>
                             </SwipeView>
-
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

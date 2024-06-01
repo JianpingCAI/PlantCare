@@ -77,7 +77,10 @@
     <Grid Padding="5,2,5,0">
         <VerticalStackLayout>
             <!--  IsWateringNotificationEnabled  -->
-            <Grid ColumnDefinitions="2*,1*" RowDefinitions="*,*,*">
+            <Grid
+                ColumnDefinitions="2*,1*"
+                HorizontalOptions="Fill"
+                RowDefinitions="*,*,*">
                 <Label
                     HorizontalTextAlignment="Start"
                     Text="Watering Notification"
@@ -117,12 +120,16 @@
 
             <BoxView Margin="0,5" class="HRule" />
 
-            <Label Text="Theme" class="Subhead" />
+            <Label
+                FontAttributes="Bold"
+                Text="Theme"
+                class="Head" />
+            <!--  class="Subhead"  -->
 
             <Grid
                 Margin="5"
                 ColumnDefinitions="*,*,*"
-                HorizontalOptions="Start"
+                HorizontalOptions="Fill"
                 RadioButtonGroup.GroupName="AppTheme"
                 RadioButtonGroup.SelectedValue="{Binding SelectedTheme}">
                 <!--  RadioButtonGroup.SelectedValue="{Binding SelectedTheme}"  -->

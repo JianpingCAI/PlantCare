@@ -52,8 +52,6 @@
                                 Offset="5,5" />
                         </Button.Shadow>
                     </Button>
-                    <!--  FontFamily="MaterialIconsRegular"  -->
-                    <!--  Text="&#xe3c9;"  -->
                 </Grid>
 
 

@@ -24,9 +24,6 @@ public partial class ReminderViewModel(IDialogService dialogService, IPlantServi
     [ObservableProperty]
     private ReminderType _selectedReminderType = ReminderType.Watering;
 
-    //[ObservableProperty]
-    //private ObservableCollection<Reminder> _reminders;
-
     [ObservableProperty]
     private ObservableCollection<ReminderItemViewModel> _reminders = [];
 
@@ -36,13 +33,21 @@ public partial class ReminderViewModel(IDialogService dialogService, IPlantServi
     [ObservableProperty]
     private bool _isSetRemindersDoneEnabled = false;
 
+    // When page appearing
+    public override async Task LoadDataWhenViewAppearingAsync()
+    {
+        try
+        {
+            await LoadAllReminders();
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify("Error", ex.Message, "OK");
+        }
+    }
+
     partial void OnSelectedReminderTypeChanged(ReminderType selectedReminderType)
     {
-        //if (Reminders.Count == 0)
-        //{
-        //    return;
-        //}
-
         switch (selectedReminderType)
         {
             case ReminderType.Watering:
@@ -207,23 +212,6 @@ public partial class ReminderViewModel(IDialogService dialogService, IPlantServi
                 }
             }
             IsBusy = false;
-        }
-    }
-
-    public override async Task LoadDataWhenViewAppearingAsync()
-    {
-        if (Reminders.Count != 0)
-        {
-            return;
-        }
-
-        try
-        {
-            await LoadAllReminders();
-        }
-        catch (Exception ex)
-        {
-            await _dialogService.Notify("Error", ex.Message, "OK");
         }
     }
 

@@ -26,8 +26,8 @@
     <Shell.TitleView>
         <Grid ColumnDefinitions="auto,*">
             <Border
-                Margin="10,0,0,0"
-                HorizontalOptions="Center"
+                Margin="5,0,0,0"
+                HorizontalOptions="Start"
                 Stroke="Transparent"
                 StrokeThickness="0"
                 VerticalOptions="Center">
