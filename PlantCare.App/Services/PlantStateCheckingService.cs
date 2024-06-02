@@ -12,6 +12,10 @@ using System.Text.Json;
 
 namespace PlantCare.App.Services;
 
+
+/// <summary>
+/// Not used for now
+/// </summary>
 public class PlantStateCheckingService : BackgroundService, IRecipient<IsWateringNotifyEnabledMessage>
 {
     private readonly ILogger<PlantStateCheckingService> _logger;

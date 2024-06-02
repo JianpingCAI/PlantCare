@@ -73,6 +73,8 @@
                     VerticalOptions="Center"
                     WidthRequest="90" />
             </Grid>
+
+            <!--  Plant Events  -->
             <CollectionView
                 x:Name="uiCurrentCollection"
                 Grid.Row="1"
@@ -178,7 +180,6 @@
         </Grid>
 
         <!--  Floating 'Done' button  -->
-        <!--<Grid>-->
         <Button
             Margin="0,0,20,20"
             Command="{Binding SetSelectedRemindersDoneCommand}"

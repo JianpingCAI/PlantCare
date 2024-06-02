@@ -54,15 +54,22 @@
             ContentTemplate="{DataTemplate views:PlantOverviewView}"
             Icon="tab_home.png"
             Route="overview" />
-        <ShellContent
+
+        <!--<ShellContent
             Title="Missed"
             ContentTemplate="{DataTemplate views:ReminderView}"
             Icon="tab_notifications.png"
-            Route="reminders" />
+            Route="reminders" />-->
+
+        <!--<ShellContent
+            Title="Calendar"
+            ContentTemplate="{DataTemplate views:ReminderCalendarView}"
+            Icon="tab_calender.png"
+            Route="calendar" />-->
 
         <ShellContent
             Title="Calendar"
-            ContentTemplate="{DataTemplate views:ReminderCalendarView}"
+            ContentTemplate="{DataTemplate views:PlantCalendarView}"
             Icon="tab_calender.png"
             Route="calendar" />
 

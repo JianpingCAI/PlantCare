@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
 using PlantCare.Data.Models;
 
@@ -36,7 +37,7 @@ public partial class PlantViewModelBase : ViewModelBase
     {
         get
         {
-            return Math.Min(1.0, Math.Max(0, (NextWateringTime - DateTime.Now).TotalMinutes / (10080/*7 * 24 * 60*/)));
+            return PlantState.GetCurrentStateValue(NextWateringTime);
         }
 
         set
@@ -67,7 +68,7 @@ public partial class PlantViewModelBase : ViewModelBase
     {
         get
         {
-            return Math.Min(1.0, Math.Max(0, (NextFertilizeTime - DateTime.Now).TotalMinutes / (10080/*7 * 24 * 60*/)));
+            return PlantState.GetCurrentStateValue(NextFertilizeTime);
         }
         set
         {

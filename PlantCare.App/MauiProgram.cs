@@ -156,8 +156,11 @@ public static class MauiProgram
         builder.Services.AddTransient<ReminderView>();
         builder.Services.AddTransient<ReminderViewModel>();
 
-        builder.Services.AddTransient<ReminderCalendarView>();
-        builder.Services.AddTransient<ReminderCalendarViewModel>();
+        //builder.Services.AddTransient<ReminderCalendarView>();
+        //builder.Services.AddTransient<ReminderCalendarViewModel>();
+
+        builder.Services.AddTransient<PlantCalendarView>();
+        builder.Services.AddTransient<PlantCalendarViewModel>();
 
         builder.Services.AddSingleton<SettingsView>();
         builder.Services.AddSingleton<SettingsViewModel>();

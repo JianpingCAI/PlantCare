@@ -96,6 +96,9 @@
 		<Compile Update="Views\PlantOverviewView.xaml.cs">
 			<DependentUpon>PlantOverviewView.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\PlantCalendarView.xaml.cs">
+		  <DependentUpon>PlantCalendarView.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\ReminderCalendarView.xaml.cs">
 		  <DependentUpon>ReminderCalendarView.xaml</DependentUpon>
 		</Compile>
@@ -122,6 +125,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\RegisterView.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\PlantCalendarView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\ReminderCalendarView.xaml">
 		  <Generator>MSBuild:Compile</Generator>

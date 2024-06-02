@@ -17,8 +17,6 @@ public partial class ReminderViewModel(IDialogService dialogService, IPlantServi
     private readonly IDialogService _dialogService = dialogService;
     private readonly IPlantService _plantService = plantService;
 
-    //public static ReminderType[] ReminderTypes => Enum.GetValues(typeof(ReminderType)).Cast<ReminderType>().ToArray();
-
     public ObservableCollection<ReminderType> ReminderTypes { get; } = Enum.GetValues(typeof(ReminderType)).Cast<ReminderType>().ToObservableCollection();
 
     [ObservableProperty]

@@ -13,14 +13,6 @@ using XCalendar.Maui.Models;
 
 namespace PlantCare.App.ViewModels
 {
-    public class PlantEvent : ColoredEvent
-    {
-        public ReminderType ReminderType { get; set; }
-        public string Name { get; set; }
-        public string PhotoPath { get; set; } = string.Empty;
-        public bool IsOverdue { get; set; }
-    }
-
     public class PlantEventDay<TEvent> : CalendarDay<TEvent> where TEvent : IEvent
     {
     }
@@ -29,16 +21,35 @@ namespace PlantCare.App.ViewModels
     {
     }
 
+    public class PlantEvent : ColoredEvent
+    {
+        public Guid PlantId { get; set; }
+        public ReminderType ReminderType { get; set; }
+        public string Name { get; set; }
+        public string PhotoPath { get; set; } = string.Empty;
+        //public bool IsOverdue { get; set; }
+
+        private bool _isSelected = false;
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(IsSelected));
+                }
+            }
+        }
+
+        public DateTime ScheduledTime { get; set; } = default;
+    }
+
     public partial class ReminderCalendarViewModel : ViewModelBase
     {
         private readonly IPlantService _plantService;
-
-        //public Calendar<PlantEventDay, PlantEvent> ReminderCalendar { get; } = new Calendar<PlantEventDay, PlantEvent>()
-        //{
-        //    SelectedDates = [],
-        //    SelectionAction = SelectionAction.Modify,
-        //    SelectionType = SelectionType.Single
-        //};
 
         [ObservableProperty]
         public Calendar<PlantEventDay, PlantEvent>? _reminderCalendar = null;
@@ -46,9 +57,6 @@ namespace PlantCare.App.ViewModels
         public ReminderCalendarViewModel(IPlantService plantService)
         {
             _plantService = plantService;
-
-            // Dates selection changed event
-            //ReminderCalendar.SelectedDates.CollectionChanged += SelectedDates_CollectionChanged;
         }
 
         public ObservableRangeCollection<PlantEvent> SelectedEvents { get; } = [];
@@ -96,7 +104,7 @@ namespace PlantCare.App.ViewModels
                     EndDate = waterTime,
                     Color = Colors.DeepSkyBlue,
 
-                    IsOverdue = waterTime <= DateTime.Now
+                    //IsOverdue = waterTime <= DateTime.Now
                 });
 
                 DateTime fertTime = plant.LastFertilized.AddHours(plant.FertilizeFrequencyInHours);
@@ -111,7 +119,7 @@ namespace PlantCare.App.ViewModels
                     EndDate = fertTime,
                     Color = Colors.OrangeRed,
 
-                    IsOverdue = fertTime <= DateTime.Now
+                    //IsOverdue = fertTime <= DateTime.Now
                 });
             }
 
