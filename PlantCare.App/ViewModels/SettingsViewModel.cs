@@ -27,29 +27,24 @@ public partial class SettingsViewModel(ISettingsService settingsService, IDialog
 
     private bool _isSettingsLoaded = false;
 
-    //[RelayCommand]
-    //private async Task SaveSettingsAsync()
-    //{
-    //    if (IsBusy) return;
-
-    //    try
-    //    {
-    //        await _settingsService.SetWateringNotificationSettingAsync(IsWateringNotificationEnabled);
-    //        await _settingsService.SetThemeSettingAsync(Theme);
-    //    }
-    //    finally { IsBusy = false; }
-    //}
-
     partial void OnIsWateringNotificationEnabledChanged(bool isEnabled)
     {
-        WeakReferenceMessenger.Default.Send(new IsWateringNotifyEnabledMessage { IsWateringNotificationEnabled = isEnabled });
+        WeakReferenceMessenger.Default.Send(new IsNotificationEnabledMessage
+        {
+            ReminderType = ReminderType.Watering,
+            IsNotificationEnabled = isEnabled
+        });
 
         _settingsService.SaveWateringNotificationSettingAsync(isEnabled);
     }
 
     partial void OnIsFertilizationNotificationEnabledChanged(bool isEnabled)
     {
-        WeakReferenceMessenger.Default.Send(new IsFertilizationNotificationEnabledMessage { IsFertilizationNotificationEnabled = isEnabled });
+        WeakReferenceMessenger.Default.Send(new IsNotificationEnabledMessage
+        {
+            ReminderType = ReminderType.Fertilization,
+            IsNotificationEnabled = isEnabled
+        });
 
         _settingsService.SaveFertilizationNotificationSettingAsync(isEnabled);
     }

@@ -290,19 +290,23 @@ namespace PlantCare.App.ViewModels
 
         void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            // edit an existing plant
-            if (query.ContainsKey("Plant"))
+            if (query is null)
             {
-                PlantDbModel? plant = query["Plant"] as PlantDbModel;
-                if (plant == null) return;
+                return;
+            }
+
+            // edit an existing plant
+            if (query.TryGetValue("Plant", out object? value))
+            {
+                if (value is not PlantDbModel plant) return;
 
                 MapPlantData(plant);
             }
             // add a new plant
-            else if (query.ContainsKey("PlantCount"))
+            else if (query.TryGetValue("PlantCount", out object? plantCount))
             {
                 // give a default name according to the existing count of plants
-                Name = $"Plant {query["PlantCount"]}";
+                Name = $"Plant {plantCount}";
             }
         }
 

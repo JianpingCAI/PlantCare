@@ -169,14 +169,14 @@
                                 <SwipeView>
                                     <SwipeView.LeftItems>
                                         <SwipeItems>
-                                            <SwipeItem
-                                                BackgroundColor="LightPink"
-                                                IconImageSource="delete.png"
-                                                Text="Delete" />
+                                            <SwipeItem BackgroundColor="LightPink" Text="Todo1" />
+                                            <!--  IconImageSource="delete.png"  -->
+
                                             <!--
                                                 Command="{Binding Source={x:Reference uiCurrentCollection}, Path=BindingContext.SetWateredCommand}"
                                                 CommandParameter="{Binding Source={x:Reference uiCurrentCollection}, Path=BindingContext.SelectedWateringReminder}"
                                             -->
+                                            <SwipeItem BackgroundColor="LightPink" Text="Todo2" />
                                         </SwipeItems>
                                     </SwipeView.LeftItems>
 

@@ -25,7 +25,7 @@ namespace PlantCare.App.ViewModels
     {
         public Guid PlantId { get; set; }
         public ReminderType ReminderType { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public string PhotoPath { get; set; } = string.Empty;
         //public bool IsOverdue { get; set; }
 
