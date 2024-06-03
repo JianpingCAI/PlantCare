@@ -15,7 +15,7 @@ public partial class PlantDetailView : ContentPageBase
     {
         if (BindingContext is PlantDetailViewModel viewModel)
         {
-            viewModel.NavidateBack();
+            viewModel.NavigateBack();
             return true;
         }
         return base.OnBackButtonPressed();

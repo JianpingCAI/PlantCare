@@ -24,7 +24,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
     {
         try
         {
-            PlantDbModel plant = MapToPlantModel(this);
+            PlantDbModel plant = PlantDetailViewModel.MapToPlantModel(this);
             await _navigationService.GoToEditPlant(plant);
         }
         catch (Exception ex)
@@ -59,10 +59,10 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
 
     void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (!query.ContainsKey("PlantId"))
+        if (!query.TryGetValue("PlantId", out object? value))
             return;
 
-        var plantId = query["PlantId"].ToString();
+        var plantId = value.ToString();
         if (Guid.TryParse(plantId, out var selectedId))
         {
             Id = selectedId;
@@ -85,7 +85,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         MapPlantData(plant);
     }
 
-    internal async void NavidateBack()
+    internal async void NavigateBack()
     {
         await _navigationService.GoToPlantsOverview();
     }
@@ -105,7 +105,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         FertilizeFrequencyInHours = plant.FertilizeFrequencyInHours;
     }
 
-    private PlantDbModel MapToPlantModel(PlantDetailViewModel plantDetailViewModel)
+    private static PlantDbModel MapToPlantModel(PlantDetailViewModel plantDetailViewModel)
     {
         return new PlantDbModel
         {

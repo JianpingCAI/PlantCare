@@ -4,10 +4,17 @@
     x:Class="PlantCare.App.Views.PlantDetailView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     Title="{Binding Name, StringFormat='{0} Details'}"
     x:DataType="vm:PlantDetailViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <utils:HoursToDayHourStringConverter x:Key="HoursToDayHourStringConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <Grid Padding="5,2,5,0">
         <ScrollView>
             <StackLayout>
@@ -29,8 +36,6 @@
                                                            Default=500}"
                             Source="{Binding PhotoPath}"
                             VerticalOptions="Center" />
-
-
                     </Border>
                     <!--  Edit button  -->
                     <Button
@@ -53,7 +58,6 @@
                         </Button.Shadow>
                     </Button>
                 </Grid>
-
 
                 <Grid ColumnDefinitions="auto,*" RowDefinitions="*,*,*,*,*,*,*,*">
 
@@ -134,25 +138,48 @@
                         FontSize="Medium"
                         Text="{Binding NextFertilizeTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
 
-                    <Label
+                    <Grid
                         Grid.Row="6"
                         Grid.ColumnSpan="2"
-                        Margin="20,10,0,0"
-                        FontAttributes="Bold"
-                        FontSize="Medium"
-                        HorizontalTextAlignment="Start"
-                        Text="{Binding HoursUntilNextWatering, StringFormat='Next watering in {0:0.00} hours'}"
-                        TextColor="DeepSkyBlue" />
+                        Margin="10,10"
+                        ColumnDefinitions="*,auto"
+                        HorizontalOptions="Start"
+                        RowDefinitions="*,*">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            HorizontalTextAlignment="End"
+                            Text="Next Watering in"
+                            TextColor="DeepSkyBlue" />
+                        <Label
+                            Grid.Column="1"
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            HorizontalTextAlignment="Start"
+                            Text="{Binding HoursUntilNextWatering, Converter={StaticResource HoursToDayHourStringConverter}}"
+                            TextColor="DeepSkyBlue" />
+                        <!--  Text="{Binding HoursUntilNextWatering, StringFormat='Next watering in {0:0.00} hours'}"  -->
 
-                    <Label
-                        Grid.Row="7"
-                        Grid.ColumnSpan="2"
-                        Margin="20,10,0,0"
-                        FontAttributes="Bold"
-                        FontSize="Medium"
-                        HorizontalTextAlignment="Start"
-                        Text="{Binding HoursUntilNextFertilize, StringFormat='Next fertilization in {0:0.00} hours'}"
-                        TextColor="DeepSkyBlue" />
+                        <Label
+                            Grid.Row="1"
+                            Margin="0,0,5,0"
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            HorizontalTextAlignment="End"
+                            Text="Next fertilization in"
+                            TextColor="DeepSkyBlue" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            HorizontalOptions="Start"
+                            HorizontalTextAlignment="Start"
+                            Text="{Binding HoursUntilNextFertilize, Converter={StaticResource HoursToDayHourStringConverter}}"
+                            TextColor="DeepSkyBlue" />
+                        <!--  Text="{Binding HoursUntilNextFertilize, StringFormat='Next fertilization in {0:0.00} hours'}"  -->
+                    </Grid>
                 </Grid>
 
                 <Grid Margin="5,10">
