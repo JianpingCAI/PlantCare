@@ -60,7 +60,7 @@ public partial class PlantViewModelBase : ViewModelBase
 
     public DateTime NextFertilizeTime => LastFertilized.AddHours(FertilizeFrequencyInHours);
 
-    public double HoursUntilNextFertilize => (LastWatered.AddHours(FertilizeFrequencyInHours) - DateTime.Now).TotalHours;
+    public double HoursUntilNextFertilize => (LastFertilized.AddHours(FertilizeFrequencyInHours) - DateTime.Now).TotalHours;
 
     public double _fertilizeState;
 
