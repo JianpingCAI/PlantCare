@@ -125,7 +125,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             if (await _settingsService.GetWateringNotificationSettingAsync())
             {
-                await ScheduleWateringNotifications();
+                await ScheduleNotifications(ReminderType.Watering);
+            }
+            if (await _settingsService.GetFertilizationNotificationSettingAsync())
+            {
+                await ScheduleNotifications(ReminderType.Fertilization);
             }
         }
         catch (Exception ex)
@@ -144,7 +148,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             return;
 
         try
-        {            
+        {
             await _navigationService.GoToAddPlant(Plants.Count + 1);
         }
         catch (Exception ex)
@@ -256,7 +260,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 {
                     _notificationService.CancelAll();
 
-                    await ScheduleWateringNotifications();
+                    await ScheduleNotifications(ReminderType.Watering);
+                    await ScheduleNotifications(ReminderType.Fertilization);
                 }
                 break;
 
@@ -270,7 +275,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    private async Task ScheduleWateringNotifications()
+    private async Task ScheduleNotifications(ReminderType reminderType)
     {
         if (!_notificationService.IsSupported)
             return;
@@ -278,42 +283,59 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         for (int i = 0; i < Plants.Count; i++)
         {
             PlantListItemViewModel plant = Plants[i];
-            await ScheduleWateringNotification(plant, i);
+            await ScheduleNotification(reminderType, plant, i);
         }
     }
 
-    private async Task ScheduleWateringNotification(PlantListItemViewModel plant, int plantIndex)
+    private async Task ScheduleNotification(ReminderType reminderType, PlantListItemViewModel plant, int plantIndex)
     {
         try
         {
             string title = $"Remember to Water Your Plant: {plant.Name}";
 
-            DateTime waterTime = plant.NextWateringTime;
+            ReminderType[] reminderTypes = Enum.GetValues(typeof(ReminderType)).Cast<ReminderType>().ToArray();
+
+            DateTime? scheduledTime = null;
+            switch (reminderType)
+            {
+                case ReminderType.Watering:
+                    scheduledTime = plant.NextWateringTime;
+                    break;
+
+                case ReminderType.Fertilization:
+                    scheduledTime = plant.NextFertilizeTime;
+                    break;
+
+                default:
+                    break;
+            }
+            if (scheduledTime == null)
+                return;
 
             if (await _settingsService.GetDebugSettingAsync())
             {
-                waterTime = DateTime.Now.AddSeconds((plantIndex + 1) * 5);
+                scheduledTime = DateTime.Now.AddSeconds((plantIndex + 1) * 5);
             }
 
             // Data to be returned by the notification
             var list = new List<string>
-            {
-                typeof(NotificationPage).FullName ?? "NotificationPage",
-                plant.Id.GetHashCode().ToString(),
-                plant.Id.ToString(),
-            };
+                {
+                    typeof(NotificationPage).FullName ?? "NotificationPage",
+                    plant.Id.GetHashCode().ToString(),
+                    plant.Id.ToString(),
+                };
             string serializeReturningData = JsonSerializer.Serialize(list);
 
             var notificationRequest = new NotificationRequest
             {
                 NotificationId = plant.Id.GetHashCode(),
                 Title = title,
-                Description = $"Planed Watering Time: {plant.NextWateringTime}",
+                Description = $"Scheduled {reminderType.ToString()} Time: {scheduledTime}",
                 ReturningData = serializeReturningData,
                 Group = AndroidOptions.DefaultGroupId,
                 Schedule =
                 {
-                    NotifyTime = waterTime,
+                    NotifyTime = scheduledTime,
                     //RepeatType = NotificationRepeat.TimeInterval,
                     //NotifyRepeatInterval = TimeSpan.FromSeconds(10),
                 }
