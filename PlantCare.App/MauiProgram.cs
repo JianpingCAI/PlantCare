@@ -151,10 +151,10 @@ public static class MauiProgram
         builder.Services.AddTransient<PlantAddEditView>();
         builder.Services.AddTransient<PlantAddEditViewModel>();
 
-        builder.Services.AddTransient<LoginViewModel>();
+        //builder.Services.AddTransient<LoginViewModel>();
 
-        builder.Services.AddTransient<ReminderView>();
-        builder.Services.AddTransient<ReminderViewModel>();
+        //builder.Services.AddTransient<ReminderView>();
+        //builder.Services.AddTransient<ReminderViewModel>();
 
         //builder.Services.AddTransient<ReminderCalendarView>();
         //builder.Services.AddTransient<ReminderCalendarViewModel>();
