@@ -287,7 +287,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             if (_notificationService.IsSupported)
             {
                 int noticeId = message.PlantId.GetHashCode();
+
                 await CancelExistingNotificationAsync(noticeId);
+                await CancelExistingNotificationAsync(-noticeId);
             }
         }
         catch (Exception ex)
@@ -356,7 +358,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             string title = $"Remember to {actionName} Your Plant: {plant.Name}";
 
-            int notificationId = plant.Id.GetHashCode();
+            int notificationId = GetNotificationId(reminderType, plant.Id);
 
             ReminderType[] reminderTypes = Enum.GetValues(typeof(ReminderType)).Cast<ReminderType>().ToArray();
 
@@ -610,7 +612,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             if (_notificationService.IsSupported)
             {
-                int noticeId = updatePlant.Id.GetHashCode();
+                int noticeId = PlantListOverviewViewModel.GetNotificationId(message.ReminderType, updatePlant.Id);
 
                 await CancelExistingNotificationAsync(noticeId);
 
@@ -621,6 +623,28 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             await _dialogService.Notify("Error", ex.Message);
         }
+    }
+
+    private static int GetNotificationId(ReminderType reminderType, Guid id)
+    {
+        if (id == default)
+        {
+            return 0;
+        }
+
+        int notificationId = id.GetHashCode();
+
+        switch (reminderType)
+        {
+            case ReminderType.Watering:
+                break;
+
+            case ReminderType.Fertilization:
+                notificationId = -notificationId;
+                break;
+        }
+
+        return notificationId;
     }
 
     private async Task CancelExistingNotificationAsync(int noticeId)
