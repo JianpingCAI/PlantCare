@@ -79,10 +79,10 @@ namespace PlantCare.App.ViewModels
                 }
             });
 
-            await UpdateCalendarAndEventList();
+            await UpdateCalendarAndEventListAsync();
         }
 
-        private async Task UpdateCalendarAndEventList()
+        private async Task UpdateCalendarAndEventListAsync()
         {
             //1) events in the calendar view
             List<PlantEvent> allPlantEvents = await GetPlantEventsAsync();
@@ -249,13 +249,15 @@ namespace PlantCare.App.ViewModels
 
             try
             {
+                IsBusy = true;
+
                 bool state = (bool)isChecked;
 
                 if (IsShowUnattendedOnly != state)
                 {
                     IsShowUnattendedOnly = state;
 
-                    await UpdateCalendarAndEventList();
+                    await UpdateCalendarAndEventListAsync();
                 }
             }
             catch (Exception ex)
@@ -429,5 +431,34 @@ namespace PlantCare.App.ViewModels
         }
 
         #endregion Calendar Methods
+
+        #region Refresh plant events
+
+        [ObservableProperty]
+        private bool _isPlantEventRefreshing = false;
+
+        [RelayCommand]
+        public async Task RefreshPlantEvents()
+        {
+            if (IsBusy) return;
+          
+            //IsBusy = true;
+
+            try
+            {
+                await UpdateCalendarAndEventListAsync();
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.Notify("Error", ex.Message);
+            }
+            finally
+            {
+                IsPlantEventRefreshing = false;
+                //IsBusy = false;
+            }
+        }
+
+        #endregion Refresh plant events
     }
 }

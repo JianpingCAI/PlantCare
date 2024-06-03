@@ -113,8 +113,8 @@
                     <CheckBox
                         x:Name="chkUnattended"
                         HorizontalOptions="Start"
-                        IsChecked="True"
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanToReverseConverter}}">
+                        IsChecked="True">
+                        <!--  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanToReverseConverter}}"  -->
                         <CheckBox.Behaviors>
                             <toolkit:EventToCommandBehavior
                                 Command="{Binding SelectUnattendedPlantsCommand}"
@@ -127,10 +127,8 @@
 
                 <!--  Show Calendar  -->
                 <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
-                    <CheckBox
-                        x:Name="chkCalendar"
-                        IsChecked="{Binding IsShowCalendar, Mode=TwoWay}"
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanToReverseConverter}}" />
+                    <CheckBox x:Name="chkCalendar" IsChecked="{Binding IsShowCalendar, Mode=TwoWay}" />
+                    <!--  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanToReverseConverter}}"  -->
                     <Label Margin="0,0,5,0" Text="Show" />
                     <Label
                         Margin="0,0,15,0"
@@ -142,113 +140,117 @@
 
             <!--  Plant Events  -->
             <Grid Grid.Row="1">
-                <CollectionView
-                    x:Name="uiCurrentCollection"
-                    ItemsSource="{Binding PlantEvents}"
-                    SelectedItems="{Binding TickedPlantEvents}"
-                    SelectionChangedCommand="{Binding TickedPlantEventsChangedCommand}"
-                    SelectionMode="Multiple">
-                    <CollectionView.Shadow>
-                        <Shadow
-                            Brush="{AppThemeBinding Light={StaticResource White},
-                                                    Dark={StaticResource Black}}"
-                            Opacity="0.3"
-                            Radius="3" />
-                    </CollectionView.Shadow>
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout
-                            HorizontalItemSpacing="2"
-                            Orientation="Vertical"
-                            Span="{OnIdiom Phone=2,
-                                           Default=6}"
-                            VerticalItemSpacing="2" />
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="vm:PlantEvent">
-                            <Grid>
-                                <SwipeView>
-                                    <SwipeView.LeftItems>
-                                        <SwipeItems>
-                                            <SwipeItem BackgroundColor="LightPink" Text="Todo1" />
-                                            <!--  IconImageSource="delete.png"  -->
 
-                                            <!--
-                                                Command="{Binding Source={x:Reference uiCurrentCollection}, Path=BindingContext.SetWateredCommand}"
-                                                CommandParameter="{Binding Source={x:Reference uiCurrentCollection}, Path=BindingContext.SelectedWateringReminder}"
-                                            -->
-                                            <SwipeItem BackgroundColor="LightPink" Text="Todo2" />
-                                        </SwipeItems>
-                                    </SwipeView.LeftItems>
+                <RefreshView Command="{Binding RefreshPlantEventsCommand}" IsRefreshing="{Binding IsPlantEventRefreshing}">
+                    <CollectionView
+                        x:Name="uiCurrentCollection"
+                        ItemsSource="{Binding PlantEvents}"
+                        SelectedItems="{Binding TickedPlantEvents}"
+                        SelectionChangedCommand="{Binding TickedPlantEventsChangedCommand}"
+                        SelectionMode="Multiple">
+                        <CollectionView.Shadow>
+                            <Shadow
+                                Brush="{AppThemeBinding Light={StaticResource White},
+                                                        Dark={StaticResource Black}}"
+                                Opacity="0.3"
+                                Radius="3" />
+                        </CollectionView.Shadow>
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout
+                                HorizontalItemSpacing="2"
+                                Orientation="Vertical"
+                                Span="{OnIdiom Phone=2,
+                                               Default=6}"
+                                VerticalItemSpacing="2" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:PlantEvent">
+                                <Grid>
+                                    <SwipeView>
+                                        <SwipeView.LeftItems>
+                                            <SwipeItems>
+                                                <SwipeItem BackgroundColor="LightPink" Text="Todo1" />
+                                                <!--  IconImageSource="delete.png"  -->
 
-                                    <Border BackgroundColor="Transparent" HorizontalOptions="Fill">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="10" />
-                                        </Border.StrokeShape>
-                                        <Grid HorizontalOptions="Fill" RowDefinitions="*,auto">
-                                            <!--  photo  -->
-                                            <Border
-                                                BackgroundColor="Transparent"
-                                                HorizontalOptions="Center"
-                                                StrokeThickness="0"
-                                                VerticalOptions="Center">
-                                                <Border.StrokeShape>
-                                                    <RoundRectangle CornerRadius="10" />
-                                                </Border.StrokeShape>
-                                                <Grid>
-                                                    <Image
-                                                        Aspect="AspectFill"
-                                                        HeightRequest="90"
-                                                        HorizontalOptions="Center"
-                                                        Source="{Binding PhotoPath}"
-                                                        WidthRequest="90" />
-                                                    <!--  Name  -->
-                                                    <Label
-                                                        Background="DarkSeaGreen"
-                                                        HorizontalOptions="Fill"
-                                                        HorizontalTextAlignment="Center"
-                                                        Opacity="0.75"
-                                                        Text="{Binding Name}"
-                                                        VerticalOptions="End" />
-                                                </Grid>
-                                            </Border>
-                                            <!--  Selection Tick  -->
-                                            <Label
-                                                FontFamily="MaterialIconsRegular"
-                                                FontSize="20"
-                                                HorizontalOptions="Start"
-                                                IsVisible="{Binding IsSelected}"
-                                                Text="&#xe86c;"
-                                                TextColor="Green"
-                                                VerticalOptions="Start"
-                                                VerticalTextAlignment="Start" />
+                                                <!--
+                                                    Command="{Binding Source={x:Reference uiCurrentCollection}, Path=BindingContext.SetWateredCommand}"
+                                                    CommandParameter="{Binding Source={x:Reference uiCurrentCollection}, Path=BindingContext.SelectedWateringReminder}"
+                                                -->
+                                                <SwipeItem BackgroundColor="LightPink" Text="Todo2" />
+                                            </SwipeItems>
+                                        </SwipeView.LeftItems>
 
-                                            <!--  Reminder Time  -->
-                                            <HorizontalStackLayout Grid.Row="1">
-                                                <Label
-                                                    Grid.Column="2"
-                                                    Margin="0,5,0,0"
-                                                    FontFamily="MaterialIconsRegular"
-                                                    FontSize="24"
-                                                    HorizontalOptions="End"
-                                                    HorizontalTextAlignment="End"
-                                                    Text="{Binding ReminderType, Converter={StaticResource ReminderTypeIconConverter}}"
-                                                    TextColor="{Binding Color}"
-                                                    VerticalOptions="Center"
-                                                    VerticalTextAlignment="End" />
-                                                <Label
-                                                    FontAttributes="Bold"
+                                        <Border BackgroundColor="Transparent" HorizontalOptions="Fill">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <Grid HorizontalOptions="Fill" RowDefinitions="*,auto">
+                                                <!--  photo  -->
+                                                <Border
+                                                    BackgroundColor="Transparent"
                                                     HorizontalOptions="Center"
-                                                    HorizontalTextAlignment="Center"
-                                                    Text="{Binding ScheduledTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
-                                            </HorizontalStackLayout>
-                                            <!--  {0:MM/dd/yyyy&#10;HH:mm}  -->
-                                        </Grid>
-                                    </Border>
-                                </SwipeView>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                                                    StrokeThickness="0"
+                                                    VerticalOptions="Center">
+                                                    <Border.StrokeShape>
+                                                        <RoundRectangle CornerRadius="10" />
+                                                    </Border.StrokeShape>
+                                                    <Grid>
+                                                        <Image
+                                                            Aspect="AspectFill"
+                                                            HeightRequest="90"
+                                                            HorizontalOptions="Center"
+                                                            Source="{Binding PhotoPath}"
+                                                            WidthRequest="90" />
+                                                        <!--  Name  -->
+                                                        <Label
+                                                            Background="DarkSeaGreen"
+                                                            HorizontalOptions="Fill"
+                                                            HorizontalTextAlignment="Center"
+                                                            Opacity="0.75"
+                                                            Text="{Binding Name}"
+                                                            VerticalOptions="End" />
+                                                    </Grid>
+                                                </Border>
+                                                <!--  Selection Tick  -->
+                                                <Label
+                                                    FontFamily="MaterialIconsRegular"
+                                                    FontSize="20"
+                                                    HorizontalOptions="Start"
+                                                    IsVisible="{Binding IsSelected}"
+                                                    Text="&#xe86c;"
+                                                    TextColor="Green"
+                                                    VerticalOptions="Start"
+                                                    VerticalTextAlignment="Start" />
+
+                                                <!--  Reminder Time  -->
+                                                <HorizontalStackLayout Grid.Row="1">
+                                                    <Label
+                                                        Grid.Column="2"
+                                                        Margin="0,5,0,0"
+                                                        FontFamily="MaterialIconsRegular"
+                                                        FontSize="24"
+                                                        HorizontalOptions="End"
+                                                        HorizontalTextAlignment="End"
+                                                        Text="{Binding ReminderType, Converter={StaticResource ReminderTypeIconConverter}}"
+                                                        TextColor="{Binding Color}"
+                                                        VerticalOptions="Center"
+                                                        VerticalTextAlignment="End" />
+                                                    <Label
+                                                        FontAttributes="Bold"
+                                                        HorizontalOptions="Center"
+                                                        HorizontalTextAlignment="Center"
+                                                        Text="{Binding ScheduledTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+                                                </HorizontalStackLayout>
+                                                <!--  {0:MM/dd/yyyy&#10;HH:mm}  -->
+                                            </Grid>
+                                        </Border>
+                                    </SwipeView>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </RefreshView>
+
                 <!--  Floating 'Done' button  -->
                 <Button
                     Margin="0,0,20,20"
@@ -402,7 +404,6 @@
                         Text="&#xead0;"
                         VerticalOptions="Start"
                         WidthRequest="80" />
-
                 </Grid>
             </toolkit:Expander>
         </Grid>
