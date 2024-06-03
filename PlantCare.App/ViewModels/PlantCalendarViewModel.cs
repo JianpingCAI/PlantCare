@@ -94,6 +94,8 @@ namespace PlantCare.App.ViewModels
             ReminderCalendar!.Events.ReplaceRange(allPlantEvents);
 
             UpdatePlantEventsOnSelectedCalendarDates();
+
+            TickedPlantEvents.Clear();
         }
 
         private void UpdatePlantEventsOnSelectedCalendarDates()
@@ -379,6 +381,8 @@ namespace PlantCare.App.ViewModels
 
                             PlantEvents.Remove(plantEvent);
                         }
+
+                        TickedPlantEvents.Remove(item);
                     }
                 }
                 IsBusy = false;

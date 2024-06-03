@@ -490,10 +490,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 //logMessage.AppendLine($"{Environment.NewLine}Tapped {DateTime.Now}");
                 if (e.Request is null)
                 {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        _dialogService.Notify(e.Request.Title, $"No Request", "OK");
-                    });
+                    //MainThread.BeginInvokeOnMainThread(() =>
+                    //{
+                    //    _dialogService.Notify(e.Request.Title, $"No Request", "OK");
+                    //});
                     return;
                 }
 
