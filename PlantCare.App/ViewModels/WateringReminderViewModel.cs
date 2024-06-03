@@ -8,10 +8,38 @@ namespace PlantCare.App.ViewModels
         Fertilization
     }
 
+    public static class ReminderTypeExtension
+    {
+        public static string GetActionName(this ReminderType reminderType)
+        {
+            string actionName = string.Empty;
+            switch (reminderType)
+            {
+                case ReminderType.Watering:
+                    {
+                        actionName = "Water";
+                    }
+                    break;
+
+                case ReminderType.Fertilization:
+                    {
+                        actionName = "Fertilize";
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+            return actionName;
+        }
+    }
+
     public partial class ReminderItemViewModel(ReminderType reminderType, Guid plantId) : ObservableObject
     {
         private readonly ReminderType _reminderType = reminderType;
         private readonly Guid _plantId = plantId;
+
         [ObservableProperty]
         private bool _isSelected = false;
 

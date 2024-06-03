@@ -3,9 +3,9 @@ using PlantCare.App.ViewModels;
 
 namespace PlantCare.App.Messaging
 {
-    internal class ReminderItemChangedMessage
+    internal class PlantEventStatusChangedMessage
     {
-        public ReminderItemChangedMessage()
+        public PlantEventStatusChangedMessage()
         {
         }
 

@@ -187,7 +187,7 @@ public partial class ReminderViewModel(IDialogService dialogService, IPlantServi
                     toRemovedSelections.Add(item);
                     Reminders.Remove(reminder);
 
-                    WeakReferenceMessenger.Default.Send<ReminderItemChangedMessage>(new ReminderItemChangedMessage
+                    WeakReferenceMessenger.Default.Send<PlantEventStatusChangedMessage>(new PlantEventStatusChangedMessage
                     {
                         PlantId = reminder.PlantId,
                         UpdatedTime = updateTime,

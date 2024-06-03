@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using PlantCare.App.Services;
 
 using System.Collections.ObjectModel;
-using CommunityToolkit.Maui.Core.Extensions;
 using PlantCare.App.ViewModels.Base;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
@@ -21,7 +20,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     IRecipient<PlantAddedOrChangedMessage>,
     IRecipient<PlantDeletedMessage>,
     IRecipient<IsNotificationEnabledMessage>,
-    IRecipient<ReminderItemChangedMessage>
+    IRecipient<PlantEventStatusChangedMessage>
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
@@ -40,7 +39,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         WeakReferenceMessenger.Default.Register<PlantAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantDeletedMessage>(this);
-        WeakReferenceMessenger.Default.Register<ReminderItemChangedMessage>(this);
+        WeakReferenceMessenger.Default.Register<PlantEventStatusChangedMessage>(this);
 
         if (_notificationService.IsSupported)
         {
@@ -140,13 +139,18 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             _allPlantViewModelsCache.AddRange(Plants);
 
-            if (await _settingsService.GetWateringNotificationSettingAsync())
+            if (_notificationService.IsSupported)
             {
-                await ScheduleNotifications(ReminderType.Watering);
-            }
-            if (await _settingsService.GetFertilizationNotificationSettingAsync())
-            {
-                await ScheduleNotifications(ReminderType.Fertilization);
+                _notificationService.Cancel();
+
+                if (await _settingsService.GetWateringNotificationSettingAsync())
+                {
+                    await ScheduleNotifications(ReminderType.Watering);
+                }
+                if (await _settingsService.GetFertilizationNotificationSettingAsync())
+                {
+                    await ScheduleNotifications(ReminderType.Fertilization);
+                }
             }
         }
         catch (Exception ex)
@@ -253,6 +257,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     #endregion Search methods
 
+    /// <summary>
+    /// TODO: need performance optimization
+    /// </summary>
+    /// <param name="message"></param>
     async void IRecipient<PlantAddedOrChangedMessage>.Receive(PlantAddedOrChangedMessage message)
     {
         try
@@ -275,6 +283,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 Plants.Remove(deletedPlant);
             }
+
+            if (_notificationService.IsSupported)
+            {
+                int noticeId = message.PlantId.GetHashCode();
+                await CancelExistingNotificationAsync(noticeId);
+            }
         }
         catch (Exception ex)
         {
@@ -292,21 +306,19 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         if (!_notificationService.IsSupported)
             return;
 
-        string actionName = string.Empty;
+        string actionName = reminderType.GetActionName();
 
         switch (reminderType)
         {
             case ReminderType.Watering:
                 {
                     _wateringNotificationIds.Clear();
-                    actionName = "Water";
                 }
                 break;
 
             case ReminderType.Fertilization:
                 {
                     _fertilizationNotificationIds.Clear();
-                    actionName = "Fertilize";
                 }
                 break;
 
@@ -317,7 +329,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         for (int i = 0; i < Plants.Count; i++)
         {
             PlantListItemViewModel plant = Plants[i];
-            int notificationId = await ScheduleNotification(reminderType, actionName, plant, i);
+            int notificationId = await ScheduleNotificationAsync(reminderType, actionName, plant, i);
 
             if (notificationId > 0)
             {
@@ -338,7 +350,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    private async Task<int> ScheduleNotification(ReminderType reminderType, string actionName, PlantListItemViewModel plant, int plantIndex)
+    private async Task<int> ScheduleNotificationAsync(ReminderType reminderType, string actionName, PlantListItemViewModel plant, int plantIndex)
     {
         try
         {
@@ -362,7 +374,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 default:
                     break;
             }
-            if (scheduledTime == null)
+
+            if (scheduledTime == null || scheduledTime < DateTime.Now)
                 return 0;
 
             if (await _settingsService.GetDebugSettingAsync())
@@ -414,52 +427,29 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     async void IRecipient<IsNotificationEnabledMessage>.Receive(IsNotificationEnabledMessage message)
     {
+        if (!_notificationService.IsSupported)
+        {
+            return;
+        }
+
+        _notificationService.CancelAll();
+
         switch (message.ReminderType)
         {
             case ReminderType.Watering:
                 {
-                    switch (message.IsNotificationEnabled)
+                    if (message.IsNotificationEnabled)
                     {
-                        case true:
-                            {
-                                _notificationService.Cancel([.. _wateringNotificationIds]);
-
-                                await ScheduleNotifications(ReminderType.Watering);
-                            }
-                            break;
-
-                        case false:
-                            {
-                                _notificationService.Cancel([.. _wateringNotificationIds]);
-                                _wateringNotificationIds.Clear();
-                            }
-                            break;
-
-                        default:
+                        await ScheduleNotifications(ReminderType.Watering);
                     }
                 }
                 break;
 
             case ReminderType.Fertilization:
                 {
-                    switch (message.IsNotificationEnabled)
+                    if (message.IsNotificationEnabled)
                     {
-                        case true:
-                            {
-                                _notificationService.Cancel([.. _fertilizationNotificationIds]);
-
-                                await ScheduleNotifications(ReminderType.Watering);
-                            }
-                            break;
-
-                        case false:
-                            {
-                                _notificationService.Cancel([.. _fertilizationNotificationIds]);
-                                _fertilizationNotificationIds.Clear();
-                            }
-                            break;
-
-                        default:
+                        await ScheduleNotifications(ReminderType.Fertilization);
                     }
                 }
                 break;
@@ -581,21 +571,23 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     /// </summary>
     /// <param name="message"></param>
     /// <exception cref="NotImplementedException"></exception>
-    async void IRecipient<ReminderItemChangedMessage>.Receive(ReminderItemChangedMessage message)
+    async void IRecipient<PlantEventStatusChangedMessage>.Receive(PlantEventStatusChangedMessage message)
     {
-        if (null == message)
+        try
         {
-            return;
-        }
+            if (null == message)
+            {
+                return;
+            }
 
-        PlantListItemViewModel? updatePlant = Plants.FirstOrDefault(x => x.Id == message.PlantId);
+            PlantListItemViewModel? updatePlant = Plants.FirstOrDefault(x => x.Id == message.PlantId);
+            if (updatePlant is null)
+                return;
 
-        Plant? plantFromDB = await _plantService.GetPlantByIdAsync(message.PlantId);
-        if (null == plantFromDB)
-            return;
+            Plant? plantFromDB = await _plantService.GetPlantByIdAsync(message.PlantId);
+            if (null == plantFromDB)
+                return;
 
-        if (updatePlant != null)
-        {
             switch (message.ReminderType)
             {
                 case ReminderType.Watering:
@@ -615,6 +607,41 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 default:
                     break;
             }
+
+            if (_notificationService.IsSupported)
+            {
+                int noticeId = updatePlant.Id.GetHashCode();
+
+                await CancelExistingNotificationAsync(noticeId);
+
+                await ScheduleNotificationAsync(message.ReminderType, message.ReminderType.GetActionName(), updatePlant, 0);
+            }
         }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify("Error", ex.Message);
+        }
+    }
+
+    private async Task CancelExistingNotificationAsync(int noticeId)
+    {
+        List<int> notificationIds = await GetPendingNotificationIdsAsync();
+        if (notificationIds.Contains(noticeId))
+        {
+            _notificationService.Cancel([noticeId]);
+        }
+    }
+
+    private async Task<List<int>> GetPendingNotificationIdsAsync()
+    {
+        if (_notificationService.IsSupported)
+        {
+            List<int> notificationIds = (await _notificationService.GetPendingNotificationList())
+                .Select(x => x.NotificationId).ToList();
+
+            return notificationIds;
+        }
+
+        return [];
     }
 }
