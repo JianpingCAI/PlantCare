@@ -7,7 +7,7 @@
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="My Plants"
+    Title="{Binding Title}"
     x:DataType="vm:PlantListOverviewViewModel">
     <ContentPage.Resources>
         <!--  Style used by the CollectionView selection  -->

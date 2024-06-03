@@ -52,6 +52,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     }
 
     [ObservableProperty]
+    private string _title = "My Plants";
+
+    [ObservableProperty]
     private ObservableCollection<PlantListItemViewModel> _plants = [];
 
     [ObservableProperty]
@@ -135,6 +138,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             foreach (Plant plant in _plantListDatabase)
             {
                 Plants.Add(MapToViewModel(plant));
+            }
+
+            if (Plants.Count > 0)
+            {
+                Title = $"My Plants ({Plants.Count})";
             }
 
             _allPlantViewModelsCache.AddRange(Plants);
