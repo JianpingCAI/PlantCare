@@ -8,7 +8,7 @@ public interface IReminderRepository
 
     Task<Reminder?> GetByIdAsync(Guid id);
 
-    Task AddAsync(Reminder reminder);
+    Task<Reminder> AddAsync(Reminder reminder);
 
     Task<bool> UpdateAsync(Reminder reminder);
 

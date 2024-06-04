@@ -146,7 +146,7 @@
             FontFamily="MaterialIconsRegular"
             FontSize="30"
             HorizontalOptions="End"
-            Opacity="0.95"
+            Opacity="0.9"
             Text="&#xe147;"
             VerticalOptions="End">
             <Button.Shadow>

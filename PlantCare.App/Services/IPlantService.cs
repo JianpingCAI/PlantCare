@@ -5,7 +5,7 @@ namespace PlantCare.App.Services;
 
 public interface IPlantService
 {
-    Task CreatePlantAsync(PlantDbModel plant);
+    Task<Guid> CreatePlantAsync(PlantDbModel plant);
 
     Task DeletePlantAsync(Guid plantId);
 

@@ -36,8 +36,15 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
     [RelayCommand]
     private async Task DeletePlant()
     {
+        if (IsBusy)
+        {
+            return;
+        }
+
         try
         {
+            IsBusy = true;
+
             bool isConfirmed = await _dialogService.Ask("Confirm", $"Are you sure to delete {Name}?");
 
             if (!isConfirmed)
@@ -54,6 +61,10 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         catch (Exception ex)
         {
             await _dialogService.Notify("Error", ex.Message);
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 

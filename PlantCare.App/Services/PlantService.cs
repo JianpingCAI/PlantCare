@@ -26,9 +26,10 @@ public class PlantService(IPlantRepository plantRepository, IMapper mapper) : IP
         return _mapper.Map<Plant>(dbModel);
     }
 
-    public async Task CreatePlantAsync(PlantDbModel plant)
+    public async Task<Guid> CreatePlantAsync(PlantDbModel plant)
     {
-        await _plantRepository.AddAsync(plant);
+        PlantDbModel plantDB = await _plantRepository.AddAsync(plant);
+        return plantDB.Id;
     }
 
     public async Task<bool> UpdatePlantAsync(PlantDbModel plant)

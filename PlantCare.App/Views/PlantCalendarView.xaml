@@ -260,7 +260,7 @@
                     FontSize="30"
                     HorizontalOptions="End"
                     IsEnabled="{Binding IsSetRemindersDoneEnabled}"
-                    Opacity="0.95"
+                    Opacity="0.9"
                     Text="&#xe877;"
                     VerticalOptions="End">
                     <Button.Shadow>

@@ -4,7 +4,7 @@ namespace PlantCare.Data.Repositories;
 
 public interface IUserRepository
 {
-    Task AddAsync(User user);
+    Task<User> AddAsync(User user);
 
     Task<User> FindByEmailAsync(string email);
 

@@ -10,8 +10,6 @@ using PlantCare.Data.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Linq;
 
 namespace PlantCare.App.ViewModels
 {
@@ -164,18 +162,18 @@ namespace PlantCare.App.ViewModels
                 PlantDbModel plant = MapToPlantModel();
 
                 // Add/Create a plant
-                if (Id == Guid.Empty)
+                if (Id == default)
                 {
                     try
                     {
-                        await _plantService.CreatePlantAsync(plant);
+                        Id = await _plantService.CreatePlantAsync(plant);
                     }
                     catch (Exception)
                     {
                         await _dialogService.Notify("Failed", "Adding the plant failed.");
                     }
 
-                    WeakReferenceMessenger.Default.Send(new PlantAddedOrChangedMessage());
+                    WeakReferenceMessenger.Default.Send(new PlantAddedMessage(Id));
 
                     await _dialogService.Notify("Success", "The plant is added.");
                     await _navigationService.GoToPlantsOverview();
@@ -199,7 +197,7 @@ namespace PlantCare.App.ViewModels
                     }
                     else
                     {
-                        WeakReferenceMessenger.Default.Send(new PlantAddedOrChangedMessage { PlantId = Id });
+                        WeakReferenceMessenger.Default.Send(new PlantModifiedMessage(Id));
                         await _dialogService.Notify("Success", "The plant is updated.");
                         //await _navigationService.GoBack();
                         await _navigationService.GoToPlantDetail(plant.Id);

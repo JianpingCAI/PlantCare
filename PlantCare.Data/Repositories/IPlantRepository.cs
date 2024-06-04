@@ -8,7 +8,7 @@ public interface IPlantRepository
 
     Task<PlantDbModel?> GetByIdAsync(Guid id);
 
-    Task AddAsync(PlantDbModel plant);
+    Task<PlantDbModel> AddAsync(PlantDbModel plant);
 
     Task<bool> UpdateAsync(PlantDbModel plant);
 
