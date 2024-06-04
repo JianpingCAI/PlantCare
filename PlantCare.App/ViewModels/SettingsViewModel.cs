@@ -19,15 +19,17 @@ public partial class SettingsViewModel(ISettingsService settingsService, IDialog
     [ObservableProperty]
     private bool _isFertilizationNotificationEnabled = true;
 
-    [ObservableProperty]
-    private bool _isDebugModeEnabled = true;
+    //[ObservableProperty]
+    //private bool _isDebugModeEnabled = false;
 
     [ObservableProperty]
     private AppTheme _selectedTheme = AppTheme.Unspecified;
 
     private bool _isSettingsLoaded = false;
 
+#pragma warning disable CS8826 // Partial method declarations have signature differences.
     partial void OnIsWateringNotificationEnabledChanged(bool isEnabled)
+#pragma warning restore CS8826 // Partial method declarations have signature differences.
     {
         WeakReferenceMessenger.Default.Send(new IsNotificationEnabledMessage
         {
@@ -38,7 +40,9 @@ public partial class SettingsViewModel(ISettingsService settingsService, IDialog
         _settingsService.SaveWateringNotificationSettingAsync(isEnabled);
     }
 
+#pragma warning disable CS8826 // Partial method declarations have signature differences.
     partial void OnIsFertilizationNotificationEnabledChanged(bool isEnabled)
+#pragma warning restore CS8826 // Partial method declarations have signature differences.
     {
         WeakReferenceMessenger.Default.Send(new IsNotificationEnabledMessage
         {
@@ -49,10 +53,10 @@ public partial class SettingsViewModel(ISettingsService settingsService, IDialog
         _settingsService.SaveFertilizationNotificationSettingAsync(isEnabled);
     }
 
-    partial void OnIsDebugModeEnabledChanged(bool isEnabled)
-    {
-        _settingsService.SaveDebugSettingAsync(isEnabled);
-    }
+    //partial void OnIsDebugModeEnabledChanged(bool isEnabled)
+    //{
+    //    _settingsService.SaveDebugSettingAsync(isEnabled);
+    //}
 
     partial void OnSelectedThemeChanged(AppTheme value)
     {
@@ -87,7 +91,7 @@ public partial class SettingsViewModel(ISettingsService settingsService, IDialog
 
             SelectedTheme = await _settingsService.GetThemeSettingAsync();
 
-            IsDebugModeEnabled = await _settingsService.GetDebugSettingAsync();
+            //IsDebugModeEnabled = await _settingsService.GetDebugSettingAsync();
         }
         catch (Exception ex)
         {

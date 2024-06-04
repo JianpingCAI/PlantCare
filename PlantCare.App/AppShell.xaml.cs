@@ -13,9 +13,7 @@ namespace PlantCare.App
             Routing.RegisterRoute("plant", typeof(PlantDetailView));
             Routing.RegisterRoute("edit", typeof(PlantAddEditView));
             Routing.RegisterRoute("add", typeof(PlantAddEditView));
-            Routing.RegisterRoute("reminders", typeof(ReminderView));
 
-            //Routing.RegisterRoute("calendar", typeof(ReminderCalendarView));
             Routing.RegisterRoute("calendar", typeof(PlantCalendarView));
         }
 

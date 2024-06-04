@@ -106,6 +106,7 @@
             </Grid>
 
             <!--  Debugging Mode  -->
+            <!--
             <Grid ColumnDefinitions="2*,1*">
                 <Label
                     HorizontalTextAlignment="Start"
@@ -116,7 +117,7 @@
                     HorizontalOptions="Start"
                     IsToggled="{Binding IsDebugModeEnabled, Mode=TwoWay}"
                     VerticalOptions="End" />
-            </Grid>
+            </Grid>-->
 
             <BoxView Margin="0,5" class="HRule" />
 

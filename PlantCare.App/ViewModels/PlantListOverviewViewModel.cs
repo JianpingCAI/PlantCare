@@ -331,7 +331,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         for (int i = 0; i < Plants.Count; i++)
         {
             PlantListItemViewModel plant = Plants[i];
-            int notificationId = await ScheduleNotificationAsync(reminderType, actionName, plant, i);
+            int notificationId = await ScheduleNotificationAsync(reminderType, actionName, plant);
 
             if (notificationId > 0)
             {
@@ -352,7 +352,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    private async Task<int> ScheduleNotificationAsync(ReminderType reminderType, string actionName, PlantListItemViewModel plant, int plantIndex)
+    private async Task<int> ScheduleNotificationAsync(ReminderType reminderType, string actionName, PlantListItemViewModel plant)
     {
         try
         {
@@ -379,11 +379,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             if (scheduledTime == null || scheduledTime < DateTime.Now)
                 return 0;
-
-            if (await _settingsService.GetDebugSettingAsync())
-            {
-                scheduledTime = DateTime.Now.AddSeconds((plantIndex + 1) * 5);
-            }
 
             // Data to be returned by the notification
             var list = new List<string>
@@ -617,7 +612,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 await CancelPendingNotificationAsync(noticeId);
                 await CancelPendingNotificationAsync(-noticeId);
 
-                await ScheduleNotificationAsync(message.ReminderType, message.ReminderType.GetActionName(), updatePlant, 0);
+                await ScheduleNotificationAsync(message.ReminderType, message.ReminderType.GetActionName(), updatePlant);
             }
         }
         catch (Exception ex)

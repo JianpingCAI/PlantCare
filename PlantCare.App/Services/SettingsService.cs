@@ -71,7 +71,7 @@ public class SettingsService : ISettingsService
         string? value = await SecureStorage.GetAsync(Consts.IsDebugMode);
         if (value is null)
         {
-            return true;
+            return false;
         }
 
         // Assume settings are stored with a key-value pair locally

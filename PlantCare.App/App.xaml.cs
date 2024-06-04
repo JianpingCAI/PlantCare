@@ -28,16 +28,15 @@ namespace PlantCare.App
             RegisterNavigationEventHandlers();
         }
 
-        private void LoadTheme()
+        private static void LoadTheme()
         {
-            AppTheme appTheme = AppTheme.Dark;
+            AppTheme appTheme = AppTheme.Unspecified;
 
+            if (Current is null)
+                return;
             string? strTheme = SecureStorage.GetAsync("AppTheme").Result;
             if (string.IsNullOrEmpty(strTheme))
-            {
-                App.Current.UserAppTheme = AppTheme.Unspecified;
                 return;
-            }
 
             try
             {
@@ -47,10 +46,10 @@ namespace PlantCare.App
             {
             }
 
-            App.Current.UserAppTheme = appTheme;
+            Current.UserAppTheme = appTheme;
         }
 
-        private void RegisterNavigationEventHandlers()
+        private static void RegisterNavigationEventHandlers()
         {
             if (Shell.Current != null)
             {

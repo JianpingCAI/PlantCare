@@ -13,24 +13,52 @@ using System.Diagnostics;
 using XCalendar.Core.Collections;
 using XCalendar.Core.Enums;
 using XCalendar.Core.Extensions;
+using XCalendar.Core.Interfaces;
 using XCalendar.Core.Models;
-using static Microsoft.Maui.ApplicationModel.Permissions;
+using XCalendar.Maui.Models;
 
 namespace PlantCare.App.ViewModels
 {
-    public partial class PlantCalendarViewModel : ViewModelBase
+    public class PlantEvent : ColoredEvent
     {
-        private readonly IPlantService _plantService;
-        private readonly IDialogService _dialogService;
+        public Guid PlantId { get; set; }
+        public ReminderType ReminderType { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string PhotoPath { get; set; } = string.Empty;
+
+        private bool _isSelected = false;
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(IsSelected));
+                }
+            }
+        }
+
+        public DateTime ScheduledTime { get; set; } = default;
+    }
+
+    public class PlantEventDay<TEvent> : CalendarDay<TEvent> where TEvent : IEvent
+    {
+    }
+
+    public class PlantEventDay : PlantEventDay<PlantEvent>
+    {
+    }
+
+    public partial class PlantCalendarViewModel(IPlantService plantService, IDialogService dialogService) : ViewModelBase
+    {
+        private readonly IPlantService _plantService = plantService;
+        private readonly IDialogService _dialogService = dialogService;
 
         [ObservableProperty]
         private Calendar<PlantEventDay, PlantEvent>? _reminderCalendar = null;
-
-        public PlantCalendarViewModel(IPlantService plantService, IDialogService dialogService)
-        {
-            _plantService = plantService;
-            _dialogService = dialogService;
-        }
 
         public bool IsShowUnattendedOnly { get; set; } = true;
 
@@ -108,9 +136,9 @@ namespace PlantCare.App.ViewModels
             if (ReminderCalendar.SelectedDates.Count > 0)
             {
                 List<PlantEvent> plantEventsOnSelectedDates
-                    = ReminderCalendar!.Events
+                    = [.. ReminderCalendar!.Events
                      .Where(pEvt => ReminderCalendar.SelectedDates.Any(selectedDate => selectedDate.Date == pEvt.StartDate.AddDays(1).Date))
-                     .OrderByDescending(pEvt => pEvt.StartDate).ToList();
+                     .OrderByDescending(pEvt => pEvt.StartDate)];
 
                 PlantEvents.ReplaceRange(plantEventsOnSelectedDates);
             }
@@ -129,8 +157,6 @@ namespace PlantCare.App.ViewModels
             List<Plant> _allPlantsCache = await _plantService.GetAllPlantsAsync();
 
             DateTime nowTime = DateTime.Now;
-
-            ProgressToColorConverter colorConverter = new();
 
             List<Plant> filteredPlants = [];
 
@@ -166,7 +192,7 @@ namespace PlantCare.App.ViewModels
                             PhotoPath = plant.PhotoPath,
                             StartDate = expectedWaterTime.AddDays(-1), // a trick needed here to use XCalendar
                             EndDate = expectedWaterTime,
-                            Color = colorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime), null, null, null) as Color ?? Colors.Red,
+                            Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime)),
 
                             ScheduledTime = expectedWaterTime,
                             //IsOverdue = expectedWaterTime <= DateTime.Now
@@ -185,7 +211,7 @@ namespace PlantCare.App.ViewModels
                         PhotoPath = plant.PhotoPath,
                         StartDate = expectedWaterTime.AddDays(-1), // a trick needed here to use XCalendar
                         EndDate = expectedWaterTime,
-                        Color = colorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime), null, null, null) as Color ?? Colors.Red,
+                        Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime)),
 
                         ScheduledTime = expectedWaterTime,
                         //IsOverdue = expectedWaterTime <= DateTime.Now
@@ -207,7 +233,7 @@ namespace PlantCare.App.ViewModels
                             PhotoPath = plant.PhotoPath,
                             StartDate = fertilizationTime.AddDays(-1),
                             EndDate = fertilizationTime,
-                            Color = colorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime), null, null, null) as Color ?? Colors.Red,
+                            Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime)),
 
                             ScheduledTime = fertilizationTime,
                             //IsOverdue = fertilizationTime <= DateTime.Now
@@ -226,7 +252,7 @@ namespace PlantCare.App.ViewModels
                         PhotoPath = plant.PhotoPath,
                         StartDate = fertilizationTime.AddDays(-1),
                         EndDate = fertilizationTime,
-                        Color = colorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime), null, null, null) as Color ?? Colors.Red,
+                        Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime)),
 
                         ScheduledTime = fertilizationTime,
                         //IsOverdue = fertilizationTime <= DateTime.Now
@@ -418,6 +444,11 @@ namespace PlantCare.App.ViewModels
         [RelayCommand]
         public void NavigateCalendar(int amount)
         {
+            if (ReminderCalendar is null)
+            {
+                return;
+            }
+
             if (ReminderCalendar.NavigatedDate.TryAddMonths(amount, out DateTime targetDate))
             {
                 ReminderCalendar.Navigate(targetDate - ReminderCalendar.NavigatedDate);
@@ -445,7 +476,7 @@ namespace PlantCare.App.ViewModels
         public async Task RefreshPlantEvents()
         {
             if (IsBusy) return;
-          
+
             //IsBusy = true;
 
             try

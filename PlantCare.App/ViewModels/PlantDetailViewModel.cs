@@ -71,12 +71,12 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
 
     public override async Task LoadDataWhenViewAppearingAsync()
     {
-        await GetPlantDetailAsync(Id);
+        await LoadPlantDetailAsync(Id);
     }
 
-    private async Task GetPlantDetailAsync(Guid plantId)
+    private async Task LoadPlantDetailAsync(Guid plantId)
     {
-        Plant plant = await _plantService.GetPlantByIdAsync(plantId);
+        Plant? plant = await _plantService.GetPlantByIdAsync(plantId);
         if (plant is null)
         {
             return;
@@ -92,6 +92,11 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
 
     private void MapPlantData(Plant plant)
     {
+        if (plant is null)
+        {
+            return;
+        }
+
         Id = plant.Id;
         Species = plant.Species;
         Name = plant.Name;

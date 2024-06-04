@@ -10,21 +10,25 @@ public class ProgressToColorConverter : IValueConverter
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is double progress)
-        {
-            if (progress < 0.01)
-                return Colors.Red;
-            else if (progress <= _oneDay)
-                return Colors.Orange;
-            else if (progress < _threeDays)
-                return Colors.Yellow;
-            else
-                return Colors.DeepSkyBlue;
-        }
+            return Convert(progress);
+
         return Colors.Transparent;
     }
 
     object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
+    }
+
+    public static Color Convert(double progress)
+    {
+        if (progress < 0.01)
+            return Colors.Red;
+        else if (progress <= _oneDay)
+            return Colors.Orange;
+        else if (progress < _threeDays)
+            return Colors.Yellow;
+        else
+            return Colors.DeepSkyBlue;
     }
 }
