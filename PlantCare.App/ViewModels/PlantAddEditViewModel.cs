@@ -34,7 +34,7 @@ namespace PlantCare.App.ViewModels
 
         [ObservableProperty]
         [Required]
-        [MinLength(3)]
+        [MinLength(1)]
         [MaxLength(50)]
         [NotifyDataErrorInfo]
         private string _name = "Plant";
@@ -61,21 +61,16 @@ namespace PlantCare.App.ViewModels
         [ObservableProperty]
         [Required]
         [Range(0, 365)]
-        //[NotifyPropertyChangedFor(nameof(NextWateringTime))]
         [NotifyPropertyChangedFor(nameof(WateringFrequencyInHours))]
         private int _wateringFrequencyDays = 3;
 
         [ObservableProperty]
         [Required]
         [Range(0, 24)]
-        //[NotifyPropertyChangedFor(nameof(NextWateringTime))]
         [NotifyPropertyChangedFor(nameof(WateringFrequencyInHours))]
         private int _wateringFrequencyHours = 0;
 
         public int WateringFrequencyInHours => 24 * WateringFrequencyDays + WateringFrequencyHours;
-
-        //public DateTime NextWateringTime => LastWatered.AddDays(WateringFrequencyDays).AddHours(WateringFrequencyHours);
-
         #endregion Watering
 
         #region Fertilization

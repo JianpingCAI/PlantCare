@@ -287,17 +287,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             }
 
             PlantListItemViewModel newPlantVM = MapToViewModel(plantDB);
-
-            int i = 0;
-            for (i = 0; i < Plants.Count; ++i)
-            {
-                // greater
-                if (newPlantVM.Name.CompareTo(Plants[i].Name) <= 0)
-                {
-                    break;
-                }
-            }
-            Plants.Insert(i, newPlantVM);
+            InsertPlant(newPlantVM);
 
             _allPlantViewModelsCache.Add(newPlantVM);
             _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
@@ -312,6 +302,20 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             await _dialogService.Notify("Error", ex.Message);
         }
+    }
+
+    private void InsertPlant(PlantListItemViewModel newPlantVM)
+    {
+        int i = 0;
+        for (i = 0; i < Plants.Count; ++i)
+        {
+            // greater
+            if (newPlantVM.Name.CompareTo(Plants[i].Name) <= 0)
+            {
+                break;
+            }
+        }
+        Plants.Insert(i, newPlantVM);
     }
 
     async void IRecipient<PlantModifiedMessage>.Receive(PlantModifiedMessage message)
@@ -329,7 +333,17 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             Plant? plantDB = await _plantService.GetPlantByIdAsync(message.PlantId);
             if (plantDB is null) { return; }
 
-            ModifyPlantViewModel(plantVM, plantDB);
+            string originalName = plantVM.Name;
+
+            UpdatePlantViewModel(plantVM, plantDB);
+
+            // Reorder needed if name changed
+            if (originalName.CompareTo(plantVM.Name) != 0)
+            {
+                Plants.Remove(plantVM);
+
+                InsertPlant(plantVM);
+            }
 
             await CancelPendingNotificationAsync(plantVM.Id);
             await ScheduleNotificationAsync(ReminderType.Watering, ReminderType.Watering.GetActionName(), plantVM);
@@ -610,12 +624,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private static PlantListItemViewModel MapToViewModel(Plant plant)
     {
         PlantListItemViewModel plantVM = new();
-        ModifyPlantViewModel(plantVM, plant);
+        UpdatePlantViewModel(plantVM, plant);
 
         return plantVM;
     }
 
-    private static void ModifyPlantViewModel(PlantListItemViewModel plantVM, Plant plantDB)
+    private static void UpdatePlantViewModel(PlantListItemViewModel plantVM, Plant plantDB)
     {
         plantVM.Id = plantDB.Id;
 
