@@ -298,7 +298,7 @@ namespace PlantCare.App.ViewModels
             // edit an existing plant
             if (query.TryGetValue("Plant", out object? value))
             {
-                if (value is not PlantDbModel plant) return;
+                if (value is not Plant plant) return;
 
                 MapPlantData(plant);
             }
@@ -340,7 +340,7 @@ namespace PlantCare.App.ViewModels
             };
         }
 
-        private void MapPlantData(PlantDbModel plant)
+        private void MapPlantData(Plant plant)
         {
             Id = plant.Id;
             Name = plant.Name;

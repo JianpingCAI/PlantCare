@@ -22,7 +22,7 @@ public class NavigationService : INavigationService
         await Shell.Current.GoToAsync("//overview/add", navigationParameter);
     }
 
-    public async Task GoToEditPlant(PlantDbModel plant)
+    public async Task GoToEditPlant(Plant plant)
     {
         var navigationParameter = new ShellNavigationQueryParameters
         {

@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
-using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
 
 namespace PlantCare.App.ViewModels;
@@ -13,6 +12,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
     private readonly IPlantService _plantService = plantService;
     private readonly INavigationService _navigationService = navigationService;
     private readonly IDialogService _dialogService = dialogService;
+
     [ObservableProperty]
     private string _species = string.Empty;
 
@@ -24,7 +24,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
     {
         try
         {
-            PlantDbModel plant = PlantDetailViewModel.MapToPlantModel(this);
+            Plant plant = MapToDataModel(this);
             await _navigationService.GoToEditPlant(plant);
         }
         catch (Exception ex)
@@ -82,7 +82,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
             return;
         }
 
-        MapPlantData(plant);
+        MapToViewModel(plant);
     }
 
     internal async void NavigateBack()
@@ -90,7 +90,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         await _navigationService.GoToPlantsOverview();
     }
 
-    private void MapPlantData(Plant plant)
+    private void MapToViewModel(Plant plant)
     {
         if (plant is null)
         {
@@ -110,20 +110,20 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         FertilizeFrequencyInHours = plant.FertilizeFrequencyInHours;
     }
 
-    private static PlantDbModel MapToPlantModel(PlantDetailViewModel plantDetailViewModel)
+    private static Plant MapToDataModel(PlantDetailViewModel viewModel)
     {
-        return new PlantDbModel
+        return new Plant
         {
-            Id = plantDetailViewModel.Id,
-            Species = plantDetailViewModel.Species,
-            Name = plantDetailViewModel.Name,
-            Age = plantDetailViewModel.Age,
-            PhotoPath = plantDetailViewModel.PhotoPath,
+            Id = viewModel.Id,
+            Species = viewModel.Species,
+            Name = viewModel.Name,
+            Age = viewModel.Age,
+            PhotoPath = viewModel.PhotoPath,
 
-            LastWatered = plantDetailViewModel.LastWatered,
-            WateringFrequencyInHours = plantDetailViewModel.WateringFrequencyInHours,
-            LastFertilized = plantDetailViewModel.LastFertilized,
-            FertilizeFrequencyInHours = plantDetailViewModel.FertilizeFrequencyInHours
+            LastWatered = viewModel.LastWatered,
+            WateringFrequencyInHours = viewModel.WateringFrequencyInHours,
+            LastFertilized = viewModel.LastFertilized,
+            FertilizeFrequencyInHours = viewModel.FertilizeFrequencyInHours
         };
     }
 }

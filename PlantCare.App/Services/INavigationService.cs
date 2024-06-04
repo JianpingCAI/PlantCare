@@ -1,4 +1,4 @@
-﻿using PlantCare.Data.DbModels;
+﻿using PlantCare.Data.Models;
 
 namespace PlantCare.App.Services;
 
@@ -8,7 +8,7 @@ public interface INavigationService
 
     Task GoToAddPlant(int plantCount);
 
-    Task GoToEditPlant(PlantDbModel plant);
+    Task GoToEditPlant(Plant plant);
 
     Task GoToPlantsOverview();
 
