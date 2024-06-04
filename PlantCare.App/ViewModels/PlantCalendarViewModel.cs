@@ -150,37 +150,56 @@ namespace PlantCare.App.ViewModels
 
         #region Load Data
 
-        //private List<Plant> _allPlantsCache = [];
-
-        private async Task<List<PlantEvent>> GetPlantEventsAsync()
+        private Task<List<PlantEvent>> GetPlantEventsAsync()
         {
-            List<Plant> _allPlantsCache = await _plantService.GetAllPlantsAsync();
-
-            DateTime nowTime = DateTime.Now;
-
-            List<Plant> filteredPlants = [];
-
-            // filter by IsShowUnattendedOnly
-            if (IsShowUnattendedOnly)
+            return Task.Run(async () =>
             {
-                filteredPlants = _allPlantsCache
-                    .Where(x => x.LastWatered.AddHours(x.WateringFrequencyInHours) <= nowTime
-                        || x.LastFertilized.AddHours(x.FertilizeFrequencyInHours) <= nowTime)
-                    .ToList();
-            }
-            else
-            {
-                filteredPlants = _allPlantsCache;
-            }
+                List<Plant> _allPlantsCache = await _plantService.GetAllPlantsAsync();
 
-            // Convert to PlantEvent
-            List<PlantEvent> plantEvents = [];
-            foreach (Plant plant in filteredPlants)
-            {
-                DateTime expectedWaterTime = plant.LastWatered.AddHours(plant.WateringFrequencyInHours);
+                DateTime nowTime = DateTime.Now;
+
+                List<Plant> filteredPlants = [];
+
+                // filter by IsShowUnattendedOnly
                 if (IsShowUnattendedOnly)
                 {
-                    if (expectedWaterTime <= nowTime)
+                    filteredPlants = _allPlantsCache
+                        .Where(x => x.LastWatered.AddHours(x.WateringFrequencyInHours) <= nowTime
+                            || x.LastFertilized.AddHours(x.FertilizeFrequencyInHours) <= nowTime)
+                        .ToList();
+                }
+                else
+                {
+                    filteredPlants = _allPlantsCache;
+                }
+
+                // Convert to PlantEvent
+                List<PlantEvent> plantEvents = [];
+                foreach (Plant plant in filteredPlants)
+                {
+                    DateTime expectedWaterTime = plant.LastWatered.AddHours(plant.WateringFrequencyInHours);
+                    if (IsShowUnattendedOnly)
+                    {
+                        if (expectedWaterTime <= nowTime)
+                        {
+                            plantEvents.Add(new PlantEvent
+                            {
+                                //Title = plant.Name,
+                                //Description = plant.PhotoPath,
+                                PlantId = plant.Id,
+                                ReminderType = ReminderType.Watering,
+                                Name = plant.Name,
+                                PhotoPath = plant.PhotoPath,
+                                StartDate = expectedWaterTime.AddDays(-1), // a trick needed here to use XCalendar
+                                EndDate = expectedWaterTime,
+                                Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime)),
+
+                                ScheduledTime = expectedWaterTime,
+                                //IsOverdue = expectedWaterTime <= DateTime.Now
+                            });
+                        }
+                    }
+                    else
                     {
                         plantEvents.Add(new PlantEvent
                         {
@@ -198,30 +217,30 @@ namespace PlantCare.App.ViewModels
                             //IsOverdue = expectedWaterTime <= DateTime.Now
                         });
                     }
-                }
-                else
-                {
-                    plantEvents.Add(new PlantEvent
+
+                    DateTime fertilizationTime = plant.LastFertilized.AddHours(plant.FertilizeFrequencyInHours);
+                    if (IsShowUnattendedOnly)
                     {
-                        //Title = plant.Name,
-                        //Description = plant.PhotoPath,
-                        PlantId = plant.Id,
-                        ReminderType = ReminderType.Watering,
-                        Name = plant.Name,
-                        PhotoPath = plant.PhotoPath,
-                        StartDate = expectedWaterTime.AddDays(-1), // a trick needed here to use XCalendar
-                        EndDate = expectedWaterTime,
-                        Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime)),
+                        if (fertilizationTime <= nowTime)
+                        {
+                            plantEvents.Add(new PlantEvent
+                            {
+                                //Title = plant.Name,
+                                //Description = plant.PhotoPath,
+                                PlantId = plant.Id,
+                                ReminderType = ReminderType.Fertilization,
+                                Name = plant.Name,
+                                PhotoPath = plant.PhotoPath,
+                                StartDate = fertilizationTime.AddDays(-1),
+                                EndDate = fertilizationTime,
+                                Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime)),
 
-                        ScheduledTime = expectedWaterTime,
-                        //IsOverdue = expectedWaterTime <= DateTime.Now
-                    });
-                }
-
-                DateTime fertilizationTime = plant.LastFertilized.AddHours(plant.FertilizeFrequencyInHours);
-                if (IsShowUnattendedOnly)
-                {
-                    if (fertilizationTime <= nowTime)
+                                ScheduledTime = fertilizationTime,
+                                //IsOverdue = fertilizationTime <= DateTime.Now
+                            });
+                        }
+                    }
+                    else
                     {
                         plantEvents.Add(new PlantEvent
                         {
@@ -240,27 +259,9 @@ namespace PlantCare.App.ViewModels
                         });
                     }
                 }
-                else
-                {
-                    plantEvents.Add(new PlantEvent
-                    {
-                        //Title = plant.Name,
-                        //Description = plant.PhotoPath,
-                        PlantId = plant.Id,
-                        ReminderType = ReminderType.Fertilization,
-                        Name = plant.Name,
-                        PhotoPath = plant.PhotoPath,
-                        StartDate = fertilizationTime.AddDays(-1),
-                        EndDate = fertilizationTime,
-                        Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime)),
 
-                        ScheduledTime = fertilizationTime,
-                        //IsOverdue = fertilizationTime <= DateTime.Now
-                    });
-                }
-            }
-
-            return plantEvents;
+                return plantEvents;
+            });
         }
 
         #endregion Load Data
@@ -278,6 +279,7 @@ namespace PlantCare.App.ViewModels
             try
             {
                 IsBusy = true;
+                IsLoading = true;
 
                 bool state = (bool)isChecked;
 
@@ -295,6 +297,7 @@ namespace PlantCare.App.ViewModels
             finally
             {
                 IsBusy = false;
+                IsLoading = false;
             }
         }
 
