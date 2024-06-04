@@ -306,8 +306,15 @@
                 </VerticalStackLayout>
             </Grid>
         </ScrollView>
-        <!--<Grid BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" IsVisible="{Binding IsLoading}">
-            <ActivityIndicator IsRunning="{Binding IsLoading}" />
-        </Grid>-->
+        <Grid
+            BackgroundColor="{AppThemeBinding Light={StaticResource Gray200},
+                                              Dark={StaticResource Gray500}}"
+            IsVisible="{Binding IsLoading}"
+            Opacity="0.5">
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsLoading}"
+                VerticalOptions="Center" />
+        </Grid>
     </Grid>
 </ContentPage>

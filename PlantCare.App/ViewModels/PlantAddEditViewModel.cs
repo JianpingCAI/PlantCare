@@ -159,14 +159,18 @@ namespace PlantCare.App.ViewModels
                     return;
                 }
 
-                PlantDbModel plant = MapToPlantModel();
+                IsLoading = true;
 
                 // Add/Create a plant
                 if (Id == default)
                 {
                     try
                     {
-                        Id = await _plantService.CreatePlantAsync(plant);
+                        await Task.Run(async () =>
+                        {
+                            PlantDbModel plant = MapToPlantModel();
+                            Id = await _plantService.CreatePlantAsync(plant);
+                        });
                     }
                     catch (Exception)
                     {
@@ -184,29 +188,37 @@ namespace PlantCare.App.ViewModels
                     bool updated = false;
                     try
                     {
-                        updated = await _plantService.UpdatePlantAsync(plant);
+                        await Task.Run(async () =>
+                        {
+                            PlantDbModel plant = MapToPlantModel();
+                            updated = await _plantService.UpdatePlantAsync(plant);
+                        });
                     }
                     catch (Exception e)
                     {
                         await _dialogService.Notify("Error", e.Message);
                     }
 
-                    if (!updated)
-                    {
-                        await _dialogService.Notify("Failed", "Editing the plant failed.");
-                    }
-                    else
+                    if (updated)
                     {
                         WeakReferenceMessenger.Default.Send(new PlantModifiedMessage(Id));
                         await _dialogService.Notify("Success", "The plant is updated.");
                         //await _navigationService.GoBack();
-                        await _navigationService.GoToPlantDetail(plant.Id);
+                        await _navigationService.GoToPlantDetail(Id);
+                    }
+                    else
+                    {
+                        await _dialogService.Notify("Failed", "Editing the plant failed.");
                     }
                 }
             }
             catch (Exception ex)
             {
                 await _dialogService.Notify("Error", ex.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 

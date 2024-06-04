@@ -34,7 +34,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
     }
 
     [RelayCommand]
-    private async Task DeletePlant()
+    private async void DeletePlant()
     {
         if (IsBusy)
         {
@@ -51,11 +51,14 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
             {
                 return;
             }
+            IsLoading = true;
 
-            await _plantService.DeletePlantAsync(Id);
+            await Task.Run(async () =>
+            {
+                await _plantService.DeletePlantAsync(Id);
 
-            WeakReferenceMessenger.Default.Send(new PlantDeletedMessage { PlantId = Id });
-
+                WeakReferenceMessenger.Default.Send(new PlantDeletedMessage { PlantId = Id });
+            });
             await _navigationService.GoToPlantsOverview();
         }
         catch (Exception ex)
@@ -65,6 +68,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         finally
         {
             IsBusy = false;
+            IsLoading = false;
         }
     }
 

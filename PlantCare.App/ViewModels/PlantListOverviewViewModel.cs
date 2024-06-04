@@ -150,6 +150,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             if (_notificationService.IsSupported)
             {
+                if (await _notificationService.AreNotificationsEnabled() == false)
+                {
+                    await _notificationService.RequestNotificationPermission();
+                }
+
                 _notificationService.Cancel();
 
                 if (await _settingsService.GetWateringNotificationSettingAsync())
@@ -284,7 +289,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             PlantListItemViewModel newPlantVM = MapToViewModel(plantDB);
 
             int i = 0;
-            for (i = 0;i < Plants.Count;++i)
+            for (i = 0; i < Plants.Count; ++i)
             {
                 // greater
                 if (newPlantVM.Name.CompareTo(Plants[i].Name) <= 0)
@@ -292,7 +297,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                     break;
                 }
             }
-            Plants.Insert(i,newPlantVM);
+            Plants.Insert(i, newPlantVM);
 
             _allPlantViewModelsCache.Add(newPlantVM);
             _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
@@ -410,6 +415,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task<int> ScheduleNotificationAsync(ReminderType reminderType, string actionName, PlantListItemViewModel plant)
     {
+        if (!_notificationService.IsSupported)
+        {
+            return 0;
+        }
         try
         {
             string title = $"Remember to {actionName} Your Plant: {plant.Name}";
@@ -459,11 +468,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                     //NotifyRepeatInterval = TimeSpan.FromSeconds(10),
                 }
             };
-
-            if (await _notificationService.AreNotificationsEnabled() == false)
-            {
-                await _notificationService.RequestNotificationPermission();
-            }
 
             // Send a local notification to the device
             await _notificationService.Show(notificationRequest);
@@ -716,6 +720,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task CancelPendingNotificationAsync(int noticeId)
     {
+        if (!_notificationService.IsSupported)
+            return;
+
         List<int> notificationIds = await GetPendingNotificationIdsAsync();
         if (notificationIds.Contains(noticeId))
         {
@@ -725,14 +732,14 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task<List<int>> GetPendingNotificationIdsAsync()
     {
-        if (_notificationService.IsSupported)
+        if (!_notificationService.IsSupported)
         {
-            List<int> notificationIds = (await _notificationService.GetPendingNotificationList())
-                .Select(x => x.NotificationId).ToList();
-
-            return notificationIds;
+            return [];
         }
 
-        return [];
+        List<int> notificationIds = (await _notificationService.GetPendingNotificationList())
+                .Select(x => x.NotificationId).ToList();
+
+        return notificationIds;
     }
 }
