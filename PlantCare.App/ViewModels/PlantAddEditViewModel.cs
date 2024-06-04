@@ -142,7 +142,7 @@ namespace PlantCare.App.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanSubmitPlant))]
         private async Task Submit()
         {
             try
@@ -216,6 +216,8 @@ namespace PlantCare.App.ViewModels
                 IsLoading = false;
             }
         }
+
+        private bool CanSubmitPlant() => !HasErrors;
 
         #region Photo related
 

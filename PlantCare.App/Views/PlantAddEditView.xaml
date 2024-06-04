@@ -300,6 +300,7 @@
                     <Button
                         Command="{Binding SubmitCommand}"
                         HorizontalOptions="CenterAndExpand"
+                        IsEnabled="True"
                         MinimumWidthRequest="150"
                         Text="Save" />
                 </VerticalStackLayout>
