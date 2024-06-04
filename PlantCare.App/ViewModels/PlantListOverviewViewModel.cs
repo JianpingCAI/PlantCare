@@ -288,8 +288,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 int noticeId = message.PlantId.GetHashCode();
 
-                await CancelExistingNotificationAsync(noticeId);
-                await CancelExistingNotificationAsync(-noticeId);
+                await CancelPendingNotificationAsync(noticeId);
+                await CancelPendingNotificationAsync(-noticeId);
             }
         }
         catch (Exception ex)
@@ -612,9 +612,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             if (_notificationService.IsSupported)
             {
-                int noticeId = PlantListOverviewViewModel.GetNotificationId(message.ReminderType, updatePlant.Id);
+                int noticeId = GetNotificationId(message.ReminderType, updatePlant.Id);
 
-                await CancelExistingNotificationAsync(noticeId);
+                await CancelPendingNotificationAsync(noticeId);
+                await CancelPendingNotificationAsync(-noticeId);
 
                 await ScheduleNotificationAsync(message.ReminderType, message.ReminderType.GetActionName(), updatePlant, 0);
             }
@@ -647,7 +648,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         return notificationId;
     }
 
-    private async Task CancelExistingNotificationAsync(int noticeId)
+    private async Task CancelPendingNotificationAsync(int noticeId)
     {
         List<int> notificationIds = await GetPendingNotificationIdsAsync();
         if (notificationIds.Contains(noticeId))
