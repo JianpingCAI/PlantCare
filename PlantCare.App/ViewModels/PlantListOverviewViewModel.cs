@@ -51,7 +51,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         WeakReferenceMessenger.Default.Register<PlantDeletedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantEventStatusChangedMessage>(this);
 
-        if (_notificationService.IsSupported)
+        if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
         {
             WeakReferenceMessenger.Default.Register<IsNotificationEnabledMessage>(this);
 
@@ -158,7 +158,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             ResetDisplayedPlants();
 
-            if (_notificationService.IsSupported)
+            if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
             {
                 if (await _notificationService.AreNotificationsEnabled() == false)
                 {
@@ -307,7 +307,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             _allPlantViewModelsCache.Add(newPlantVM);
             _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
 
-            if (_notificationService.IsSupported)
+            if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
             {
                 await ScheduleNotificationAsync(ReminderType.Watering, ReminderType.Watering.GetActionName(), newPlantVM);
                 await ScheduleNotificationAsync(ReminderType.Fertilization, ReminderType.Fertilization.GetActionName(), newPlantVM);
@@ -400,7 +400,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task ScheduleNotifications(ReminderType reminderType)
     {
-        if (!_notificationService.IsSupported)
+        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
             return;
 
         string actionName = reminderType.GetActionName();
@@ -449,7 +449,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task<int> ScheduleNotificationAsync(ReminderType reminderType, string actionName, PlantListItemViewModel plant)
     {
-        if (!_notificationService.IsSupported)
+        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
         {
             return 0;
         }
@@ -518,7 +518,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     async void IRecipient<IsNotificationEnabledMessage>.Receive(IsNotificationEnabledMessage message)
     {
-        if (!_notificationService.IsSupported)
+        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
         {
             return;
         }
@@ -705,7 +705,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             }
 
             _logger.LogInformation($"Status changed {message.ReminderType}: Plant {updatePlant.Name}.");
-            if (_notificationService.IsSupported)
+            if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
             {
                 int noticeId = GetNotificationId(message.ReminderType, updatePlant.Id);
 
@@ -743,7 +743,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task CancelPendingNotificationAsync(Guid plantId, string name)
     {
-        if (_notificationService.IsSupported)
+        if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
         {
             int noticeId = plantId.GetHashCode();
 
@@ -754,7 +754,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task CancelPendingNotificationAsync(int noticeId, string name)
     {
-        if (!_notificationService.IsSupported)
+        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
             return;
 
         List<int> notificationIds = await GetPendingNotificationIdsAsync();
@@ -768,7 +768,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task<List<int>> GetPendingNotificationIdsAsync()
     {
-        if (!_notificationService.IsSupported)
+        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
         {
             return [];
         }
