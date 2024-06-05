@@ -8,7 +8,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.Data.Models;
 using Plugin.LocalNotification;
-using PlantCare.App.Views;
 using Plugin.LocalNotification.AndroidOption;
 using System.Text.Json;
 using Plugin.LocalNotification.EventArgs;

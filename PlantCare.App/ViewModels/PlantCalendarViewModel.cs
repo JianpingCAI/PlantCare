@@ -383,7 +383,6 @@ namespace PlantCare.App.ViewModels
                         }
 
                         toRemovedSelections.Add(item);
-                        PlantEvents.Remove(plantEvent);
 
                         WeakReferenceMessenger.Default.Send<PlantEventStatusChangedMessage>(new PlantEventStatusChangedMessage
                         (
