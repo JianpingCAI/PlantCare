@@ -127,7 +127,7 @@ public static class MauiProgram
         // Register background service
         //builder.Services.AddHostedService<PlantStateCheckingService>();
 
-        builder.Services.AddHostedService<TestBackGroundService>();
+        //builder.Services.AddHostedService<TestBackGroundService>();
 
 
 #if DEBUG

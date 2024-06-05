@@ -439,8 +439,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             int notificationId = GetNotificationId(reminderType, plant.Id);
 
-            ReminderType[] reminderTypes = Enum.GetValues(typeof(ReminderType)).Cast<ReminderType>().ToArray();
-
             DateTime? scheduledTime = null;
             switch (reminderType)
             {

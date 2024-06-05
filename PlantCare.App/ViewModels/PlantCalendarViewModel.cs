@@ -354,9 +354,9 @@ namespace PlantCare.App.ViewModels
 
             try
             {
-                DateTime updateTime = DateTime.Now;
+                DateTime updatedTime = DateTime.Now;
 
-                bool isConfirmed = await _dialogService.Ask("Confirm", $"Mark as done and update the last attended time as now {updateTime.ToShortTimeString()}?");
+                bool isConfirmed = await _dialogService.Ask("Confirm", $"Mark as done and update the last attended time as now {updatedTime.ToShortTimeString()}?");
                 if (!isConfirmed)
                     return;
 
@@ -368,13 +368,13 @@ namespace PlantCare.App.ViewModels
                         {
                             case ReminderType.Watering:
                                 {
-                                    await _plantService.UpdateLastWateringTime(plantEvent.PlantId, updateTime);
+                                    await _plantService.UpdateLastWateringTime(plantEvent.PlantId, updatedTime);
                                 }
                                 break;
 
                             case ReminderType.Fertilization:
                                 {
-                                    await _plantService.UpdateLastFertilizationTime(plantEvent.PlantId, updateTime);
+                                    await _plantService.UpdateLastFertilizationTime(plantEvent.PlantId, updatedTime);
                                 }
                                 break;
 
@@ -386,11 +386,11 @@ namespace PlantCare.App.ViewModels
                         PlantEvents.Remove(plantEvent);
 
                         WeakReferenceMessenger.Default.Send<PlantEventStatusChangedMessage>(new PlantEventStatusChangedMessage
-                        {
-                            PlantId = plantEvent.PlantId,
-                            UpdatedTime = updateTime,
-                            ReminderType = plantEvent.ReminderType
-                        });
+                        (
+                             plantEvent.PlantId,
+                             plantEvent.ReminderType,
+                             updatedTime
+                        ));
                     }
                 }
             }

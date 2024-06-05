@@ -1,16 +1,11 @@
-﻿
-using PlantCare.App.ViewModels;
+﻿using PlantCare.App.ViewModels;
 
 namespace PlantCare.App.Messaging
 {
-    internal class PlantEventStatusChangedMessage
+    internal class PlantEventStatusChangedMessage(Guid plantId, ReminderType reminderType, DateTime updatedTime)
     {
-        public PlantEventStatusChangedMessage()
-        {
-        }
-
-        public Guid PlantId { get; internal set; }
-        public DateTime UpdatedTime { get; internal set; }
-        public ReminderType ReminderType { get; internal set; }
+        public Guid PlantId { get; internal set; } = plantId;
+        public DateTime UpdatedTime { get; internal set; } = updatedTime;
+        public ReminderType ReminderType { get; internal set; } = reminderType;
     }
 }

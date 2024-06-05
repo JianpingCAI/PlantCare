@@ -28,11 +28,14 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+  
+  <!--for local notification-->
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
+  
 	<key>CFBundleDisplayName</key>
 	<string>MyPlantCare</string>
 	<key>CFBundleIdentifier</key>
