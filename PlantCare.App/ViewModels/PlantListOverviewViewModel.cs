@@ -165,7 +165,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                     await _notificationService.RequestNotificationPermission();
                 }
 
-                _notificationService.Cancel();
+                IList<NotificationRequest> pendingNotifications = await _notificationService.GetPendingNotificationList();
+                if( pendingNotifications.Count > 0)
+                {
+                    _notificationService.CancelAll();
+                    _logger.LogInformation($"{pendingNotifications.Count} pending notifications cancelled.");
+                }
 
                 if (await _settingsService.GetWateringNotificationSettingAsync())
                 {
@@ -361,7 +366,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             await CancelPendingNotificationAsync(plantVM.Id, plantVM.Name);
             await ScheduleNotificationAsync(ReminderType.Watering, ReminderType.Watering.GetActionName(), plantVM);
-            await ScheduleNotificationAsync(ReminderType.Watering, ReminderType.Watering.GetActionName(), plantVM);
+            await ScheduleNotificationAsync(ReminderType.Fertilization, ReminderType.Fertilization.GetActionName(), plantVM);
         }
         catch (Exception ex)
         {
@@ -499,7 +504,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             // Send a local notification to the device
             await _notificationService.Show(notificationRequest);
 
-            _logger.LogInformation($"Notification scheduled: {plant.Name} - {reminderType}, {scheduledTime}");
+            _logger.LogInformation($"Notification scheduled (Notification Id = {notificationId}): {plant.Name} - {reminderType}, {scheduledTime}");
 
             return notificationId;
         }
