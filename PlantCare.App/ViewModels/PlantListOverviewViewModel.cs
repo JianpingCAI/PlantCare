@@ -28,8 +28,15 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private readonly INotificationService _notificationService;
     private readonly IDialogService _dialogService;
     private readonly ISettingsService _settingsService;
+    private readonly IAppLogger<PlantListOverviewViewModel> _logger;
 
-    public PlantListOverviewViewModel(IPlantService plantService, INavigationService navigationService, INotificationService notificationService, IDialogService dialogService, ISettingsService settingsService)
+    public PlantListOverviewViewModel(
+        IPlantService plantService,
+        INavigationService navigationService,
+        INotificationService notificationService,
+        IDialogService dialogService,
+        ISettingsService settingsService,
+        IAppLogger<PlantListOverviewViewModel> logger)
     {
         _plantService = plantService;
 
@@ -37,6 +44,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         _notificationService = notificationService;
         _dialogService = dialogService;
         _settingsService = settingsService;
+        _logger = logger;
 
         WeakReferenceMessenger.Default.Register<PlantAddedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantModifiedMessage>(this);
@@ -145,6 +153,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 _allPlantViewModelsCache.Add(MapToViewModel(plantDB));
             }
+
+            _logger.LogInformation($"{_allPlantViewModelsCache.Count} plants are loaded.");
 
             ResetDisplayedPlants();
 
@@ -297,6 +307,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 await ScheduleNotificationAsync(ReminderType.Watering, ReminderType.Watering.GetActionName(), newPlantVM);
                 await ScheduleNotificationAsync(ReminderType.Fertilization, ReminderType.Fertilization.GetActionName(), newPlantVM);
             }
+
+            _logger.LogInformation($"New plant {plantDB.Name} is added, with id: {message.PlantId}");
         }
         catch (Exception ex)
         {
@@ -345,7 +357,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 InsertPlant(plantVM);
             }
 
-            await CancelPendingNotificationAsync(plantVM.Id);
+            _logger.LogInformation($"Plant {plantVM.Name} is modified.");
+
+            await CancelPendingNotificationAsync(plantVM.Id, plantVM.Name);
             await ScheduleNotificationAsync(ReminderType.Watering, ReminderType.Watering.GetActionName(), plantVM);
             await ScheduleNotificationAsync(ReminderType.Watering, ReminderType.Watering.GetActionName(), plantVM);
         }
@@ -360,12 +374,13 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         try
         {
             PlantListItemViewModel? deletedPlant = Plants.FirstOrDefault(e => e.Id == message.PlantId);
-            if (deletedPlant != null)
-            {
-                Plants.Remove(deletedPlant);
-            }
+            if (deletedPlant is null) { return; }
 
-            await CancelPendingNotificationAsync(message.PlantId);
+            Plants.Remove(deletedPlant);
+
+            _logger.LogInformation($"Plant {deletedPlant.Name} is deleted");
+
+            await CancelPendingNotificationAsync(message.PlantId, deletedPlant.Name);
         }
         catch (Exception ex)
         {
@@ -483,6 +498,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             // Send a local notification to the device
             await _notificationService.Show(notificationRequest);
+
+            _logger.LogInformation($"Notification scheduled: {plant.Name} - {reminderType}, {scheduledTime}");
 
             return notificationId;
         }
@@ -683,11 +700,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                     break;
             }
 
+            _logger.LogInformation($"Status changed {message.ReminderType}: Plant {updatePlant.Name}.");
             if (_notificationService.IsSupported)
             {
                 int noticeId = GetNotificationId(message.ReminderType, updatePlant.Id);
 
-                await CancelPendingNotificationAsync(noticeId);
+                await CancelPendingNotificationAsync(noticeId, plantFromDB.Name);
                 await ScheduleNotificationAsync(message.ReminderType, message.ReminderType.GetActionName(), updatePlant);
             }
         }
@@ -719,18 +737,18 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         return notificationId;
     }
 
-    private async Task CancelPendingNotificationAsync(Guid plantId)
+    private async Task CancelPendingNotificationAsync(Guid plantId, string name)
     {
         if (_notificationService.IsSupported)
         {
             int noticeId = plantId.GetHashCode();
 
-            await CancelPendingNotificationAsync(noticeId);
-            await CancelPendingNotificationAsync(-noticeId);
+            await CancelPendingNotificationAsync(noticeId, name);
+            await CancelPendingNotificationAsync(-noticeId, name);
         }
     }
 
-    private async Task CancelPendingNotificationAsync(int noticeId)
+    private async Task CancelPendingNotificationAsync(int noticeId, string name)
     {
         if (!_notificationService.IsSupported)
             return;
@@ -739,6 +757,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         if (notificationIds.Contains(noticeId))
         {
             _notificationService.Cancel([noticeId]);
+
+            _logger.LogInformation($"Cancel pending notification for Plant {name}, notification Id = {noticeId}");
         }
     }
 

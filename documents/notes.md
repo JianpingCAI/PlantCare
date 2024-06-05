@@ -1,5 +1,8 @@
 # EF
 
+`C:\Users\cai-j\AppData\Local\Packages\com.companyname.plantcare.app_9zz4h110yvjzm\LocalState`
+`/data/user/0/com.jianping.myapp/files/app.log`
+
 ## DB Migration
 
 ```cmd

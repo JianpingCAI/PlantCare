@@ -9,6 +9,7 @@ using PlantCare.Data;
 using PlantCare.App.Utils;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
+using Serilog;
 
 namespace PlantCare.App;
 
@@ -17,6 +18,12 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+
+        // Configure Serilog
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.File(Path.Combine(Microsoft.Maui.Storage.FileSystem.AppDataDirectory, "app.log"), rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
         builder
             .UseMauiApp<App>()
             // Initialize the .NET MAUI Community Toolkit by adding the below line of code
@@ -96,7 +103,7 @@ public static class MauiProgram
         // Configure services
 
         // Database context
-        string dbPath = Path.Combine(FileSystem.AppDataDirectory, Consts.DatabaseFileName);
+        string dbPath = Path.Combine(Microsoft.Maui.Storage.FileSystem.AppDataDirectory, Consts.DatabaseFileName);
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite($"Data Source={dbPath}"));
@@ -136,6 +143,8 @@ public static class MauiProgram
         //LocalNotificationCenter.LogLevel = LogLevel.Debug;
         //builder.Logging.AddConsole();
 #endif
+        builder.Logging.AddSerilog(dispose: true);
+        builder.Services.AddSingleton(typeof(IAppLogger<>), typeof(AppLogger<>));
 
         return builder.Build();
     }
