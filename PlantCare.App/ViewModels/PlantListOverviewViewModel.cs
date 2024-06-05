@@ -480,9 +480,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             // Data to be returned by the notification
             var list = new List<string>
                 {
-                    typeof(NotificationPage).FullName ?? "NotificationPage",
                     notificationId.ToString(),
                     plant.Id.ToString(),
+                    plant.Name,
                 };
             string serializeReturningData = JsonSerializer.Serialize(list);
 
@@ -576,6 +576,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             // Notification is tapped
             if (e.IsTapped)
             {
+                _logger.LogInformation("Notification tapped ..");
+
                 //logMessage.AppendLine($"{Environment.NewLine}Tapped {DateTime.Now}");
                 if (e.Request is null)
                 {
@@ -590,18 +592,15 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 var list = JsonSerializer.Deserialize<List<string>>(e.Request.ReturningData);
                 if (list is null || list.Count != 3)
                 {
-                    await _dialogService.Notify(e.Request.Title, $"No ReturningData {e.Request.ReturningData}", "OK");
+                    //await _dialogService.Notify(e.Request.Title, $"No ReturningData {e.Request.ReturningData}", "OK");
                     return;
                 }
 
-                if (list[0] != typeof(NotificationPage).FullName)
-                {
-                    await _dialogService.Notify(e.Request.Title, $"Not NotificationPage", "OK");
-                    return;
-                }
+                var notificationId = list[0];
+                var plantId = list[1];
+                string plantName = list[2];
 
-                var notificationId = list[1];
-                var plantId = list[2];
+                _logger.LogInformation($"Notification tapped: Notification Id = {notificationId}, Plant {plantName}, Id = {plantId}");
 
                 await _navigationService.GoToPlantDetail(Guid.Parse(plantId));
 
