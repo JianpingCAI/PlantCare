@@ -44,153 +44,80 @@
                 VerticalTextAlignment="Center" />
 
             <!--  Plants Collection View  -->
-            <CollectionView
+            <RefreshView
                 Grid.Row="1"
-                EmptyView="{Binding Path=[AddMyPlants], Source={x:Static utils:LocalizationManager.Instance}}"
-                ItemsSource="{Binding Plants}"
-                SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
-                SelectionChangedCommand="{Binding SelectPlantCommand}"
-                SelectionMode="Single">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout
-                        HorizontalItemSpacing="2"
-                        Orientation="Vertical"
-                        Span="{OnIdiom Phone=3,
-                                       Desktop=5}"
-                        VerticalItemSpacing="5" />
-                </CollectionView.ItemsLayout>
+                Command="{Binding RefreshPlantStatesCommand}"
+                IsRefreshing="{Binding IsPlantStatesRefreshing}">
+                <CollectionView
+                    EmptyView="{Binding Path=[AddMyPlants], Source={x:Static utils:LocalizationManager.Instance}}"
+                    ItemsSource="{Binding Plants}"
+                    SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
+                    SelectionChangedCommand="{Binding SelectPlantCommand}"
+                    SelectionMode="Single">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="2"
+                            Orientation="Vertical"
+                            Span="{OnIdiom Phone=3,
+                                           Desktop=5}"
+                            VerticalItemSpacing="5" />
+                    </CollectionView.ItemsLayout>
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:PlantListItemViewModel">
-                        <Grid HorizontalOptions="CenterAndExpand">
-                            <Border StrokeThickness="1" VerticalOptions="FillAndExpand">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="10" />
-                                </Border.StrokeShape>
-                                <Grid Padding="0,0,0,5" RowDefinitions="auto,*,*">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:PlantListItemViewModel">
+                            <Grid HorizontalOptions="CenterAndExpand">
+                                <Border StrokeThickness="1" VerticalOptions="FillAndExpand">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+                                    <Grid Padding="0,0,0,5" RowDefinitions="auto,*,*">
 
-                                    <!--  Photo  -->
-                                    <Border
-                                        HorizontalOptions="Center"
-                                        Stroke="Transparent"
-                                        StrokeThickness="0"
-                                        VerticalOptions="Center">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="10" />
-                                        </Border.StrokeShape>
-                                        <Grid>
-                                            <Image
-                                                Aspect="AspectFill"
-                                                HeightRequest="125"
-                                                HorizontalOptions="Center"
-                                                Source="{Binding PhotoPath}"
-                                                VerticalOptions="Center"
-                                                WidthRequest="125" />
-                                            <Label
-                                                Background="DarkSeaGreen"
-                                                FontAttributes="Bold"
-                                                HorizontalOptions="Fill"
-                                                HorizontalTextAlignment="Center"
-                                                Opacity="0.75"
-                                                Text="{Binding Name}"
-                                                VerticalOptions="End" />
-                                        </Grid>
-                                    </Border>
-
-                                    <!--  Watering State  -->
-                                    <Grid
-                                        Grid.Row="1"
-                                        ColumnDefinitions="20,*"
-                                        HorizontalOptions="StartAndExpand">
-                                        <Label
-                                            Margin="0,0,3,0"
-                                            FontFamily="MaterialIconsRegular"
-                                            FontSize="16"
-                                            Text="&#xe798;"
-                                            TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
-
-                                        <Grid Grid.Column="1">
-
-                                            <ProgressBar
-                                                HeightRequest="5"
-                                                Progress="{Binding WaterState}"
-                                                ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
-                                                WidthRequest="100" />
-
-                                            <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="3">
-                                                <BoxView
-                                                    HeightRequest="5"
-                                                    HorizontalOptions="End"
-                                                    VerticalOptions="Center"
-                                                    WidthRequest="3"
-                                                    Color="White" />
-
-                                                <BoxView
-                                                    Grid.Column="1"
-                                                    HeightRequest="5"
-                                                    HorizontalOptions="End"
-                                                    VerticalOptions="Center"
-                                                    WidthRequest="3"
-                                                    Color="White" />
-                                                <BoxView
-                                                    Grid.Column="2"
-                                                    HeightRequest="5"
-                                                    HorizontalOptions="End"
-                                                    VerticalOptions="Center"
-                                                    WidthRequest="3"
-                                                    Color="White" />
-                                                <BoxView
-                                                    Grid.Column="3"
-                                                    HeightRequest="5"
-                                                    HorizontalOptions="End"
-                                                    VerticalOptions="Center"
-                                                    WidthRequest="3"
-                                                    Color="White" />
-                                                <BoxView
-                                                    Grid.Column="4"
-                                                    HeightRequest="5"
-                                                    HorizontalOptions="End"
-                                                    VerticalOptions="Center"
-                                                    WidthRequest="3"
-                                                    Color="White" />
-                                                <BoxView
-                                                    Grid.Column="5"
-                                                    HeightRequest="5"
-                                                    HorizontalOptions="End"
-                                                    VerticalOptions="Center"
-                                                    WidthRequest="3"
-                                                    Color="White" />
-                                                <BoxView
-                                                    Grid.Column="6"
-                                                    HeightRequest="5"
-                                                    HorizontalOptions="End"
-                                                    VerticalOptions="Center"
-                                                    WidthRequest="3"
-                                                    Color="White" />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-
-                                    <!--  Fertilization State  -->
-                                    <Grid
-                                        Grid.Row="2"
-                                        ColumnDefinitions="20,*"
-                                        HorizontalOptions="StartAndExpand">
-                                        <Label
-                                            Margin="0,0,3,0"
-                                            FontFamily="MaterialIconsRegular"
-                                            FontSize="16"
-                                            Text="&#xe761;"
-                                            TextColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}" />
-                                        <Grid Grid.Column="1">
-                                            <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="2" />
+                                        <!--  Photo  -->
+                                        <Border
+                                            HorizontalOptions="Center"
+                                            Stroke="Transparent"
+                                            StrokeThickness="0"
+                                            VerticalOptions="Center">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
                                             <Grid>
+                                                <Image
+                                                    Aspect="AspectFill"
+                                                    HeightRequest="125"
+                                                    HorizontalOptions="Center"
+                                                    Source="{Binding PhotoPath}"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="125" />
+                                                <Label
+                                                    Background="DarkSeaGreen"
+                                                    FontAttributes="Bold"
+                                                    HorizontalOptions="Fill"
+                                                    HorizontalTextAlignment="Center"
+                                                    Opacity="0.75"
+                                                    Text="{Binding Name}"
+                                                    VerticalOptions="End" />
+                                            </Grid>
+                                        </Border>
+
+                                        <!--  Watering State  -->
+                                        <Grid
+                                            Grid.Row="1"
+                                            ColumnDefinitions="20,*"
+                                            HorizontalOptions="StartAndExpand">
+                                            <Label
+                                                Margin="0,0,3,0"
+                                                FontFamily="MaterialIconsRegular"
+                                                FontSize="16"
+                                                Text="&#xe798;"
+                                                TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}" />
+
+                                            <Grid Grid.Column="1">
 
                                                 <ProgressBar
-                                                    Grid.Column="1"
                                                     HeightRequest="5"
-                                                    Progress="{Binding FertilizeState}"
-                                                    ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
+                                                    Progress="{Binding WaterState}"
+                                                    ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
                                                     WidthRequest="100" />
 
                                                 <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="3">
@@ -246,13 +173,90 @@
                                                 </Grid>
                                             </Grid>
                                         </Grid>
+
+                                        <!--  Fertilization State  -->
+                                        <Grid
+                                            Grid.Row="2"
+                                            ColumnDefinitions="20,*"
+                                            HorizontalOptions="StartAndExpand">
+                                            <Label
+                                                Margin="0,0,3,0"
+                                                FontFamily="MaterialIconsRegular"
+                                                FontSize="16"
+                                                Text="&#xe761;"
+                                                TextColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}" />
+                                            <Grid Grid.Column="1">
+                                                <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="2" />
+                                                <Grid>
+
+                                                    <ProgressBar
+                                                        Grid.Column="1"
+                                                        HeightRequest="5"
+                                                        Progress="{Binding FertilizeState}"
+                                                        ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
+                                                        WidthRequest="100" />
+
+                                                    <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="3">
+                                                        <BoxView
+                                                            HeightRequest="5"
+                                                            HorizontalOptions="End"
+                                                            VerticalOptions="Center"
+                                                            WidthRequest="3"
+                                                            Color="White" />
+
+                                                        <BoxView
+                                                            Grid.Column="1"
+                                                            HeightRequest="5"
+                                                            HorizontalOptions="End"
+                                                            VerticalOptions="Center"
+                                                            WidthRequest="3"
+                                                            Color="White" />
+                                                        <BoxView
+                                                            Grid.Column="2"
+                                                            HeightRequest="5"
+                                                            HorizontalOptions="End"
+                                                            VerticalOptions="Center"
+                                                            WidthRequest="3"
+                                                            Color="White" />
+                                                        <BoxView
+                                                            Grid.Column="3"
+                                                            HeightRequest="5"
+                                                            HorizontalOptions="End"
+                                                            VerticalOptions="Center"
+                                                            WidthRequest="3"
+                                                            Color="White" />
+                                                        <BoxView
+                                                            Grid.Column="4"
+                                                            HeightRequest="5"
+                                                            HorizontalOptions="End"
+                                                            VerticalOptions="Center"
+                                                            WidthRequest="3"
+                                                            Color="White" />
+                                                        <BoxView
+                                                            Grid.Column="5"
+                                                            HeightRequest="5"
+                                                            HorizontalOptions="End"
+                                                            VerticalOptions="Center"
+                                                            WidthRequest="3"
+                                                            Color="White" />
+                                                        <BoxView
+                                                            Grid.Column="6"
+                                                            HeightRequest="5"
+                                                            HorizontalOptions="End"
+                                                            VerticalOptions="Center"
+                                                            WidthRequest="3"
+                                                            Color="White" />
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
         </Grid>
 
         <!--  Add Plant Button  -->

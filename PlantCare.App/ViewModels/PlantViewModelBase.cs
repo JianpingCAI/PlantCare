@@ -75,4 +75,10 @@ public partial class PlantViewModelBase : ViewModelBase
             SetProperty(ref _fertilizeState, value);
         }
     }
+
+    public void RefreshStates()
+    {
+        WaterState = PlantState.GetCurrentStateValue(NextWateringTime);
+        FertilizeState = PlantState.GetCurrentStateValue(NextFertilizeTime);
+    }
 }

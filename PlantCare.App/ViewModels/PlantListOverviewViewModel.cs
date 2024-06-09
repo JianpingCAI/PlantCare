@@ -130,17 +130,23 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task LoadAllPlantsFromDatabase()
     {
-        _plantListDatabase = await _plantService.GetAllPlantsAsync();
-        _plantListDatabase = [.. _plantListDatabase.OrderBy(x => x.Name)];
+        await Task.Run(async () =>
+        {
+            _plantListDatabase = await _plantService.GetAllPlantsAsync();
+            _plantListDatabase = [.. _plantListDatabase.OrderBy(x => x.Name)];
+        });
     }
 
-    private void ResetDisplayedPlants()
+    private Task ResetDisplayedPlantsAsync()
     {
-        Plants.Clear();
-        foreach (PlantListItemViewModel item in _allPlantViewModelsCache)
+        return Task.Run(() =>
         {
-            Plants.Add(item);
-        }
+            Plants.Clear();
+            foreach (PlantListItemViewModel item in _allPlantViewModelsCache)
+            {
+                Plants.Add(item);
+            }
+        });
     }
 
     private async Task SetAllPlants()
@@ -155,7 +161,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             _logger.LogInformation($"{_allPlantViewModelsCache.Count} plants are loaded.");
 
-            ResetDisplayedPlants();
+            await ResetDisplayedPlantsAsync();
 
             if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
             {
@@ -165,7 +171,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 }
 
                 IList<NotificationRequest> pendingNotifications = await _notificationService.GetPendingNotificationList();
-                if( pendingNotifications.Count > 0)
+                if (pendingNotifications.Count > 0)
                 {
                     _notificationService.CancelAll();
                     _logger.LogInformation($"{pendingNotifications.Count} pending notifications cancelled.");
@@ -240,7 +246,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             }
             else
             {
-                ResetSearch();
+                await ResetSearchAsync();
             }
         }
         finally
@@ -249,7 +255,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    internal void ResetSearch()
+    internal async Task ResetSearchAsync()
     {
         if (_allPlantViewModelsCache.Count == 0)
         {
@@ -258,7 +264,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         if (string.IsNullOrEmpty(SearchText.Trim()))
         {
-            ResetDisplayedPlants();
+            await ResetDisplayedPlantsAsync();
         }
     }
 
@@ -391,6 +397,48 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             await _dialogService.Notify("Error", ex.Message);
         }
     }
+
+    #region Refresh plant states
+
+    [ObservableProperty]
+    private bool _isPlantStatesRefreshing = false;
+
+    [RelayCommand]
+    public async Task RefreshPlantStates()
+    {
+        if (IsBusy) return;
+
+        try
+        {
+            IsBusy = false;
+
+            await RefreshPlantStateAsync();
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify("Error", ex.Message);
+        }
+        finally
+        {
+            IsPlantStatesRefreshing = false;
+            IsBusy = false;
+        }
+    }
+
+    private Task RefreshPlantStateAsync()
+    {
+        return Task.Run(() =>
+        {
+            if (Plants.Count == 0) return;
+
+            foreach (PlantListItemViewModel plant in Plants)
+            {
+                plant.RefreshStates();
+            }
+        });
+    }
+
+    #endregion Refresh plant states
 
     #region Notification methods
 

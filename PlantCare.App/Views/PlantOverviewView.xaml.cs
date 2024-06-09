@@ -15,7 +15,7 @@ public partial class PlantOverviewView : ContentPageBase
     {
         if (BindingContext is PlantListOverviewViewModel viewModel)
         {
-            viewModel.ResetSearch();
+            viewModel.ResetSearchAsync();
         }
     }
 }

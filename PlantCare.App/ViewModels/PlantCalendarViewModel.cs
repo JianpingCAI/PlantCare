@@ -500,10 +500,10 @@ namespace PlantCare.App.ViewModels
         {
             if (IsBusy) return;
 
-            //IsBusy = true;
 
             try
             {
+                IsBusy = true;
                 await UpdateCalendarAndEventListAsync();
             }
             catch (Exception ex)
@@ -513,7 +513,7 @@ namespace PlantCare.App.ViewModels
             finally
             {
                 IsPlantEventRefreshing = false;
-                //IsBusy = false;
+                IsBusy = false;
             }
         }
 
