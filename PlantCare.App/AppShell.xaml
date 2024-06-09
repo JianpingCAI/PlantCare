@@ -22,9 +22,6 @@
         </Tab>
     </FlyoutItem>-->
 
-    <!--<Shell.TitleView>
-        <views:LogoView />
-    </Shell.TitleView>-->
     <Shell.TitleView>
         <Grid ColumnDefinitions="auto,*">
             <Border
@@ -43,7 +40,7 @@
                 x:Name="pageTitle"
                 Grid.Column="1"
                 Margin="15,0,0,0"
-                FontSize="Large"
+                FontSize="Medium"
                 HorizontalOptions="Start"
                 VerticalTextAlignment="Center" />
         </Grid>

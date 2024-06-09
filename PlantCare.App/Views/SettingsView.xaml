@@ -31,7 +31,7 @@
             <Label
                 Grid.Column="1"
                 Margin="15,0,0,0"
-                FontSize="Large"
+                FontSize="Medium"
                 HorizontalOptions="Start"
                 Text="{Binding Path=[Settings], Source={x:Static utils:LocalizationManager.Instance}}"
                 VerticalTextAlignment="Center" />
