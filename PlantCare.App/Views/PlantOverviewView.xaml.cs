@@ -11,11 +11,11 @@ public partial class PlantOverviewView : ContentPageBase
         BindingContext = viewModel;
     }
 
-    private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
+  private async void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (BindingContext is PlantListOverviewViewModel viewModel)
         {
-            viewModel.ResetSearchAsync();
+            await viewModel.ResetSearchAsync();
         }
     }
 }

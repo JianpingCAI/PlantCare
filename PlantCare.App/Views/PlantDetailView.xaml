@@ -45,7 +45,7 @@
                         FontFamily="MaterialIconsRegular"
                         FontSize="30"
                         HorizontalOptions="End"
-                        Opacity="0.9"
+                        Opacity="0.75"
                         Text="&#xe3c9;"
                         ToolTipProperties.Text="Edit the details"
                         VerticalOptions="End">

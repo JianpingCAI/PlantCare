@@ -141,11 +141,16 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     {
         return Task.Run(() =>
         {
+            IsLoading = true;
+
             Plants.Clear();
+
             foreach (PlantListItemViewModel item in _allPlantViewModelsCache)
             {
                 Plants.Add(item);
             }
+
+            IsLoading = false;
         });
     }
 
@@ -234,23 +239,31 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
-            if (!string.IsNullOrEmpty(SearchText))
-            {
-                List<PlantListItemViewModel> searchedPlants = await SearchPlantsByNameAsync(Plants, SearchText);
+            IsBusy = true;
 
-                Plants.Clear();
-                foreach (PlantListItemViewModel plant in searchedPlants)
-                {
-                    Plants.Add(plant);
-                }
-            }
-            else
+            await Task.Run(async () =>
             {
-                await ResetSearchAsync();
-            }
+                IsLoading = true;
+
+                if (!string.IsNullOrEmpty(SearchText))
+                {
+                    List<PlantListItemViewModel> searchedPlants = await SearchPlantsByNameAsync(Plants, SearchText);
+
+                    Plants.Clear();
+                    foreach (PlantListItemViewModel plant in searchedPlants)
+                    {
+                        Plants.Add(plant);
+                    }
+                }
+                else
+                {
+                    await ResetSearchAsync();
+                }
+            });
         }
         finally
         {
+            IsLoading = false;
             IsBusy = false;
         }
     }
