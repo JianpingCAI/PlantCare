@@ -11,7 +11,7 @@
     xmlns:xcStyles="clr-namespace:XCalendar.Maui.Styles;assembly=XCalendar.Maui"
     xmlns:xcViews="clr-namespace:XCalendar.Maui.Views;assembly=XCalendar.Maui"
     x:Name="This"
-    Title="Care Calendar"
+    Title="{Binding Path=[CareCalendar], Source={x:Static utils:LocalizationManager.Instance}}"
     x:DataType="vm:PlantCalendarViewModel">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -114,7 +114,6 @@
                         x:Name="chkUnattended"
                         HorizontalOptions="Start"
                         IsChecked="True">
-                        <!--  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanToReverseConverter}}"  -->
                         <CheckBox.Behaviors>
                             <toolkit:EventToCommandBehavior
                                 Command="{Binding SelectUnattendedPlantsCommand}"
@@ -122,14 +121,13 @@
                                 EventName="CheckedChanged" />
                         </CheckBox.Behaviors>
                     </CheckBox>
-                    <Label Text="Unattended Only" />
+                    <Label Text="{Binding Path=[UnattendedOnly], Source={x:Static utils:LocalizationManager.Instance}}" />
                 </HorizontalStackLayout>
 
                 <!--  Show Calendar  -->
                 <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
                     <CheckBox x:Name="chkCalendar" IsChecked="{Binding IsShowCalendar, Mode=TwoWay}" />
-                    <!--  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanToReverseConverter}}"  -->
-                    <Label Margin="0,0,5,0" Text="Show" />
+                    <Label Margin="0,0,5,0" Text="{Binding Path=[Show], Source={x:Static utils:LocalizationManager.Instance}}" />
                     <Label
                         Margin="0,0,15,0"
                         FontFamily="MaterialIconsRegular"

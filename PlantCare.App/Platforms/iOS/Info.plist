@@ -28,17 +28,25 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
-  
-  <!--for local notification-->
+	
+	<!--for local notification-->
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
-  
+	
 	<key>CFBundleDisplayName</key>
 	<string>MyPlantCare</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.jianping.plantcare.app</string>
+	
+	<!--for localization-->
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>zh-Hans</string>
+	</array>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
 </dict>
 </plist>

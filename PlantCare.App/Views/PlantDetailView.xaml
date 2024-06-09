@@ -7,7 +7,7 @@
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="{Binding Name, StringFormat='{0} Details'}"
+    Title="{Binding Name, StringFormat='{0}'}"
     x:DataType="vm:PlantDetailViewModel">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -59,14 +59,17 @@
                     </Button>
                 </Grid>
 
-                <Grid ColumnDefinitions="auto,*" RowDefinitions="*,*,*,*,*,*,*,*">
+                <Grid
+                    ColumnDefinitions="auto,*"
+                    HorizontalOptions="Center"
+                    RowDefinitions="*,*,*,*,*,*,*,*">
 
                     <Label
                         Margin="0,0,10,0"
                         FontAttributes="Bold"
                         FontSize="Medium"
                         HorizontalTextAlignment="End"
-                        Text="Species" />
+                        Text="{Binding Path=[Species], Source={x:Static utils:LocalizationManager.Instance}}" />
                     <Label
                         Grid.Column="1"
                         FontSize="Medium"
@@ -79,7 +82,8 @@
                         FontAttributes="Bold"
                         FontSize="Medium"
                         HorizontalTextAlignment="End"
-                        Text="Age" />
+                        Text="{Binding Path=[Age], Source={x:Static utils:LocalizationManager.Instance}}" />
+
                     <Label
                         Grid.Row="1"
                         Grid.Column="1"
@@ -92,7 +96,7 @@
                         FontAttributes="Bold"
                         FontSize="Medium"
                         HorizontalTextAlignment="End"
-                        Text="Last watering" />
+                        Text="{Binding Path=[LastWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
                     <Label
                         Grid.Row="2"
                         Grid.Column="1"
@@ -105,7 +109,7 @@
                         FontAttributes="Bold"
                         FontSize="Medium"
                         HorizontalTextAlignment="End"
-                        Text="Next watering" />
+                        Text="{Binding Path=[NextWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
                     <Label
                         Grid.Row="3"
                         Grid.Column="1"
@@ -118,7 +122,7 @@
                         FontAttributes="Bold"
                         FontSize="Medium"
                         HorizontalTextAlignment="End"
-                        Text="Last fertilization" />
+                        Text="{Binding Path=[LastFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
                     <Label
                         Grid.Row="4"
                         Grid.Column="1"
@@ -131,7 +135,7 @@
                         FontAttributes="Bold"
                         FontSize="Medium"
                         HorizontalTextAlignment="End"
-                        Text="Next fertilization" />
+                        Text="{Binding Path=[NextFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
                     <Label
                         Grid.Row="5"
                         Grid.Column="1"
@@ -150,7 +154,7 @@
                             FontAttributes="Bold"
                             FontSize="16"
                             HorizontalTextAlignment="End"
-                            Text="Next Watering in"
+                            Text="{Binding Path=[NextWatering], Source={x:Static utils:LocalizationManager.Instance}}"
                             TextColor="DeepSkyBlue" />
                         <Label
                             Grid.Column="1"
@@ -159,7 +163,6 @@
                             HorizontalTextAlignment="Start"
                             Text="{Binding HoursUntilNextWatering, Converter={StaticResource HoursToDayHourStringConverter}}"
                             TextColor="DeepSkyBlue" />
-                        <!--  Text="{Binding HoursUntilNextWatering, StringFormat='Next watering in {0:0.00} hours'}"  -->
 
                         <Label
                             Grid.Row="1"
@@ -167,7 +170,7 @@
                             FontAttributes="Bold"
                             FontSize="16"
                             HorizontalTextAlignment="End"
-                            Text="Next fertilization in"
+                            Text="{Binding Path=[NextFertilization], Source={x:Static utils:LocalizationManager.Instance}}"
                             TextColor="DeepSkyBlue" />
                         <Label
                             Grid.Row="1"
@@ -178,7 +181,6 @@
                             HorizontalTextAlignment="Start"
                             Text="{Binding HoursUntilNextFertilize, Converter={StaticResource HoursToDayHourStringConverter}}"
                             TextColor="DeepSkyBlue" />
-                        <!--  Text="{Binding HoursUntilNextFertilize, StringFormat='Next fertilization in {0:0.00} hours'}"  -->
                     </Grid>
                 </Grid>
 
@@ -188,7 +190,7 @@
                         Command="{Binding DeletePlantCommand}"
                         HorizontalOptions="Center"
                         MinimumWidthRequest="100"
-                        Text="Delete" />
+                        Text="{Binding Path=[Delete], Source={x:Static utils:LocalizationManager.Instance}}" />
                 </Grid>
             </StackLayout>
         </ScrollView>

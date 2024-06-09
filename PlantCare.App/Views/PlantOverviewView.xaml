@@ -7,8 +7,10 @@
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="{Binding Plants.Count, StringFormat='My Plants ({0})', Mode=OneWay}"
+    Title="{Binding Path=[MyPlants], Source={x:Static utils:LocalizationManager.Instance}}"
     x:DataType="vm:PlantListOverviewViewModel">
+    <!--  Title="{Binding Plants.Count, StringFormat='My Plants ({0})', Mode=OneWay}"  -->
+
     <ContentPage.Resources>
         <!--  Style used by the CollectionView selection  -->
         <Style TargetType="Grid">

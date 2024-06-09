@@ -6,11 +6,37 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:am="clr-namespace:Microsoft.Maui.ApplicationModel;assembly=Microsoft.Maui.Essentials"
     xmlns:local="clr-namespace:PlantCare.App.Resources.Styles"
+    xmlns:strings="clr-namespace:PlantCare.App.Resources"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="Settings"
     x:DataType="vm:SettingsViewModel">
+    <!--  Title="{x:Static strings:LocalizationResources.Settings}"  -->
+    <!--  Title="{Binding Path=[Settings], Source={x:Static utils:LocalizationManager.Instance}}"  -->
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="auto,*">
+            <Border
+                Margin="5,0,0,0"
+                HorizontalOptions="Start"
+                Stroke="Transparent"
+                StrokeThickness="0"
+                VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="40" />
+                </Border.StrokeShape>
+                <Image HeightRequest="40" Source="default_plant.png" />
+            </Border>
 
+            <Label
+                Grid.Column="1"
+                Margin="15,0,0,0"
+                FontSize="Large"
+                HorizontalOptions="Start"
+                Text="{Binding Path=[Settings], Source={x:Static utils:LocalizationManager.Instance}}"
+                VerticalTextAlignment="Center" />
+        </Grid>
+    </Shell.TitleView>
     <ContentPage.Resources>
         <ControlTemplate x:Key="ThemeRadioTemplate">
             <Border
@@ -73,6 +99,9 @@
                 </VisualStateManager.VisualStateGroups>
             </Border>
         </ControlTemplate>
+        <ResourceDictionary>
+            <utils:EnumDescriptionConverter x:Key="EnumDescConverter" />
+        </ResourceDictionary>
     </ContentPage.Resources>
     <Grid Padding="5,2,5,0">
         <VerticalStackLayout>
@@ -83,26 +112,45 @@
                 RowDefinitions="*,*,*">
                 <Label
                     HorizontalTextAlignment="Start"
-                    Text="Watering Notification"
+                    Text="{Binding Path=[WateringNotification], Source={x:Static utils:LocalizationManager.Instance}}"
                     VerticalTextAlignment="Center" />
+                <!--  Text="{x:Static strings:LocalizationResources.WateringNotification}"  -->
                 <Switch
+                    x:Name="wateringSwitch"
                     Grid.Column="1"
                     HorizontalOptions="Start"
                     IsToggled="{Binding IsWateringNotificationEnabled}"
-                    VerticalOptions="End" />
+                    VerticalOptions="End">
+                    <Switch.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            Command="{Binding ToggleWateringNotificationCommand}"
+                            CommandParameter="{Binding Source={x:Reference wateringSwitch}, Path=IsToggled}"
+                            EventName="Toggled" />
+                    </Switch.Behaviors>
+                </Switch>
 
                 <!--  IsFertilizationNotificationEnabled  -->
                 <Label
                     Grid.Row="1"
                     HorizontalTextAlignment="Start"
-                    Text="Fertilization Notification"
+                    Text="{Binding Path=[FertilizationNotification], Source={x:Static utils:LocalizationManager.Instance}}"
                     VerticalTextAlignment="Center" />
+                <!--  Text="{x:Static strings:LocalizationResources.FertilizationNotification}"  -->
+
                 <Switch
+                    x:Name="fertilizationSwitch"
                     Grid.Row="1"
                     Grid.Column="1"
                     HorizontalOptions="Start"
                     IsToggled="{Binding IsFertilizationNotificationEnabled}"
-                    VerticalOptions="End" />
+                    VerticalOptions="End">
+                    <Switch.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            Command="{Binding ToggleFertilizationNotificationCommand}"
+                            CommandParameter="{Binding Source={x:Reference fertilizationSwitch}, Path=IsToggled}"
+                            EventName="Toggled" />
+                    </Switch.Behaviors>
+                </Switch>
             </Grid>
 
             <!--  Debugging Mode  -->
@@ -123,7 +171,29 @@
 
             <Label
                 FontAttributes="Bold"
-                Text="Theme"
+                Text="{Binding Path=[Language], Source={x:Static utils:LocalizationManager.Instance}}"
+                class="Head" />
+            <!--  Text="{Binding Path=[Language], Source={x:Static utils:LocalizationManager.Instance}}"  -->
+
+            <!--  Title="Language"  -->
+            <Picker
+                x:Name="langPicker"
+                ItemDisplayBinding="{Binding Converter={StaticResource EnumDescConverter}}"
+                ItemsSource="{Binding Source={x:Static utils:LanguageProvider.All}}"
+                SelectedItem="{Binding SelectedLanguage}">
+                <Picker.Behaviors>
+                    <toolkit:EventToCommandBehavior
+                        Command="{Binding SelectLanguageChangedCommand}"
+                        CommandParameter="{Binding Source={x:Reference langPicker}, Path=SelectedItem}"
+                        EventName="SelectedIndexChanged" />
+                </Picker.Behaviors>
+            </Picker>
+
+            <BoxView Margin="0,5" class="HRule" />
+
+            <Label
+                FontAttributes="Bold"
+                Text="{Binding Path=[Theme], Source={x:Static utils:LocalizationManager.Instance}}"
                 class="Head" />
             <!--  class="Subhead"  -->
 
@@ -133,7 +203,6 @@
                 HorizontalOptions="Fill"
                 RadioButtonGroup.GroupName="AppTheme"
                 RadioButtonGroup.SelectedValue="{Binding SelectedTheme}">
-                <!--  RadioButtonGroup.SelectedValue="{Binding SelectedTheme}"  -->
 
                 <Grid.Resources>
                     <Style TargetType="RadioButton">
@@ -157,7 +226,7 @@
                             <Label
                                 Grid.Row="1"
                                 HorizontalOptions="Center"
-                                Text="Default"
+                                Text="{Binding Path=[Default], Source={x:Static utils:LocalizationManager.Instance}}"
                                 VerticalOptions="Center" />
                         </Grid>
                     </RadioButton.Content>
@@ -179,7 +248,7 @@
                             <Label
                                 Grid.Row="1"
                                 HorizontalOptions="Center"
-                                Text="Dark"
+                                Text="{Binding Path=[Dark], Source={x:Static utils:LocalizationManager.Instance}}"
                                 VerticalOptions="Center" />
                         </Grid>
                     </RadioButton.Content>
@@ -204,7 +273,7 @@
                             <Label
                                 Grid.Row="1"
                                 HorizontalOptions="Center"
-                                Text="Light"
+                                Text="{Binding Path=[Light], Source={x:Static utils:LocalizationManager.Instance}}"
                                 VerticalOptions="Center" />
                         </Grid>
                     </RadioButton.Content>
@@ -213,7 +282,6 @@
                     </RadioButton.GestureRecognizers>-->
                 </RadioButton>
             </Grid>
-
         </VerticalStackLayout>
         <Grid
             BackgroundColor="{AppThemeBinding Light={StaticResource Gray200},

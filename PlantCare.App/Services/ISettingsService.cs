@@ -1,4 +1,6 @@
-﻿namespace PlantCare.App.Services;
+﻿using PlantCare.App.Utils;
+
+namespace PlantCare.App.Services;
 
 public interface ISettingsService
 {
@@ -17,4 +19,8 @@ public interface ISettingsService
     Task<bool> GetDebugSettingAsync();
 
     Task SaveDebugSettingAsync(bool isEnabled);
+
+    Task<Language> GetLanguageAsync();
+    Task SaveLanguageAsync(Language language);
+
 }

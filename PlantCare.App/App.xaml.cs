@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PlantCare.App.Utils;
 using PlantCare.Data.Repositories;
 using System.Diagnostics;
 
@@ -6,6 +7,8 @@ namespace PlantCare.App
 {
     public partial class App : Application
     {
+        public static Language AppLanguage { get; private set; }
+
         public App(IServiceProvider serviceProvider)
         {
             InitializeComponent();
@@ -21,11 +24,35 @@ namespace PlantCare.App
 
             LoadTheme();
 
+            LoadLocalizationLanguage();
+
             MainPage = new AppShell();
             //MainPage = new NavigationPage(serviceProvider.GetRequiredService<HomeView>());
 
             // Add navigation event handlers
             RegisterNavigationEventHandlers();
+        }
+
+        private static void LoadLocalizationLanguage()
+        {
+            string? languageString = SecureStorage.GetAsync("Language").Result;
+            try
+            {
+                if (!string.IsNullOrEmpty(languageString))
+                {
+                    Language language = (Language)Enum.Parse(typeof(Language), languageString, true);
+
+                    LocalizationManager.Instance.SetLanguage(language);
+
+                    AppLanguage = language;
+                }
+            }
+            catch (Exception)
+            {
+                LocalizationManager.Instance.SetLanguage(Language.English);
+
+                AppLanguage = Language.English;
+            }
         }
 
         private static void LoadTheme()

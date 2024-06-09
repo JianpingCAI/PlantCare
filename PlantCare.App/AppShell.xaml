@@ -3,6 +3,8 @@
     x:Class="PlantCare.App.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:strings="clr-namespace:PlantCare.App.Resources"
+    xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     Title="PlantCare.App"
     Shell.FlyoutBehavior="Disabled">
@@ -49,36 +51,27 @@
 
     <TabBar>
 
+        <!--  Home  -->
         <ShellContent
-            Title="Home"
+            x:Name="tabHome"
+            Title="{Binding Path=[Home], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:PlantOverviewView}"
             Icon="tab_home.png"
             Route="overview" />
 
-        <!--<ShellContent
-            Title="Missed"
-            ContentTemplate="{DataTemplate views:ReminderView}"
-            Icon="tab_notifications.png"
-            Route="reminders" />-->
-
-        <!--<ShellContent
-            Title="Calendar"
-            ContentTemplate="{DataTemplate views:ReminderCalendarView}"
-            Icon="tab_calender.png"
-            Route="calendar" />-->
-
+        <!--  Calendar  -->
         <ShellContent
-            Title="Calendar"
+            x:Name="tabCalendar"
+            Title="{Binding Path=[Calendar], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:PlantCalendarView}"
             Icon="tab_calender.png"
             Route="calendar" />
 
-        <!--  Icon="reminders.png"  -->
         <ShellContent
-            Title="Settings"
+            x:Name="tabSettings"
+            Title="{Binding Path=[Settings], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:SettingsView}"
             Icon="tab_settings.png"
             Route="settings" />
-        <!--  Icon="settings.png"  -->
     </TabBar>
 </Shell>

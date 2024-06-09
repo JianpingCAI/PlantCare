@@ -3,15 +3,23 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
+using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace PlantCare.App.ViewModels;
 
-public partial class SettingsViewModel(ISettingsService settingsService, IDialogService dialogService) : ViewModelBase
+public partial class SettingsViewModel : ViewModelBase
 {
-    private readonly ISettingsService _settingsService = settingsService;
-    private readonly IDialogService _dialogService = dialogService;
+    private readonly ISettingsService _settingsService;
+    private readonly IDialogService _dialogService;
+
+    public SettingsViewModel(ISettingsService settingsService, IDialogService dialogService)
+    {
+        _settingsService = settingsService;
+        _dialogService = dialogService;
+    }
 
     [ObservableProperty]
     private bool _isWateringNotificationEnabled = true;
@@ -21,36 +29,60 @@ public partial class SettingsViewModel(ISettingsService settingsService, IDialog
 
     //[ObservableProperty]
     //private bool _isDebugModeEnabled = false;
+    public Language[] LanguageOptions { get; } = Enum.GetValues(typeof(Language)).Cast<Language>().ToArray();
 
     [ObservableProperty]
     private AppTheme _selectedTheme = AppTheme.Unspecified;
 
     private bool _isSettingsLoaded = false;
 
-#pragma warning disable CS8826 // Partial method declarations have signature differences.
-    partial void OnIsWateringNotificationEnabledChanged(bool isEnabled)
-#pragma warning restore CS8826 // Partial method declarations have signature differences.
-    {
-        WeakReferenceMessenger.Default.Send(new IsNotificationEnabledMessage
-        {
-            ReminderType = ReminderType.Watering,
-            IsNotificationEnabled = isEnabled
-        });
+    [ObservableProperty]
+    private Language _selectedLanguage = App.AppLanguage;
 
-        _settingsService.SaveWateringNotificationSettingAsync(isEnabled);
+    //private partial void OnIsWateringNotificationEnabledChanged(bool isEnabled)
+    [RelayCommand]
+    public async Task ToggleWateringNotification(object? isEnabledObj)
+    {
+        try
+        {
+            if (isEnabledObj is not bool isEnabled)
+                return;
+
+            WeakReferenceMessenger.Default.Send(new IsNotificationEnabledMessage
+            {
+                ReminderType = ReminderType.Watering,
+                IsNotificationEnabled = isEnabled
+            });
+
+            await _settingsService.SaveWateringNotificationSettingAsync(isEnabled);
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify("Error", ex.Message);
+        }
     }
 
-#pragma warning disable CS8826 // Partial method declarations have signature differences.
-    partial void OnIsFertilizationNotificationEnabledChanged(bool isEnabled)
-#pragma warning restore CS8826 // Partial method declarations have signature differences.
+    //partial void OnIsFertilizationNotificationEnabledChanged(bool isEnabled)
+    [RelayCommand]
+    public async Task ToggleFertilizationNotification(object? isEnabledObj)
     {
-        WeakReferenceMessenger.Default.Send(new IsNotificationEnabledMessage
-        {
-            ReminderType = ReminderType.Fertilization,
-            IsNotificationEnabled = isEnabled
-        });
+        if (isEnabledObj is not bool isEnabled)
+            return;
 
-        _settingsService.SaveFertilizationNotificationSettingAsync(isEnabled);
+        try
+        {
+            WeakReferenceMessenger.Default.Send(new IsNotificationEnabledMessage
+            {
+                ReminderType = ReminderType.Fertilization,
+                IsNotificationEnabled = isEnabled
+            });
+
+            await _settingsService.SaveFertilizationNotificationSettingAsync(isEnabled);
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify("Error", ex.Message);
+        }
     }
 
     //partial void OnIsDebugModeEnabledChanged(bool isEnabled)
@@ -60,7 +92,13 @@ public partial class SettingsViewModel(ISettingsService settingsService, IDialog
 
     partial void OnSelectedThemeChanged(AppTheme value)
     {
-        _settingsService.SaveThemeSettingAsync(value);
+        try
+        {
+            _settingsService.SaveThemeSettingAsync(value);
+        }
+        catch (Exception)
+        {
+        }
     }
 
     public override async Task LoadDataWhenViewAppearingAsync()
@@ -91,12 +129,32 @@ public partial class SettingsViewModel(ISettingsService settingsService, IDialog
 
             SelectedTheme = await _settingsService.GetThemeSettingAsync();
 
+            SelectedLanguage = await _settingsService.GetLanguageAsync();
+
+            //SelectLanguageChanged(SelectedLanguage);
+
             //IsDebugModeEnabled = await _settingsService.GetDebugSettingAsync();
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Exception thrown: {ex.Message}");
             throw;
+        }
+    }
+
+    [RelayCommand]
+    public async Task SelectLanguageChanged(object? selectedItem)
+    {
+        if (selectedItem is not Language selectedLanguage) return;
+
+        try
+        {
+            LocalizationManager.Instance.SetLanguage(selectedLanguage);
+            await _settingsService.SaveLanguageAsync(SelectedLanguage);
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify("Error", ex.Message);
         }
     }
 }

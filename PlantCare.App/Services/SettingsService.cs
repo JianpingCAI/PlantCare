@@ -1,4 +1,5 @@
-﻿using PlantCare.Data;
+﻿using PlantCare.App.Utils;
+using PlantCare.Data;
 
 namespace PlantCare.App.Services;
 
@@ -66,6 +67,32 @@ public class SettingsService : ISettingsService
         await SecureStorage.SetAsync("AppTheme", theme.ToString());
     }
 
+    public async Task<Language> GetLanguageAsync()
+    {
+        // Retrieve the theme setting
+        string? languageString = await SecureStorage.GetAsync("Language");
+        if (string.IsNullOrEmpty(languageString))
+        {
+            return Language.English;
+        }
+
+        try
+        {
+            Language language = (Language)Enum.Parse(typeof(Language), languageString, true);
+            return language;
+        }
+        catch (Exception)
+        {
+            return Language.English;
+        }
+    }
+
+    public async Task SaveLanguageAsync(Language language)
+    {
+        await SecureStorage.SetAsync("Language", language.ToString());
+    }
+
+
     public async Task<bool> GetDebugSettingAsync()
     {
         string? value = await SecureStorage.GetAsync(Consts.IsDebugMode);
@@ -82,4 +109,6 @@ public class SettingsService : ISettingsService
     {
         await SecureStorage.SetAsync(Consts.IsDebugMode, isEnabled.ToString());
     }
+
+    
 }

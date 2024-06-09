@@ -11,7 +11,7 @@ public class HoursToDayHourStringConverter : IValueConverter
             int days = ((int)hours) / 24;
             double remainHours = hours - days * 24;
 
-            return $"{days} days & {remainHours:0.00} hours";
+            return $"{days} {LocalizationManager.Instance["Days"]} & {remainHours:0.00} {LocalizationManager.Instance["Hours"]}";
         }
         return string.Empty;
     }

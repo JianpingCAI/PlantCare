@@ -10,6 +10,7 @@ using PlantCare.Data.Models;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Globalization;
 using XCalendar.Core.Collections;
 using XCalendar.Core.Enums;
 using XCalendar.Core.Extensions;
@@ -52,10 +53,21 @@ namespace PlantCare.App.ViewModels
     {
     }
 
-    public partial class PlantCalendarViewModel(IPlantService plantService, IDialogService dialogService) : ViewModelBase
+    public partial class PlantCalendarViewModel : ViewModelBase,
+        IDisposable,
+        IRecipient<LanguageChangedMessage>
     {
-        private readonly IPlantService _plantService = plantService;
-        private readonly IDialogService _dialogService = dialogService;
+        private readonly IPlantService _plantService;
+        private readonly IDialogService _dialogService;
+
+        public PlantCalendarViewModel(IPlantService plantService, IDialogService dialogService)
+        {
+            _plantService = plantService;
+            _dialogService = dialogService;
+
+            //LocalizationManager.Instance.LanguageChanged += OnLanguageChanged;
+            WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this);
+        }
 
         [ObservableProperty]
         private Calendar<PlantEventDay, PlantEvent>? _reminderCalendar = null;
@@ -93,21 +105,30 @@ namespace PlantCare.App.ViewModels
         {
             _loadCalendarTask = Task.Run(() =>
             {
-                if (ReminderCalendar is null)
-                {
-                    ReminderCalendar = new Calendar<PlantEventDay, PlantEvent>()
-                    {
-                        SelectedDates = [],
-                        SelectionAction = SelectionAction.Modify,
-                        SelectionType = SelectionType.Single
-                    };
-
-                    // Dates selection changed event
-                    ReminderCalendar.SelectedDates.CollectionChanged += SelectedDates_CollectionChanged;
-                }
+                ReminderCalendar ??= CreateCalendar(null);
             });
 
             await UpdateCalendarAndEventListAsync();
+        }
+
+        private Calendar<PlantEventDay, PlantEvent> CreateCalendar(string? cultureCode)
+        {
+            var calendar = new Calendar<PlantEventDay, PlantEvent>()
+            {
+                SelectedDates = [],
+                SelectionAction = SelectionAction.Modify,
+                SelectionType = SelectionType.Single
+            };
+
+            if (!string.IsNullOrEmpty(cultureCode))
+            {
+                CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(CultureInfo.CurrentCulture.Name);
+                CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(CultureInfo.CurrentCulture.Name);
+            }
+            // Dates selection changed event
+            calendar.SelectedDates.CollectionChanged += SelectedDates_CollectionChanged;
+
+            return calendar;
         }
 
         private async Task UpdateCalendarAndEventListAsync()
@@ -497,5 +518,83 @@ namespace PlantCare.App.ViewModels
         }
 
         #endregion Refresh plant events
+
+        void IDisposable.Dispose()
+        {
+            //LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
+            if (ReminderCalendar is not null)
+            {
+                ReminderCalendar.SelectedDates.CollectionChanged -= SelectedDates_CollectionChanged;
+            }
+        }
+
+        async void IRecipient<LanguageChangedMessage>.Receive(LanguageChangedMessage message)
+        {
+            if (string.IsNullOrEmpty(message?.CultureCode) || ReminderCalendar is null)
+                return;
+
+            try
+            {
+                //Set DefaultThreadCurrentCulture because CurrentCulture gets automatically reset when changed.
+                //CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CurrentCulture; // new CultureInfo(TargetCultureCode);
+                //CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentUICulture;//new CultureInfo(TargetCultureCode);
+
+                CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(message.CultureCode);
+                CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(message.CultureCode);
+
+                //This causes the binding converters (which use the current culture) to update.
+                //Day Names
+                var oldDayNamesOlder = ReminderCalendar.DayNamesOrder.ToList();
+                ReminderCalendar.DayNamesOrder.ReplaceRange(new List<DayOfWeek>() { DayOfWeek.Monday });
+                ReminderCalendar.DayNamesOrder.ReplaceRange(oldDayNamesOlder);
+
+                //NavigationView Title
+                NavigateCalendar(1);
+                NavigateCalendar(-1);
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.Notify("Error", ex.Message);
+            }
+
+            //if (ReminderCalendar is null)
+            //{
+            //    ReminderCalendar = CreateCalendar(message.CultureCode);
+            //}
+            //else
+            //{
+            //    ReminderCalendar.SelectedDates.CollectionChanged -= SelectedDates_CollectionChanged;
+
+            //    ReminderCalendar = CreateCalendar(message.CultureCode);
+            //}
+        }
+
+        //private async void OnLanguageChanged(object? sender, EventArgs e)
+        //{
+        //    if (ReminderCalendar is null) return;
+        //    try
+        //    {
+        //        //Set DefaultThreadCurrentCulture because CurrentCulture gets automatically reset when changed.
+        //        //CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CurrentCulture; // new CultureInfo(TargetCultureCode);
+        //        //CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentUICulture;//new CultureInfo(TargetCultureCode);
+
+        //        CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(CultureInfo.CurrentCulture.Name);
+        //        CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(CultureInfo.CurrentCulture.Name);
+
+        //        //This causes the binding converters (which use the current culture) to update.
+        //        //Day Names
+        //        var oldDayNamesOlder = ReminderCalendar.DayNamesOrder.ToList();
+        //        ReminderCalendar.DayNamesOrder.ReplaceRange(new List<DayOfWeek>() { DayOfWeek.Monday });
+        //        ReminderCalendar.DayNamesOrder.ReplaceRange(oldDayNamesOlder);
+
+        //        //NavigationView Title
+        //        NavigateCalendar(1);
+        //        NavigateCalendar(-1);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await _dialogService.Notify("Error", ex.Message);
+        //    }
+        //}
     }
 }

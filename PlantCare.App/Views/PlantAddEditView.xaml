@@ -6,8 +6,9 @@
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
     xmlns:local="clr-namespace:PlantCare.App.Utils"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="{Binding Name, StringFormat='Edit: {0}', Mode=OneWay}"
+    Title="{Binding Name, StringFormat='{0}', Mode=OneWay}"
     x:DataType="vm:PlantAddEditViewModel">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -71,13 +72,13 @@
                         </Border.StrokeShape>
                         <Grid
                             ColumnDefinitions="90,*"
-                            HorizontalOptions="Start"
+                            HorizontalOptions="CenterAndExpand"
                             RowDefinitions="35,35,*">
 
                             <Label
-                                Padding="3"
+                                FontAttributes="Bold"
                                 HorizontalTextAlignment="End"
-                                Text="Name" />
+                                Text="{Binding Path=[Name], Source={x:Static utils:LocalizationManager.Instance}}" />
                             <Entry
                                 Grid.Column="1"
                                 Margin="5,0,0,0"
@@ -90,8 +91,9 @@
 
                             <Label
                                 Grid.Row="1"
+                                FontAttributes="Bold"
                                 HorizontalTextAlignment="End"
-                                Text="Species" />
+                                Text="{Binding Path=[Species], Source={x:Static utils:LocalizationManager.Instance}}" />
                             <Entry
                                 Grid.Row="1"
                                 Grid.Column="1"
@@ -107,7 +109,7 @@
                                 Grid.Row="2"
                                 FontAttributes="Bold"
                                 HorizontalTextAlignment="End"
-                                Text="Age" />
+                                Text="{Binding Path=[Age], Source={x:Static utils:LocalizationManager.Instance}}" />
                             <HorizontalStackLayout Grid.Row="2" Grid.Column="1">
                                 <Entry
                                     Margin="5,0,0,0"
@@ -137,12 +139,12 @@
                         </Border.StrokeShape>
                         <Grid
                             ColumnDefinitions="90,*"
-                            HorizontalOptions="Start"
+                            HorizontalOptions="CenterAndExpand"
                             RowDefinitions="*,*">
                             <Label
                                 FontAttributes="Bold"
                                 HorizontalTextAlignment="End"
-                                Text="Last Watering" />
+                                Text="{Binding Path=[LastWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
 
                             <!--  Last watering  -->
                             <HorizontalStackLayout Grid.Column="1" Margin="5,0,0,0">
@@ -154,7 +156,7 @@
                                     Padding="5"
                                     Command="{Binding SetCurrentTimeAsLastWateredCommand}"
                                     HeightRequest="35"
-                                    Text="Now"
+                                    Text="{Binding Path=[Now], Source={x:Static utils:LocalizationManager.Instance}}"
                                     VerticalOptions="Center" />
                             </HorizontalStackLayout>
 
@@ -163,7 +165,8 @@
                                 Grid.Row="1"
                                 FontAttributes="Bold"
                                 HorizontalTextAlignment="End"
-                                Text="Waterting&#10;Interval" />
+                                Text="{Binding Path=[WateringInterval], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <!--  Text="Waterting&#10;Interval"  -->
 
                             <VerticalStackLayout
                                 Grid.Row="1"
@@ -186,7 +189,7 @@
                                                                       Default=200}"
                                         Minimum="0"
                                         Value="{Binding WateringFrequencyDays, Mode=TwoWay}" />
-                                    <Label Margin="5,0,10,0" Text="Days" />
+                                    <Label Margin="5,0,10,0" Text="{Binding Path=[Days], Source={x:Static utils:LocalizationManager.Instance}}" />
                                 </HorizontalStackLayout>
                                 <!--  Hours  -->
                                 <HorizontalStackLayout>
@@ -205,7 +208,7 @@
                                                                       Default=200}"
                                         Minimum="0"
                                         Value="{Binding WateringFrequencyHours, Mode=TwoWay}" />
-                                    <Label Margin="5,0,0,0" Text="Hours" />
+                                    <Label Margin="5,0,0,0" Text="{Binding Path=[Hours], Source={x:Static utils:LocalizationManager.Instance}}" />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </Grid>
@@ -218,12 +221,12 @@
                         </Border.StrokeShape>
                         <Grid
                             ColumnDefinitions="90,*"
-                            HorizontalOptions="Start"
+                            HorizontalOptions="CenterAndExpand"
                             RowDefinitions="*,*">
                             <Label
                                 FontAttributes="Bold"
                                 HorizontalTextAlignment="End"
-                                Text="Last&#10;Fertilization" />
+                                Text="{Binding Path=[LastFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
 
                             <HorizontalStackLayout Grid.Column="1" Margin="5,0,0,0">
                                 <DatePicker Date="{Binding LastFertilizationDate, Mode=TwoWay}" VerticalOptions="End" />
@@ -233,7 +236,7 @@
                                     Padding="5"
                                     Command="{Binding SetCurrentTimeAsLastFertilizationCommand}"
                                     HeightRequest="35"
-                                    Text="Now"
+                                    Text="{Binding Path=[Now], Source={x:Static utils:LocalizationManager.Instance}}"
                                     VerticalOptions="Center" />
                             </HorizontalStackLayout>
 
@@ -241,7 +244,7 @@
                                 Grid.Row="1"
                                 FontAttributes="Bold"
                                 HorizontalTextAlignment="End"
-                                Text="Fertilization&#10;Interval" />
+                                Text="{Binding Path=[FertilizationInterval], Source={x:Static utils:LocalizationManager.Instance}}" />
 
                             <VerticalStackLayout
                                 Grid.Row="1"
@@ -263,7 +266,7 @@
                                                                       Default=200}"
                                         Minimum="0"
                                         Value="{Binding FertilizationFrequencyDays, Mode=TwoWay}" />
-                                    <Label Margin="5,0,10,0" Text="Days" />
+                                    <Label Margin="5,0,10,0" Text="{Binding Path=[Days], Source={x:Static utils:LocalizationManager.Instance}}" />
                                 </HorizontalStackLayout>
 
                                 <HorizontalStackLayout>
@@ -282,7 +285,7 @@
                                                                       Default=200}"
                                         Minimum="0"
                                         Value="{Binding FertilizationFrequencyHours, Mode=TwoWay}" />
-                                    <Label Margin="5,0,0,0" Text="Hours" />
+                                    <Label Margin="5,0,0,0" Text="{Binding Path=[Hours], Source={x:Static utils:LocalizationManager.Instance}}" />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </Grid>
@@ -302,7 +305,7 @@
                         HorizontalOptions="CenterAndExpand"
                         IsEnabled="True"
                         MinimumWidthRequest="150"
-                        Text="Save" />
+                        Text="{Binding Path=[Save], Source={x:Static utils:LocalizationManager.Instance}}" />
                 </VerticalStackLayout>
             </Grid>
         </ScrollView>
