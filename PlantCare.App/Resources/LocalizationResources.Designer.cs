@@ -61,6 +61,15 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No plants found. Add a new plant to get started!.
+        /// </summary>
+        internal static string AddMyPlants {
+            get {
+                return ResourceManager.GetString("AddMyPlants", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Age.
         /// </summary>
         internal static string Age {

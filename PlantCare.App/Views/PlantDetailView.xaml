@@ -149,17 +149,19 @@
                         ColumnDefinitions="*,auto"
                         HorizontalOptions="Start"
                         RowDefinitions="*,*">
+
+                        <!--  Next watering  -->
                         <Label
                             Margin="0,0,5,0"
                             FontAttributes="Bold"
-                            FontSize="16"
+                            FontSize="Medium"
                             HorizontalTextAlignment="End"
                             Text="{Binding Path=[NextWatering], Source={x:Static utils:LocalizationManager.Instance}}"
                             TextColor="DeepSkyBlue" />
                         <Label
                             Grid.Column="1"
                             FontAttributes="Bold"
-                            FontSize="16"
+                            FontSize="Medium"
                             HorizontalTextAlignment="Start"
                             Text="{Binding HoursUntilNextWatering, Converter={StaticResource HoursToDayHourStringConverter}}"
                             TextColor="DeepSkyBlue" />
@@ -168,7 +170,7 @@
                             Grid.Row="1"
                             Margin="0,0,5,0"
                             FontAttributes="Bold"
-                            FontSize="16"
+                            FontSize="Medium"
                             HorizontalTextAlignment="End"
                             Text="{Binding Path=[NextFertilization], Source={x:Static utils:LocalizationManager.Instance}}"
                             TextColor="DeepSkyBlue" />
@@ -176,7 +178,7 @@
                             Grid.Row="1"
                             Grid.Column="1"
                             FontAttributes="Bold"
-                            FontSize="16"
+                            FontSize="Medium"
                             HorizontalOptions="Start"
                             HorizontalTextAlignment="Start"
                             Text="{Binding HoursUntilNextFertilize, Converter={StaticResource HoursToDayHourStringConverter}}"

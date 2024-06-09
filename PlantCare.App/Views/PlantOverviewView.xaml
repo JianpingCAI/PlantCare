@@ -36,7 +36,7 @@
             <!--  Search Bar for quick filtering  -->
             <SearchBar
                 Margin="0,0,0,10"
-                Placeholder="Search plants by name"
+                Placeholder="{Binding Path=[SearchPlantByName], Source={x:Static utils:LocalizationManager.Instance}}"
                 SearchCommand="{Binding SearchCommand}"
                 Text="{Binding SearchText}"
                 TextChanged="SearchBar_TextChanged"
@@ -46,7 +46,7 @@
             <!--  Plants Collection View  -->
             <CollectionView
                 Grid.Row="1"
-                EmptyView="No plants found. Add a new plant to get started!"
+                EmptyView="{Binding Path=[AddMyPlants], Source={x:Static utils:LocalizationManager.Instance}}"
                 ItemsSource="{Binding Plants}"
                 SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
                 SelectionChangedCommand="{Binding SelectPlantCommand}"
