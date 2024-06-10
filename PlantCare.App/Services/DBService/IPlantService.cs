@@ -1,4 +1,5 @@
-﻿using PlantCare.Data.DbModels;
+﻿using PlantCare.App.ViewModels;
+using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
 
 namespace PlantCare.App.Services.DBService;
@@ -26,4 +27,12 @@ public interface IPlantService
     Task<List<WateringHistory>> GetPlantWateringHistoryAsync(Guid plantId);
 
     Task<List<FertilizationHistory>> GetPlanFertilizationHistoryAsync(Guid plantId);
+
+    Task AddPlantCareHistory(Guid id, DateTime lastWatered, DateTime lastFertilized);
+
+    Task AddWateringHistory(Guid id, DateTime lastWatered);
+
+    Task AddFertilizationHistory(Guid id, DateTime lastFertilized);
+
+    Task<List<PlantCareHistory>> GetAllPlantsWithWateringHistoryAsync();
 }

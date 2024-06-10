@@ -6,8 +6,8 @@
     xmlns:strings="clr-namespace:PlantCare.App.Resources"
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
-    Title="PlantCare.App"
-    Shell.FlyoutBehavior="Disabled">
+    Title="PlantCare.App">
+    <!--  Shell.FlyoutBehavior="Disabled"  -->
 
     <!--<FlyoutItem>
         <Tab>
@@ -63,6 +63,13 @@
             ContentTemplate="{DataTemplate views:PlantCalendarView}"
             Icon="tab_calender.png"
             Route="calendar" />
+
+        <ShellContent
+            x:Name="tabHistory"
+            Title="History"
+            ContentTemplate="{DataTemplate views:WateringHistoryView}"
+            Icon="tab_calender.png"
+            Route="history" />
 
         <ShellContent
             x:Name="tabSettings"

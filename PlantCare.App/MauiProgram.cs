@@ -143,7 +143,6 @@ public static class MauiProgram
 
         //builder.Services.AddHostedService<TestBackGroundService>();
 
-
 #if DEBUG
         builder.Logging.AddDebug();
 
@@ -180,5 +179,8 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<SettingsView>();
         builder.Services.AddSingleton<SettingsViewModel>();
+
+        builder.Services.AddTransient<WateringHistoryView>();
+        builder.Services.AddTransient<WateringHistoryViewModel>();
     }
 }

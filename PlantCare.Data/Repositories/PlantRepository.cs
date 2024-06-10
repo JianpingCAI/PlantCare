@@ -40,4 +40,11 @@ public class PlantRepository(ApplicationDbContext context) : GenericRepository<P
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<List<PlantDbModel>> GetAllPlantsWithWateringHistoryAsync()
+    {
+        return await _context.Plants
+                             .Include(p => p.WateringHistories)
+                             .ToListAsync();
+    }
 }

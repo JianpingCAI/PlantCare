@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using PlantCare.App.ViewModels;
 using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
 using PlantCare.Data.Repositories.interfaces;
+using System.Collections.Generic;
 
 namespace PlantCare.App.Services.DBService;
 
@@ -88,5 +90,44 @@ public class PlantService : IPlantService
     public async Task<List<FertilizationHistory>> GetPlanFertilizationHistoryAsync(Guid plantId)
     {
         return await _fertilizationHistoryRepository.GetFertilizationHistoryByPlantIdAsync(plantId);
+    }
+
+    public async Task AddPlantCareHistory(Guid plantId, DateTime lastWatered, DateTime lastFertilized)
+    {
+        await AddWateringHistory(plantId, lastWatered);
+        await AddFertilizationHistory(plantId, lastFertilized);
+    }
+
+    public async Task AddWateringHistory(Guid plantId, DateTime lastWatered)
+    {
+        await _waterHistoryRepository.AddAsync(new WateringHistory() { CareTime = lastWatered, PlantId = plantId });
+    }
+
+    public async Task AddFertilizationHistory(Guid plantId, DateTime lastFertilized)
+    {
+        await _fertilizationHistoryRepository.AddAsync(new FertilizationHistory() { PlantId = plantId, CareTime = lastFertilized });
+    }
+
+    public Task<List<PlantCareHistory>> GetAllPlantsWithWateringHistoryAsync()
+    {
+        return Task.Run(async () =>
+        {
+            List<PlantDbModel> plants = await _plantRepository.GetAllPlantsWithWateringHistoryAsync();
+            plants = [.. plants.OrderBy(x => x.Name)];
+
+            List<PlantCareHistory> plantCareHistoryList = new(plants.Count);
+
+            foreach (PlantDbModel plant in plants)
+            {
+                plantCareHistoryList.Add(new PlantCareHistory()
+                {
+                    PlantId = plant.Id,
+                    Name = plant.Name,
+                    CareTimes = plant.WateringHistories.Select(x => x.CareTime).ToList()
+                });
+            }
+
+            return plantCareHistoryList;
+        });
     }
 }

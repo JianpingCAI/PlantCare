@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase
+    x:Class="PlantCare.App.Views.WateringHistoryView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:PlantCare.App.Views"
+    xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
+    Title="Watering History"
+    x:DataType="vm:WateringHistoryViewModel">
+    <Grid Padding="5,2,5,0">
+        <CollectionView ItemsSource="{Binding CareHistory}">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout
+                    Orientation="Vertical"
+                    Span="1"
+                    VerticalItemSpacing="5" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:PlantCareHistory">
+                    <Grid ColumnDefinitions="auto,*">
+                        <Label Text="{Binding Name}" />
+
+                        <ListView Grid.Column="1" ItemsSource="{Binding CareTimes}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Text="{Binding .}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</views:ContentPageBase>

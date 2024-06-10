@@ -14,7 +14,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlantCare.App.ViewModels
 {
-    public partial class PlantAddEditViewModel : ViewModelBase, IQueryAttributable
+    public partial class PlantAddEditViewModel : ViewModelBase, IQueryAttributable, IDisposable
     {
         private readonly IPlantService _plantService;
         private readonly IDialogService _dialogService;
@@ -22,7 +22,7 @@ namespace PlantCare.App.ViewModels
 
         public PlantAddEditViewModel(IPlantService plantService, IDialogService dialogService, INavigationService navigationService)
         {
-            ErrorsChanged += AddPlantViewModel_ErrorsChanged;
+            ErrorsChanged += ViewModel_ErrorsChanged;
             _plantService = plantService;
             _dialogService = dialogService;
             _navigationService = navigationService;
@@ -46,6 +46,11 @@ namespace PlantCare.App.ViewModels
         [ObservableProperty]
         [Range(0, 3000)]
         private int _age = 1;
+
+        // For detecting changes
+        private DateTime _originalLastWatered;
+
+        private DateTime _originalLastFertilized;
 
         #region Watering
 
@@ -72,6 +77,7 @@ namespace PlantCare.App.ViewModels
         private int _wateringFrequencyHours = 0;
 
         public int WateringFrequencyInHours => 24 * WateringFrequencyDays + WateringFrequencyHours;
+
         #endregion Watering
 
         #region Fertilization
@@ -143,6 +149,10 @@ namespace PlantCare.App.ViewModels
             }
         }
 
+        /// <summary>
+        /// Save a new plant or changes to a plant
+        /// </summary>
+        /// <returns></returns>
         [RelayCommand(CanExecute = nameof(CanSubmitPlant))]
         private async Task Submit()
         {
@@ -164,7 +174,7 @@ namespace PlantCare.App.ViewModels
                     {
                         await Task.Run(async () =>
                         {
-                            PlantDbModel plant = MapToPlantModel();
+                            PlantDbModel plant = MapViewModelPropertiesToPlantModel(isExistingPlant: false);
                             Id = await _plantService.CreatePlantAsync(plant);
                         });
                     }
@@ -186,8 +196,17 @@ namespace PlantCare.App.ViewModels
                     {
                         await Task.Run(async () =>
                         {
-                            PlantDbModel plant = MapToPlantModel();
+                            PlantDbModel plant = MapViewModelPropertiesToPlantModel(isExistingPlant: true);
                             updated = await _plantService.UpdatePlantAsync(plant);
+
+                            if (_originalLastWatered != plant.LastWatered)
+                            {
+                                await _plantService.AddWateringHistory(plant.Id, plant.LastWatered);
+                            }
+                            if (_originalLastFertilized != plant.LastFertilized)
+                            {
+                                await _plantService.AddFertilizationHistory(plant.Id, plant.LastFertilized);
+                            }
                         });
                     }
                     catch (Exception e)
@@ -285,9 +304,9 @@ namespace PlantCare.App.ViewModels
 
         #region Data Validation
 
-        public ObservableCollection<ValidationResult> Errors { get; } = new();
+        public ObservableCollection<ValidationResult> Errors { get; } = [];
 
-        private void AddPlantViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
+        private void ViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
         {
             Errors.Clear();
             GetErrors().ToList().ForEach(Errors.Add);
@@ -308,7 +327,7 @@ namespace PlantCare.App.ViewModels
             {
                 if (value is not Plant plant) return;
 
-                MapPlantData(plant);
+                MapPlantDataToViewModelProperties(plant);
             }
             // add a new plant
             else if (query.TryGetValue("PlantCount", out object? plantCount))
@@ -330,11 +349,10 @@ namespace PlantCare.App.ViewModels
             }
         }
 
-        private PlantDbModel MapToPlantModel()
+        private PlantDbModel MapViewModelPropertiesToPlantModel(bool isExistingPlant)
         {
-            return new PlantDbModel
+            PlantDbModel dbModel = new()
             {
-                Id = Id,
                 Name = Name,
                 Species = Species,
                 Age = Age,
@@ -346,9 +364,23 @@ namespace PlantCare.App.ViewModels
                 LastFertilized = LastFertilization,
                 FertilizeFrequencyInHours = FertilizationFrequencyInHours
             };
+
+            // An existing plant
+            if (isExistingPlant)
+            {
+                dbModel.Id = Id;
+            }
+            // A new plant
+            else
+            {
+                dbModel.WateringHistories = [new WateringHistory { PlantId = Id, CareTime = LastWatered }];
+                dbModel.FertilizationHistories = [new FertilizationHistory { PlantId = Id, CareTime = LastFertilization }];
+            }
+
+            return dbModel;
         }
 
-        private void MapPlantData(Plant plant)
+        private void MapPlantDataToViewModelProperties(Plant plant)
         {
             Id = plant.Id;
             Name = plant.Name;
@@ -365,6 +397,14 @@ namespace PlantCare.App.ViewModels
             LastFertilizationTime = plant.LastFertilized.TimeOfDay;
             FertilizationFrequencyDays = plant.FertilizeFrequencyInHours / 24;
             FertilizationFrequencyHours = plant.FertilizeFrequencyInHours % 24;
+
+            _originalLastWatered = plant.LastWatered;
+            _originalLastFertilized = plant.LastFertilized;
+        }
+
+        public void Dispose()
+        {
+            ErrorsChanged -= ViewModel_ErrorsChanged;
         }
     }
 }

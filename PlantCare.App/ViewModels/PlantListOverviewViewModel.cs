@@ -780,14 +780,14 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    private static int GetNotificationId(ReminderType reminderType, Guid id)
+    private static int GetNotificationId(ReminderType reminderType, Guid plantId)
     {
-        if (id == default)
+        if (plantId == default)
         {
             return 0;
         }
 
-        int notificationId = id.GetHashCode();
+        int notificationId = plantId.GetHashCode();
 
         switch (reminderType)
         {
