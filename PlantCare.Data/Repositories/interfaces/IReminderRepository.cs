@@ -1,6 +1,6 @@
 ﻿using PlantCare.Data.DbModels;
 
-namespace PlantCare.Data.Repositories;
+namespace PlantCare.Data.Repositories.interfaces;
 
 public interface IReminderRepository
 {

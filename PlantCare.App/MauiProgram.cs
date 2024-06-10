@@ -10,6 +10,8 @@ using PlantCare.App.Utils;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
 using Serilog;
+using PlantCare.Data.Repositories.interfaces;
+using PlantCare.App.Services.DBService;
 
 namespace PlantCare.App;
 
@@ -106,11 +108,16 @@ public static class MauiProgram
         string dbPath = Path.Combine(Microsoft.Maui.Storage.FileSystem.AppDataDirectory, Consts.DatabaseFileName);
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite($"Data Source={dbPath}"));
+        {
+            options.UseSqlite($"Data Source={dbPath}")
+                   .UseLazyLoadingProxies();
+        });
 
         // Repository registrations
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IPlantRepository, PlantRepository>();
+        builder.Services.AddScoped<IWateringHistoryRepository, WateringHistoryRepository>();
+        builder.Services.AddScoped<IFertilizationHistoryRepository, FertilizationHistoryRepository>();
         builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
 
         // Service registrations

@@ -1,7 +1,7 @@
 ﻿using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
 
-namespace PlantCare.App.Services;
+namespace PlantCare.App.Services.DBService;
 
 public interface IPlantService
 {
@@ -16,8 +16,14 @@ public interface IPlantService
     Task<bool> UpdatePlantAsync(PlantDbModel plant);
 
     Task<List<Plant>> GetPlantsToWater();
+
     Task<List<Plant>> GetPlantsToFertilize();
 
     Task UpdateLastWateringTime(Guid plantId, DateTime time);
+
     Task UpdateLastFertilizationTime(Guid plantId, DateTime updateTime);
+
+    Task<List<WateringHistory>> GetPlantWateringHistoryAsync(Guid plantId);
+
+    Task<List<FertilizationHistory>> GetPlanFertilizationHistoryAsync(Guid plantId);
 }

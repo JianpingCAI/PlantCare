@@ -21,10 +21,10 @@ using Android.Runtime;
 [assembly: UsesPermission(Android.Manifest.Permission.ReceiveBootCompleted)]
 [assembly: UsesPermission(Android.Manifest.Permission.Vibrate)]
 
-namespace PlantCare.App
+namespace PlantCare.App.Platforms.Android
 {
     [Application]
-    public class MainApplication(IntPtr handle, JniHandleOwnership ownership) : MauiApplication(handle, ownership)
+    public class MainApplication(nint handle, JniHandleOwnership ownership) : MauiApplication(handle, ownership)
     {
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     }

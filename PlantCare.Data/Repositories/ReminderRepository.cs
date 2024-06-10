@@ -1,4 +1,5 @@
 ﻿using PlantCare.Data.DbModels;
+using PlantCare.Data.Repositories.interfaces;
 
 namespace PlantCare.Data.Repositories;
 

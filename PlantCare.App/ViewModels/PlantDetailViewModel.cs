@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
+using PlantCare.App.Services.DBService;
 using PlantCare.Data.Models;
 
 namespace PlantCare.App.ViewModels;

@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlantCare.Data.DbModels;
+using PlantCare.Data.Repositories.interfaces;
 
 namespace PlantCare.Data.Repositories;
 
 public class PlantRepository(ApplicationDbContext context) : GenericRepository<PlantDbModel>(context), IPlantRepository
 {
-
     // Additional plant-specific methods can be added here if needed
     public async Task<List<PlantDbModel>> GetPlantsToWater()
     {

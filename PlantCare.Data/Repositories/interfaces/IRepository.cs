@@ -1,4 +1,4 @@
-﻿namespace PlantCare.Data.Repositories;
+﻿namespace PlantCare.Data.Repositories.interfaces;
 
 public interface IRepository<T> where T : class
 {

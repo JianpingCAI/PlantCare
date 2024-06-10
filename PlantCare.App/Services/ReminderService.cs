@@ -1,5 +1,5 @@
 ﻿using PlantCare.Data.DbModels;
-using PlantCare.Data.Repositories;
+using PlantCare.Data.Repositories.interfaces;
 
 namespace PlantCare.App.Services;
 

@@ -12,6 +12,7 @@ using Plugin.LocalNotification.AndroidOption;
 using System.Text.Json;
 using Plugin.LocalNotification.EventArgs;
 using System.Diagnostics;
+using PlantCare.App.Services.DBService;
 
 namespace PlantCare.App.ViewModels;
 
