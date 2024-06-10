@@ -94,7 +94,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     #region For data loading
 
-    private List<Plant> _plantListDatabase = [];
     private readonly List<PlantListItemViewModel> _allPlantViewModelsCache = [];
 
     /// <summary>
@@ -108,7 +107,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             // Load only once
             if (Plants.Count == 0)
             {
-                await LoadAllPlantsFromDatabase();
+                await LoadAllPlantsFromDatabaseAsync();
             }
         }
         catch (Exception ex)
@@ -117,58 +116,27 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    /// <summary>
-    /// When view is loading, and after data is loaded from database
-    /// </summary>
-    /// <returns></returns>
-    public override async Task OnDataLoadedWhenViewAppearingAsync()
-    {
-        if (Plants.Count == 0)
-        {
-            await SetAllPlants();
-        }
-    }
-
-    private async Task LoadAllPlantsFromDatabase()
+    private async Task LoadAllPlantsFromDatabaseAsync()
     {
         await Task.Run(async () =>
         {
-            _plantListDatabase = await _plantService.GetAllPlantsAsync();
-            _plantListDatabase = [.. _plantListDatabase.OrderBy(x => x.Name)];
-        });
-    }
+            // Load from DB
+            List<Plant> plantListDatabase = await _plantService.GetAllPlantsAsync();
+            plantListDatabase = [.. plantListDatabase.OrderBy(x => x.Name)];
 
-    private Task ResetDisplayedPlantsAsync()
-    {
-        return Task.Run(() =>
-        {
-            IsLoading = true;
+            _logger.LogInformation($"{_allPlantViewModelsCache.Count} plants are loaded.");
 
-            Plants.Clear();
-
-            foreach (PlantListItemViewModel item in _allPlantViewModelsCache)
-            {
-                Plants.Add(item);
-            }
-
-            IsLoading = false;
-        });
-    }
-
-    private async Task SetAllPlants()
-    {
-        try
-        {
+            // Cache 
             _allPlantViewModelsCache.Clear();
-            foreach (Plant plantDB in _plantListDatabase)
+            foreach (Plant plantDB in plantListDatabase)
             {
                 _allPlantViewModelsCache.Add(MapToViewModel(plantDB));
             }
 
-            _logger.LogInformation($"{_allPlantViewModelsCache.Count} plants are loaded.");
+            // Set binding source
+            await ResetPlantsAsync();
 
-            await ResetDisplayedPlantsAsync();
-
+            // Set up notifications
             if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
             {
                 if (await _notificationService.AreNotificationsEnabled() == false)
@@ -192,12 +160,20 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                     await ScheduleNotifications(ReminderType.Fertilization);
                 }
             }
-        }
-        catch (Exception ex)
+        });
+    }
+
+    private Task ResetPlantsAsync()
+    {
+        return Task.Run(() =>
         {
-            //Debug.WriteLine(ex.Message);
-            await _dialogService.Notify("Error", ex.Message);
-        }
+            Plants.Clear();
+
+            foreach (PlantListItemViewModel item in _allPlantViewModelsCache)
+            {
+                Plants.Add(item);
+            }
+        });
     }
 
     #endregion For data loading
@@ -258,7 +234,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 }
                 else
                 {
-                    await ResetSearchAsync();
+                    await ResetPlantsAsync();
                 }
             });
         }
@@ -266,6 +242,31 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             IsLoading = false;
             IsBusy = false;
+        }
+    }
+
+    /// <summary>
+    /// Reset search when search text is empty
+    /// </summary>
+    /// <returns></returns>
+    [RelayCommand]
+    private async Task SearchTextChanged()
+    {
+        if (string.IsNullOrEmpty(SearchText.Trim()))
+        {
+            try
+            {
+                IsLoading = true;
+                await ResetPlantsAsync();
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.Notify("Error", ex.Message);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 
@@ -278,7 +279,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         if (string.IsNullOrEmpty(SearchText.Trim()))
         {
-            await ResetDisplayedPlantsAsync();
+            await ResetPlantsAsync();
         }
     }
 
@@ -393,6 +394,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
+    /// <summary>
+    /// Delete a plant
+    /// </summary>
+    /// <param name="message"></param>
     async void IRecipient<PlantDeletedMessage>.Receive(PlantDeletedMessage message)
     {
         try
@@ -401,6 +406,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             if (deletedPlant is null) { return; }
 
             Plants.Remove(deletedPlant);
+
+            _allPlantViewModelsCache.Remove(deletedPlant);
 
             _logger.LogInformation($"Plant {deletedPlant.Name} is deleted");
 

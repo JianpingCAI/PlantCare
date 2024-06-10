@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:layouts="clr-namespace:PlantCare.App.Layouts"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
@@ -70,9 +71,12 @@
                 Placeholder="{Binding Path=[SearchPlantByName], Source={x:Static utils:LocalizationManager.Instance}}"
                 SearchCommand="{Binding SearchCommand}"
                 Text="{Binding SearchText}"
-                TextChanged="SearchBar_TextChanged"
                 VerticalOptions="Center"
-                VerticalTextAlignment="Center" />
+                VerticalTextAlignment="Center">
+                <SearchBar.Behaviors>
+                    <toolkit:EventToCommandBehavior Command="{Binding SearchTextChangedCommand}" EventName="TextChanged" />
+                </SearchBar.Behaviors>
+            </SearchBar>
 
             <!--  Plants Collection View  -->
             <RefreshView
@@ -152,8 +156,7 @@
                                                     WidthRequest="90" />
 
                                                 <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="3">
-                                                    <BoxView Style="{StaticResource progressBox}" />
-
+                                                    <BoxView Grid.Column="0" Style="{StaticResource progressBox}" />
                                                     <BoxView Grid.Column="1" Style="{StaticResource progressBox}" />
                                                     <BoxView Grid.Column="2" Style="{StaticResource progressBox}" />
                                                     <BoxView Grid.Column="3" Style="{StaticResource progressBox}" />
@@ -187,8 +190,7 @@
                                                         WidthRequest="90" />
 
                                                     <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="3">
-                                                        <BoxView Style="{StaticResource progressBox}" />
-
+                                                        <BoxView Grid.Column="0" Style="{StaticResource progressBox}" />
                                                         <BoxView Grid.Column="1" Style="{StaticResource progressBox}" />
                                                         <BoxView Grid.Column="2" Style="{StaticResource progressBox}" />
                                                         <BoxView Grid.Column="3" Style="{StaticResource progressBox}" />

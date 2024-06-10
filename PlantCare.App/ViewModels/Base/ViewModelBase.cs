@@ -23,21 +23,9 @@ public abstract partial class ViewModelBase : ObservableValidator/*ObservableObj
             async () =>
             {
                 IsLoading = true;
-                await LoadingDataWhenViewAppearingAsync(LoadDataWhenViewAppearingAsync);
+                await LoadDataWhenViewAppearingAsync();
                 IsLoading = false;
-
-                await OnDataLoadedWhenViewAppearingAsync();
             });
-    }
-
-    public virtual Task OnDataLoadedWhenViewAppearingAsync()
-    {
-        return Task.CompletedTask;
-    }
-
-    protected async Task LoadingDataWhenViewAppearingAsync(Func<Task> workFunc)
-    {
-        await workFunc();
     }
 
     public virtual Task LoadDataWhenViewAppearingAsync() => Task.CompletedTask;
