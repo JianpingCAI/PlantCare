@@ -9,7 +9,7 @@
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     x:DataType="vm:CareHistoryViewModel">
     <Shell.TitleView>
-        <Grid ColumnDefinitions="auto,*">
+        <Grid ColumnDefinitions="auto,auto,*">
             <Border
                 Margin="5,0,0,0"
                 HorizontalOptions="Start"
@@ -29,26 +29,29 @@
                 HorizontalOptions="Start"
                 Text="{Binding Path=[History], Source={x:Static utils:LocalizationManager.Instance}}"
                 VerticalTextAlignment="Center" />
+
+            <Grid
+                Grid.Column="2"
+                ColumnDefinitions="auto,auto"
+                HorizontalOptions="End">
+                <RadioButton
+                    x:Name="radioWatering"
+                    Content="{Binding Path=[Watering], Source={x:Static utils:LocalizationManager.Instance}}"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    IsChecked="True" />
+
+                <RadioButton
+                    x:Name="radioFertilization"
+                    Grid.Column="1"
+                    Margin="0,0,5,0"
+                    Content="{Binding Path=[Fertilization], Source={x:Static utils:LocalizationManager.Instance}}"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center" />
+            </Grid>
         </Grid>
     </Shell.TitleView>
     <Grid Padding="5,2,5,0" RowDefinitions="auto,*">
-        <Grid ColumnDefinitions="*,*" HorizontalOptions="CenterAndExpand">
-            <RadioButton
-                x:Name="radioWatering"
-                Margin="10,0"
-                Content="{Binding Path=[Watering], Source={x:Static utils:LocalizationManager.Instance}}"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                IsChecked="True" />
-
-            <RadioButton
-                x:Name="radioFertilization"
-                Grid.Column="1"
-                Margin="10,0"
-                Content="{Binding Path=[Fertilization], Source={x:Static utils:LocalizationManager.Instance}}"
-                FontAttributes="Bold"
-                HorizontalOptions="Center" />
-        </Grid>
         <CollectionView Grid.Row="1" ItemsSource="{Binding CareHistory}">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout
