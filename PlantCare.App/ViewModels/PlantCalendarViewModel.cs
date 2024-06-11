@@ -115,7 +115,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message);
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
             }
         }
 
@@ -323,7 +323,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message);
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
             }
             finally
             {
@@ -366,7 +366,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message);
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
                 Debug.WriteLine(ex.Message);
             }
         }
@@ -387,7 +387,11 @@ namespace PlantCare.App.ViewModels
             {
                 DateTime updatedTime = DateTime.Now;
 
-                bool isConfirmed = await _dialogService.Ask("Confirm", $"Mark as done and update the last attended time as now {updatedTime.ToShortTimeString()}?");
+                bool isConfirmed = await _dialogService.Ask(
+                    LocalizationManager.Instance[Consts.Confirm] ?? Consts.Confirm,
+                    $"{LocalizationManager.Instance[Consts.MarkDone]}: {updatedTime.ToShortTimeString()}?",
+                    LocalizationManager.Instance[Consts.Yes] ?? Consts.Yes,
+                    LocalizationManager.Instance[Consts.No] ?? Consts.No);
                 if (!isConfirmed)
                     return;
 
@@ -426,7 +430,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message);
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
             }
             finally
             {
@@ -470,7 +474,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message);
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
             }
         }
 
@@ -517,7 +521,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message);
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
             }
             finally
             {
@@ -563,7 +567,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message);
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
             }
 
             //if (ReminderCalendar is null)
@@ -602,7 +606,7 @@ namespace PlantCare.App.ViewModels
         //    }
         //    catch (Exception ex)
         //    {
-        //        await _dialogService.Notify("Error", ex.Message);
+        //        await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         //    }
         //}
     }

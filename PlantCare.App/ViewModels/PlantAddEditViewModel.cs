@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
 using PlantCare.App.Services.DBService;
+using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
 using PlantCare.Data;
 using PlantCare.Data.DbModels;
@@ -128,7 +129,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message, "OK");
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message, "OK");
             }
         }
 
@@ -145,7 +146,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message, "OK");
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message, "OK");
             }
         }
 
@@ -211,7 +212,7 @@ namespace PlantCare.App.ViewModels
                     }
                     catch (Exception e)
                     {
-                        await _dialogService.Notify("Error", e.Message);
+                        await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, e.Message);
                     }
 
                     if (updated)
@@ -229,7 +230,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message);
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
             }
             finally
             {
@@ -267,7 +268,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message, "OK");
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message, "OK");
             }
         }
 
@@ -296,7 +297,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message, "OK");
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message, "OK");
             }
         }
 

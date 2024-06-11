@@ -4,7 +4,9 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using PlantCare.App.Services;
 using PlantCare.App.Services.DBService;
+using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
+using PlantCare.Data;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -90,7 +92,7 @@ public partial class CareHistoryViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 

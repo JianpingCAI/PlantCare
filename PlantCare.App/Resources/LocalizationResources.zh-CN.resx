@@ -129,6 +129,12 @@
   <data name="CareCalendar" xml:space="preserve">
     <value>管理日历</value>
   </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>请确认</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>确定删除</value>
+  </data>
   <data name="Dark" xml:space="preserve">
     <value>深色</value>
   </data>
@@ -171,6 +177,9 @@
   <data name="Light" xml:space="preserve">
     <value>明亮</value>
   </data>
+  <data name="MarkDone" xml:space="preserve">
+    <value>设置为完成并将完成时间设置为现在</value>
+  </data>
   <data name="MyPlants" xml:space="preserve">
     <value>我的植物</value>
   </data>
@@ -178,13 +187,19 @@
     <value>名称</value>
   </data>
   <data name="NextFertilization" xml:space="preserve">
-    <value>下次施肥时间</value>
+    <value>离下次施肥时间还有</value>
   </data>
   <data name="NextWatering" xml:space="preserve">
-    <value>下次浇水时间</value>
+    <value>离下次浇水时间还有</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>否</value>
   </data>
   <data name="Now" xml:space="preserve">
     <value>现在</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>好的</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>保存</value>
@@ -215,5 +230,8 @@
   </data>
   <data name="WateringNotification" xml:space="preserve">
     <value>浇水提醒</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是</value>
   </data>
 </root>

@@ -13,6 +13,8 @@ using System.Text.Json;
 using Plugin.LocalNotification.EventArgs;
 using System.Diagnostics;
 using PlantCare.App.Services.DBService;
+using PlantCare.Data;
+using PlantCare.App.Utils;
 
 namespace PlantCare.App.ViewModels;
 
@@ -112,7 +114,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 
@@ -195,7 +197,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             try
             {
-                await _dialogService.Notify("Error", ex.Message);
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
                 await _navigationService.GoToPlantsOverview();
             }
             catch (Exception e)
@@ -264,7 +266,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify("Error", ex.Message);
+                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
             }
             finally
             {
@@ -340,7 +342,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 
@@ -393,7 +395,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 
@@ -418,7 +420,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 
@@ -440,7 +442,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
         finally
         {
@@ -581,7 +583,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message, "OK");
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message, "OK");
 
             return 0;
         }
@@ -701,7 +703,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
         finally
         {
@@ -786,7 +788,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 

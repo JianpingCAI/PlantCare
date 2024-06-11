@@ -129,6 +129,12 @@
   <data name="CareCalendar" xml:space="preserve">
     <value>Care Calendar</value>
   </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Are you sure to delete</value>
+  </data>
   <data name="Dark" xml:space="preserve">
     <value>Dark</value>
   </data>
@@ -171,6 +177,9 @@
   <data name="Light" xml:space="preserve">
     <value>Light</value>
   </data>
+  <data name="MarkDone" xml:space="preserve">
+    <value>Mark as done and update the last attended time as now</value>
+  </data>
   <data name="MyPlants" xml:space="preserve">
     <value>My Plants</value>
   </data>
@@ -178,13 +187,19 @@
     <value>Name</value>
   </data>
   <data name="NextFertilization" xml:space="preserve">
-    <value>NextFertilization</value>
+    <value>Next Fertilization in </value>
   </data>
   <data name="NextWatering" xml:space="preserve">
-    <value>Next Watering</value>
+    <value>Next Watering in </value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
   </data>
   <data name="Now" xml:space="preserve">
     <value>Now</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
@@ -215,5 +230,8 @@
   </data>
   <data name="WateringNotification" xml:space="preserve">
     <value>Watering Notification</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

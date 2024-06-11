@@ -97,6 +97,24 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirmation.
+        /// </summary>
+        internal static string Confirmation {
+            get {
+                return ResourceManager.GetString("Confirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure to delete.
+        /// </summary>
+        internal static string ConfirmDelete {
+            get {
+                return ResourceManager.GetString("ConfirmDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dark.
         /// </summary>
         internal static string Dark {
@@ -223,6 +241,15 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mark as done and update the last attended time as now.
+        /// </summary>
+        internal static string MarkDone {
+            get {
+                return ResourceManager.GetString("MarkDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My Plants.
         /// </summary>
         internal static string MyPlants {
@@ -241,7 +268,7 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NextFertilization.
+        ///   Looks up a localized string similar to Next Fertilization in .
         /// </summary>
         internal static string NextFertilization {
             get {
@@ -250,11 +277,20 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next Watering.
+        ///   Looks up a localized string similar to Next Watering in .
         /// </summary>
         internal static string NextWatering {
             get {
                 return ResourceManager.GetString("NextWatering", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
             }
         }
         
@@ -264,6 +300,15 @@ namespace PlantCare.App.Resources {
         internal static string Now {
             get {
                 return ResourceManager.GetString("Now", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string Ok {
+            get {
+                return ResourceManager.GetString("Ok", resourceCulture);
             }
         }
         
@@ -354,6 +399,15 @@ namespace PlantCare.App.Resources {
         internal static string WateringNotification {
             get {
                 return ResourceManager.GetString("WateringNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

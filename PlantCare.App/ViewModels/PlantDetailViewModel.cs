@@ -4,6 +4,8 @@ using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
 using PlantCare.App.Services.DBService;
+using PlantCare.App.Utils;
+using PlantCare.Data;
 using PlantCare.Data.Models;
 
 namespace PlantCare.App.ViewModels;
@@ -30,7 +32,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 
@@ -46,7 +48,11 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         {
             IsBusy = true;
 
-            bool isConfirmed = await _dialogService.Ask("Confirm", $"Are you sure to delete {Name}?");
+            bool isConfirmed = await _dialogService.Ask(
+                LocalizationManager.Instance[Consts.Confirm] ?? "Confirm",
+                $"{LocalizationManager.Instance[Consts.ConfirmDelete]}: {Name}?",
+                LocalizationManager.Instance[Consts.Yes] ?? "Yes",
+                LocalizationManager.Instance[Consts.No] ?? "No");
 
             if (!isConfirmed)
             {
@@ -64,7 +70,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
         finally
         {
@@ -93,7 +99,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 

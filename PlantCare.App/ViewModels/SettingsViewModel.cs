@@ -5,6 +5,7 @@ using PlantCare.App.Messaging;
 using PlantCare.App.Services;
 using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
+using PlantCare.Data;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -58,7 +59,7 @@ public partial class SettingsViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 
@@ -81,7 +82,7 @@ public partial class SettingsViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 
@@ -116,7 +117,7 @@ public partial class SettingsViewModel : ViewModelBase
         catch (Exception ex)
         {
             _isSettingsLoaded = false;
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 
@@ -154,7 +155,7 @@ public partial class SettingsViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify("Error", ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
         }
     }
 }
