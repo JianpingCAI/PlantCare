@@ -141,11 +141,17 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Fertilization" xml:space="preserve">
+    <value>Fertilization</value>
+  </data>
   <data name="FertilizationInterval" xml:space="preserve">
     <value>Fertilization Interval</value>
   </data>
   <data name="FertilizationNotification" xml:space="preserve">
     <value>Fertilization Notification</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>History</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
@@ -200,6 +206,9 @@
   </data>
   <data name="UnattendedOnly" xml:space="preserve">
     <value>UnattendedOnly</value>
+  </data>
+  <data name="Watering" xml:space="preserve">
+    <value>Watering</value>
   </data>
   <data name="WateringInterval" xml:space="preserve">
     <value>Watering Interval</value>

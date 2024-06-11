@@ -12,6 +12,7 @@ using Plugin.LocalNotification.AndroidOption;
 using Serilog;
 using PlantCare.Data.Repositories.interfaces;
 using PlantCare.App.Services.DBService;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace PlantCare.App;
 
@@ -27,6 +28,7 @@ public static class MauiProgram
             .CreateLogger();
 
         builder
+            .UseSkiaSharp(registerRenderers: true)
             .UseMauiApp<App>()
             // Initialize the .NET MAUI Community Toolkit by adding the below line of code
             .UseMauiCommunityToolkit()
@@ -180,7 +182,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<SettingsView>();
         builder.Services.AddSingleton<SettingsViewModel>();
 
-        builder.Services.AddTransient<WateringHistoryView>();
-        builder.Services.AddTransient<WateringHistoryViewModel>();
+        builder.Services.AddTransient<CareHistoryView>();
+        builder.Services.AddTransient<CareHistoryViewModel>();
     }
 }

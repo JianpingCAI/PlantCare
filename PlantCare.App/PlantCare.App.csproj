@@ -63,6 +63,7 @@
 		<None Remove="Resources\Fonts\MaterialIcons-Regular.ttf" />
 		<None Remove="Resources\Images\default_plant.png" />
 		<None Remove="Resources\Images\tab_calender.svg" />
+		<None Remove="Resources\Images\tab_history.svg" />
 		<None Remove="Resources\Images\tab_home.svg" />
 		<None Remove="Resources\Images\tab_home_on.svg" />
 		<None Remove="Resources\Images\tab_notifications.svg" />
@@ -79,6 +80,7 @@
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc2" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.40" />
@@ -107,15 +109,15 @@
 		<Compile Update="Views\PlantCalendarView.xaml.cs">
 		  <DependentUpon>PlantCalendarView.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\CareHistoryView.xaml.cs">
+		  <DependentUpon>CareHistoryView.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <EmbeddedResource Update="Resources\LocalizationResources.resx">
 	    <LastGenOutput>LocalizationResources.Designer.cs</LastGenOutput>
 	    <Generator>ResXFileCodeGenerator</Generator>
-	  </EmbeddedResource>
-	  <EmbeddedResource Update="Resources\LocalizationResources.en.resx">
-	    <Generator></Generator>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\LocalizationResources.zh-CN.resx">
 	    <Generator></Generator>
@@ -150,7 +152,7 @@
 		<MauiXaml Update="Views\SettingsView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\WateringHistoryView.xaml">
+		<MauiXaml Update="Views\CareHistoryView.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>

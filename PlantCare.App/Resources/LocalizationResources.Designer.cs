@@ -133,6 +133,15 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fertilization.
+        /// </summary>
+        internal static string Fertilization {
+            get {
+                return ResourceManager.GetString("Fertilization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fertilization Interval.
         /// </summary>
         internal static string FertilizationInterval {
@@ -147,6 +156,15 @@ namespace PlantCare.App.Resources {
         internal static string FertilizationNotification {
             get {
                 return ResourceManager.GetString("FertilizationNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to History.
+        /// </summary>
+        internal static string History {
+            get {
+                return ResourceManager.GetString("History", resourceCulture);
             }
         }
         
@@ -309,6 +327,15 @@ namespace PlantCare.App.Resources {
         internal static string UnattendedOnly {
             get {
                 return ResourceManager.GetString("UnattendedOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watering.
+        /// </summary>
+        internal static string Watering {
+            get {
+                return ResourceManager.GetString("Watering", resourceCulture);
             }
         }
         

@@ -37,6 +37,7 @@ namespace PlantCare.App
             tabHome.Title = LocalizationManager.Instance["Home"];
             tabCalendar.Title = LocalizationManager.Instance["Calendar"];
             tabSettings.Title = LocalizationManager.Instance["Settings"];
+            tabHistory.Title = LocalizationManager.Instance["History"];
         }
     }
 }

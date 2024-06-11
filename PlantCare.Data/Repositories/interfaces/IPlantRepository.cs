@@ -12,5 +12,5 @@ public interface IPlantRepository : IRepository<PlantDbModel>
 
     Task UpdateLastFertilizationTime(Guid plantId, DateTime time);
 
-    Task<List<PlantDbModel>> GetAllPlantsWithWateringHistoryAsync();
+    Task<List<PlantDbModel>> GetAllPlantsWithCareHistoryAsync();
 }

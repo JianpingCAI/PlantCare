@@ -2,9 +2,9 @@ using PlantCare.App.ViewModels;
 
 namespace PlantCare.App.Views;
 
-public partial class WateringHistoryView : ContentPageBase
+public partial class CareHistoryView : ContentPageBase
 {
-    public WateringHistoryView(WateringHistoryViewModel viewModel)
+    public CareHistoryView(CareHistoryViewModel viewModel)
     {
         InitializeComponent();
 

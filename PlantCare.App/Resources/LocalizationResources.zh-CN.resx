@@ -141,11 +141,17 @@
   <data name="Delete" xml:space="preserve">
     <value>删除</value>
   </data>
+  <data name="Fertilization" xml:space="preserve">
+    <value>施肥</value>
+  </data>
   <data name="FertilizationInterval" xml:space="preserve">
     <value>施肥间隔</value>
   </data>
   <data name="FertilizationNotification" xml:space="preserve">
     <value>施肥提醒</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>日志</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>主页</value>
@@ -200,6 +206,9 @@
   </data>
   <data name="UnattendedOnly" xml:space="preserve">
     <value>亟需照料</value>
+  </data>
+  <data name="Watering" xml:space="preserve">
+    <value>浇水</value>
   </data>
   <data name="WateringInterval" xml:space="preserve">
     <value>浇水间隔</value>

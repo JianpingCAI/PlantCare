@@ -9,7 +9,6 @@
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     x:DataType="vm:PlantListOverviewViewModel">
-    <!--  Title="{Binding Path=[MyPlants], Source={x:Static utils:LocalizationManager.Instance}}"  -->
 
     <Shell.TitleView>
         <Grid ColumnDefinitions="auto,*">

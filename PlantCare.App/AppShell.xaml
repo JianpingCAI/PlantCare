@@ -66,9 +66,9 @@
 
         <ShellContent
             x:Name="tabHistory"
-            Title="History"
-            ContentTemplate="{DataTemplate views:WateringHistoryView}"
-            Icon="tab_calender.png"
+            Title="{Binding Path=[History], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
+            ContentTemplate="{DataTemplate views:CareHistoryView}"
+            Icon="tab_history.png"
             Route="history" />
 
         <ShellContent

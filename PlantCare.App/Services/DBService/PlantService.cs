@@ -108,11 +108,11 @@ public class PlantService : IPlantService
         await _fertilizationHistoryRepository.AddAsync(new FertilizationHistory() { PlantId = plantId, CareTime = lastFertilized });
     }
 
-    public Task<List<PlantCareHistory>> GetAllPlantsWithWateringHistoryAsync()
+    public Task<List<PlantCareHistory>> GetAllPlantsWithCareHistoryAsync()
     {
         return Task.Run(async () =>
         {
-            List<PlantDbModel> plants = await _plantRepository.GetAllPlantsWithWateringHistoryAsync();
+            List<PlantDbModel> plants = await _plantRepository.GetAllPlantsWithCareHistoryAsync();
             plants = [.. plants.OrderBy(x => x.Name)];
 
             List<PlantCareHistory> plantCareHistoryList = new(plants.Count);
@@ -123,7 +123,9 @@ public class PlantService : IPlantService
                 {
                     PlantId = plant.Id,
                     Name = plant.Name,
-                    CareTimes = plant.WateringHistories.Select(x => x.CareTime).ToList()
+                    PhotoPath = plant.PhotoPath,
+                    WateringTimestamps = plant.WateringHistories.Select(x => x.CareTime).ToList(),
+                    FertilizationTimestamps = plant.FertilizationHistories.Select(x => x.CareTime).ToList()
                 });
             }
 

@@ -34,5 +34,5 @@ public interface IPlantService
 
     Task AddFertilizationHistory(Guid id, DateTime lastFertilized);
 
-    Task<List<PlantCareHistory>> GetAllPlantsWithWateringHistoryAsync();
+    Task<List<PlantCareHistory>> GetAllPlantsWithCareHistoryAsync();
 }

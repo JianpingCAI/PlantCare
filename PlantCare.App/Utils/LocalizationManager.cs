@@ -14,7 +14,7 @@ public class LocalizationManager : INotifyPropertyChanged
 
     public string? this[string key] => _resourceManager?.GetString(key, _currentCulture);
 
-    public event EventHandler LanguageChanged;
+    public event EventHandler? LanguageChanged;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -41,10 +41,11 @@ public class PlantRepository(ApplicationDbContext context) : GenericRepository<P
         }
     }
 
-    public async Task<List<PlantDbModel>> GetAllPlantsWithWateringHistoryAsync()
+    public async Task<List<PlantDbModel>> GetAllPlantsWithCareHistoryAsync()
     {
         return await _context.Plants
                              .Include(p => p.WateringHistories)
+                             .Include(p => p.FertilizationHistories)
                              .ToListAsync();
     }
 }
