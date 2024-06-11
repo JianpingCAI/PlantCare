@@ -3,7 +3,6 @@ using PlantCare.App.ViewModels;
 using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
 using PlantCare.Data.Repositories.interfaces;
-using System.Collections.Generic;
 
 namespace PlantCare.App.Services.DBService;
 
@@ -58,20 +57,6 @@ public class PlantService : IPlantService
         await _plantRepository.DeleteAsync(plantId);
     }
 
-    public async Task<List<Plant>> GetPlantsToWater()
-    {
-        var dbModels = await _plantRepository.GetPlantsToWater();
-
-        return _mapper.Map<List<Plant>>(dbModels);
-    }
-
-    public async Task<List<Plant>> GetPlantsToFertilize()
-    {
-        var dbModels = await _plantRepository.GetPlantsToFertilize();
-
-        return _mapper.Map<List<Plant>>(dbModels);
-    }
-
     public async Task UpdateLastWateringTime(Guid plantId, DateTime time)
     {
         await _plantRepository.UpdateLastWateringTime(plantId, time);
@@ -82,28 +67,12 @@ public class PlantService : IPlantService
         await _plantRepository.UpdateLastFertilizationTime(plantId, time);
     }
 
-    public async Task<List<WateringHistory>> GetPlantWateringHistoryAsync(Guid plantId)
-    {
-        return await _waterHistoryRepository.GetWateringHistoryByPlantIdAsync(plantId);
-    }
-
-    public async Task<List<FertilizationHistory>> GetPlanFertilizationHistoryAsync(Guid plantId)
-    {
-        return await _fertilizationHistoryRepository.GetFertilizationHistoryByPlantIdAsync(plantId);
-    }
-
-    public async Task AddPlantCareHistory(Guid plantId, DateTime lastWatered, DateTime lastFertilized)
-    {
-        await AddWateringHistory(plantId, lastWatered);
-        await AddFertilizationHistory(plantId, lastFertilized);
-    }
-
-    public async Task AddWateringHistory(Guid plantId, DateTime lastWatered)
+    public async Task AddWateringHistoryAsync(Guid plantId, DateTime lastWatered)
     {
         await _waterHistoryRepository.AddAsync(new WateringHistory() { CareTime = lastWatered, PlantId = plantId });
     }
 
-    public async Task AddFertilizationHistory(Guid plantId, DateTime lastFertilized)
+    public async Task AddFertilizationHistoryAsync(Guid plantId, DateTime lastFertilized)
     {
         await _fertilizationHistoryRepository.AddAsync(new FertilizationHistory() { PlantId = plantId, CareTime = lastFertilized });
     }
@@ -116,7 +85,6 @@ public class PlantService : IPlantService
             plants = [.. plants.OrderBy(x => x.Name)];
 
             List<PlantCareHistory> plantCareHistoryList = new(plants.Count);
-
 
             foreach (PlantDbModel plant in plants)
             {

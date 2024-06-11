@@ -187,7 +187,7 @@ namespace PlantCare.App.ViewModels
 
                 DateTime nowTime = DateTime.Now;
 
-                List<Plant> filteredPlants = [];
+                List<Plant> filteredPlants;
 
                 // filter by IsShowUnattendedOnly
                 if (IsShowUnattendedOnly)
@@ -201,6 +201,8 @@ namespace PlantCare.App.ViewModels
                 {
                     filteredPlants = _allPlantsCache;
                 }
+
+                filteredPlants = filteredPlants.OrderBy(x => x.Name).ToList();
 
                 // Convert to PlantEvent
                 List<PlantEvent> plantEvents = [];

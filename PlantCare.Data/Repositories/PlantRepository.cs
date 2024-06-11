@@ -7,19 +7,6 @@ namespace PlantCare.Data.Repositories;
 public class PlantRepository(ApplicationDbContext context) : GenericRepository<PlantDbModel>(context), IPlantRepository
 {
     // Additional plant-specific methods can be added here if needed
-    public async Task<List<PlantDbModel>> GetPlantsToWater()
-    {
-        return await _context.Plants
-                .Where(x => x.LastWatered.AddHours(x.WateringFrequencyInHours) <= DateTime.Now)
-                .ToListAsync();
-    }
-
-    public async Task<List<PlantDbModel>> GetPlantsToFertilize()
-    {
-        return await _context.Plants
-                .Where(x => x.LastFertilized.AddHours(x.FertilizeFrequencyInHours) <= DateTime.Now)
-                .ToListAsync();
-    }
 
     public async Task UpdateLastWateringTime(Guid plantId, DateTime time)
     {
@@ -27,6 +14,7 @@ public class PlantRepository(ApplicationDbContext context) : GenericRepository<P
         if (plant != null)
         {
             plant.LastWatered = time;
+            plant.WateringHistories.Add(new WateringHistory { PlantId = plant.Id, CareTime = time });
             await _context.SaveChangesAsync();
         }
     }
@@ -37,6 +25,7 @@ public class PlantRepository(ApplicationDbContext context) : GenericRepository<P
         if (plant != null)
         {
             plant.LastFertilized = time;
+            plant.FertilizationHistories.Add(new FertilizationHistory { PlantId = plant.Id, CareTime = time });
             await _context.SaveChangesAsync();
         }
     }

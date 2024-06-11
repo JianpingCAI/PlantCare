@@ -201,11 +201,11 @@ namespace PlantCare.App.ViewModels
 
                             if (_originalLastWatered != plant.LastWatered)
                             {
-                                await _plantService.AddWateringHistory(plant.Id, plant.LastWatered);
+                                await _plantService.AddWateringHistoryAsync(plant.Id, plant.LastWatered);
                             }
                             if (_originalLastFertilized != plant.LastFertilized)
                             {
-                                await _plantService.AddFertilizationHistory(plant.Id, plant.LastFertilized);
+                                await _plantService.AddFertilizationHistoryAsync(plant.Id, plant.LastFertilized);
                             }
                         });
                     }

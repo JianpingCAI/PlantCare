@@ -16,23 +16,13 @@ public interface IPlantService
 
     Task<bool> UpdatePlantAsync(PlantDbModel plant);
 
-    Task<List<Plant>> GetPlantsToWater();
-
-    Task<List<Plant>> GetPlantsToFertilize();
-
     Task UpdateLastWateringTime(Guid plantId, DateTime time);
 
     Task UpdateLastFertilizationTime(Guid plantId, DateTime updateTime);
 
-    Task<List<WateringHistory>> GetPlantWateringHistoryAsync(Guid plantId);
+    Task AddWateringHistoryAsync(Guid id, DateTime lastWatered);
 
-    Task<List<FertilizationHistory>> GetPlanFertilizationHistoryAsync(Guid plantId);
-
-    Task AddPlantCareHistory(Guid id, DateTime lastWatered, DateTime lastFertilized);
-
-    Task AddWateringHistory(Guid id, DateTime lastWatered);
-
-    Task AddFertilizationHistory(Guid id, DateTime lastFertilized);
+    Task AddFertilizationHistoryAsync(Guid id, DateTime lastFertilized);
 
     Task<List<PlantCareHistory>> GetAllPlantsWithCareHistoryAsync();
 }
