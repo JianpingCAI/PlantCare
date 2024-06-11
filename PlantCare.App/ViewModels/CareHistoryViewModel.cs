@@ -55,9 +55,6 @@ public partial class CareHistoryViewModel : ViewModelBase
             {
                 List<PlantCareHistory> careHistoryList = await LoadWateringHistoryAsync();
 
-                Axis[] xAxes1 = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }];
-                Axis[] xAxes2 = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }];
-
                 List<PlantCareHistoryWithPlot> careHistoryWithPlots = new(careHistoryList.Count);
                 foreach (PlantCareHistory careHistory in careHistoryList)
                 {
@@ -66,10 +63,6 @@ public partial class CareHistoryViewModel : ViewModelBase
                     {
                         DateTime currentTimestamp = careHistory.WateringTimestamps[i];
                         int interval = i != 0 ? currentTimestamp.Subtract(careHistory.WateringTimestamps[i - 1]).Days : 3;
-                        if (interval < 0)
-                        {
-                            Debug.WriteLine($"{interval}");
-                        }
                         wateringDatePoints.Add(new DateTimePoint(currentTimestamp, interval));
                     }
 
@@ -89,8 +82,8 @@ public partial class CareHistoryViewModel : ViewModelBase
                         WateringTimestamps = careHistory.WateringTimestamps,
                         WateringTimestampsSeries = [new ColumnSeries<DateTimePoint> { Values = wateringDatePoints }],
                         FertilizationTimestampsSeries = [new ColumnSeries<DateTimePoint> { Values = fertilizationDatePoints }],
-                        XAxesWatering = xAxes1,
-                        XAxesFertilization = xAxes2
+                        XAxesWatering = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }],
+                        XAxesFertilization = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }]
                     });
                 }
             });
