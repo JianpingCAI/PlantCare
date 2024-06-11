@@ -2,7 +2,7 @@
 
 namespace PlantCare.App.Services;
 
-public interface ISettingsService
+public interface IAppSettingsService
 {
     Task<AppTheme> GetThemeSettingAsync();
 

@@ -35,7 +35,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
     }
 
     [RelayCommand]
-    private async void DeletePlant()
+    private async Task DeletePlant()
     {
         if (IsBusy)
         {

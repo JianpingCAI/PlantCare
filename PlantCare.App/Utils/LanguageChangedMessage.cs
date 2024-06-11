@@ -2,6 +2,6 @@
 {
     internal class LanguageChangedMessage
     {
-        public string CultureCode { get; internal set; }
+        public string CultureCode { get; internal set; } = "en";
     }
 }

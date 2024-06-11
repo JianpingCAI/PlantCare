@@ -13,4 +13,6 @@ public static class Consts
     public const string Unselect = "Unselect";
 
     public const string DefaultPhotoPath = "default_plant.png";
+    public const string AppTheme = "AppTheme";
+    public const string Language = "Language";
 }

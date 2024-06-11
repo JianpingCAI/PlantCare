@@ -12,10 +12,10 @@ namespace PlantCare.App.ViewModels;
 
 public partial class SettingsViewModel : ViewModelBase
 {
-    private readonly ISettingsService _settingsService;
+    private readonly IAppSettingsService _settingsService;
     private readonly IDialogService _dialogService;
 
-    public SettingsViewModel(ISettingsService settingsService, IDialogService dialogService)
+    public SettingsViewModel(IAppSettingsService settingsService, IDialogService dialogService)
     {
         _settingsService = settingsService;
         _dialogService = dialogService;

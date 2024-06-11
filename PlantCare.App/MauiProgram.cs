@@ -8,7 +8,6 @@ using CommunityToolkit.Maui;
 using PlantCare.Data;
 using PlantCare.App.Utils;
 using Plugin.LocalNotification;
-using Plugin.LocalNotification.AndroidOption;
 using Serilog;
 using PlantCare.Data.Repositories.interfaces;
 using PlantCare.App.Services.DBService;
@@ -41,69 +40,6 @@ public static class MauiProgram
             })
             .UseLocalNotification();
 
-        //            .UseLocalNotification(config =>
-        //            {
-        //                config.AddCategory(new NotificationCategory(NotificationCategoryType.Status)
-        //                {
-        //                    ActionList = new HashSet<NotificationAction>(new List<NotificationAction>()
-        //                        {
-        //                            new(100)
-        //                            {
-        //                                Title = "Hello",
-        //                                Android =
-        //                                {
-        //                                    LaunchAppWhenTapped = true,
-        //                                    IconName =
-        //                                    {
-        //                                        ResourceName = "i2"
-        //                                    }
-        //                                },
-        //                                IOS =
-        //                                {
-        //                                    Action = Plugin.LocalNotification.iOSOption.iOSActionType.Foreground
-        //                                },
-        //                                Windows =
-        //                                {
-        //                                    LaunchAppWhenTapped = true
-        //                                }
-        //                            },
-        //                            new(101)
-        //                            {
-        //                                Title = "Close",
-        //                                Android =
-        //                                {
-        //                                    LaunchAppWhenTapped = false,
-        //                                    IconName =
-        //                                    {
-        //                                        ResourceName = "i3"
-        //                                    }
-        //                                },
-        //                                IOS =
-        //                                {
-        //                                    Action = Plugin.LocalNotification.iOSOption.iOSActionType.Destructive
-        //                                },
-        //                                Windows =
-        //                                {
-        //                                    LaunchAppWhenTapped = false
-        //                                }
-        //                            }
-        //                        })
-        //                })
-        //                .AddAndroid(android =>
-        //                {
-        //                    android.AddChannel(new NotificationChannelRequest
-        //                    {
-        //                        Sound = "good_things_happen"
-        //                    });
-        //                })
-        //                .AddiOS(iOS =>
-        //                {
-        //#if IOS
-        //                    //iOS.SetCustomUserNotificationCenterDelegate(new CustomUserNotificationCenterDelegate());
-        //#endif
-        //                });
-        //            });
-
         // Configure services
 
         // Database context
@@ -126,7 +62,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IAuthService, AuthService>();
         builder.Services.AddSingleton<IPlantService, PlantService>();
         builder.Services.AddSingleton<IReminderService, ReminderService>();
-        builder.Services.AddSingleton<ISettingsService, SettingsService>();
+        builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
 
         // Register Views and ViewModels
         RegisterViewWithViewModels(builder);

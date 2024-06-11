@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PlantCare.App.Services;
 using PlantCare.App.Utils;
 using PlantCare.Data.Repositories;
 using System.Diagnostics;
@@ -7,11 +8,15 @@ namespace PlantCare.App
 {
     public partial class App : Application
     {
+        private readonly IAppSettingsService _settingsService;
+
         public static Language AppLanguage { get; private set; }
 
-        public App(IServiceProvider serviceProvider)
+        public App(IServiceProvider serviceProvider, IAppSettingsService settingsService)
         {
             InitializeComponent();
+
+            _settingsService = settingsService;
 
             //FileHelper.DeleteDatabaseFile();
 
@@ -33,47 +38,34 @@ namespace PlantCare.App
             RegisterNavigationEventHandlers();
         }
 
-        private static void LoadLocalizationLanguage()
+        private void LoadLocalizationLanguage()
         {
-            string? languageString = SecureStorage.GetAsync("Language").Result;
             try
             {
-                if (!string.IsNullOrEmpty(languageString))
-                {
-                    Language language = (Language)Enum.Parse(typeof(Language), languageString, true);
-
-                    LocalizationManager.Instance.SetLanguage(language);
-
-                    AppLanguage = language;
-                }
+                Language language = _settingsService.GetLanguageAsync().Result;
+                LocalizationManager.Instance.SetLanguage(language);
+                AppLanguage = language;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 LocalizationManager.Instance.SetLanguage(Language.English);
-
                 AppLanguage = Language.English;
+                Debug.WriteLine($"?????????? Exception occurs: {ex.Message}");
             }
         }
 
-        private static void LoadTheme()
+        private void LoadTheme()
         {
-            AppTheme appTheme = AppTheme.Unspecified;
-
-            if (Current is null)
-                return;
-            string? strTheme = SecureStorage.GetAsync("AppTheme").Result;
-            if (string.IsNullOrEmpty(strTheme))
-                return;
-
             try
             {
-                appTheme = (AppTheme)Enum.Parse(typeof(AppTheme), strTheme, true);
+                AppTheme appTheme = _settingsService.GetThemeSettingAsync().Result;
+                Current.UserAppTheme = appTheme;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Current.UserAppTheme = AppTheme.Unspecified;
+                Debug.WriteLine($"?????????? Exception occurs: {ex.Message}");
             }
-
-            Current.UserAppTheme = appTheme;
         }
 
         private static void RegisterNavigationEventHandlers()

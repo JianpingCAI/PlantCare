@@ -27,7 +27,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private readonly INavigationService _navigationService;
     private readonly INotificationService _notificationService;
     private readonly IDialogService _dialogService;
-    private readonly ISettingsService _settingsService;
+    private readonly IAppSettingsService _settingsService;
     private readonly IAppLogger<PlantListOverviewViewModel> _logger;
 
     public PlantListOverviewViewModel(
@@ -35,7 +35,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         INavigationService navigationService,
         INotificationService notificationService,
         IDialogService dialogService,
-        ISettingsService settingsService,
+        IAppSettingsService settingsService,
         IAppLogger<PlantListOverviewViewModel> logger)
     {
         _plantService = plantService;
@@ -126,7 +126,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             _logger.LogInformation($"{_allPlantViewModelsCache.Count} plants are loaded.");
 
-            // Cache 
+            // Cache
             _allPlantViewModelsCache.Clear();
             foreach (Plant plantDB in plantListDatabase)
             {
@@ -139,10 +139,13 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             // Set up notifications
             if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
             {
-                if (await _notificationService.AreNotificationsEnabled() == false)
+                MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await _notificationService.RequestNotificationPermission();
-                }
+                    if (await _notificationService.AreNotificationsEnabled() == false)
+                    {
+                        await _notificationService.RequestNotificationPermission();
+                    }
+                });
 
                 IList<NotificationRequest> pendingNotifications = await _notificationService.GetPendingNotificationList();
                 if (pendingNotifications.Count > 0)
