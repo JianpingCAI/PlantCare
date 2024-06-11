@@ -87,7 +87,14 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
 
     public override async Task LoadDataWhenViewAppearingAsync()
     {
-        await LoadPlantDetailAsync(Id);
+        try
+        {
+            await LoadPlantDetailAsync(Id);
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify("Error", ex.Message);
+        }
     }
 
     private async Task LoadPlantDetailAsync(Guid plantId)

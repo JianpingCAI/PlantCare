@@ -104,12 +104,19 @@ namespace PlantCare.App.ViewModels
         /// <returns></returns>
         public override async Task LoadDataWhenViewAppearingAsync()
         {
-            _loadCalendarTask = Task.Run(() =>
+            try
             {
-                ReminderCalendar ??= CreateCalendar(null);
-            });
+                _loadCalendarTask = Task.Run(() =>
+                   {
+                       ReminderCalendar ??= CreateCalendar(null);
+                   });
 
-            await UpdateCalendarAndEventListAsync();
+                await UpdateCalendarAndEventListAsync();
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.Notify("Error", ex.Message);
+            }
         }
 
         private Calendar<PlantEventDay, PlantEvent> CreateCalendar(string? cultureCode)
@@ -500,7 +507,6 @@ namespace PlantCare.App.ViewModels
         public async Task RefreshPlantEvents()
         {
             if (IsBusy) return;
-
 
             try
             {

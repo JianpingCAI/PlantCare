@@ -117,15 +117,22 @@ public class PlantService : IPlantService
 
             List<PlantCareHistory> plantCareHistoryList = new(plants.Count);
 
+
             foreach (PlantDbModel plant in plants)
             {
+                List<DateTime> wateringTimestamps = plant.WateringHistories.Select(x => x.CareTime).ToList();
+                wateringTimestamps.Sort();
+
+                List<DateTime> fertilizationTimestamps = plant.FertilizationHistories.Select(x => x.CareTime).ToList();
+                fertilizationTimestamps.Sort();
+
                 plantCareHistoryList.Add(new PlantCareHistory()
                 {
                     PlantId = plant.Id,
                     Name = plant.Name,
                     PhotoPath = plant.PhotoPath,
-                    WateringTimestamps = plant.WateringHistories.Select(x => x.CareTime).ToList(),
-                    FertilizationTimestamps = plant.FertilizationHistories.Select(x => x.CareTime).ToList()
+                    WateringTimestamps = wateringTimestamps,
+                    FertilizationTimestamps = fertilizationTimestamps
                 });
             }
 
