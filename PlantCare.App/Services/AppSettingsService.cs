@@ -9,7 +9,7 @@ public class AppSettingsService : IAppSettingsService
     {
         return Task.Run(() =>
         {
-            return Preferences.Get(Consts.EnableWateringNotification, true);
+            return Preferences.Get(ConstStrings.EnableWateringNotification, true);
         });
     }
 
@@ -17,7 +17,7 @@ public class AppSettingsService : IAppSettingsService
     {
         return Task.Run(() =>
         {
-            Preferences.Set(Consts.EnableWateringNotification, isEnabled);
+            Preferences.Set(ConstStrings.EnableWateringNotification, isEnabled);
         });
     }
 
@@ -25,7 +25,7 @@ public class AppSettingsService : IAppSettingsService
     {
         return Task.Run(() =>
         {
-            return Preferences.Get(Consts.EnableFertilizationNotification, true);
+            return Preferences.Get(ConstStrings.EnableFertilizationNotification, true);
         });
     }
 
@@ -33,7 +33,7 @@ public class AppSettingsService : IAppSettingsService
     {
         return Task.Run(() =>
         {
-            Preferences.Set(Consts.EnableFertilizationNotification, isEnabled);
+            Preferences.Set(ConstStrings.EnableFertilizationNotification, isEnabled);
         });
     }
 
@@ -41,7 +41,7 @@ public class AppSettingsService : IAppSettingsService
     {
         return Task.Run(() =>
         {
-            string strTheme = Preferences.Get(Consts.AppTheme, AppTheme.Unspecified.ToString());
+            string strTheme = Preferences.Get(ConstStrings.AppTheme, AppTheme.Unspecified.ToString());
 
             if (string.IsNullOrEmpty(strTheme))
             {
@@ -64,7 +64,7 @@ public class AppSettingsService : IAppSettingsService
     {
         return Task.Run(() =>
         {
-            Preferences.Set(Consts.AppTheme, theme.ToString());
+            Preferences.Set(ConstStrings.AppTheme, theme.ToString());
         });
     }
 
@@ -72,7 +72,7 @@ public class AppSettingsService : IAppSettingsService
     {
         return Task.Run(() =>
         {
-            string? languageString = Preferences.Get(Consts.Language, Language.English.ToString());
+            string? languageString = Preferences.Get(ConstStrings.Language, Language.English.ToString());
             if (string.IsNullOrEmpty(languageString))
             {
                 return Language.English;
@@ -94,7 +94,7 @@ public class AppSettingsService : IAppSettingsService
     {
         return Task.Run(() =>
         {
-            Preferences.Set(Consts.Language, language.ToString());
+            Preferences.Set(ConstStrings.Language, language.ToString());
         });
     }
 
@@ -102,7 +102,7 @@ public class AppSettingsService : IAppSettingsService
     {
         return Task.Run(() =>
         {
-            return Preferences.Get(Consts.IsDebugMode, false);
+            return Preferences.Get(ConstStrings.IsDebugMode, false);
         });
     }
 
@@ -110,7 +110,7 @@ public class AppSettingsService : IAppSettingsService
     {
         return Task.Run(() =>
         {
-            Preferences.Set(Consts.IsDebugMode, isEnabled);
+            Preferences.Set(ConstStrings.IsDebugMode, isEnabled);
         });
     }
 }

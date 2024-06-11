@@ -43,7 +43,7 @@ public static class MauiProgram
         // Configure services
 
         // Database context
-        string dbPath = Path.Combine(Microsoft.Maui.Storage.FileSystem.AppDataDirectory, Consts.DatabaseFileName);
+        string dbPath = Path.Combine(Microsoft.Maui.Storage.FileSystem.AppDataDirectory, ConstStrings.DatabaseFileName);
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
         {

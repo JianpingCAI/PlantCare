@@ -92,7 +92,7 @@ public partial class CareHistoryViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
     }
 

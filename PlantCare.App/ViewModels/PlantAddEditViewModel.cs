@@ -114,7 +114,7 @@ namespace PlantCare.App.ViewModels
         #endregion Fertilization
 
         [ObservableProperty]
-        private string _photoPath = Consts.DefaultPhotoPath;
+        private string _photoPath = ConstStrings.DefaultPhotoPath;
 
         [RelayCommand]
         private async Task SetCurrentTimeAsLastWatered()
@@ -129,7 +129,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message, "OK");
+                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message, "OK");
             }
         }
 
@@ -146,7 +146,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message, "OK");
+                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message, "OK");
             }
         }
 
@@ -212,7 +212,7 @@ namespace PlantCare.App.ViewModels
                     }
                     catch (Exception e)
                     {
-                        await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, e.Message);
+                        await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, e.Message);
                     }
 
                     if (updated)
@@ -230,7 +230,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
+                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
             }
             finally
             {
@@ -268,7 +268,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message, "OK");
+                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message, "OK");
             }
         }
 
@@ -297,7 +297,7 @@ namespace PlantCare.App.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message, "OK");
+                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message, "OK");
             }
         }
 

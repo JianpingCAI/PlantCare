@@ -32,7 +32,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
     }
 
@@ -49,10 +49,10 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
             IsBusy = true;
 
             bool isConfirmed = await _dialogService.Ask(
-                LocalizationManager.Instance[Consts.Confirm] ?? "Confirm",
-                $"{LocalizationManager.Instance[Consts.ConfirmDelete]}: {Name}?",
-                LocalizationManager.Instance[Consts.Yes] ?? "Yes",
-                LocalizationManager.Instance[Consts.No] ?? "No");
+                LocalizationManager.Instance[ConstStrings.Confirm] ?? "Confirm",
+                $"{LocalizationManager.Instance[ConstStrings.ConfirmDelete]}: {Name}?",
+                LocalizationManager.Instance[ConstStrings.Yes] ?? "Yes",
+                LocalizationManager.Instance[ConstStrings.No] ?? "No");
 
             if (!isConfirmed)
             {
@@ -70,7 +70,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
         finally
         {
@@ -99,7 +99,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify(LocalizationManager.Instance[Consts.Error] ?? Consts.Error, ex.Message);
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
     }
 

@@ -6,7 +6,7 @@ namespace PlantCare.App.Utils
     {
         public static void DeleteDatabaseFile()
         {
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, Consts.DatabaseFileName);
+            string dbPath = Path.Combine(FileSystem.AppDataDirectory, ConstStrings.DatabaseFileName);
             if (File.Exists(dbPath))
             {
                 File.Delete(dbPath);
