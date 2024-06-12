@@ -13,6 +13,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <local:StringToIntConverter x:Key="StringToIntConverter" />
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid Padding="5,2,5,0">
@@ -303,7 +304,7 @@
                     <Button
                         Command="{Binding SubmitCommand}"
                         HorizontalOptions="CenterAndExpand"
-                        IsEnabled="True"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                         MinimumWidthRequest="150"
                         Text="{Binding Path=[Save], Source={x:Static utils:LocalizationManager.Instance}}" />
                 </VerticalStackLayout>

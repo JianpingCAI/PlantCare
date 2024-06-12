@@ -167,6 +167,7 @@ namespace PlantCare.App.ViewModels
                 }
 
                 IsLoading = true;
+                IsBusy = true;
 
                 // Add/Create a plant
                 if (Id == default)
@@ -235,6 +236,7 @@ namespace PlantCare.App.ViewModels
             finally
             {
                 IsLoading = false;
+                IsBusy = false;
             }
         }
 

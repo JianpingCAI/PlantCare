@@ -66,6 +66,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
 
                 WeakReferenceMessenger.Default.Send(new PlantDeletedMessage { PlantId = Id });
             });
+
             await _navigationService.GoToPlantsOverview();
         }
         catch (Exception ex)
