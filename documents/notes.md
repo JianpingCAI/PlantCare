@@ -9,6 +9,10 @@
 
 Add-Migration InitialCreate -Project PlantCare.Data -StartupProject PlantCare.Data
 
+```
+
+No need to run the following command,
+```
 Update-Database -Project PlantCare.Data -StartupProject PlantCare.Data
 ```
 
