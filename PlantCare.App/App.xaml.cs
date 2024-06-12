@@ -59,11 +59,15 @@ namespace PlantCare.App
             try
             {
                 AppTheme appTheme = _settingsService.GetThemeSettingAsync().Result;
-                Current.UserAppTheme = appTheme;
+                if (Current is not null)
+                {
+                    Current.UserAppTheme = appTheme;
+                }
             }
             catch (Exception ex)
             {
-                Current.UserAppTheme = AppTheme.Unspecified;
+                if (Current is not null)
+                    Current.UserAppTheme = AppTheme.Unspecified;
                 Debug.WriteLine($"?????????? Exception occurs: {ex.Message}");
             }
         }

@@ -57,7 +57,7 @@ public abstract class EventHistoryBase
 
     // Relationship
     [ForeignKey(nameof(PlantId))]
-    public virtual PlantDbModel Plant { get; set; }
+    public virtual PlantDbModel? Plant { get; set; }
 }
 
 [Table(nameof(WateringHistory))]

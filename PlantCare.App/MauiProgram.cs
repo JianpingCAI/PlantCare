@@ -60,7 +60,6 @@ public static class MauiProgram
         // Service registrations
         builder.Services.AddSingleton<IAuthService, AuthService>();
         builder.Services.AddSingleton<IPlantService, PlantService>();
-        builder.Services.AddSingleton<IReminderService, ReminderService>();
         builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
 
         // Register Views and ViewModels
