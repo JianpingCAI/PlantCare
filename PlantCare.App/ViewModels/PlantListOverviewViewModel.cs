@@ -11,10 +11,10 @@ using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
 using System.Text.Json;
 using Plugin.LocalNotification.EventArgs;
-using System.Diagnostics;
 using PlantCare.App.Services.DBService;
 using PlantCare.Data;
 using PlantCare.App.Utils;
+using CommunityToolkit.Maui.Alerts;
 
 namespace PlantCare.App.ViewModels;
 
@@ -320,6 +320,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 return;
             }
 
+            var toast = Toast.Make($"{plantDB.Name} is added.", CommunityToolkit.Maui.Core.ToastDuration.Short);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            toast.Show();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
             PlantListItemViewModel newPlantVM = MapToViewModel(plantDB);
             InsertPlant(newPlantVM);
 
@@ -374,6 +379,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             Plant? plantDB = await _plantService.GetPlantByIdAsync(message.PlantId);
             if (plantDB is null) { return; }
 
+            var toast = Toast.Make($"{plantDB.Name} is updated.", CommunityToolkit.Maui.Core.ToastDuration.Short);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            toast.Show();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
             string originalName = plantVM.Name;
 
             UpdatePlantViewModel(plantVM, plantDB);
@@ -413,6 +423,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             IsLoading = true;
             PlantListItemViewModel? deletedPlant = Plants.FirstOrDefault(e => e.Id == message.PlantId);
             if (deletedPlant is null) { return; }
+
+            var toast = Toast.Make($"{deletedPlant.Name} is deleted.", CommunityToolkit.Maui.Core.ToastDuration.Short);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            toast.Show();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             Plants.Remove(deletedPlant);
 

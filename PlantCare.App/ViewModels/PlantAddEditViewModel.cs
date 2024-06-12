@@ -185,11 +185,7 @@ namespace PlantCare.App.ViewModels
 
                     WeakReferenceMessenger.Default.Send(new PlantAddedMessage(Id));
 
-                    //await _dialogService.Notify("Success", "The plant is added.");
-
-                    var toast = Toast.Make($"{Name} is added.", CommunityToolkit.Maui.Core.ToastDuration.Short);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    toast.Show();
                     _navigationService.GoToPlantsOverview();
 
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -222,9 +218,7 @@ namespace PlantCare.App.ViewModels
                     {
                         WeakReferenceMessenger.Default.Send(new PlantModifiedMessage(Id));
 
-                        var toast = Toast.Make($"{Name} is updated.", CommunityToolkit.Maui.Core.ToastDuration.Short);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                        toast.Show();
                         _navigationService.GoToPlantDetail(Id);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     }
