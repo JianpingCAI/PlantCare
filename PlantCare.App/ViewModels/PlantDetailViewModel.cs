@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
@@ -67,6 +68,8 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
                 WeakReferenceMessenger.Default.Send(new PlantDeletedMessage { PlantId = Id });
             });
 
+            var toast = Toast.Make($"{Name} is deleted.", CommunityToolkit.Maui.Core.ToastDuration.Short);
+            await toast.Show();
             await _navigationService.GoToPlantsOverview();
         }
         catch (Exception ex)
