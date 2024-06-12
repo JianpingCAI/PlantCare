@@ -7,8 +7,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<User> Users { get; set; }
     public DbSet<PlantDbModel> Plants { get; set; }
-    public DbSet<Reminder> Reminders { get; set; }
-    public DbSet<Log> Logs { get; set; }
 
     public DbSet<WateringHistory> WateringHistories { get; set; }
     public DbSet<FertilizationHistory> FertilizationHistories { get; set; }

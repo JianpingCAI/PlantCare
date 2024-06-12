@@ -56,7 +56,6 @@ public static class MauiProgram
         builder.Services.AddScoped<IPlantRepository, PlantRepository>();
         builder.Services.AddScoped<IWateringHistoryRepository, WateringHistoryRepository>();
         builder.Services.AddScoped<IFertilizationHistoryRepository, FertilizationHistoryRepository>();
-        builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
 
         // Service registrations
         builder.Services.AddSingleton<IAuthService, AuthService>();
