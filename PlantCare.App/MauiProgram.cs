@@ -30,7 +30,12 @@ public static class MauiProgram
             .UseSkiaSharp(registerRenderers: true)
             .UseMauiApp<App>()
             // Initialize the .NET MAUI Community Toolkit by adding the below line of code
-            .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkit(options =>
+            {
+#if WINDOWS
+                options.SetShouldEnableSnackbarOnWindows(true);
+#endif
+            })
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

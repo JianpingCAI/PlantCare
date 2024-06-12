@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
@@ -187,7 +188,11 @@ namespace PlantCare.App.ViewModels
 
                     WeakReferenceMessenger.Default.Send(new PlantAddedMessage(Id));
 
-                    await _dialogService.Notify("Success", "The plant is added.");
+                    //await _dialogService.Notify("Success", "The plant is added.");
+
+                    var toast = Toast.Make($"{Name} is added.", CommunityToolkit.Maui.Core.ToastDuration.Short);
+                    await toast.Show();
+
                     await _navigationService.GoToPlantsOverview();
                 }
                 // Edit/Update a plant
@@ -219,13 +224,16 @@ namespace PlantCare.App.ViewModels
                     if (updated)
                     {
                         WeakReferenceMessenger.Default.Send(new PlantModifiedMessage(Id));
-                        await _dialogService.Notify("Success", "The plant is updated.");
+
+                        var toast = Toast.Make($"{Name} is updated.", CommunityToolkit.Maui.Core.ToastDuration.Short);
+                        await toast.Show();
+                        //await _dialogService.Notify("Success", "The plant is updated.");
                         //await _navigationService.GoBack();
                         await _navigationService.GoToPlantDetail(Id);
                     }
                     else
                     {
-                        await _dialogService.Notify("Failed", "Editing the plant failed.");
+                        await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error]??ConstStrings.Error, "Editing the plant failed.");
                     }
                 }
             }
