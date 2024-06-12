@@ -195,15 +195,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         catch (Exception ex)
         {
-            try
-            {
-                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
-                await _navigationService.GoToPlantsOverview();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
         finally
         {
@@ -320,44 +312,35 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
-            await Task.Run(async () =>
+            IsLoading = true;
+
+            Plant? plantDB = await _plantService.GetPlantByIdAsync(message.PlantId);
+            if (plantDB is null)
             {
-                IsLoading = true;
-                try
-                {
-                    Plant? plantDB = await _plantService.GetPlantByIdAsync(message.PlantId);
-                    if (plantDB is null)
-                    {
-                        return;
-                    }
+                return;
+            }
 
-                    PlantListItemViewModel newPlantVM = MapToViewModel(plantDB);
-                    InsertPlant(newPlantVM);
+            PlantListItemViewModel newPlantVM = MapToViewModel(plantDB);
+            InsertPlant(newPlantVM);
 
-                    _allPlantViewModelsCache.Add(newPlantVM);
-                    _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
+            _allPlantViewModelsCache.Add(newPlantVM);
+            _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
 
-                    if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
-                    {
-                        await ScheduleNotificationAsync(ReminderType.Watering, ReminderType.Watering.GetActionName(), newPlantVM);
-                        await ScheduleNotificationAsync(ReminderType.Fertilization, ReminderType.Fertilization.GetActionName(), newPlantVM);
-                    }
+            if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
+            {
+                await ScheduleNotificationAsync(ReminderType.Watering, ReminderType.Watering.GetActionName(), newPlantVM);
+                await ScheduleNotificationAsync(ReminderType.Fertilization, ReminderType.Fertilization.GetActionName(), newPlantVM);
+            }
 
-                    _logger.LogInformation($"New plant {plantDB.Name} is added, with id: {message.PlantId}");
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-                finally
-                {
-                    IsLoading = false;
-                }
-            });
+            _logger.LogInformation($"New plant {plantDB.Name} is added, with id: {message.PlantId}");
         }
         catch (Exception ex)
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 
@@ -382,6 +365,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             return;
         }
 
+        IsLoading = true;
         try
         {
             PlantListItemViewModel? plantVM = Plants.FirstOrDefault(e => e.Id == message.PlantId);
@@ -412,6 +396,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 
     /// <summary>
@@ -422,35 +410,25 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     {
         try
         {
-            await Task.Run(async () =>
-            {
-                IsLoading = true;
-                try
-                {
-                    PlantListItemViewModel? deletedPlant = Plants.FirstOrDefault(e => e.Id == message.PlantId);
-                    if (deletedPlant is null) { return; }
+            IsLoading = true;
+            PlantListItemViewModel? deletedPlant = Plants.FirstOrDefault(e => e.Id == message.PlantId);
+            if (deletedPlant is null) { return; }
 
-                    Plants.Remove(deletedPlant);
+            Plants.Remove(deletedPlant);
 
-                    _allPlantViewModelsCache.Remove(deletedPlant);
+            _allPlantViewModelsCache.Remove(deletedPlant);
 
-                    _logger.LogInformation($"Plant {deletedPlant.Name} is deleted");
+            _logger.LogInformation($"Plant {deletedPlant.Name} is deleted");
 
-                    await CancelPendingNotificationAsync(message.PlantId, deletedPlant.Name);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-                finally
-                {
-                    IsLoading = false;
-                }
-            });
+            await CancelPendingNotificationAsync(message.PlantId, deletedPlant.Name);
         }
         catch (Exception ex)
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 

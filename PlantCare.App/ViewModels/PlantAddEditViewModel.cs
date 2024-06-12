@@ -175,11 +175,8 @@ namespace PlantCare.App.ViewModels
                 {
                     try
                     {
-                        await Task.Run(async () =>
-                        {
-                            PlantDbModel plant = MapViewModelPropertiesToPlantModel(isExistingPlant: false);
-                            Id = await _plantService.CreatePlantAsync(plant);
-                        });
+                        PlantDbModel plant = MapViewModelPropertiesToPlantModel(isExistingPlant: false);
+                        Id = await _plantService.CreatePlantAsync(plant);
                     }
                     catch (Exception)
                     {
@@ -191,9 +188,11 @@ namespace PlantCare.App.ViewModels
                     //await _dialogService.Notify("Success", "The plant is added.");
 
                     var toast = Toast.Make($"{Name} is added.", CommunityToolkit.Maui.Core.ToastDuration.Short);
-                    await toast.Show();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    toast.Show();
+                    _navigationService.GoToPlantsOverview();
 
-                    await _navigationService.GoToPlantsOverview();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 }
                 // Edit/Update a plant
                 else
@@ -201,20 +200,18 @@ namespace PlantCare.App.ViewModels
                     bool updated = false;
                     try
                     {
-                        await Task.Run(async () =>
-                        {
-                            PlantDbModel plant = MapViewModelPropertiesToPlantModel(isExistingPlant: true);
-                            updated = await _plantService.UpdatePlantAsync(plant);
+                        
+                        PlantDbModel plant = MapViewModelPropertiesToPlantModel(isExistingPlant: true);
+                        updated = await _plantService.UpdatePlantAsync(plant);
 
-                            if (_originalLastWatered != plant.LastWatered)
-                            {
-                                await _plantService.AddWateringHistoryAsync(plant.Id, plant.LastWatered);
-                            }
-                            if (_originalLastFertilized != plant.LastFertilized)
-                            {
-                                await _plantService.AddFertilizationHistoryAsync(plant.Id, plant.LastFertilized);
-                            }
-                        });
+                        if (_originalLastWatered != plant.LastWatered)
+                        {
+                            await _plantService.AddWateringHistoryAsync(plant.Id, plant.LastWatered);
+                        }
+                        if (_originalLastFertilized != plant.LastFertilized)
+                        {
+                            await _plantService.AddFertilizationHistoryAsync(plant.Id, plant.LastFertilized);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -226,14 +223,14 @@ namespace PlantCare.App.ViewModels
                         WeakReferenceMessenger.Default.Send(new PlantModifiedMessage(Id));
 
                         var toast = Toast.Make($"{Name} is updated.", CommunityToolkit.Maui.Core.ToastDuration.Short);
-                        await toast.Show();
-                        //await _dialogService.Notify("Success", "The plant is updated.");
-                        //await _navigationService.GoBack();
-                        await _navigationService.GoToPlantDetail(Id);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                        toast.Show();
+                        _navigationService.GoToPlantDetail(Id);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     }
                     else
                     {
-                        await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error]??ConstStrings.Error, "Editing the plant failed.");
+                        await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, "Editing the plant failed.");
                     }
                 }
             }

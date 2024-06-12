@@ -61,16 +61,14 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
             }
             IsLoading = true;
 
-            await Task.Run(async () =>
-            {
-                await _plantService.DeletePlantAsync(Id);
-
-                WeakReferenceMessenger.Default.Send(new PlantDeletedMessage { PlantId = Id });
-            });
+            await _plantService.DeletePlantAsync(Id);
+            WeakReferenceMessenger.Default.Send(new PlantDeletedMessage { PlantId = Id });
 
             var toast = Toast.Make($"{Name} is deleted.", CommunityToolkit.Maui.Core.ToastDuration.Short);
-            await toast.Show();
-            await _navigationService.GoToPlantsOverview();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            toast.Show();
+            _navigationService.GoToPlantsOverview();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
         catch (Exception ex)
         {
