@@ -6,35 +6,35 @@ namespace PlantCare.App.Services;
 
 public class NavigationService : INavigationService
 {
-    public async Task GoToPlantDetail(Guid id)
+    public Task GoToPlantDetail(Guid id)
     {
         var parameters = new Dictionary<string, object> { { "PlantId", id } };
-        await Shell.Current.GoToAsync("//overview/plant", parameters);
+        return Shell.Current.GoToAsync("//overview/plant", parameters);
     }
 
-    public async Task GoToAddPlant(int plantCount)
+    public Task GoToAddPlant(int plantCount)
     {
         var navigationParameter = new ShellNavigationQueryParameters
         {
             { "PlantCount", plantCount }
         };
 
-        await Shell.Current.GoToAsync("//overview/add", navigationParameter);
+        return Shell.Current.GoToAsync("//overview/add", navigationParameter);
     }
 
-    public async Task GoToEditPlant(Plant plant)
+    public Task GoToEditPlant(Plant plant)
     {
         var navigationParameter = new ShellNavigationQueryParameters
         {
             { "Plant", plant }
         };
 
-        await Shell.Current.GoToAsync("//overview/edit", navigationParameter);
+        return Shell.Current.GoToAsync("//overview/edit", navigationParameter);
     }
 
-    public async Task GoToPlantsOverview()
+    public Task GoToPlantsOverview()
     {
-        await Shell.Current.GoToAsync("//overview");
+        return Shell.Current.GoToAsync("//overview");
     }
 
     //public async Task GoBack()
