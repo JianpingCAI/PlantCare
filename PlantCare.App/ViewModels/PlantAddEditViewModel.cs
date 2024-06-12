@@ -248,18 +248,18 @@ namespace PlantCare.App.ViewModels
         {
             try
             {
-                var result = await FilePicker.PickAsync(new PickOptions
+                FileResult? photoFileResult = await FilePicker.PickAsync(new PickOptions
                 {
                     FileTypes = FilePickerFileType.Images,
                     PickerTitle = $"{LocalizationManager.Instance[ConstStrings.PickPhoto]??ConstStrings.PickPhoto}"
                 });
 
-                if (result != null)
+                if (photoFileResult != null)
                 {
-                    var stream = await result.OpenReadAsync();
-                    var filePath = Path.Combine(FileSystem.AppDataDirectory, result.FileName);
+                    Stream stream = await photoFileResult.OpenReadAsync();
+                    string filePath = Path.Combine(FileSystem.AppDataDirectory, photoFileResult.FileName);
 
-                    using (var newStream = File.OpenWrite(filePath))
+                    using (FileStream newStream = File.OpenWrite(filePath))
                     {
                         await stream.CopyToAsync(newStream);
                     }

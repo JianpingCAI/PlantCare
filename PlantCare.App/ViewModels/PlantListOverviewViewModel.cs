@@ -320,16 +320,17 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 return;
             }
 
-            var toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Added]??ConstStrings.Added}", CommunityToolkit.Maui.Core.ToastDuration.Short);
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            toast.Show();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
             PlantListItemViewModel newPlantVM = MapToViewModel(plantDB);
             InsertPlant(newPlantVM);
 
             _allPlantViewModelsCache.Add(newPlantVM);
             _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
+
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                var toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}", CommunityToolkit.Maui.Core.ToastDuration.Short);
+                await toast.Show();
+            });
 
             if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
             {
@@ -379,11 +380,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             Plant? plantDB = await _plantService.GetPlantByIdAsync(message.PlantId);
             if (plantDB is null) { return; }
 
-            var toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Updated]??ConstStrings.Updated}", CommunityToolkit.Maui.Core.ToastDuration.Short);
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            toast.Show();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
             string originalName = plantVM.Name;
 
             UpdatePlantViewModel(plantVM, plantDB);
@@ -395,6 +391,13 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
                 InsertPlant(plantVM);
             }
+
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                var toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Updated] ?? ConstStrings.Updated}", CommunityToolkit.Maui.Core.ToastDuration.Short);
+
+                await toast.Show();
+            });
 
             _logger.LogInformation($"Plant {plantVM.Name} is modified.");
 
@@ -420,18 +423,20 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     {
         try
         {
-            IsLoading = true;
+            //IsLoading = true;
+
             PlantListItemViewModel? deletedPlant = Plants.FirstOrDefault(e => e.Id == message.PlantId);
             if (deletedPlant is null) { return; }
-
-            var toast = Toast.Make($"{deletedPlant.Name} {LocalizationManager.Instance[ConstStrings.Deleted]??ConstStrings.Deleted}", CommunityToolkit.Maui.Core.ToastDuration.Short);
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            toast.Show();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             Plants.Remove(deletedPlant);
 
             _allPlantViewModelsCache.Remove(deletedPlant);
+
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                var toast = Toast.Make($"{deletedPlant.Name} {LocalizationManager.Instance[ConstStrings.Deleted] ?? ConstStrings.Deleted}", CommunityToolkit.Maui.Core.ToastDuration.Short);
+                await toast.Show();
+            });
 
             _logger.LogInformation($"Plant {deletedPlant.Name} is deleted");
 
@@ -443,7 +448,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            IsLoading = false;
+            //IsLoading = false;
         }
     }
 
