@@ -320,7 +320,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 return;
             }
 
-            var toast = Toast.Make($"{plantDB.Name} is added.", CommunityToolkit.Maui.Core.ToastDuration.Short);
+            var toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Added]??ConstStrings.Added}", CommunityToolkit.Maui.Core.ToastDuration.Short);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             toast.Show();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -379,7 +379,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             Plant? plantDB = await _plantService.GetPlantByIdAsync(message.PlantId);
             if (plantDB is null) { return; }
 
-            var toast = Toast.Make($"{plantDB.Name} is updated.", CommunityToolkit.Maui.Core.ToastDuration.Short);
+            var toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Updated]??ConstStrings.Updated}", CommunityToolkit.Maui.Core.ToastDuration.Short);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             toast.Show();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -424,7 +424,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             PlantListItemViewModel? deletedPlant = Plants.FirstOrDefault(e => e.Id == message.PlantId);
             if (deletedPlant is null) { return; }
 
-            var toast = Toast.Make($"{deletedPlant.Name} is deleted.", CommunityToolkit.Maui.Core.ToastDuration.Short);
+            var toast = Toast.Make($"{deletedPlant.Name} {LocalizationManager.Instance[ConstStrings.Deleted]??ConstStrings.Deleted}", CommunityToolkit.Maui.Core.ToastDuration.Short);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             toast.Show();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed

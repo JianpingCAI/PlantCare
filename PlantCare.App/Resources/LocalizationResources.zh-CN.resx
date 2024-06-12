@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Added" xml:space="preserve">
+    <value>已添加</value>
+  </data>
   <data name="AddMyPlants" xml:space="preserve">
     <value>开始添加你的植物吧</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>删除</value>
+  </data>
+  <data name="Deleted" xml:space="preserve">
+    <value>已刪除</value>
   </data>
   <data name="Fertilization" xml:space="preserve">
     <value>施肥</value>
@@ -201,6 +207,9 @@
   <data name="Ok" xml:space="preserve">
     <value>好的</value>
   </data>
+  <data name="PickPhoto" xml:space="preserve">
+    <value>请选择图片</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>保存</value>
   </data>
@@ -221,6 +230,9 @@
   </data>
   <data name="UnattendedOnly" xml:space="preserve">
     <value>亟需照料</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>已更新</value>
   </data>
   <data name="Watering" xml:space="preserve">
     <value>浇水</value>

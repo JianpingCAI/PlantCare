@@ -234,4 +234,16 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Deleted" xml:space="preserve">
+    <value>is deleted</value>
+  </data>
+  <data name="Added" xml:space="preserve">
+    <value>is added</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>is updated</value>
+  </data>
+  <data name="PickPhoto" xml:space="preserve">
+    <value>Please select an image</value>
+  </data>
 </root>

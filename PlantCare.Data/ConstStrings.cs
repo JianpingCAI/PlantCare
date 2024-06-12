@@ -21,4 +21,8 @@ public static class ConstStrings
     public const string No = "No";
     public const string Yes = "Yes";
     public const string Error = "Error";
+    public const string Added = "Added";
+    public const string Deleted = "Deleted";
+    public const string Updated = "Updated";
+    public const string PickPhoto = "PickPhoto";
 }

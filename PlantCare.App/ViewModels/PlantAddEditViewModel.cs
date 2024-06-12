@@ -251,7 +251,7 @@ namespace PlantCare.App.ViewModels
                 var result = await FilePicker.PickAsync(new PickOptions
                 {
                     FileTypes = FilePickerFileType.Images,
-                    PickerTitle = "Please select an image"
+                    PickerTitle = $"{LocalizationManager.Instance[ConstStrings.PickPhoto]??ConstStrings.PickPhoto}"
                 });
 
                 if (result != null)
