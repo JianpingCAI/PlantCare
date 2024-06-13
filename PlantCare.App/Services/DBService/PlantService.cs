@@ -25,10 +25,15 @@ public class PlantService : IPlantService
         _mapper = mapper;
     }
 
-    public async Task<List<Plant>> GetAllPlantsAsync()
+    public Task<List<Plant>> GetAllPlantsAsync()
     {
-        List<PlantDbModel> dbModels = await _plantRepository.GetAllAsync();
-        return _mapper.Map<List<Plant>>(dbModels);
+        return Task.Run(async () =>
+        {
+            List<PlantDbModel> dbModels = await _plantRepository.GetAllAsync();
+            List<Plant> plants = _mapper.Map<List<Plant>>(dbModels);
+
+            return plants.OrderBy(x => x.Name).ToList();
+        });
     }
 
     public async Task<Plant?> GetPlantByIdAsync(Guid id)

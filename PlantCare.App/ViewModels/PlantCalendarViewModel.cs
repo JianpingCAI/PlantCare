@@ -202,8 +202,6 @@ namespace PlantCare.App.ViewModels
                     filteredPlants = _allPlantsCache;
                 }
 
-                filteredPlants = filteredPlants.OrderBy(x => x.Name).ToList();
-
                 // Convert to PlantEvent
                 List<PlantEvent> plantEvents = [];
                 foreach (Plant plant in filteredPlants)
