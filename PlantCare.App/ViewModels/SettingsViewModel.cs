@@ -132,8 +132,6 @@ public partial class SettingsViewModel : ViewModelBase
 
             SelectedLanguage = await _settingsService.GetLanguageAsync();
 
-            //SelectLanguageChanged(SelectedLanguage);
-
             //IsDebugModeEnabled = await _settingsService.GetDebugSettingAsync();
         }
         catch (Exception ex)

@@ -50,7 +50,6 @@ namespace PlantCare.App
             {
                 LocalizationManager.Instance.SetLanguage(Language.English);
                 AppLanguage = Language.English;
-                Debug.WriteLine($"?????????? Exception occurs: {ex.Message}");
             }
         }
 

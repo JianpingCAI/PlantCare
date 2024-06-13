@@ -18,7 +18,7 @@ public class LocalizationManager : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public void SetCulture(CultureInfo culture)
+    private void SetCulture(CultureInfo culture)
     {
         if (_currentCulture != culture)
         {
@@ -33,7 +33,7 @@ public class LocalizationManager : INotifyPropertyChanged
 
             WeakReferenceMessenger.Default.Send<LanguageChangedMessage>(new LanguageChangedMessage
             {
-                CultureCode = culture.Name
+                CultureCode = culture.Name,
             });
         }
     }
