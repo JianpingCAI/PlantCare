@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documents", "documents", "{
 		documents\design_document_v2.md = documents\design_document_v2.md
 		documents\notes.md = documents\notes.md
 		documents\require_document.md = documents\require_document.md
+		notes_debounce.md = notes_debounce.md
 		TODO.md = TODO.md
 	EndProjectSection
 EndProject
