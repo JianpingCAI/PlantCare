@@ -2,5 +2,12 @@
 
 internal class PlantDeletedMessage
 {
-    public Guid PlantId { get; internal set; }
+    public PlantDeletedMessage(Guid id, string name)
+    {
+        PlantId = id;
+        Name = name;
+    }
+
+    public Guid PlantId { get; }
+    public string Name { get; }
 }

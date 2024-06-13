@@ -122,11 +122,8 @@ namespace PlantCare.App.ViewModels
         {
             try
             {
-                await Task.Run(() =>
-                    {
-                        LastWateredDate = DateTime.Now.Date;
-                        LastWateredTime = DateTime.Now.TimeOfDay;
-                    });
+                LastWateredDate = DateTime.Now.Date;
+                LastWateredTime = DateTime.Now.TimeOfDay;
             }
             catch (Exception ex)
             {
@@ -139,11 +136,8 @@ namespace PlantCare.App.ViewModels
         {
             try
             {
-                await Task.Run(() =>
-                {
-                    LastFertilizationDate = DateTime.Now.Date;
-                    LastFertilizationTime = DateTime.Now.TimeOfDay;
-                });
+                LastFertilizationDate = DateTime.Now.Date;
+                LastFertilizationTime = DateTime.Now.TimeOfDay;
             }
             catch (Exception ex)
             {
@@ -175,7 +169,7 @@ namespace PlantCare.App.ViewModels
                 {
                     try
                     {
-                        PlantDbModel plant = MapViewModelPropertiesToPlantModel(isExistingPlant: false);
+                        PlantDbModel plant = MapViewModelToDBModel(isExistingPlant: false);
                         Id = await _plantService.CreatePlantAsync(plant);
                     }
                     catch (Exception)
@@ -196,8 +190,7 @@ namespace PlantCare.App.ViewModels
                     bool updated = false;
                     try
                     {
-                        
-                        PlantDbModel plant = MapViewModelPropertiesToPlantModel(isExistingPlant: true);
+                        PlantDbModel plant = MapViewModelToDBModel(isExistingPlant: true);
                         updated = await _plantService.UpdatePlantAsync(plant);
 
                         if (_originalLastWatered != plant.LastWatered)
@@ -234,8 +227,11 @@ namespace PlantCare.App.ViewModels
             }
             finally
             {
-                IsLoading = false;
-                IsBusy = false;
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    IsLoading = false;
+                    IsBusy = false;
+                });
             }
         }
 
@@ -251,7 +247,7 @@ namespace PlantCare.App.ViewModels
                 FileResult? photoFileResult = await FilePicker.PickAsync(new PickOptions
                 {
                     FileTypes = FilePickerFileType.Images,
-                    PickerTitle = $"{LocalizationManager.Instance[ConstStrings.PickPhoto]??ConstStrings.PickPhoto}"
+                    PickerTitle = $"{LocalizationManager.Instance[ConstStrings.PickPhoto] ?? ConstStrings.PickPhoto}"
                 });
 
                 if (photoFileResult != null)
@@ -264,7 +260,7 @@ namespace PlantCare.App.ViewModels
                         await stream.CopyToAsync(newStream);
                     }
 
-                    PhotoPath = filePath;
+                    await MainThread.InvokeOnMainThreadAsync(() => { PhotoPath = filePath; });
                 }
             }
             catch (Exception ex)
@@ -292,7 +288,7 @@ namespace PlantCare.App.ViewModels
 
                         await sourceStream.CopyToAsync(localFileStream);
 
-                        PhotoPath = localFilePath;
+                        await MainThread.InvokeOnMainThreadAsync(() => { PhotoPath = localFilePath; });
                     }
                 }
             }
@@ -324,19 +320,22 @@ namespace PlantCare.App.ViewModels
                 return;
             }
 
-            // edit an existing plant
-            if (query.TryGetValue("Plant", out object? value))
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (value is not Plant plant) return;
+                // edit an existing plant
+                if (query.TryGetValue("Plant", out object? value))
+                {
+                    if (value is not Plant plant) return;
 
-                MapPlantDataToViewModelProperties(plant);
-            }
-            // add a new plant
-            else if (query.TryGetValue("PlantCount", out object? plantCount))
-            {
-                // give a default name according to the existing count of plants
-                Name = $"Plant {plantCount}";
-            }
+                    MapToViewModel(plant);
+                }
+                // add a new plant
+                else if (query.TryGetValue("PlantCount", out object? plantCount))
+                {
+                    // give a default name according to the existing count of plants
+                    Name = $"Plant {plantCount}";
+                }
+            });
         }
 
         internal async Task NavigateBack()
@@ -351,7 +350,7 @@ namespace PlantCare.App.ViewModels
             }
         }
 
-        private PlantDbModel MapViewModelPropertiesToPlantModel(bool isExistingPlant)
+        private PlantDbModel MapViewModelToDBModel(bool isExistingPlant)
         {
             PlantDbModel dbModel = new()
             {
@@ -382,7 +381,7 @@ namespace PlantCare.App.ViewModels
             return dbModel;
         }
 
-        private void MapPlantDataToViewModelProperties(Plant plant)
+        private void MapToViewModel(Plant plant)
         {
             Id = plant.Id;
             Name = plant.Name;

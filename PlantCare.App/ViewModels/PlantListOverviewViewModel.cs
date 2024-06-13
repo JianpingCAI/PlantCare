@@ -89,7 +89,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            IsBusy = false;
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                IsBusy = false;
+            });
         }
     }
 
@@ -119,26 +122,28 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task LoadAllPlantsFromDatabaseAsync()
     {
-        Plants.Clear();
-
         // Load from DB
         List<Plant> plantListDatabase = await _plantService.GetAllPlantsAsync();
 
-        // Cache
-        _allPlantViewModelsCache.Clear();
-        foreach (Plant plantDB in plantListDatabase)
+        await MainThread.InvokeOnMainThreadAsync(() =>
         {
-            PlantListItemViewModel plantVM = MapToViewModel(plantDB);
-            _allPlantViewModelsCache.Add(plantVM);
-            Plants.Add(plantVM);
-        }
+            Plants.Clear();
+            // Cache
+            _allPlantViewModelsCache.Clear();
+            foreach (Plant plantDB in plantListDatabase)
+            {
+                PlantListItemViewModel plantVM = MapToViewModel(plantDB);
+                _allPlantViewModelsCache.Add(plantVM);
+                Plants.Add(plantVM);
+            }
+        });
 
         _logger.LogInformation($"{_allPlantViewModelsCache.Count} plants are loaded.");
 
         // Set up notifications
         if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
         {
-            MainThread.BeginInvokeOnMainThread(async () =>
+            await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 if (await _notificationService.AreNotificationsEnabled() == false)
                 {
@@ -164,14 +169,17 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    private void ResetPlantsAsync()
+    private async Task ResetPlantsAsync()
     {
-        Plants.Clear();
-
-        foreach (PlantListItemViewModel item in _allPlantViewModelsCache)
+        await MainThread.InvokeOnMainThreadAsync(() =>
         {
-            Plants.Add(item);
-        }
+            Plants.Clear();
+
+            foreach (PlantListItemViewModel item in _allPlantViewModelsCache)
+            {
+                Plants.Add(item);
+            }
+        });
     }
 
     #endregion For data loading
@@ -208,30 +216,33 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             IsBusy = true;
 
-            await Task.Run(async () =>
+            IsLoading = true;
+
+            if (!string.IsNullOrEmpty(SearchText))
             {
-                IsLoading = true;
+                List<PlantListItemViewModel> searchedPlants = await SearchPlantsByNameAsync(Plants, SearchText);
 
-                if (!string.IsNullOrEmpty(SearchText))
+                await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    List<PlantListItemViewModel> searchedPlants = await SearchPlantsByNameAsync(Plants, SearchText);
-
                     Plants.Clear();
                     foreach (PlantListItemViewModel plant in searchedPlants)
                     {
                         Plants.Add(plant);
                     }
-                }
-                else
-                {
-                    ResetPlantsAsync();
-                }
-            });
+                });
+            }
+            else
+            {
+                await ResetPlantsAsync();
+            }
         }
         finally
         {
-            IsLoading = false;
-            IsBusy = false;
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                IsLoading = false;
+                IsBusy = false;
+            });
         }
     }
 
@@ -242,12 +253,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     [RelayCommand]
     private async Task SearchTextChanged()
     {
-        if (string.IsNullOrEmpty(SearchText.Trim()))
+        if (SearchText.Length == 0)
         {
             try
             {
                 IsLoading = true;
-                ResetPlantsAsync();
+                await ResetPlantsAsync();
             }
             catch (Exception ex)
             {
@@ -255,21 +266,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             }
             finally
             {
-                IsLoading = false;
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    IsLoading = false; IsBusy = false;
+                });
             }
-        }
-    }
-
-    internal async Task ResetSearchAsync()
-    {
-        if (_allPlantViewModelsCache.Count == 0)
-        {
-            return;
-        }
-
-        if (string.IsNullOrEmpty(SearchText.Trim()))
-        {
-            ResetPlantsAsync();
         }
     }
 
@@ -305,24 +306,23 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
-            IsLoading = true;
-
             Plant? plantDB = await _plantService.GetPlantByIdAsync(message.PlantId);
             if (plantDB is null)
             {
                 return;
             }
-
             PlantListItemViewModel newPlantVM = MapToViewModel(plantDB);
-            InsertPlant(newPlantVM);
 
-            _allPlantViewModelsCache.Add(newPlantVM);
-            _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
-
-            await MainThread.InvokeOnMainThreadAsync(async () =>
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
+                IsLoading = true;
+
+                InsertPlant(newPlantVM);
+
+                _allPlantViewModelsCache.Add(newPlantVM);
+                _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
                 var toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}", CommunityToolkit.Maui.Core.ToastDuration.Short);
-                await toast.Show();
+                toast.Show();
             });
 
             if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
@@ -339,7 +339,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            IsLoading = false;
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                IsLoading = false;
+            });
         }
     }
 
@@ -375,21 +378,21 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             string originalName = plantVM.Name;
 
-            UpdatePlantViewModel(plantVM, plantDB);
-
-            // Reorder needed if name changed
-            if (originalName.CompareTo(plantVM.Name) != 0)
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                Plants.Remove(plantVM);
+                UpdatePlantViewModel(plantVM, plantDB);
 
-                InsertPlant(plantVM);
-            }
+                // Reorder needed if name changed
+                if (originalName.CompareTo(plantVM.Name) != 0)
+                {
+                    Plants.Remove(plantVM);
 
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
+                    InsertPlant(plantVM);
+                }
+
                 var toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Updated] ?? ConstStrings.Updated}", CommunityToolkit.Maui.Core.ToastDuration.Short);
 
-                await toast.Show();
+                toast.Show();
             });
 
             _logger.LogInformation($"Plant {plantVM.Name} is modified.");
@@ -404,7 +407,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            IsLoading = false;
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                IsLoading = false;
+            });
         }
     }
 
@@ -416,24 +422,22 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     {
         try
         {
-            //IsLoading = true;
-
-            PlantListItemViewModel? deletedPlant = Plants.FirstOrDefault(e => e.Id == message.PlantId);
-            if (deletedPlant is null) { return; }
-
-            Plants.Remove(deletedPlant);
-
-            _allPlantViewModelsCache.Remove(deletedPlant);
-
-            await MainThread.InvokeOnMainThreadAsync(async () =>
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
+                IsLoading = true;
+
+                PlantListItemViewModel? deletedPlant = Plants.FirstOrDefault(e => e.Id == message.PlantId);
+
+                if (deletedPlant is null) { return; }
+                Plants.Remove(deletedPlant);
+
+                _allPlantViewModelsCache.Remove(deletedPlant);
                 var toast = Toast.Make($"{deletedPlant.Name} {LocalizationManager.Instance[ConstStrings.Deleted] ?? ConstStrings.Deleted}", CommunityToolkit.Maui.Core.ToastDuration.Short);
-                await toast.Show();
+                toast.Show();
             });
 
-            _logger.LogInformation($"Plant {deletedPlant.Name} is deleted");
-
-            await CancelPendingNotificationAsync(message.PlantId, deletedPlant.Name);
+            _logger.LogInformation($"Plant {message.Name} is deleted");
+            await CancelPendingNotificationAsync(message.PlantId, message.Name);
         }
         catch (Exception ex)
         {
@@ -441,7 +445,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            //IsLoading = false;
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                IsLoading = false;
+            });
         }
     }
 
@@ -459,7 +466,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             IsBusy = false;
 
-            await RefreshPlantStateAsync();
+            if (Plants.Count == 0) return;
+
+            foreach (PlantListItemViewModel plant in Plants)
+            {
+                plant.RefreshStates();
+            }
         }
         catch (Exception ex)
         {
@@ -470,19 +482,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             IsPlantStatesRefreshing = false;
             IsBusy = false;
         }
-    }
-
-    private Task RefreshPlantStateAsync()
-    {
-        return Task.Run(() =>
-        {
-            if (Plants.Count == 0) return;
-
-            foreach (PlantListItemViewModel plant in Plants)
-            {
-                plant.RefreshStates();
-            }
-        });
     }
 
     #endregion Refresh plant states
@@ -732,6 +731,66 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
+    private static int GetNotificationId(ReminderType reminderType, Guid plantId)
+    {
+        if (plantId == default)
+        {
+            return 0;
+        }
+
+        int notificationId = plantId.GetHashCode();
+
+        switch (reminderType)
+        {
+            case ReminderType.Watering:
+                break;
+
+            case ReminderType.Fertilization:
+                notificationId = -notificationId;
+                break;
+        }
+
+        return notificationId;
+    }
+
+    private async Task CancelPendingNotificationAsync(Guid plantId, string name)
+    {
+        if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
+        {
+            int noticeId = plantId.GetHashCode();
+
+            await CancelPendingNotificationAsync(noticeId, name);
+            await CancelPendingNotificationAsync(-noticeId, name);
+        }
+    }
+
+    private async Task CancelPendingNotificationAsync(int noticeId, string name)
+    {
+        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
+            return;
+
+        List<int> notificationIds = await GetPendingNotificationIdsAsync();
+        if (notificationIds.Contains(noticeId))
+        {
+            _notificationService.Cancel([noticeId]);
+
+            _logger.LogInformation($"Cancel pending notification for Plant {name}, notification Id = {noticeId}");
+        }
+    }
+
+    private async Task<List<int>> GetPendingNotificationIdsAsync()
+    {
+        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
+        {
+            return [];
+        }
+
+        List<int> notificationIds = (await _notificationService.GetPendingNotificationList())
+                .Select(x => x.NotificationId).ToList();
+
+        return notificationIds;
+    }
+
     #endregion Notification methods
 
     private static PlantListItemViewModel MapToViewModel(Plant plant)
@@ -811,65 +870,5 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
-    }
-
-    private static int GetNotificationId(ReminderType reminderType, Guid plantId)
-    {
-        if (plantId == default)
-        {
-            return 0;
-        }
-
-        int notificationId = plantId.GetHashCode();
-
-        switch (reminderType)
-        {
-            case ReminderType.Watering:
-                break;
-
-            case ReminderType.Fertilization:
-                notificationId = -notificationId;
-                break;
-        }
-
-        return notificationId;
-    }
-
-    private async Task CancelPendingNotificationAsync(Guid plantId, string name)
-    {
-        if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
-        {
-            int noticeId = plantId.GetHashCode();
-
-            await CancelPendingNotificationAsync(noticeId, name);
-            await CancelPendingNotificationAsync(-noticeId, name);
-        }
-    }
-
-    private async Task CancelPendingNotificationAsync(int noticeId, string name)
-    {
-        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
-            return;
-
-        List<int> notificationIds = await GetPendingNotificationIdsAsync();
-        if (notificationIds.Contains(noticeId))
-        {
-            _notificationService.Cancel([noticeId]);
-
-            _logger.LogInformation($"Cancel pending notification for Plant {name}, notification Id = {noticeId}");
-        }
-    }
-
-    private async Task<List<int>> GetPendingNotificationIdsAsync()
-    {
-        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
-        {
-            return [];
-        }
-
-        List<int> notificationIds = (await _notificationService.GetPendingNotificationList())
-                .Select(x => x.NotificationId).ToList();
-
-        return notificationIds;
     }
 }

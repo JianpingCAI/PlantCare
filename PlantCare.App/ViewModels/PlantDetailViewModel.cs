@@ -48,6 +48,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         try
         {
             IsBusy = true;
+            IsLoading = true;
 
             bool isConfirmed = await _dialogService.Ask(
                 LocalizationManager.Instance[ConstStrings.Confirm] ?? "Confirm",
@@ -59,10 +60,9 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
             {
                 return;
             }
-            IsLoading = true;
 
             await _plantService.DeletePlantAsync(Id);
-            WeakReferenceMessenger.Default.Send(new PlantDeletedMessage { PlantId = Id });
+            WeakReferenceMessenger.Default.Send(new PlantDeletedMessage(Id, Name));
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             _navigationService.GoToPlantsOverview();
@@ -74,8 +74,11 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         }
         finally
         {
-            IsBusy = false;
-            IsLoading = false;
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                IsBusy = false;
+                IsLoading = false;
+            });
         }
     }
 
@@ -95,23 +98,21 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
     {
         try
         {
-            await LoadPlantDetailAsync(Id);
+            Plant? plant = await _plantService.GetPlantByIdAsync(Id);
+            if (plant is null)
+            {
+                return;
+            }
+
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                MapToViewModel(plant);
+            });
         }
         catch (Exception ex)
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
-    }
-
-    private async Task LoadPlantDetailAsync(Guid plantId)
-    {
-        Plant? plant = await _plantService.GetPlantByIdAsync(plantId);
-        if (plant is null)
-        {
-            return;
-        }
-
-        MapToViewModel(plant);
     }
 
     internal async void NavigateBack()

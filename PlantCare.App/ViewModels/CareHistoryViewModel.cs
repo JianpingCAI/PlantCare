@@ -53,29 +53,29 @@ public partial class CareHistoryViewModel : ViewModelBase
         {
             CareHistory.Clear();
 
-            await Task.Run(async () =>
+            List<PlantCareHistory> careHistoryList = await _plantService.GetAllPlantsWithCareHistoryAsync();
+
+            List<PlantCareHistoryWithPlot> careHistoryWithPlots = new(careHistoryList.Count);
+            foreach (PlantCareHistory careHistory in careHistoryList)
             {
-                List<PlantCareHistory> careHistoryList = await LoadWateringHistoryAsync();
-
-                List<PlantCareHistoryWithPlot> careHistoryWithPlots = new(careHistoryList.Count);
-                foreach (PlantCareHistory careHistory in careHistoryList)
+                List<DateTimePoint> wateringDatePoints = new(careHistory.WateringTimestamps.Count);
+                for (int i = 0; i < careHistory.WateringTimestamps.Count; i++)
                 {
-                    List<DateTimePoint> wateringDatePoints = new(careHistory.WateringTimestamps.Count);
-                    for (int i = 0; i < careHistory.WateringTimestamps.Count; i++)
-                    {
-                        DateTime currentTimestamp = careHistory.WateringTimestamps[i];
-                        int interval = i != 0 ? currentTimestamp.Subtract(careHistory.WateringTimestamps[i - 1]).Days : 3;
-                        wateringDatePoints.Add(new DateTimePoint(currentTimestamp, interval));
-                    }
+                    DateTime currentTimestamp = careHistory.WateringTimestamps[i];
+                    int interval = i != 0 ? currentTimestamp.Subtract(careHistory.WateringTimestamps[i - 1]).Days : 3;
+                    wateringDatePoints.Add(new DateTimePoint(currentTimestamp, interval));
+                }
 
-                    List<DateTimePoint> fertilizationDatePoints = new(careHistory.FertilizationTimestamps.Count);
-                    for (int i = 0; i < careHistory.FertilizationTimestamps.Count; i++)
-                    {
-                        DateTime currentTimestamp = careHistory.FertilizationTimestamps[i];
-                        int interval = i != 0 ? currentTimestamp.Subtract(careHistory.FertilizationTimestamps[i - 1]).Days : 3;
-                        fertilizationDatePoints.Add(new DateTimePoint(currentTimestamp, interval));
-                    }
+                List<DateTimePoint> fertilizationDatePoints = new(careHistory.FertilizationTimestamps.Count);
+                for (int i = 0; i < careHistory.FertilizationTimestamps.Count; i++)
+                {
+                    DateTime currentTimestamp = careHistory.FertilizationTimestamps[i];
+                    int interval = i != 0 ? currentTimestamp.Subtract(careHistory.FertilizationTimestamps[i - 1]).Days : 3;
+                    fertilizationDatePoints.Add(new DateTimePoint(currentTimestamp, interval));
+                }
 
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
                     CareHistory.Add(new PlantCareHistoryWithPlot
                     {
                         PlantId = careHistory.PlantId,
@@ -87,22 +87,12 @@ public partial class CareHistoryViewModel : ViewModelBase
                         XAxesWatering = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }],
                         XAxesFertilization = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }]
                     });
-                }
-            });
+                });
+            }
         }
         catch (Exception ex)
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
-    }
-
-    private Task<List<PlantCareHistory>> LoadWateringHistoryAsync()
-    {
-        return Task.Run(async () =>
-        {
-            List<PlantCareHistory> plantCareHistoryList = await _plantService.GetAllPlantsWithCareHistoryAsync();
-
-            return plantCareHistoryList;
-        });
     }
 }
