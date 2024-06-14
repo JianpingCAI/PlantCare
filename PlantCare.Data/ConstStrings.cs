@@ -25,4 +25,9 @@ public static class ConstStrings
     public const string Deleted = "Deleted";
     public const string Updated = "Updated";
     public const string PickPhoto = "PickPhoto";
+    public const string Average = "Average";
+
+    public const string Days = "Days";
+    public const string Hours = "Hours";
+
 }

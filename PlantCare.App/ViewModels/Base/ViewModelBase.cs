@@ -23,8 +23,17 @@ public abstract partial class ViewModelBase : ObservableValidator/*ObservableObj
             async () =>
             {
                 IsLoading = true;
-                await LoadDataWhenViewAppearingAsync();
-                IsLoading = false;
+                try
+                {
+                    await LoadDataWhenViewAppearingAsync();
+                }
+                catch (Exception)
+                {
+                }
+                finally
+                {
+                    IsLoading = false;
+                }
             });
     }
 

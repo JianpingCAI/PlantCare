@@ -246,4 +246,7 @@
   <data name="PickPhoto" xml:space="preserve">
     <value>Please select an image</value>
   </data>
+  <data name="Average" xml:space="preserve">
+    <value>Average</value>
+  </data>
 </root>

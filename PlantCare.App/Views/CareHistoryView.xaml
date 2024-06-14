@@ -81,7 +81,7 @@
                                         VerticalOptions="Center"
                                         WidthRequest="90" />
                                 </Border>
-                                <Grid Grid.Column="1">
+                                <Grid Grid.Column="1" RowDefinitions="*,auto">
                                     <Label
                                         FontAttributes="Bold"
                                         HorizontalOptions="Center"
@@ -100,7 +100,26 @@
                                         Series="{Binding FertilizationTimestampsSeries}"
                                         VerticalOptions="EndAndExpand"
                                         XAxes="{Binding XAxesFertilization}" />
+
+                                    <Label
+                                        Grid.Row="1"
+                                        FontSize="10"
+                                        HorizontalOptions="Center"
+                                        IsVisible="{Binding Source={x:Reference radioWatering}, Path=IsChecked}"
+                                        Text="{Binding WateringFrequencyInfo}"
+                                        TextColor="DeepSkyBlue"
+                                        VerticalOptions="Start" />
+
+                                    <Label
+                                        Grid.Row="1"
+                                        FontSize="10"
+                                        HorizontalOptions="Center"
+                                        IsVisible="{Binding Source={x:Reference radioFertilization}, Path=IsChecked}"
+                                        Text="{Binding FertilizationFrequencyInfo}"
+                                        TextColor="DeepSkyBlue"
+                                        VerticalOptions="Start" />
                                 </Grid>
+
                             </Grid>
                         </Border>
                     </Grid>

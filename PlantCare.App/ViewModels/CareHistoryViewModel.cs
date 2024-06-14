@@ -29,6 +29,9 @@ public class PlantCareHistoryWithPlot : PlantCareHistory
     public ISeries[] WateringTimestampsSeries { get; set; } = [];
     public ISeries[] FertilizationTimestampsSeries { get; set; } = [];
 
+    public string WateringFrequencyInfo { get; internal set; } = string.Empty;
+    public string FertilizationFrequencyInfo { get; internal set; } = string.Empty;
+
     public Axis[]? XAxesWatering { get; set; }
     public Axis[]? XAxesFertilization { get; set; }
 }
@@ -51,8 +54,6 @@ public partial class CareHistoryViewModel : ViewModelBase
     {
         try
         {
-            CareHistory.Clear();
-
             List<PlantCareHistory> careHistoryList = await _plantService.GetAllPlantsWithCareHistoryAsync();
             List<PlantCareHistoryWithPlot> careHistoryWithPlots = await Task.Run(() =>
             {
@@ -82,6 +83,8 @@ public partial class CareHistoryViewModel : ViewModelBase
                         PhotoPath = careHistory.PhotoPath,
                         WateringTimestamps = careHistory.WateringTimestamps,
                         WateringTimestampsSeries = [new ColumnSeries<DateTimePoint> { Values = wateringDatePoints }],
+                        WateringFrequencyInfo = GetFrequencyInfo(careHistory.WateringTimestamps),
+                        FertilizationFrequencyInfo = GetFrequencyInfo(careHistory.FertilizationTimestamps),
                         FertilizationTimestampsSeries = [new ColumnSeries<DateTimePoint> { Values = fertilizationDatePoints }],
                         XAxesWatering = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }],
                         XAxesFertilization = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }]
@@ -93,6 +96,8 @@ public partial class CareHistoryViewModel : ViewModelBase
 
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
+                CareHistory.Clear();
+
                 foreach (var item in careHistoryWithPlots)
                 {
                     CareHistory.Add(item);
@@ -103,5 +108,17 @@ public partial class CareHistoryViewModel : ViewModelBase
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
+    }
+
+    private string GetFrequencyInfo(List<DateTime> timestamps)
+    {
+        if (timestamps.Count < 2)
+        {
+            return string.Empty;
+        }
+
+        TimeSpan averageInterval = MathTool.CalculateAverageInterval(timestamps);
+
+        return $"{LocalizationManager.Instance[ConstStrings.Average] ?? ConstStrings.Average}: {averageInterval.Days} {LocalizationManager.Instance[ConstStrings.Days] ?? ConstStrings.Days} {averageInterval.Hours} {LocalizationManager.Instance[ConstStrings.Hours] ?? ConstStrings.Hours}";
     }
 }
