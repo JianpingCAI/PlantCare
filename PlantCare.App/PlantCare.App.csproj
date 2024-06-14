@@ -134,12 +134,6 @@
 		<MauiXaml Update="Views\PlantOverviewView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\LoginView.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\LogoView.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
 		<MauiXaml Update="Views\PlantDetailView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
