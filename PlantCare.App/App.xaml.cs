@@ -46,7 +46,7 @@ namespace PlantCare.App
                 LocalizationManager.Instance.SetLanguage(language);
                 AppLanguage = language;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 LocalizationManager.Instance.SetLanguage(Language.English);
                 AppLanguage = Language.English;

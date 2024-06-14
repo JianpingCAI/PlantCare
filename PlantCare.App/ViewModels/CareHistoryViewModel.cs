@@ -54,8 +54,8 @@ public partial class CareHistoryViewModel : ViewModelBase
             CareHistory.Clear();
 
             List<PlantCareHistory> careHistoryList = await _plantService.GetAllPlantsWithCareHistoryAsync();
-            List<PlantCareHistoryWithPlot> careHistoryWithPlots = await Task.Run(() => {
-
+            List<PlantCareHistoryWithPlot> careHistoryWithPlots = await Task.Run(() =>
+            {
                 List<PlantCareHistoryWithPlot> careHistoryWithPlots = new(careHistoryList.Count);
                 foreach (PlantCareHistory careHistory in careHistoryList)
                 {
@@ -90,7 +90,6 @@ public partial class CareHistoryViewModel : ViewModelBase
 
                 return careHistoryWithPlots;
             });
-
 
             await MainThread.InvokeOnMainThreadAsync(() =>
             {

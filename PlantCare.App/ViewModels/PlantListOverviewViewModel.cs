@@ -23,7 +23,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     IRecipient<PlantAddedMessage>,
     IRecipient<PlantDeletedMessage>,
     IRecipient<IsNotificationEnabledMessage>,
-    IRecipient<PlantEventStatusChangedMessage>
+    IRecipient<PlantStateChangedMessage>
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
@@ -51,7 +51,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         WeakReferenceMessenger.Default.Register<PlantAddedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantModifiedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantDeletedMessage>(this);
-        WeakReferenceMessenger.Default.Register<PlantEventStatusChangedMessage>(this);
+        WeakReferenceMessenger.Default.Register<PlantStateChangedMessage>(this);
 
         if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
         {
@@ -89,10 +89,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                IsBusy = false;
-            });
+            IsBusy = false;
         }
     }
 
@@ -820,15 +817,15 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     /// </summary>
     /// <param name="message"></param>
     /// <exception cref="NotImplementedException"></exception>
-    async void IRecipient<PlantEventStatusChangedMessage>.Receive(PlantEventStatusChangedMessage message)
+    async void IRecipient<PlantStateChangedMessage>.Receive(PlantStateChangedMessage message)
     {
+        if (null == message)
+        {
+            return;
+        }
+
         try
         {
-            if (null == message)
-            {
-                return;
-            }
-
             PlantListItemViewModel? updatePlant = Plants.FirstOrDefault(x => x.Id == message.PlantId);
             if (updatePlant is null)
                 return;
@@ -837,25 +834,28 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             if (null == plantFromDB)
                 return;
 
-            switch (message.ReminderType)
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                case ReminderType.Watering:
-                    {
-                        //updatePlant.LastWatered = message.UpdatedTime;
-                        updatePlant.LastWatered = plantFromDB.LastWatered;
-                    }
-                    break;
+                switch (message.ReminderType)
+                {
+                    case ReminderType.Watering:
+                        {
+                            //updatePlant.LastWatered = message.UpdatedTime;
+                            updatePlant.LastWatered = plantFromDB.LastWatered;
+                        }
+                        break;
 
-                case ReminderType.Fertilization:
-                    {
-                        //updatePlant.LastFertilized = message.UpdatedTime;
-                        updatePlant.LastFertilized = plantFromDB.LastFertilized;
-                    }
-                    break;
+                    case ReminderType.Fertilization:
+                        {
+                            //updatePlant.LastFertilized = message.UpdatedTime;
+                            updatePlant.LastFertilized = plantFromDB.LastFertilized;
+                        }
+                        break;
 
-                default:
-                    break;
-            }
+                    default:
+                        break;
+                }
+            });
 
             _logger.LogInformation($"Status changed {message.ReminderType}: Plant {updatePlant.Name}.");
             if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
