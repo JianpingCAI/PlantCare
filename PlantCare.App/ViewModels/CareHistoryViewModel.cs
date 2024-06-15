@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
@@ -8,9 +9,10 @@ using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
 using PlantCare.Data;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace PlantCare.App.ViewModels;
+
+public record class TimeStampRecord(DateTime Timestamp, Guid HistoryId);
 
 public class PlantCareHistory
 {
@@ -18,8 +20,8 @@ public class PlantCareHistory
 
     public string Name { get; internal set; } = string.Empty;
 
-    public List<DateTime> WateringTimestamps { get; internal set; } = [];
-    public List<DateTime> FertilizationTimestamps { get; internal set; } = [];
+    public List<TimeStampRecord> WateringTimestamps { get; internal set; } = [];
+    public List<TimeStampRecord> FertilizationTimestamps { get; internal set; } = [];
 
     public string? PhotoPath { get; internal set; }
 }
@@ -40,11 +42,16 @@ public partial class CareHistoryViewModel : ViewModelBase
 {
     private readonly IPlantService _plantService;
     private readonly IDialogService _dialogService;
+    private readonly INavigationService _navigationService;
 
-    public CareHistoryViewModel(IPlantService plantService, IDialogService dialogService)
+    public CareHistoryViewModel(
+        IPlantService plantService,
+        IDialogService dialogService,
+        INavigationService navigationService)
     {
         _plantService = plantService;
         _dialogService = dialogService;
+        _navigationService = navigationService;
     }
 
     [ObservableProperty]
@@ -63,17 +70,17 @@ public partial class CareHistoryViewModel : ViewModelBase
                     List<DateTimePoint> wateringDatePoints = new(careHistory.WateringTimestamps.Count);
                     for (int i = 0; i < careHistory.WateringTimestamps.Count; i++)
                     {
-                        DateTime currentTimestamp = careHistory.WateringTimestamps[i];
-                        int interval = i != 0 ? currentTimestamp.Subtract(careHistory.WateringTimestamps[i - 1]).Days : 3;
-                        wateringDatePoints.Add(new DateTimePoint(currentTimestamp, interval));
+                        DateTime currentTimestamp = careHistory.WateringTimestamps[i].Timestamp;
+                        double interval = i != 0 ? currentTimestamp.Subtract(careHistory.WateringTimestamps[i - 1].Timestamp).TotalDays : 1.0;
+                        wateringDatePoints.Add(new DateTimePoint(currentTimestamp, Math.Round(interval, 1)));
                     }
 
                     List<DateTimePoint> fertilizationDatePoints = new(careHistory.FertilizationTimestamps.Count);
                     for (int i = 0; i < careHistory.FertilizationTimestamps.Count; i++)
                     {
-                        DateTime currentTimestamp = careHistory.FertilizationTimestamps[i];
-                        int interval = i != 0 ? currentTimestamp.Subtract(careHistory.FertilizationTimestamps[i - 1]).Days : 3;
-                        fertilizationDatePoints.Add(new DateTimePoint(currentTimestamp, interval));
+                        DateTime currentTimestamp = careHistory.FertilizationTimestamps[i].Timestamp;
+                        double interval = i != 0 ? currentTimestamp.Subtract(careHistory.FertilizationTimestamps[i - 1].Timestamp).TotalDays : 1.0;
+                        fertilizationDatePoints.Add(new DateTimePoint(currentTimestamp, Math.Round(interval, 1)));
                     }
 
                     careHistoryWithPlots.Add(new PlantCareHistoryWithPlot
@@ -81,13 +88,17 @@ public partial class CareHistoryViewModel : ViewModelBase
                         PlantId = careHistory.PlantId,
                         Name = careHistory.Name,
                         PhotoPath = careHistory.PhotoPath,
+
                         WateringTimestamps = careHistory.WateringTimestamps,
                         WateringTimestampsSeries = [new ColumnSeries<DateTimePoint> { Values = wateringDatePoints }],
-                        WateringFrequencyInfo = GetFrequencyInfo(careHistory.WateringTimestamps),
-                        FertilizationFrequencyInfo = GetFrequencyInfo(careHistory.FertilizationTimestamps),
+                        WateringFrequencyInfo = GetFrequencyInfo(careHistory.WateringTimestamps.Select(x => x.Timestamp).ToList()),
+
+                        FertilizationTimestamps = careHistory.FertilizationTimestamps,
+                        FertilizationFrequencyInfo = GetFrequencyInfo(careHistory.FertilizationTimestamps.Select(x => x.Timestamp).ToList()),
                         FertilizationTimestampsSeries = [new ColumnSeries<DateTimePoint> { Values = fertilizationDatePoints }],
+
                         XAxesWatering = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }],
-                        XAxesFertilization = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }]
+                        XAxesFertilization = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }],
                     });
                 }
 
@@ -121,4 +132,43 @@ public partial class CareHistoryViewModel : ViewModelBase
 
         return $"{LocalizationManager.Instance[ConstStrings.Average] ?? ConstStrings.Average}: {averageInterval.Days} {LocalizationManager.Instance[ConstStrings.Days] ?? ConstStrings.Days} {averageInterval.Hours} {LocalizationManager.Instance[ConstStrings.Hours] ?? ConstStrings.Hours}";
     }
+
+    #region Select Related
+
+    [ObservableProperty]
+    private bool _isWateringHistory = true;
+
+    [ObservableProperty]
+    private bool _isFertilizationHistory = false;
+
+    [ObservableProperty]
+    private PlantCareHistoryWithPlot? _selectedPlant = null;
+
+    [RelayCommand]
+    public async Task SelectPlant()
+    {
+        if (IsBusy) return;
+
+        IsBusy = true;
+
+        try
+        {
+            if (SelectedPlant != null)
+            {
+                List<TimeStampRecord> timestampRecords = IsWateringHistory ? SelectedPlant.WateringTimestamps : SelectedPlant.FertilizationTimestamps;
+
+                await _navigationService.GoToCareHistory(SelectedPlant.Name, IsWateringHistory ? CareType.Watering : CareType.Fertilization, timestampRecords);
+            }
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    #endregion Select Related
 }

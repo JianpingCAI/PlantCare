@@ -7,13 +7,13 @@ public class ReminderTypeIconConverter : IValueConverter
 {
     object? IValueConverter.Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is ReminderType reminderType)
+        if (value is CareType reminderType)
         {
             switch (reminderType)
             {
-                case ReminderType.Watering:
+                case CareType.Watering:
                     return "\ue798";//"&#xe798;"; //water drop icon
-                case ReminderType.Fertilization:
+                case CareType.Fertilization:
                     return "\ue761"; //"&#xe761;"; //fertilization icon
                 default:
                     break;

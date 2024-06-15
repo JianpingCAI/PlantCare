@@ -69,7 +69,7 @@
             Title="{Binding Path=[History], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:CareHistoryView}"
             Icon="tab_history.png"
-            Route="history" />
+            Route="careHistory" />
 
         <ShellContent
             x:Name="tabSettings"

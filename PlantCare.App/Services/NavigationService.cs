@@ -1,6 +1,5 @@
-﻿using PlantCare.Data.DbModels;
+﻿using PlantCare.App.ViewModels;
 using PlantCare.Data.Models;
-using System.Diagnostics;
 
 namespace PlantCare.App.Services;
 
@@ -19,7 +18,7 @@ public class NavigationService : INavigationService
             { "PlantCount", plantCount }
         };
 
-        return Shell.Current.GoToAsync("//overview/add", navigationParameter);
+        return Shell.Current.GoToAsync($"//{PageName.Overview}/{PageName.Add}", navigationParameter);
     }
 
     public Task GoToEditPlant(Plant plant)
@@ -29,12 +28,24 @@ public class NavigationService : INavigationService
             { "Plant", plant }
         };
 
-        return Shell.Current.GoToAsync("//overview/edit", navigationParameter);
+        return Shell.Current.GoToAsync($"//{PageName.Overview}/{PageName.Edit}", navigationParameter);
     }
 
     public Task GoToPlantsOverview()
     {
-        return Shell.Current.GoToAsync("//overview");
+        return Shell.Current.GoToAsync($"//{PageName.Overview}");
+    }
+
+    public Task GoToCareHistory(string plantName, CareType careType, List<TimeStampRecord> timestampRecords)
+    {
+        var navigationParameters = new ShellNavigationQueryParameters
+        {
+            {"plantName", plantName},
+            {"careType", careType },
+            {"records", timestampRecords }
+        };
+
+        return Shell.Current.GoToAsync($"//{PageName.History}/{PageName.SinglePlantCareHistory}", navigationParameters);
     }
 
     //public async Task GoBack()

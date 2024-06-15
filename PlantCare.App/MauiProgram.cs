@@ -125,5 +125,8 @@ public static class MauiProgram
 
         builder.Services.AddTransient<CareHistoryView>();
         builder.Services.AddTransient<CareHistoryViewModel>();
+
+        builder.Services.AddTransient<SingePlantCareHistoryView>();
+        builder.Services.AddTransient<SinglePlantCareHistoryViewModel>();
     }
 }

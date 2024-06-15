@@ -9,12 +9,14 @@ namespace PlantCare.App
         {
             InitializeComponent();
 
-            Routing.RegisterRoute("overview", typeof(PlantOverviewView));
-            Routing.RegisterRoute("plant", typeof(PlantDetailView));
-            Routing.RegisterRoute("edit", typeof(PlantAddEditView));
-            Routing.RegisterRoute("add", typeof(PlantAddEditView));
+            Routing.RegisterRoute(PageName.Overview, typeof(PlantOverviewView));
+            Routing.RegisterRoute(PageName.Plant, typeof(PlantDetailView));
+            Routing.RegisterRoute(PageName.Edit, typeof(PlantAddEditView));
+            Routing.RegisterRoute(PageName.Add, typeof(PlantAddEditView));
 
-            Routing.RegisterRoute("calendar", typeof(PlantCalendarView));
+            Routing.RegisterRoute(PageName.Calendar, typeof(PlantCalendarView));
+
+            Routing.RegisterRoute(PageName.SinglePlantCareHistory, typeof(SingePlantCareHistoryView));
 
             LocalizationManager.Instance.LanguageChanged += OnLanguageChanged;
         }

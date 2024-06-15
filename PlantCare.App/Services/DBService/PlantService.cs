@@ -77,9 +77,20 @@ public class PlantService : IPlantService
         await _waterHistoryRepository.AddAsync(new WateringHistory() { CareTime = lastWatered, PlantId = plantId });
     }
 
+    public Task DeleteWateringHistoryAsync(Guid historyId)
+    {
+        return _waterHistoryRepository.DeleteAsync(historyId);
+    }
+
+    
     public async Task AddFertilizationHistoryAsync(Guid plantId, DateTime lastFertilized)
     {
         await _fertilizationHistoryRepository.AddAsync(new FertilizationHistory() { PlantId = plantId, CareTime = lastFertilized });
+    }
+
+    public Task DeleteFertilizationHistoryAsync(Guid historyId)
+    {
+        return _fertilizationHistoryRepository.DeleteAsync(historyId);
     }
 
     public Task<List<PlantCareHistory>> GetAllPlantsWithCareHistoryAsync()
@@ -93,11 +104,13 @@ public class PlantService : IPlantService
 
             foreach (PlantDbModel plant in plants)
             {
-                List<DateTime> wateringTimestamps = plant.WateringHistories.Select(x => x.CareTime).ToList();
-                wateringTimestamps.Sort();
+                List<TimeStampRecord> wateringTimestamps = plant.WateringHistories
+                                                                .Select(x => new TimeStampRecord(x.CareTime, x.Id))
+                                                                .OrderBy(x => x.Timestamp).ToList();
 
-                List<DateTime> fertilizationTimestamps = plant.FertilizationHistories.Select(x => x.CareTime).ToList();
-                fertilizationTimestamps.Sort();
+                List<TimeStampRecord> fertilizationTimestamps = plant.FertilizationHistories
+                                                                .Select(x => new TimeStampRecord(x.CareTime, x.Id))
+                                                                .OrderBy(x => x.Timestamp).ToList();
 
                 plantCareHistoryList.Add(new PlantCareHistory()
                 {
@@ -112,4 +125,6 @@ public class PlantService : IPlantService
             return plantCareHistoryList;
         });
     }
+
+    
 }

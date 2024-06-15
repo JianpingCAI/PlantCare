@@ -157,11 +157,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             if (await _settingsService.GetWateringNotificationSettingAsync())
             {
-                await ScheduleNotifications(ReminderType.Watering);
+                await ScheduleNotifications(CareType.Watering);
             }
             if (await _settingsService.GetFertilizationNotificationSettingAsync())
             {
-                await ScheduleNotifications(ReminderType.Fertilization);
+                await ScheduleNotifications(CareType.Fertilization);
             }
         }
     }
@@ -324,8 +324,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
             {
-                await ScheduleNotificationAsync(ReminderType.Watering, ReminderType.Watering.GetActionName(), newPlantVM);
-                await ScheduleNotificationAsync(ReminderType.Fertilization, ReminderType.Fertilization.GetActionName(), newPlantVM);
+                await ScheduleNotificationAsync(CareType.Watering, CareType.Watering.GetActionName(), newPlantVM);
+                await ScheduleNotificationAsync(CareType.Fertilization, CareType.Fertilization.GetActionName(), newPlantVM);
             }
 
             _logger.LogInformation($"New plant {plantDB.Name} is added, with id: {message.PlantId}");
@@ -395,8 +395,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             _logger.LogInformation($"Plant {plantVM.Name} is modified.");
 
             await CancelPendingNotificationAsync(plantVM.Id, plantVM.Name);
-            await ScheduleNotificationAsync(ReminderType.Watering, ReminderType.Watering.GetActionName(), plantVM);
-            await ScheduleNotificationAsync(ReminderType.Fertilization, ReminderType.Fertilization.GetActionName(), plantVM);
+            await ScheduleNotificationAsync(CareType.Watering, CareType.Watering.GetActionName(), plantVM);
+            await ScheduleNotificationAsync(CareType.Fertilization, CareType.Fertilization.GetActionName(), plantVM);
         }
         catch (Exception ex)
         {
@@ -488,22 +488,22 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private readonly List<int> _wateringNotificationIds = [];
     private readonly List<int> _fertilizationNotificationIds = [];
 
-    private async Task ScheduleNotifications(ReminderType reminderType)
+    private async Task ScheduleNotifications(CareType careType)
     {
         if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
             return;
 
-        string actionName = reminderType.GetActionName();
+        string actionName = careType.GetActionName();
 
-        switch (reminderType)
+        switch (careType)
         {
-            case ReminderType.Watering:
+            case CareType.Watering:
                 {
                     _wateringNotificationIds.Clear();
                 }
                 break;
 
-            case ReminderType.Fertilization:
+            case CareType.Fertilization:
                 {
                     _fertilizationNotificationIds.Clear();
                 }
@@ -516,17 +516,17 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         for (int i = 0; i < Plants.Count; i++)
         {
             PlantListItemViewModel plant = Plants[i];
-            int notificationId = await ScheduleNotificationAsync(reminderType, actionName, plant);
+            int notificationId = await ScheduleNotificationAsync(careType, actionName, plant);
 
             if (notificationId > 0)
             {
-                switch (reminderType)
+                switch (careType)
                 {
-                    case ReminderType.Watering:
+                    case CareType.Watering:
                         _wateringNotificationIds.Add(notificationId);
                         break;
 
-                    case ReminderType.Fertilization:
+                    case CareType.Fertilization:
                         _fertilizationNotificationIds.Add(notificationId);
                         break;
 
@@ -537,7 +537,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    private async Task<int> ScheduleNotificationAsync(ReminderType reminderType, string actionName, PlantListItemViewModel plant)
+    private async Task<int> ScheduleNotificationAsync(CareType reminderType, string actionName, PlantListItemViewModel plant)
     {
         if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
         {
@@ -552,11 +552,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             DateTime? scheduledTime = null;
             switch (reminderType)
             {
-                case ReminderType.Watering:
+                case CareType.Watering:
                     scheduledTime = plant.NextWateringTime;
                     break;
 
-                case ReminderType.Fertilization:
+                case CareType.Fertilization:
                     scheduledTime = plant.NextFertilizeTime;
                     break;
 
@@ -617,20 +617,20 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         switch (message.ReminderType)
         {
-            case ReminderType.Watering:
+            case CareType.Watering:
                 {
                     if (message.IsNotificationEnabled)
                     {
-                        await ScheduleNotifications(ReminderType.Watering);
+                        await ScheduleNotifications(CareType.Watering);
                     }
                 }
                 break;
 
-            case ReminderType.Fertilization:
+            case CareType.Fertilization:
                 {
                     if (message.IsNotificationEnabled)
                     {
-                        await ScheduleNotifications(ReminderType.Fertilization);
+                        await ScheduleNotifications(CareType.Fertilization);
                     }
                 }
                 break;
@@ -728,7 +728,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    private static int GetNotificationId(ReminderType reminderType, Guid plantId)
+    private static int GetNotificationId(CareType reminderType, Guid plantId)
     {
         if (plantId == default)
         {
@@ -739,10 +739,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         switch (reminderType)
         {
-            case ReminderType.Watering:
+            case CareType.Watering:
                 break;
 
-            case ReminderType.Fertilization:
+            case CareType.Fertilization:
                 notificationId = -notificationId;
                 break;
         }
@@ -838,14 +838,14 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 switch (message.ReminderType)
                 {
-                    case ReminderType.Watering:
+                    case CareType.Watering:
                         {
                             //updatePlant.LastWatered = message.UpdatedTime;
                             updatePlant.LastWatered = plantFromDB.LastWatered;
                         }
                         break;
 
-                    case ReminderType.Fertilization:
+                    case CareType.Fertilization:
                         {
                             //updatePlant.LastFertilized = message.UpdatedTime;
                             updatePlant.LastFertilized = plantFromDB.LastFertilized;

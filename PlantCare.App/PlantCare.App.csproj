@@ -103,6 +103,9 @@
 		  <DesignTime>True</DesignTime>
 		  <AutoGen>True</AutoGen>
 		</Compile>
+		<Compile Update="Views\SingePlantCareHistoryView.xaml.cs">
+		  <DependentUpon>SingePlantCareHistoryView.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\PlantOverviewView.xaml.cs">
 			<DependentUpon>PlantOverviewView.xaml</DependentUpon>
 		</Compile>
@@ -125,6 +128,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Views\SingePlantCareHistoryView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\NotificationPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

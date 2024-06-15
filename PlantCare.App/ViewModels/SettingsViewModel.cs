@@ -51,7 +51,7 @@ public partial class SettingsViewModel : ViewModelBase
 
             WeakReferenceMessenger.Default.Send(new IsNotificationEnabledMessage
             {
-                ReminderType = ReminderType.Watering,
+                ReminderType = CareType.Watering,
                 IsNotificationEnabled = isEnabled
             });
 
@@ -74,7 +74,7 @@ public partial class SettingsViewModel : ViewModelBase
         {
             WeakReferenceMessenger.Default.Send(new IsNotificationEnabledMessage
             {
-                ReminderType = ReminderType.Fertilization,
+                ReminderType = CareType.Fertilization,
                 IsNotificationEnabled = isEnabled
             });
 

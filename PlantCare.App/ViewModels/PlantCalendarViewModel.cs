@@ -24,7 +24,7 @@ namespace PlantCare.App.ViewModels
     public class PlantEvent : ColoredEvent
     {
         public Guid PlantId { get; set; }
-        public ReminderType ReminderType { get; set; }
+        public CareType ReminderType { get; set; }
         public string Name { get; set; } = string.Empty;
         public string PhotoPath { get; set; } = string.Empty;
 
@@ -227,7 +227,7 @@ namespace PlantCare.App.ViewModels
                                 //Title = plant.Name,
                                 //Description = plant.PhotoPath,
                                 PlantId = plant.Id,
-                                ReminderType = ReminderType.Watering,
+                                ReminderType = CareType.Watering,
                                 Name = plant.Name,
                                 PhotoPath = plant.PhotoPath,
                                 StartDate = expectedWaterTime.AddDays(-1), // a trick needed here to use XCalendar
@@ -246,7 +246,7 @@ namespace PlantCare.App.ViewModels
                             //Title = plant.Name,
                             //Description = plant.PhotoPath,
                             PlantId = plant.Id,
-                            ReminderType = ReminderType.Watering,
+                            ReminderType = CareType.Watering,
                             Name = plant.Name,
                             PhotoPath = plant.PhotoPath,
                             StartDate = expectedWaterTime.AddDays(-1), // a trick needed here to use XCalendar
@@ -268,7 +268,7 @@ namespace PlantCare.App.ViewModels
                                 //Title = plant.Name,
                                 //Description = plant.PhotoPath,
                                 PlantId = plant.Id,
-                                ReminderType = ReminderType.Fertilization,
+                                ReminderType = CareType.Fertilization,
                                 Name = plant.Name,
                                 PhotoPath = plant.PhotoPath,
                                 StartDate = fertilizationTime.AddDays(-1),
@@ -287,7 +287,7 @@ namespace PlantCare.App.ViewModels
                             //Title = plant.Name,
                             //Description = plant.PhotoPath,
                             PlantId = plant.Id,
-                            ReminderType = ReminderType.Fertilization,
+                            ReminderType = CareType.Fertilization,
                             Name = plant.Name,
                             PhotoPath = plant.PhotoPath,
                             StartDate = fertilizationTime.AddDays(-1),
@@ -410,13 +410,13 @@ namespace PlantCare.App.ViewModels
                     {
                         switch (plantEvent.ReminderType)
                         {
-                            case ReminderType.Watering:
+                            case CareType.Watering:
                                 {
                                     await _plantService.UpdateLastWateringTime(plantEvent.PlantId, updatedTime);
                                 }
                                 break;
 
-                            case ReminderType.Fertilization:
+                            case CareType.Fertilization:
                                 {
                                     await _plantService.UpdateLastFertilizationTime(plantEvent.PlantId, updatedTime);
                                 }

@@ -39,7 +39,7 @@
                     Content="{Binding Path=[Watering], Source={x:Static utils:LocalizationManager.Instance}}"
                     FontAttributes="Bold"
                     HorizontalOptions="Center"
-                    IsChecked="True" />
+                    IsChecked="{Binding IsWateringHistory}" />
 
                 <RadioButton
                     x:Name="radioFertilization"
@@ -47,12 +47,18 @@
                     Margin="0,0,5,0"
                     Content="{Binding Path=[Fertilization], Source={x:Static utils:LocalizationManager.Instance}}"
                     FontAttributes="Bold"
-                    HorizontalOptions="Center" />
+                    HorizontalOptions="Center"
+                    IsChecked="{Binding IsFertilizationHistory}" />
             </Grid>
         </Grid>
     </Shell.TitleView>
     <Grid Padding="5,2,5,0" RowDefinitions="auto,*">
-        <CollectionView Grid.Row="1" ItemsSource="{Binding CareHistory}">
+        <CollectionView
+            Grid.Row="1"
+            ItemsSource="{Binding CareHistory}"
+            SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
+            SelectionChangedCommand="{Binding SelectPlantCommand}"
+            SelectionMode="Single">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout
                     Orientation="Vertical"
@@ -62,26 +68,30 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="vm:PlantCareHistoryWithPlot">
-                    <Grid>
+                    <Grid Style="{StaticResource GridStyleForCollectionView}">
                         <Border StrokeThickness="1">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="5" />
                             </Border.StrokeShape>
-                            <Grid ColumnDefinitions="auto,*" HorizontalOptions="FillAndExpand">
+                            <Grid ColumnDefinitions="*,auto" HorizontalOptions="FillAndExpand">
                                 <!--  Photo  -->
-                                <Border StrokeThickness="1" VerticalOptions="Center">
+                                <Border
+                                    Grid.Column="1"
+                                    StrokeThickness="1"
+                                    VerticalOptions="Center">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="5" />
                                     </Border.StrokeShape>
                                     <Image
                                         Aspect="AspectFill"
-                                        HeightRequest="90"
+                                        HeightRequest="120"
                                         HorizontalOptions="Center"
                                         Source="{Binding PhotoPath}"
                                         VerticalOptions="Center"
                                         WidthRequest="90" />
                                 </Border>
-                                <Grid Grid.Column="1" RowDefinitions="*,auto">
+                                <Grid RowDefinitions="*,auto">
+                                    <!--  Plant Name  -->
                                     <Label
                                         FontAttributes="Bold"
                                         HorizontalOptions="Center"
@@ -92,7 +102,19 @@
                                         HeightRequest="90"
                                         IsVisible="{Binding Source={x:Reference radioWatering}, Path=IsChecked}"
                                         Series="{Binding WateringTimestampsSeries}"
+                                        VerticalOptions="End"
                                         XAxes="{Binding XAxesWatering}" />
+
+                                    <!--  WateringFrequencyInfo  -->
+                                    <Label
+                                        Grid.Row="1"
+                                        Margin="0,0,0,2"
+                                        FontSize="10"
+                                        HorizontalOptions="Center"
+                                        IsVisible="{Binding Source={x:Reference radioWatering}, Path=IsChecked}"
+                                        Text="{Binding WateringFrequencyInfo}"
+                                        TextColor="DeepSkyBlue"
+                                        VerticalOptions="End" />
 
                                     <lvc:CartesianChart
                                         HeightRequest="90"
@@ -103,23 +125,14 @@
 
                                     <Label
                                         Grid.Row="1"
-                                        FontSize="10"
-                                        HorizontalOptions="Center"
-                                        IsVisible="{Binding Source={x:Reference radioWatering}, Path=IsChecked}"
-                                        Text="{Binding WateringFrequencyInfo}"
-                                        TextColor="DeepSkyBlue"
-                                        VerticalOptions="Start" />
-
-                                    <Label
-                                        Grid.Row="1"
+                                        Margin="0,0,0,2"
                                         FontSize="10"
                                         HorizontalOptions="Center"
                                         IsVisible="{Binding Source={x:Reference radioFertilization}, Path=IsChecked}"
                                         Text="{Binding FertilizationFrequencyInfo}"
                                         TextColor="DeepSkyBlue"
-                                        VerticalOptions="Start" />
+                                        VerticalOptions="End" />
                                 </Grid>
-
                             </Grid>
                         </Border>
                     </Grid>
