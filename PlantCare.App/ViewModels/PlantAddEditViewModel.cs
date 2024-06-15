@@ -191,7 +191,6 @@ namespace PlantCare.App.ViewModels
                     try
                     {
                         PlantDbModel plant = MapViewModelToDBModel(isExistingPlant: true);
-                        updated = await _plantService.UpdatePlantAsync(plant);
 
                         if (_originalLastWatered != plant.LastWatered)
                         {
@@ -201,6 +200,19 @@ namespace PlantCare.App.ViewModels
                         {
                             await _plantService.AddFertilizationHistoryAsync(plant.Id, plant.LastFertilized);
                         }
+
+                        // no need to update the last watering/fertilization time, so revert them
+                        // this is not very good design, but for performance concern
+                        if (_originalLastWatered > plant.LastWatered)
+                        {
+                            plant.LastWatered = _originalLastWatered;
+                        }
+                        if (_originalLastFertilized > plant.LastFertilized)
+                        {
+                            plant.LastFertilized = _originalLastFertilized;
+                        }
+
+                        updated = await _plantService.UpdatePlantAsync(plant);
                     }
                     catch (Exception e)
                     {
