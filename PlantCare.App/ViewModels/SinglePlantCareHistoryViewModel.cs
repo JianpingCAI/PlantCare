@@ -78,7 +78,7 @@ namespace PlantCare.App.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanDeleteRecord))]
         public async Task DeleteRecord(object? target)
         {
             if (target == null || target is not TimeStampRecord record) return;
@@ -86,7 +86,7 @@ namespace PlantCare.App.ViewModels
             IsBusy = true;
             try
             {
-                Debug.WriteLine($"{record.Timestamp}, {record.HistoryId}");
+                //Debug.WriteLine($"{record.Timestamp}, {record.HistoryId}");
                 bool isConfirmed = await _dialogService.Ask(
                                         LocalizationManager.Instance[ConstStrings.Confirm] ?? "Confirm",
                                         $"{LocalizationManager.Instance[ConstStrings.ConfirmDelete]}: {record.Timestamp}?",
@@ -131,6 +131,14 @@ namespace PlantCare.App.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        private bool CanDeleteRecord()
+        {
+            if (TimestampRecords.Count == 1)
+                return false;
+
+            return true;
         }
     }
 }
