@@ -77,20 +77,52 @@ public class PlantService : IPlantService
         await _waterHistoryRepository.AddAsync(new WateringHistory() { CareTime = lastWatered, PlantId = plantId });
     }
 
-    public Task DeleteWateringHistoryAsync(Guid historyId)
+    public async Task DeleteWateringHistoryAsync(Guid plantId, Guid historyId)
     {
-        return _waterHistoryRepository.DeleteAsync(historyId);
+        WateringHistory? deleted = await _waterHistoryRepository.DeleteAsync(historyId);
+        PlantDbModel? plantDB = await _plantRepository.GetByIdAsync(plantId);
+        if (deleted is null || plantDB is null)
+        {
+            return;
+        }
+
+        if (plantDB.LastWatered == deleted.CareTime)
+        {
+            List<WateringHistory> historyList = await _waterHistoryRepository.GetWateringHistoryByPlantIdAsync(plantId);
+            if (historyList.Count != 0)
+            {
+                plantDB.LastWatered = historyList.Last().CareTime;
+
+                await _plantRepository.UpdateAsync(plantDB);
+            }
+        }
     }
 
-    
     public async Task AddFertilizationHistoryAsync(Guid plantId, DateTime lastFertilized)
     {
         await _fertilizationHistoryRepository.AddAsync(new FertilizationHistory() { PlantId = plantId, CareTime = lastFertilized });
     }
 
-    public Task DeleteFertilizationHistoryAsync(Guid historyId)
+    public async Task DeleteFertilizationHistoryAsync(Guid plantId, Guid historyId)
     {
-        return _fertilizationHistoryRepository.DeleteAsync(historyId);
+        var deleted = await _fertilizationHistoryRepository.DeleteAsync(historyId);
+
+        PlantDbModel? plantDB = await _plantRepository.GetByIdAsync(plantId);
+        if (deleted is null || plantDB is null)
+        {
+            return;
+        }
+
+        if (plantDB.LastFertilized == deleted.CareTime)
+        {
+            List<FertilizationHistory> historyList = await _fertilizationHistoryRepository.GetFertilizationHistoryByPlantIdAsync(plantId);
+            if (historyList.Count != 0)
+            {
+                plantDB.LastFertilized = historyList.Last().CareTime;
+
+                await _plantRepository.UpdateAsync(plantDB);
+            }
+        }
     }
 
     public Task<List<PlantCareHistory>> GetAllPlantsWithCareHistoryAsync()
@@ -105,11 +137,11 @@ public class PlantService : IPlantService
             foreach (PlantDbModel plant in plants)
             {
                 List<TimeStampRecord> wateringTimestamps = plant.WateringHistories
-                                                                .Select(x => new TimeStampRecord(x.CareTime, x.Id))
+                                                                .Select(x => new TimeStampRecord(x.CareTime, x.PlantId, x.Id))
                                                                 .OrderBy(x => x.Timestamp).ToList();
 
                 List<TimeStampRecord> fertilizationTimestamps = plant.FertilizationHistories
-                                                                .Select(x => new TimeStampRecord(x.CareTime, x.Id))
+                                                                .Select(x => new TimeStampRecord(x.CareTime, x.PlantId, x.Id))
                                                                 .OrderBy(x => x.Timestamp).ToList();
 
                 plantCareHistoryList.Add(new PlantCareHistory()
@@ -125,6 +157,4 @@ public class PlantService : IPlantService
             return plantCareHistoryList;
         });
     }
-
-    
 }

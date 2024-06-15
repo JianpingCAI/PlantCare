@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using PlantCare.App.Messaging;
 using PlantCare.App.Services;
 using PlantCare.App.Services.DBService;
 using PlantCare.App.Utils;
@@ -7,7 +9,6 @@ using PlantCare.App.ViewModels.Base;
 using PlantCare.Data;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace PlantCare.App.ViewModels
 {
@@ -104,14 +105,16 @@ namespace PlantCare.App.ViewModels
                         switch (careType)
                         {
                             case CareType.Watering:
-                                await _plantService.DeleteWateringHistoryAsync(record.HistoryId);
+                                await _plantService.DeleteWateringHistoryAsync(record.PlantId, record.HistoryId);
+
                                 break;
 
                             case CareType.Fertilization:
-                                await _plantService.DeleteFertilizationHistoryAsync(record.HistoryId);
+                                await _plantService.DeleteFertilizationHistoryAsync(record.PlantId, record.HistoryId);
                                 break;
                         }
 
+                        WeakReferenceMessenger.Default.Send<PlantCareHistoryChangedMessage>(new PlantCareHistoryChangedMessage(record.PlantId, careType));
                         TimestampRecords.Remove(record);
                     }
                     catch (Exception)

@@ -23,7 +23,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     IRecipient<PlantAddedMessage>,
     IRecipient<PlantDeletedMessage>,
     IRecipient<IsNotificationEnabledMessage>,
-    IRecipient<PlantStateChangedMessage>
+    IRecipient<PlantStateChangedMessage>,
+    IRecipient<PlantCareHistoryChangedMessage>
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
@@ -52,6 +53,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         WeakReferenceMessenger.Default.Register<PlantModifiedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantDeletedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantStateChangedMessage>(this);
+        WeakReferenceMessenger.Default.Register<PlantCareHistoryChangedMessage>(this);
 
         if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
         {
@@ -798,18 +800,18 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         return plantVM;
     }
 
-    private static void UpdatePlantViewModel(PlantListItemViewModel plantVM, Plant plantDB)
+    private static void UpdatePlantViewModel(PlantListItemViewModel plantVM, Plant plant)
     {
-        plantVM.Id = plantDB.Id;
+        plantVM.Id = plant.Id;
 
-        plantVM.Name = plantDB.Name;
-        plantVM.PhotoPath = plantDB.PhotoPath;
+        plantVM.Name = plant.Name;
+        plantVM.PhotoPath = plant.PhotoPath;
 
-        plantVM.LastWatered = plantDB.LastWatered;
-        plantVM.WateringFrequencyInHours = plantDB.WateringFrequencyInHours;
+        plantVM.LastWatered = plant.LastWatered;
+        plantVM.WateringFrequencyInHours = plant.WateringFrequencyInHours;
 
-        plantVM.LastFertilized = plantDB.LastFertilized;
-        plantVM.FertilizeFrequencyInHours = plantDB.FertilizeFrequencyInHours;
+        plantVM.LastFertilized = plant.LastFertilized;
+        plantVM.FertilizeFrequencyInHours = plant.FertilizeFrequencyInHours;
     }
 
     /// <summary>
@@ -870,5 +872,26 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
+    }
+
+    async void IRecipient<PlantCareHistoryChangedMessage>.Receive(PlantCareHistoryChangedMessage message)
+    {
+        if (message is null) return;
+
+        Guid plantId = message.PlantId;
+        CareType careType = message.CareType;
+
+        Plant? plant = await _plantService.GetPlantByIdAsync(plantId);
+        if (plant is null) return;
+
+        int plantVMIndex = _allPlantViewModelsCache.FindIndex(x => x.Id == plantId);
+        if (plantVMIndex == -1) return;
+
+        PlantListItemViewModel plantVM = _allPlantViewModelsCache[plantVMIndex];
+
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            UpdatePlantViewModel(plantVM, plant);
+        });
     }
 }

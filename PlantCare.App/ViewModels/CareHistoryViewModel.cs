@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 
 namespace PlantCare.App.ViewModels;
 
-public record class TimeStampRecord(DateTime Timestamp, Guid HistoryId);
+public record class TimeStampRecord(DateTime Timestamp, Guid PlantId, Guid HistoryId);
 
 public class PlantCareHistory
 {

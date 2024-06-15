@@ -22,11 +22,11 @@ public interface IPlantService
 
     Task AddWateringHistoryAsync(Guid id, DateTime lastWatered);
 
-    Task DeleteWateringHistoryAsync(Guid historyId);
+    Task DeleteWateringHistoryAsync(Guid plantId, Guid historyId);
 
     Task AddFertilizationHistoryAsync(Guid id, DateTime lastFertilized);
 
-    Task DeleteFertilizationHistoryAsync(Guid historyId);
+    Task DeleteFertilizationHistoryAsync(Guid plantId, Guid historyId);
 
     Task<List<PlantCareHistory>> GetAllPlantsWithCareHistoryAsync();
 }

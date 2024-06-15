@@ -110,7 +110,7 @@ public class GenericRepository<T> : IRepository<T> where T : class
         return await _dbSet.FindAsync(keyValues.Cast<object>().ToArray());
     }
 
-    public async Task<bool> DeleteAsync(Guid itemId)
+    public async Task<T?> DeleteAsync(Guid itemId)
     {
         T? entity = await _dbSet.FindAsync(itemId);
 
@@ -122,11 +122,11 @@ public class GenericRepository<T> : IRepository<T> where T : class
 
             if (count == 1)
             {
-                return true;
+                return entity;
             }
         }
 
-        return false;
+        return entity;
     }
 
     //public async Task DeleteAsync(T entity)
