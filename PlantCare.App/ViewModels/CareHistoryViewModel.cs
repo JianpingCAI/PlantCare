@@ -3,11 +3,13 @@ using CommunityToolkit.Mvvm.Input;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
 using PlantCare.App.Services;
 using PlantCare.App.Services.DBService;
 using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
 using PlantCare.Data;
+using SkiaSharp;
 using System.Collections.ObjectModel;
 
 namespace PlantCare.App.ViewModels;
@@ -90,12 +92,14 @@ public partial class CareHistoryViewModel : ViewModelBase
                         PhotoPath = careHistory.PhotoPath,
 
                         WateringTimestamps = careHistory.WateringTimestamps,
-                        WateringTimestampsSeries = [new ColumnSeries<DateTimePoint> { Values = wateringDatePoints }],
                         WateringFrequencyInfo = GetFrequencyInfo(careHistory.WateringTimestamps.Select(x => x.Timestamp).ToList()),
 
                         FertilizationTimestamps = careHistory.FertilizationTimestamps,
                         FertilizationFrequencyInfo = GetFrequencyInfo(careHistory.FertilizationTimestamps.Select(x => x.Timestamp).ToList()),
-                        FertilizationTimestampsSeries = [new ColumnSeries<DateTimePoint> { Values = fertilizationDatePoints }],
+
+                        WateringTimestampsSeries = [new ColumnSeries<DateTimePoint> { Values = wateringDatePoints, Fill = new SolidColorPaint(SKColors.DeepSkyBlue) }],
+                        FertilizationTimestampsSeries = [new ColumnSeries<DateTimePoint> { Values = fertilizationDatePoints, Fill = new SolidColorPaint(SKColors.DeepSkyBlue),
+            Stroke = new SolidColorPaint(SKColors.DeepSkyBlue, 1)}],
 
                         XAxesWatering = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }],
                         XAxesFertilization = [new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM d")) { TextSize = 8 }],
