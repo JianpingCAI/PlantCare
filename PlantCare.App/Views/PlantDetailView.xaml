@@ -32,7 +32,7 @@
                         </Border.StrokeShape>
 
                         <Image
-                            Aspect="AspectFill"
+                            Aspect="AspectFit"
                             HorizontalOptions="Center"
                             MaximumHeightRequest="{OnIdiom Phone=300,
                                                            Default=500}"
