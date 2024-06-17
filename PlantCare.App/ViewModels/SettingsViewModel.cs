@@ -236,8 +236,9 @@ public partial class SettingsViewModel : ViewModelBase
 
             if (result != null && !string.IsNullOrEmpty(result.FullPath))
             {
-                await _dataImportService.ImportDataAsync(result.FullPath);
-                //await DisplayAlert("Import Completed", "Data imported successfully", "OK");
+                int plantsCount = await _dataImportService.ImportDataAsync(result.FullPath);
+
+                WeakReferenceMessenger.Default.Send<DataImportMessage>(new DataImportMessage { PlantsCount = plantsCount });
             }
         }
         catch (Exception ex)

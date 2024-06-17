@@ -20,7 +20,7 @@ public class DataImportService : IDataImportService
         _appSettingsService = appSettingsService;
     }
 
-    public async Task ImportDataAsync(string zipFilePath)
+    public async Task<int> ImportDataAsync(string zipFilePath)
     {
         //string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         string localAppDirectory = FileSystem.AppDataDirectory;
@@ -89,5 +89,7 @@ public class DataImportService : IDataImportService
 
         //SavePreferences(importData.Preferences);
         await _appSettingsService.SaveAppSettingsAsync(importData.AppSettings);
+
+        return importData.Plants.Count;
     }
 }

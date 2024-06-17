@@ -24,7 +24,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     IRecipient<PlantDeletedMessage>,
     IRecipient<IsNotificationEnabledMessage>,
     IRecipient<PlantStateChangedMessage>,
-    IRecipient<PlantCareHistoryChangedMessage>
+    IRecipient<PlantCareHistoryChangedMessage>,
+    IRecipient<DataImportMessage>
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
@@ -54,6 +55,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         WeakReferenceMessenger.Default.Register<PlantDeletedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantStateChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantCareHistoryChangedMessage>(this);
+        WeakReferenceMessenger.Default.Register<DataImportMessage>(this);
 
         if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
         {
@@ -893,5 +895,23 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             UpdatePlantViewModel(plantVM, plant);
         });
+    }
+
+    async void IRecipient<DataImportMessage>.Receive(DataImportMessage message)
+    {
+        IsLoading = true;
+        try
+        {
+            Plants.Clear();
+            await LoadDataWhenViewAppearingAsync();
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 }
