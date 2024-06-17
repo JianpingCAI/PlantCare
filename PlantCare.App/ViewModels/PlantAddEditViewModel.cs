@@ -267,12 +267,17 @@ namespace PlantCare.App.ViewModels
                     Stream stream = await photoFileResult.OpenReadAsync();
                     string filePath = Path.Combine(FileSystem.AppDataDirectory, photoFileResult.FileName);
 
-                    using (FileStream newStream = File.OpenWrite(filePath))
-                    {
-                        await stream.CopyToAsync(newStream);
-                    }
+                    // Resize the image
+                    byte[] resizedImage = ImageHelper.ResizeImage(imageStream: stream, maxWidth: 600, maxHeight: 600);
 
-                    await MainThread.InvokeOnMainThreadAsync(() => { PhotoPath = filePath; });
+                    await File.WriteAllBytesAsync(filePath, resizedImage);
+
+                    //using (FileStream newStream = File.OpenWrite(filePath))
+                    //{
+                    //    await stream.CopyToAsync(newStream);
+                    //}
+
+                    PhotoPath = filePath;
                 }
             }
             catch (Exception ex)
@@ -292,13 +297,17 @@ namespace PlantCare.App.ViewModels
 
                     if (photo != null)
                     {
+                        using Stream sourceStream = await photo.OpenReadAsync();
+
+                        // Resize the photo
+                        byte[] resizedImage = ImageHelper.ResizeImage(sourceStream, 600, 600);
+
                         // save the file into local storage
                         string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+                        await File.WriteAllBytesAsync(localFilePath, resizedImage);
+                        //using FileStream localFileStream = File.OpenWrite(localFilePath);
 
-                        using Stream sourceStream = await photo.OpenReadAsync();
-                        using FileStream localFileStream = File.OpenWrite(localFilePath);
-
-                        await sourceStream.CopyToAsync(localFileStream);
+                        //await sourceStream.CopyToAsync(localFileStream);
 
                         await MainThread.InvokeOnMainThreadAsync(() => { PhotoPath = localFilePath; });
                     }
