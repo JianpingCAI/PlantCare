@@ -21,6 +21,20 @@ public interface IAppSettingsService
     Task SaveDebugSettingAsync(bool isEnabled);
 
     Task<Language> GetLanguageAsync();
+
     Task SaveLanguageAsync(Language language);
 
+    Task<AppSettings> GetAppSettingsAsync();
+    Task SaveAppSettingsAsync(AppSettings appSettings);
+}
+
+public record struct AppSettings
+{
+    public AppTheme Theme { get; set; }
+
+    public bool WateringNotificationEnabled { get; set; }
+
+    public bool FertilizationNotificationEnabled { get; set; }
+
+    public Language Language { get; set; }
 }

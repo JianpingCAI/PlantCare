@@ -12,8 +12,7 @@
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     x:DataType="vm:SettingsViewModel">
-    <!--  Title="{x:Static strings:LocalizationResources.Settings}"  -->
-    <!--  Title="{Binding Path=[Settings], Source={x:Static utils:LocalizationManager.Instance}}"  -->
+
     <Shell.TitleView>
         <Grid ColumnDefinitions="auto,*">
             <Border
@@ -169,13 +168,11 @@
 
             <BoxView Margin="0,5" class="HRule" />
 
+            <!--  Language  -->
             <Label
                 FontAttributes="Bold"
                 Text="{Binding Path=[Language], Source={x:Static utils:LocalizationManager.Instance}}"
                 class="Head" />
-            <!--  Text="{Binding Path=[Language], Source={x:Static utils:LocalizationManager.Instance}}"  -->
-
-            <!--  Title="Language"  -->
             <Picker
                 x:Name="langPicker"
                 ItemDisplayBinding="{Binding Converter={StaticResource EnumDescConverter}}"
@@ -191,11 +188,11 @@
 
             <BoxView Margin="0,5" class="HRule" />
 
+            <!--  Theme  -->
             <Label
                 FontAttributes="Bold"
                 Text="{Binding Path=[Theme], Source={x:Static utils:LocalizationManager.Instance}}"
                 class="Head" />
-            <!--  class="Subhead"  -->
 
             <Grid
                 Margin="5"
@@ -282,7 +279,26 @@
                     </RadioButton.GestureRecognizers>-->
                 </RadioButton>
             </Grid>
+
+            <BoxView Margin="0,5" class="HRule" />
+
+            <!--  Export and Import  -->
+            <Grid
+                ColumnDefinitions="*,*"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Button
+                    Margin="0,0,5,0"
+                    Command="{Binding ExportDataCommand}"
+                    Text="Export" />
+                <Button
+                    Grid.Column="1"
+                    Margin="5,0,0,0"
+                    Command="{Binding ImportDataCommand}"
+                    Text="Import" />
+            </Grid>
         </VerticalStackLayout>
+
         <Grid
             BackgroundColor="{AppThemeBinding Light={StaticResource Gray200},
                                               Dark={StaticResource Gray500}}"

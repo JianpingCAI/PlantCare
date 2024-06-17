@@ -113,6 +113,31 @@ public class AppSettingsService : IAppSettingsService
             Preferences.Set(ConstStrings.IsDebugMode, isEnabled);
         });
     }
+
+    public Task<AppSettings> GetAppSettingsAsync()
+    {
+        return Task.Run(async () =>
+        {
+            return new AppSettings
+            {
+                Theme = await GetThemeSettingAsync(),
+                WateringNotificationEnabled = await GetWateringNotificationSettingAsync(),
+                FertilizationNotificationEnabled = await GetFertilizationNotificationSettingAsync(),
+                Language = await GetLanguageAsync(),
+            };
+        });
+    }
+
+    public Task SaveAppSettingsAsync(AppSettings settings)
+    {
+        return Task.Run(async () =>
+        {
+            await SaveThemeSettingAsync(settings.Theme);
+            await SaveWateringNotificationSettingAsync(settings.WateringNotificationEnabled);
+            await SaveFertilizationNotificationSettingAsync(settings.FertilizationNotificationEnabled);
+            await SaveLanguageAsync(settings.Language);
+        });
+    }
 }
 
 //public class SettingsServiceWithSecureStorage : IAppSettingsService

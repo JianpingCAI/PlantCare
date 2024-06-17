@@ -1,8 +1,12 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Storage;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
+using PlantCare.App.Services.DataExportImport;
 using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
 using PlantCare.Data;
@@ -15,11 +19,22 @@ public partial class SettingsViewModel : ViewModelBase
 {
     private readonly IAppSettingsService _settingsService;
     private readonly IDialogService _dialogService;
+    private readonly IFolderPicker _folderPicker;
+    private readonly IDataExportService _dataExportService;
+    private readonly IDataImportService _dataImportService;
 
-    public SettingsViewModel(IAppSettingsService settingsService, IDialogService dialogService)
+    public SettingsViewModel(
+        IAppSettingsService settingsService,
+        IDialogService dialogService,
+        IFolderPicker folderPicker,
+        IDataExportService dataExportService,
+        IDataImportService dataImportService)
     {
         _settingsService = settingsService;
         _dialogService = dialogService;
+        _folderPicker = folderPicker;
+        _dataExportService = dataExportService;
+        _dataImportService = dataImportService;
     }
 
     [ObservableProperty]
@@ -154,6 +169,85 @@ public partial class SettingsViewModel : ViewModelBase
         catch (Exception ex)
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+        }
+    }
+
+    [RelayCommand]
+    public async Task ExportData()
+    {
+        try
+        {
+            IsLoading = true;
+            string exportDirectory = await PickFolderAsync();
+            if (!string.IsNullOrEmpty(exportDirectory))
+            {
+                string filePath = await _dataExportService.ExportDataAsync(exportDirectory);
+                await _dialogService.Notify("Export Completed", $"Data exported to {filePath}", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task<string> PickFolderAsync(CancellationToken cancellationToken = default)
+    {
+        FolderPickerResult result = await _folderPicker.PickAsync(cancellationToken);
+        //result.EnsureSuccess();
+
+        //FolderPickerResult result = await FolderPicker.Default.PickAsync(cancellationToken);
+        if (result.IsSuccessful)
+        {
+            //await Toast.Make($"The folder was picked: Name - {result.Folder.Name}, Path - {result.Folder.Path}", ToastDuration.Long).Show(cancellationToken);
+            return result.Folder.Path;
+        }
+        else
+        {
+            //await Toast.Make($"The folder was not picked with error: {result.Exception.Message}").Show(cancellationToken);
+            return string.Empty;
+        }
+    }
+
+    [RelayCommand]
+    public async Task ImportData()
+    {
+        try
+        {
+            IsLoading = true;
+
+            var zipFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+                                                  {
+                                                     { DevicePlatform.iOS, new[] { "public.archive" } },
+                                                     { DevicePlatform.Android, new[] { "application/zip" } },
+                                                     { DevicePlatform.WinUI, new[] { "zip" } },
+                                                     { DevicePlatform.MacCatalyst, new[] { "zip" } },
+                                                  });
+
+            FileResult? result = await FilePicker.PickAsync(new PickOptions
+            {
+                PickerTitle = "Please select a zip file for import",
+                FileTypes = zipFileType
+            });
+
+            if (result != null && !string.IsNullOrEmpty(result.FullPath))
+            {
+                await _dataImportService.ImportDataAsync(result.FullPath);
+                //await DisplayAlert("Import Completed", "Data imported successfully", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+            //await DisplayAlert("Import Failed", ex.Message, "OK");
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 }

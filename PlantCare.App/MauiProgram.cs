@@ -12,6 +12,8 @@ using Serilog;
 using PlantCare.Data.Repositories.interfaces;
 using PlantCare.App.Services.DBService;
 using SkiaSharp.Views.Maui.Controls.Hosting;
+using CommunityToolkit.Maui.Storage;
+using PlantCare.App.Services.DataExportImport;
 
 namespace PlantCare.App;
 
@@ -55,7 +57,7 @@ public static class MauiProgram
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlite($"Data Source={dbPath}")
-                   .UseLazyLoadingProxies();
+                   .UseLazyLoadingProxies(useLazyLoadingProxies: true);
         });
 
         // Repository registrations
@@ -78,8 +80,15 @@ public static class MauiProgram
         // Register the dialog service
         builder.Services.AddSingleton<IDialogService, DialogService>();
 
+        // Register the FolderPicker as a singleton
+        builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
+
         // Register AutoMapper
         builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+        // Register Data Export and Import services
+        builder.Services.AddTransient<IDataExportService, DataExportService>();
+        builder.Services.AddTransient<IDataImportService, DataImportService>();
 
         // Register background service
         //builder.Services.AddHostedService<PlantStateCheckingService>();
