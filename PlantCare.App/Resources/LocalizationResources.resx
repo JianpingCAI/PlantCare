@@ -249,4 +249,16 @@
   <data name="Average" xml:space="preserve">
     <value>Average</value>
   </data>
+  <data name="RemoveExistingData" xml:space="preserve">
+    <value>Delete Existing Data</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="DataImportExport" xml:space="preserve">
+    <value>Data Export/Import</value>
+  </data>
 </root>

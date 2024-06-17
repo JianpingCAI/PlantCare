@@ -20,7 +20,7 @@ public class DataImportService : IDataImportService
         _appSettingsService = appSettingsService;
     }
 
-    public async Task<int> ImportDataAsync(string zipFilePath)
+    public async Task<int> ImportDataAsync(string zipFilePath, bool isRemoveExistingData)
     {
         //string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         string localAppDirectory = FileSystem.AppDataDirectory;
@@ -56,6 +56,7 @@ public class DataImportService : IDataImportService
         {
             throw new ArgumentNullException("Failed to convert the imported data");
         }
+        DataImportService.ResetIds(importData.Plants);
 
         // Restore photo files
         foreach (PlantDbModel plant in importData.Plants)
@@ -73,15 +74,17 @@ public class DataImportService : IDataImportService
             }
         }
 
-        // Remove existing data
-        _context.Plants.RemoveRange(_context.Plants);
-        await _context.SaveChangesAsync();
+        if (isRemoveExistingData)
+        {
+            // Remove existing data
+            _context.Plants.RemoveRange(_context.Plants);
 
-        _context.WateringHistories.RemoveRange(_context.WateringHistories);
-        await _context.SaveChangesAsync();
+            _context.WateringHistories.RemoveRange(_context.WateringHistories);
 
-        _context.FertilizationHistories.RemoveRange(_context.FertilizationHistories);
-        await _context.SaveChangesAsync();
+            _context.FertilizationHistories.RemoveRange(_context.FertilizationHistories);
+
+            await _context.SaveChangesAsync();
+        }
 
         // Add new data
         await _context.Plants.AddRangeAsync(importData.Plants);
@@ -91,5 +94,25 @@ public class DataImportService : IDataImportService
         await _appSettingsService.SaveAppSettingsAsync(importData.AppSettings);
 
         return importData.Plants.Count;
+    }
+
+    private static void ResetIds(IEnumerable<PlantDbModel> plants)
+    {
+        foreach (var plant in plants)
+        {
+            plant.Id = Guid.Empty;
+
+            foreach (var wateringHistory in plant.WateringHistories)
+            {
+                wateringHistory.Id = Guid.Empty;
+                wateringHistory.PlantId = Guid.Empty; // Reset PlantId to prevent foreign key conflicts
+            }
+
+            foreach (var fertilizationHistory in plant.FertilizationHistories)
+            {
+                fertilizationHistory.Id = Guid.Empty;
+                fertilizationHistory.PlantId = Guid.Empty; // Reset PlantId to prevent foreign key conflicts
+            }
+        }
     }
 }

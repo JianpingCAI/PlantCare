@@ -2,6 +2,6 @@
 {
     public interface IDataImportService
     {
-        Task<int> ImportDataAsync(string zipFilePath);
+        Task<int> ImportDataAsync(string zipFilePath, bool isRemoveExistingData);
     }
 }

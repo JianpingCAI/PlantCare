@@ -142,6 +142,15 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data Export/Import.
+        /// </summary>
+        internal static string DataImportExport {
+            get {
+                return ResourceManager.GetString("DataImportExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Days.
         /// </summary>
         internal static string Days {
@@ -174,6 +183,15 @@ namespace PlantCare.App.Resources {
         internal static string Deleted {
             get {
                 return ResourceManager.GetString("Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string Export {
+            get {
+                return ResourceManager.GetString("Export", resourceCulture);
             }
         }
         
@@ -228,6 +246,15 @@ namespace PlantCare.App.Resources {
         internal static string Hours {
             get {
                 return ResourceManager.GetString("Hours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        internal static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
             }
         }
         
@@ -345,6 +372,15 @@ namespace PlantCare.App.Resources {
         internal static string PickPhoto {
             get {
                 return ResourceManager.GetString("PickPhoto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Existing Data.
+        /// </summary>
+        internal static string RemoveExistingData {
+            get {
+                return ResourceManager.GetString("RemoveExistingData", resourceCulture);
             }
         }
         

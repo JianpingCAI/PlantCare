@@ -10,6 +10,7 @@ using PlantCare.App.Services.DataExportImport;
 using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
 using PlantCare.Data;
+using PlantCare.Data.Models;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -213,6 +214,9 @@ public partial class SettingsViewModel : ViewModelBase
         }
     }
 
+    [ObservableProperty]
+    private bool _isRemoveExistingData = false;
+
     [RelayCommand]
     public async Task ImportData()
     {
@@ -236,9 +240,12 @@ public partial class SettingsViewModel : ViewModelBase
 
             if (result != null && !string.IsNullOrEmpty(result.FullPath))
             {
-                int plantsCount = await _dataImportService.ImportDataAsync(result.FullPath);
+                int plantsCount = await _dataImportService.ImportDataAsync(result.FullPath, IsRemoveExistingData);
 
                 WeakReferenceMessenger.Default.Send<DataImportMessage>(new DataImportMessage { PlantsCount = plantsCount });
+
+                var toast = Toast.Make($"{plantsCount} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}", ToastDuration.Short);
+                await toast.Show();
             }
         }
         catch (Exception ex)

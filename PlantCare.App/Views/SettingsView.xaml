@@ -64,7 +64,7 @@
                             VerticalOptions="Center"
                             WidthRequest="16" />
                         <Ellipse
-                            x:Name="Check"
+                            x:Name="uiEllipseCheck"
                             Fill="{StaticResource Primary}"
                             HeightRequest="8"
                             HorizontalOptions="Center"
@@ -82,7 +82,8 @@
                                 <VisualState.Setters>
                                     <Setter Property="Stroke" Value="{StaticResource Primary}" />
                                     <!--<Setter Property="BorderColor" Value="{StaticResource Primary}" />-->
-                                    <Setter TargetName="Check" Property="Opacity" Value="1" />
+                                    <!--<Setter TargetName="{x:Reference uiEllipseCheck}" Property="Opacity" Value="1" />-->
+                                    <Setter TargetName="uiEllipseCheck" Property="Opacity" Value="1" />
                                 </VisualState.Setters>
                             </VisualState>
 
@@ -90,7 +91,8 @@
                                 <VisualState.Setters>
                                     <Setter Property="Stroke" Value="{StaticResource Secondary}" />
                                     <!--<Setter Property="BorderColor" Value="{StaticResource Background_Mid}" />-->
-                                    <Setter TargetName="Check" Property="Opacity" Value="0" />
+                                    <!--<Setter TargetName="{x:Reference uiEllipseCheck}" Property="Opacity" Value="0" />-->
+                                    <Setter TargetName="uiEllipseCheck" Property="Opacity" Value="0" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -283,19 +285,31 @@
             <BoxView Margin="0,5" class="HRule" />
 
             <!--  Export and Import  -->
+            <Label
+                FontAttributes="Bold"
+                Text="{Binding Path=[DataImportExport], Source={x:Static utils:LocalizationManager.Instance}}"
+                class="Head" />
             <Grid
+                Margin="0,5"
                 ColumnDefinitions="*,*"
                 HorizontalOptions="Center"
                 VerticalOptions="Center">
                 <Button
                     Margin="0,0,5,0"
                     Command="{Binding ExportDataCommand}"
-                    Text="Export" />
-                <Button
-                    Grid.Column="1"
-                    Margin="5,0,0,0"
-                    Command="{Binding ImportDataCommand}"
-                    Text="Import" />
+                    HorizontalOptions="Center"
+                    Text="{Binding Path=[Export], Source={x:Static utils:LocalizationManager.Instance}}"
+                    VerticalOptions="Start" />
+                <VerticalStackLayout Grid.Column="1" Margin="5,0,0,0">
+                    <Button
+                        Command="{Binding ImportDataCommand}"
+                        HorizontalOptions="Center"
+                        Text="{Binding Path=[Import], Source={x:Static utils:LocalizationManager.Instance}}" />
+                    <HorizontalStackLayout>
+                        <CheckBox HorizontalOptions="Start" IsChecked="{Binding IsRemoveExistingData}" />
+                        <Label Text="{Binding Path=[RemoveExistingData], Source={x:Static utils:LocalizationManager.Instance}}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
             </Grid>
         </VerticalStackLayout>
 

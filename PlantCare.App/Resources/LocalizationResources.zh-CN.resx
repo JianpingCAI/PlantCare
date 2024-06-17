@@ -144,6 +144,9 @@
   <data name="Dark" xml:space="preserve">
     <value>深色</value>
   </data>
+  <data name="DataImportExport" xml:space="preserve">
+    <value>数据导出/导入</value>
+  </data>
   <data name="Days" xml:space="preserve">
     <value>天</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="Deleted" xml:space="preserve">
     <value>已刪除</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>导出所有数据</value>
   </data>
   <data name="Fertilization" xml:space="preserve">
     <value>施肥</value>
@@ -173,6 +179,9 @@
   </data>
   <data name="Hours" xml:space="preserve">
     <value>小时</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>导入数据</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>语言</value>
@@ -212,6 +221,9 @@
   </data>
   <data name="PickPhoto" xml:space="preserve">
     <value>请选择图片</value>
+  </data>
+  <data name="RemoveExistingData" xml:space="preserve">
+    <value>清除现有数据</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>保存</value>
