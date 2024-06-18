@@ -157,92 +157,76 @@
                             <GridItemsLayout
                                 HorizontalItemSpacing="2"
                                 Orientation="Vertical"
-                                Span="{OnIdiom Phone=2,
+                                Span="{OnIdiom Phone=3,
                                                Default=6}"
                                 VerticalItemSpacing="2" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="vm:PlantEvent">
-                                <Grid>
-                                    <SwipeView>
-                                        <SwipeView.LeftItems>
-                                            <SwipeItems>
-                                                <SwipeItem BackgroundColor="LightPink" Text="Todo1" />
-                                                <!--  IconImageSource="delete.png"  -->
-
-                                                <!--
-                                                    Command="{Binding Source={x:Reference uiCurrentCollection}, Path=BindingContext.SetWateredCommand}"
-                                                    CommandParameter="{Binding Source={x:Reference uiCurrentCollection}, Path=BindingContext.SelectedWateringReminder}"
-                                                -->
-                                                <SwipeItem BackgroundColor="LightPink" Text="Todo2" />
-                                            </SwipeItems>
-                                        </SwipeView.LeftItems>
-
-                                        <Border BackgroundColor="Transparent" HorizontalOptions="Fill">
-                                            <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="10" />
-                                            </Border.StrokeShape>
-                                            <Grid HorizontalOptions="Fill" RowDefinitions="*,auto">
-                                                <!--  photo  -->
-                                                <Border
-                                                    BackgroundColor="Transparent"
-                                                    HorizontalOptions="Center"
-                                                    StrokeThickness="0"
-                                                    VerticalOptions="Center">
-                                                    <Border.StrokeShape>
-                                                        <RoundRectangle CornerRadius="10" />
-                                                    </Border.StrokeShape>
-                                                    <Grid>
-                                                        <Image
-                                                            Aspect="AspectFill"
-                                                            HeightRequest="90"
-                                                            HorizontalOptions="Center"
-                                                            Source="{Binding PhotoPath}"
-                                                            WidthRequest="90" />
-                                                        <!--  Name  -->
-                                                        <Label
-                                                            Background="DarkSeaGreen"
-                                                            HorizontalOptions="Fill"
-                                                            HorizontalTextAlignment="Center"
-                                                            Opacity="0.75"
-                                                            Text="{Binding Name}"
-                                                            VerticalOptions="End" />
-                                                    </Grid>
-                                                </Border>
-                                                <!--  Selection Tick  -->
-                                                <Label
-                                                    FontFamily="MaterialIconsRegular"
-                                                    FontSize="20"
-                                                    HorizontalOptions="Start"
-                                                    IsVisible="{Binding IsSelected}"
-                                                    Text="&#xe86c;"
-                                                    TextColor="Green"
-                                                    VerticalOptions="Start"
-                                                    VerticalTextAlignment="Start" />
-
-                                                <!--  Reminder Time  -->
-                                                <HorizontalStackLayout Grid.Row="1">
-                                                    <Label
-                                                        Grid.Column="2"
-                                                        Margin="0,5,0,0"
-                                                        FontFamily="MaterialIconsRegular"
-                                                        FontSize="24"
-                                                        HorizontalOptions="End"
-                                                        HorizontalTextAlignment="End"
-                                                        Text="{Binding ReminderType, Converter={StaticResource ReminderTypeIconConverter}}"
-                                                        TextColor="{Binding Color}"
-                                                        VerticalOptions="Center"
-                                                        VerticalTextAlignment="End" />
-                                                    <Label
-                                                        FontAttributes="Bold"
+                                <Grid Style="{StaticResource GridStyleForCollectionView}">
+                                    <Border BackgroundColor="Transparent" HorizontalOptions="Fill">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" />
+                                        </Border.StrokeShape>
+                                        <Grid HorizontalOptions="Fill" RowDefinitions="*,auto">
+                                            <!--  photo  -->
+                                            <Border
+                                                BackgroundColor="Transparent"
+                                                HorizontalOptions="Center"
+                                                StrokeThickness="0"
+                                                VerticalOptions="Center">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10" />
+                                                </Border.StrokeShape>
+                                                <Grid>
+                                                    <Image
+                                                        Aspect="AspectFill"
+                                                        HeightRequest="125"
                                                         HorizontalOptions="Center"
+                                                        Source="{Binding PhotoPath}"
+                                                        WidthRequest="125" />
+                                                    <!--  Name  -->
+                                                    <Label
+                                                        Background="DarkSeaGreen"
+                                                        HorizontalOptions="Fill"
                                                         HorizontalTextAlignment="Center"
-                                                        Text="{Binding ScheduledTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
-                                                </HorizontalStackLayout>
-                                                <!--  {0:MM/dd/yyyy&#10;HH:mm}  -->
-                                            </Grid>
-                                        </Border>
-                                    </SwipeView>
+                                                        Opacity="0.75"
+                                                        Text="{Binding Name}"
+                                                        VerticalOptions="End" />
+                                                </Grid>
+                                            </Border>
+                                            <!--  Selection Tick  -->
+                                            <Label
+                                                FontFamily="MaterialIconsRegular"
+                                                FontSize="20"
+                                                HorizontalOptions="Start"
+                                                IsVisible="{Binding IsSelected}"
+                                                Text="&#xe86c;"
+                                                TextColor="Green"
+                                                VerticalOptions="Start"
+                                                VerticalTextAlignment="Start" />
+
+                                            <!--  Reminder Time  -->
+                                            <HorizontalStackLayout Grid.Row="1">
+                                                <Label
+                                                    Grid.Column="2"
+                                                    Margin="0,5,0,0"
+                                                    FontFamily="MaterialIconsRegular"
+                                                    FontSize="24"
+                                                    HorizontalOptions="End"
+                                                    HorizontalTextAlignment="End"
+                                                    Text="{Binding ReminderType, Converter={StaticResource ReminderTypeIconConverter}}"
+                                                    TextColor="{Binding Color}"
+                                                    VerticalOptions="Center"
+                                                    VerticalTextAlignment="End" />
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    HorizontalOptions="Center"
+                                                    HorizontalTextAlignment="Center"
+                                                    Text="{Binding ScheduledTime, StringFormat='{0:MM/dd HH:mm}'}" />
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </Border>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>

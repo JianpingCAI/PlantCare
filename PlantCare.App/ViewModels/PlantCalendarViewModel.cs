@@ -172,7 +172,7 @@ namespace PlantCare.App.ViewModels
                 List<PlantEvent> plantEventsOnSelectedDates
                     = [.. ReminderCalendar!.Events
                      .Where(pEvt => ReminderCalendar.SelectedDates.Any(selectedDate => selectedDate.Date == pEvt.StartDate.AddDays(1).Date))
-                     .OrderByDescending(pEvt => pEvt.StartDate)];
+                     .OrderBy(pEvt => pEvt.StartDate)];
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
@@ -235,7 +235,6 @@ namespace PlantCare.App.ViewModels
                                 Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime)),
 
                                 ScheduledTime = expectedWaterTime,
-                                //IsOverdue = expectedWaterTime <= DateTime.Now
                             });
                         }
                     }
@@ -254,7 +253,6 @@ namespace PlantCare.App.ViewModels
                             Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime)),
 
                             ScheduledTime = expectedWaterTime,
-                            //IsOverdue = expectedWaterTime <= DateTime.Now
                         });
                     }
 
@@ -276,7 +274,6 @@ namespace PlantCare.App.ViewModels
                                 Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime)),
 
                                 ScheduledTime = fertilizationTime,
-                                //IsOverdue = fertilizationTime <= DateTime.Now
                             });
                         }
                     }
@@ -295,10 +292,11 @@ namespace PlantCare.App.ViewModels
                             Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime)),
 
                             ScheduledTime = fertilizationTime,
-                            //IsOverdue = fertilizationTime <= DateTime.Now
                         });
                     }
                 }
+
+                plantEvents.Sort((p1,p2) => p1.ScheduledTime.CompareTo(p2.ScheduledTime));
 
                 return plantEvents;
             });
