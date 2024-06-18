@@ -91,6 +91,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 SelectedPlant = null;
             }
         }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+        }
         finally
         {
             IsBusy = false;
@@ -236,6 +240,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 await ResetPlantsAsync();
             }
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
         finally
         {
@@ -830,6 +838,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
+            IsLoading = true;
+
             PlantListItemViewModel? updatePlant = Plants.FirstOrDefault(x => x.Id == message.PlantId);
             if (updatePlant is null)
                 return;
@@ -874,27 +884,38 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 
     async void IRecipient<PlantCareHistoryChangedMessage>.Receive(PlantCareHistoryChangedMessage message)
     {
-        if (message is null) return;
-
-        Guid plantId = message.PlantId;
-        CareType careType = message.CareType;
-
-        Plant? plant = await _plantService.GetPlantByIdAsync(plantId);
-        if (plant is null) return;
-
-        int plantVMIndex = _allPlantViewModelsCache.FindIndex(x => x.Id == plantId);
-        if (plantVMIndex == -1) return;
-
-        PlantListItemViewModel plantVM = _allPlantViewModelsCache[plantVMIndex];
-
-        await MainThread.InvokeOnMainThreadAsync(() =>
+        try
         {
-            UpdatePlantViewModel(plantVM, plant);
-        });
+            if (message is null) return;
+
+            Guid plantId = message.PlantId;
+            CareType careType = message.CareType;
+
+            Plant? plant = await _plantService.GetPlantByIdAsync(plantId);
+            if (plant is null) return;
+
+            int plantVMIndex = _allPlantViewModelsCache.FindIndex(x => x.Id == plantId);
+            if (plantVMIndex == -1) return;
+
+            PlantListItemViewModel plantVM = _allPlantViewModelsCache[plantVMIndex];
+
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                UpdatePlantViewModel(plantVM, plant);
+            });
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+        }
     }
 
     async void IRecipient<DataImportMessage>.Receive(DataImportMessage message)

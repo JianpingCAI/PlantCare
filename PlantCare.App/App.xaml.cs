@@ -36,6 +36,36 @@ namespace PlantCare.App
 
             // Add navigation event handlers
             RegisterNavigationEventHandlers();
+
+            // Global exception handling
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+            TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+        }
+
+        private void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+        {
+            e.SetObserved();
+            LogException(e.Exception);
+        }
+
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var exception = (Exception)e.ExceptionObject;
+            LogException(exception);
+        }
+
+        private void LogException(Exception ex)
+        {
+            // Log exception details here, e.g., to a file or remote server
+            Debug.WriteLine($"Unhandled exception: {ex.Message}");
+            Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+
+            // Optionally, display an alert to the user
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                //await Current.MainPage.DisplayAlert("Error", $"An unexpected error occurred. Please try again later: {ex.Message}.", "OK");
+                await Shell.Current.DisplayAlert("Error", $"An unexpected error occurred. Please try again later: {ex.Message}.", "OK");
+            });
         }
 
         private void LoadLocalizationLanguage()

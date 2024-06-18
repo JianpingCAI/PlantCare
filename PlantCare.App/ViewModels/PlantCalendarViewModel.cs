@@ -488,20 +488,27 @@ namespace PlantCare.App.ViewModels
         }
 
         [RelayCommand]
-        public void NavigateCalendar(int amount)
+        public async Task NavigateCalendar(int amount)
         {
-            if (ReminderCalendar is null)
+            try
             {
-                return;
-            }
+                if (ReminderCalendar is null)
+                {
+                    return;
+                }
 
-            if (ReminderCalendar.NavigatedDate.TryAddMonths(amount, out DateTime targetDate))
-            {
-                ReminderCalendar.Navigate(targetDate - ReminderCalendar.NavigatedDate);
+                if (ReminderCalendar.NavigatedDate.TryAddMonths(amount, out DateTime targetDate))
+                {
+                    ReminderCalendar.Navigate(targetDate - ReminderCalendar.NavigatedDate);
+                }
+                else
+                {
+                    ReminderCalendar.Navigate(amount > 0 ? TimeSpan.MaxValue : TimeSpan.MinValue);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ReminderCalendar.Navigate(amount > 0 ? TimeSpan.MaxValue : TimeSpan.MinValue);
+                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
             }
         }
 
