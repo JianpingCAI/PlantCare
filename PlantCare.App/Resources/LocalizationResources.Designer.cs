@@ -322,7 +322,7 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next Fertilization in .
+        ///   Looks up a localized string similar to Next Fertilization.
         /// </summary>
         internal static string NextFertilization {
             get {
@@ -331,7 +331,7 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next Watering in .
+        ///   Looks up a localized string similar to Next Watering.
         /// </summary>
         internal static string NextWatering {
             get {
@@ -435,6 +435,24 @@ namespace PlantCare.App.Resources {
         internal static string Theme {
             get {
                 return ResourceManager.GetString("Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next Fertilization in .
+        /// </summary>
+        internal static string TillNextFertilization {
+            get {
+                return ResourceManager.GetString("TillNextFertilization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next Watering in.
+        /// </summary>
+        internal static string TillNextWatering {
+            get {
+                return ResourceManager.GetString("TillNextWatering", resourceCulture);
             }
         }
         

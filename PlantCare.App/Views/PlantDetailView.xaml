@@ -158,7 +158,7 @@
                             FontAttributes="Bold"
                             FontSize="Medium"
                             HorizontalTextAlignment="End"
-                            Text="{Binding Path=[NextWatering], Source={x:Static utils:LocalizationManager.Instance}}"
+                            Text="{Binding Path=[TillNextWatering], Source={x:Static utils:LocalizationManager.Instance}}"
                             TextColor="DeepSkyBlue" />
                         <Label
                             Grid.Column="1"
@@ -174,7 +174,7 @@
                             FontAttributes="Bold"
                             FontSize="Medium"
                             HorizontalTextAlignment="End"
-                            Text="{Binding Path=[NextFertilization], Source={x:Static utils:LocalizationManager.Instance}}"
+                            Text="{Binding Path=[TillNextFertilization], Source={x:Static utils:LocalizationManager.Instance}}"
                             TextColor="DeepSkyBlue" />
                         <Label
                             Grid.Row="1"

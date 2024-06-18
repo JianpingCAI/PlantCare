@@ -205,10 +205,10 @@
     <value>名称</value>
   </data>
   <data name="NextFertilization" xml:space="preserve">
-    <value>离下次施肥时间还有</value>
+    <value>下次施肥时间</value>
   </data>
   <data name="NextWatering" xml:space="preserve">
-    <value>离下次浇水时间还有</value>
+    <value>下次浇水时间</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>否</value>
@@ -242,6 +242,12 @@
   </data>
   <data name="Theme" xml:space="preserve">
     <value>主题亮度</value>
+  </data>
+  <data name="TillNextFertilization" xml:space="preserve">
+    <value>离下次施肥时间还有</value>
+  </data>
+  <data name="TillNextWatering" xml:space="preserve">
+    <value>离下次浇水时间还有</value>
   </data>
   <data name="UnattendedOnly" xml:space="preserve">
     <value>亟需照料</value>

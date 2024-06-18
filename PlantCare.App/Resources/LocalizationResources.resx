@@ -186,11 +186,11 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="NextFertilization" xml:space="preserve">
+  <data name="TillNextFertilization" xml:space="preserve">
     <value>Next Fertilization in </value>
   </data>
   <data name="NextWatering" xml:space="preserve">
-    <value>Next Watering in </value>
+    <value>Next Watering</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
@@ -260,5 +260,11 @@
   </data>
   <data name="DataImportExport" xml:space="preserve">
     <value>Data Export/Import</value>
+  </data>
+  <data name="TillNextWatering" xml:space="preserve">
+    <value>Next Watering in</value>
+  </data>
+  <data name="NextFertilization" xml:space="preserve">
+    <value>Next Fertilization</value>
   </data>
 </root>
