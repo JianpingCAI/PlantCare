@@ -201,15 +201,12 @@ public partial class SettingsViewModel : ViewModelBase
         FolderPickerResult result = await _folderPicker.PickAsync(cancellationToken);
         //result.EnsureSuccess();
 
-        //FolderPickerResult result = await FolderPicker.Default.PickAsync(cancellationToken);
         if (result.IsSuccessful)
         {
-            //await Toast.Make($"The folder was picked: Name - {result.Folder.Name}, Path - {result.Folder.Path}", ToastDuration.Long).Show(cancellationToken);
             return result.Folder.Path;
         }
         else
         {
-            //await Toast.Make($"The folder was not picked with error: {result.Exception.Message}").Show(cancellationToken);
             return string.Empty;
         }
     }

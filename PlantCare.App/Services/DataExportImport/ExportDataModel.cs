@@ -4,5 +4,5 @@ using PlantCare.Data.DbModels;
 internal class ExportDataModel
 {
     public List<PlantDbModel> Plants { get; set; } = [];
-    public AppSettings AppSettings { get; internal set; }
+    public AppSettings AppSettings { get; set; }
 }

@@ -272,11 +272,6 @@ namespace PlantCare.App.ViewModels
 
                     await File.WriteAllBytesAsync(filePath, resizedImage);
 
-                    //using (FileStream newStream = File.OpenWrite(filePath))
-                    //{
-                    //    await stream.CopyToAsync(newStream);
-                    //}
-
                     PhotoPath = filePath;
                 }
             }

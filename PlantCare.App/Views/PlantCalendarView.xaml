@@ -155,36 +155,35 @@
                         </CollectionView.Shadow>
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout
-                                HorizontalItemSpacing="2"
                                 Orientation="Vertical"
                                 Span="{OnIdiom Phone=3,
                                                Default=6}"
-                                VerticalItemSpacing="2" />
+                                VerticalItemSpacing="3" />
                         </CollectionView.ItemsLayout>
+
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="vm:PlantEvent">
-                                <Grid Style="{StaticResource GridStyleForCollectionView}">
-                                    <Border BackgroundColor="Transparent" HorizontalOptions="Fill">
+                                <Grid HorizontalOptions="CenterAndExpand" Style="{StaticResource GridStyleForCollectionView}">
+                                    <Border>
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="10" />
                                         </Border.StrokeShape>
-                                        <Grid HorizontalOptions="Fill" RowDefinitions="*,auto">
+                                        <Grid RowDefinitions="*,auto">
                                             <!--  photo  -->
                                             <Border
-                                                BackgroundColor="Transparent"
                                                 HorizontalOptions="Center"
                                                 StrokeThickness="0"
                                                 VerticalOptions="Center">
                                                 <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="10" />
                                                 </Border.StrokeShape>
-                                                <Grid>
+                                                <Grid HorizontalOptions="CenterAndExpand">
                                                     <Image
                                                         Aspect="AspectFill"
-                                                        HeightRequest="125"
+                                                        HeightRequest="120"
                                                         HorizontalOptions="Center"
                                                         Source="{Binding PhotoPath}"
-                                                        WidthRequest="125" />
+                                                        WidthRequest="110" />
                                                     <!--  Name  -->
                                                     <Label
                                                         Background="DarkSeaGreen"

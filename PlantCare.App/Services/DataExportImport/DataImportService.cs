@@ -4,6 +4,7 @@ using PlantCare.Data.Repositories;
 using System.Text.Json;
 using PlantCare.Data.DbModels;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
 namespace PlantCare.App.Services.DataExportImport;
 
@@ -20,80 +21,91 @@ public class DataImportService : IDataImportService
         _appSettingsService = appSettingsService;
     }
 
-    public async Task<int> ImportDataAsync(string zipFilePath, bool isRemoveExistingData)
+    public Task<int> ImportDataAsync(string zipFilePath, bool isRemoveExistingData)
     {
-        //string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        string localAppDirectory = FileSystem.AppDataDirectory;
-        string extractDirectory = Path.Combine(localAppDirectory, "PlantCareImport");
-        string photoDirectory = Path.Combine(localAppDirectory, "photos");
+        return Task.Run(async () => {
+            string localAppDirectory = FileSystem.AppDataDirectory;
+            string extractDirectory = Path.Combine(localAppDirectory, "PlantCareImport");
+            string photoDirectory = Path.Combine(localAppDirectory, "photos");
 
-        // Ensure directory exists
-        if (Directory.Exists(extractDirectory))
-        {
-            Directory.Delete(extractDirectory, true);
-        }
-        Directory.CreateDirectory(extractDirectory);
-
-        if (!Directory.Exists(photoDirectory))
-        {
-            Directory.CreateDirectory(photoDirectory);
-        }
-
-        // Extract zip archive
-        ZipFile.ExtractToDirectory(zipFilePath, extractDirectory);
-
-        string jsonFilePath = Path.Combine(extractDirectory, "exportedData.json");
-        string json = await File.ReadAllTextAsync(jsonFilePath, Encoding.UTF8);
-        //var importData = JsonConvert.DeserializeObject<ExportDataModel>(json);
-
-        // Configure JsonSerializerOptions to handle reference loops
-        JsonSerializerOptions jsonOptions = new()
-        {
-            ReferenceHandler = ReferenceHandler.Preserve
-        };
-        ExportDataModel? importData = JsonSerializer.Deserialize<ExportDataModel>(json, jsonOptions);
-        if (importData is null)
-        {
-            throw new ArgumentNullException("Failed to convert the imported data");
-        }
-        DataImportService.ResetIds(importData.Plants);
-
-        // Restore photo files
-        foreach (PlantDbModel plant in importData.Plants)
-        {
-            if (!string.IsNullOrEmpty(plant.PhotoPath))
+            // Ensure directory exists
+            if (Directory.Exists(extractDirectory))
             {
-                string fileName = Path.GetFileName(plant.PhotoPath);
-                string originalPhotoPath = Path.Combine(extractDirectory, fileName);
-                plant.PhotoPath = Path.Combine(photoDirectory, fileName);
+                Directory.Delete(extractDirectory, true);
+            }
+            Directory.CreateDirectory(extractDirectory);
 
-                if (File.Exists(originalPhotoPath))
+            if (!Directory.Exists(photoDirectory))
+            {
+                Directory.CreateDirectory(photoDirectory);
+            }
+
+            // Extract zip archive
+            ZipFile.ExtractToDirectory(zipFilePath, extractDirectory);
+
+            string jsonFilePath = Path.Combine(extractDirectory, "exportedData.json");
+            string json = await File.ReadAllTextAsync(jsonFilePath, Encoding.UTF8);
+
+            // Configure JsonSerializerOptions to handle reference loops
+            JsonSerializerOptions jsonOptions = new()
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            };
+            ExportDataModel? importData = JsonSerializer.Deserialize<ExportDataModel>(json, jsonOptions);
+            if (importData is null)
+            {
+                throw new ArgumentNullException("Failed to convert the imported data");
+            }
+
+            ResetIds(importData.Plants);
+
+            // Restore photo files
+            foreach (PlantDbModel plant in importData.Plants)
+            {
+                if (!string.IsNullOrEmpty(plant.PhotoPath))
                 {
-                    File.Copy(originalPhotoPath, plant.PhotoPath, true);
+                    string fileName = Path.GetFileName(plant.PhotoPath);
+                    string originalPhotoPath = Path.Combine(extractDirectory, fileName);
+                    plant.PhotoPath = Path.Combine(photoDirectory, fileName);
+
+                    if (File.Exists(originalPhotoPath))
+                    {
+                        File.Copy(originalPhotoPath, plant.PhotoPath, true);
+                    }
                 }
             }
-        }
 
-        if (isRemoveExistingData)
-        {
-            // Remove existing data
-            _context.Plants.RemoveRange(_context.Plants);
+            if (isRemoveExistingData)
+            {
+                await ClearTablesAsync();
+            }
 
-            _context.WateringHistories.RemoveRange(_context.WateringHistories);
-
-            _context.FertilizationHistories.RemoveRange(_context.FertilizationHistories);
-
+            // Add new data
+            await _context.Plants.AddRangeAsync(importData.Plants);
             await _context.SaveChangesAsync();
-        }
 
-        // Add new data
-        await _context.Plants.AddRangeAsync(importData.Plants);
-        await _context.SaveChangesAsync();
+            //SavePreferences(importData.Preferences);
+            await _appSettingsService.SaveAppSettingsAsync(importData.AppSettings);
 
-        //SavePreferences(importData.Preferences);
-        await _appSettingsService.SaveAppSettingsAsync(importData.AppSettings);
+            return importData.Plants.Count;
+        });
+    }
 
-        return importData.Plants.Count;
+    private async Task ClearTablesAsync()
+    {
+        // Cascading deletes are not configured/enabled
+
+        // Remove existing data from foreign tables first
+        await _context.Database.ExecuteSqlRawAsync($"DELETE FROM {nameof(WateringHistory)}");
+        await _context.Database.ExecuteSqlRawAsync($"DELETE FROM {nameof(FertilizationHistory)}");
+        await _context.Database.ExecuteSqlRawAsync("DELETE FROM Plants");
+
+        //_context.WateringHistories.RemoveRange(_context.WateringHistories.ToList());
+        //_context.FertilizationHistories.RemoveRange(_context.FertilizationHistories.ToList());
+
+        //_context.Plants.RemoveRange(_context.Plants.ToList());
+
+        //return _context.SaveChangesAsync();
     }
 
     private static void ResetIds(IEnumerable<PlantDbModel> plants)

@@ -2,21 +2,6 @@
 
 namespace PlantCare.App.Utils;
 
-public static class ImageResizer
-{
-    public static byte[] ResizeImage(byte[] imageBytes, int width, int height)
-    {
-        using var inputStream = new MemoryStream(imageBytes);
-        using var original = SKBitmap.Decode(inputStream);
-        using var resized = original.Resize(new SKImageInfo(width, height), SKFilterQuality.Medium);
-        using var image = SKImage.FromBitmap(resized);
-        using var outputStream = new MemoryStream();
-
-        image.Encode(SKEncodedImageFormat.Jpeg, 75).SaveTo(outputStream);
-        return outputStream.ToArray();
-    }
-}
-
 public static class ImageHelper
 {
     public static byte[] ResizeImage(Stream imageStream, int maxWidth, int maxHeight)
@@ -48,7 +33,7 @@ public static class ImageHelper
         using var resizedBitmap = original.Resize(new SKImageInfo(width, height), SKFilterQuality.High);
         using var image = SKImage.FromBitmap(resizedBitmap);
         using var outputStream = new MemoryStream();
-        image.Encode(SKEncodedImageFormat.Jpeg, 75).SaveTo(outputStream);
+        image.Encode(SKEncodedImageFormat.Jpeg, 90).SaveTo(outputStream);
         return outputStream.ToArray();
     }
 }
