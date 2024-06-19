@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Graphics.Platform;
+using PlantCare.Data;
 using SkiaSharp;
 
 namespace PlantCare.App.Utils;
@@ -64,6 +65,24 @@ public static class ImageHelper
                 byte[] result = binaryReader.ReadBytes((int)sourceImageStream.Length);
                 return result;
             }
+        });
+    }
+
+    public static Task SaveResizedPhotoAsync(string sourcePhotoPath, string resizedPhotoPath)
+    {
+        if (!File.Exists(sourcePhotoPath))
+            return Task.CompletedTask;
+
+        return Task.Run(async () =>
+        {
+            using Stream sourceStream = File.OpenRead(sourcePhotoPath);
+            string fileName = Path.GetFileName(sourcePhotoPath);
+            //using Stream sourceStream = await photoFileResult.OpenReadAsync();
+
+            // Resize the image
+            byte[] resizedImage = await ResizeImageAsync(sourceStream, DefaultPhotoMaxWidthOrHeight);
+
+            await File.WriteAllBytesAsync(resizedPhotoPath, resizedImage);
         });
     }
 }

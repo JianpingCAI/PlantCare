@@ -4,6 +4,8 @@ using System.Text.Json;
 using PlantCare.Data.DbModels;
 using System.Text.Json.Serialization;
 using PlantCare.App.Services.DBService;
+using PlantCare.Data;
+using PlantCare.App.Utils;
 
 namespace PlantCare.App.Services.DataExportImport;
 
@@ -24,9 +26,8 @@ public class DataImportService : IDataImportService
     {
         return Task.Run(async () =>
         {
-            string localAppDirectory = FileSystem.AppDataDirectory;
-            string extractDirectory = Path.Combine(localAppDirectory, "PlantCareImport");
-            string photoDirectory = Path.Combine(localAppDirectory, "photos");
+            string extractDirectory = Path.Combine(FileSystem.AppDataDirectory, "PlantCareImport");
+            string newPhotosDirectory = Path.Combine(FileSystem.AppDataDirectory, ConstStrings.Photos);
 
             // Ensure directory exists
             if (Directory.Exists(extractDirectory))
@@ -35,9 +36,9 @@ public class DataImportService : IDataImportService
             }
             Directory.CreateDirectory(extractDirectory);
 
-            if (!Directory.Exists(photoDirectory))
+            if (!Directory.Exists(newPhotosDirectory))
             {
-                Directory.CreateDirectory(photoDirectory);
+                Directory.CreateDirectory(newPhotosDirectory);
             }
 
             // Extract zip archive
@@ -62,15 +63,24 @@ public class DataImportService : IDataImportService
             // Restore photo files
             foreach (PlantDbModel plant in importData.Plants)
             {
-                if (!string.IsNullOrEmpty(plant.PhotoPath))
+                if (!string.IsNullOrEmpty(plant.PhotoPath)
+                 && !plant.PhotoPath.Contains(ConstStrings.DefaultPhotoPath))
                 {
                     string fileName = Path.GetFileName(plant.PhotoPath);
+
                     string originalPhotoPath = Path.Combine(extractDirectory, fileName);
-                    plant.PhotoPath = Path.Combine(photoDirectory, fileName);
 
                     if (File.Exists(originalPhotoPath))
                     {
-                        File.Copy(originalPhotoPath, plant.PhotoPath, true);
+                        //// original size
+                        //File.Copy(originalPhotoPath, plant.PhotoPath, true);
+
+                        // save resized photo
+                        string newPhotoPath = Path.Combine(newPhotosDirectory, fileName);
+
+                        await ImageHelper.SaveResizedPhotoAsync(originalPhotoPath, newPhotoPath);
+
+                        plant.PhotoPath = newPhotoPath;
                     }
                 }
             }
