@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PlantCare.App.ViewModels;
+using PlantCare.Data;
 using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
 using PlantCare.Data.Repositories.interfaces;
@@ -59,7 +60,19 @@ public class PlantService : IPlantService
 
     public async Task DeletePlantAsync(Guid plantId)
     {
-        await _plantRepository.DeleteAsync(plantId);
+        PlantDbModel? deletedPlant = await _plantRepository.DeleteAsync(plantId);
+        if (deletedPlant != null)
+            DeletePhotoFile(deletedPlant.PhotoPath);
+    }
+
+    private static void DeletePhotoFile(string photoPath)
+    {
+        if (!string.IsNullOrEmpty(photoPath)
+            && !(photoPath.Contains(ConstStrings.DefaultPhotoPath))
+            && File.Exists(photoPath))
+        {
+            File.Delete(photoPath);
+        }
     }
 
     public async Task UpdateLastWateringTime(Guid plantId, DateTime time)
@@ -105,7 +118,7 @@ public class PlantService : IPlantService
 
     public async Task DeleteFertilizationHistoryAsync(Guid plantId, Guid historyId)
     {
-        var deleted = await _fertilizationHistoryRepository.DeleteAsync(historyId);
+        FertilizationHistory? deleted = await _fertilizationHistoryRepository.DeleteAsync(historyId);
 
         PlantDbModel? plantDB = await _plantRepository.GetByIdAsync(plantId);
         if (deleted is null || plantDB is null)
@@ -156,5 +169,30 @@ public class PlantService : IPlantService
 
             return plantCareHistoryList;
         });
+    }
+
+    public async Task AddPlantsAsync(List<PlantDbModel> plants)
+    {
+        await _plantRepository.AddPlantsAsync(plants);
+    }
+
+    public async Task ClearAllAsync()
+    {
+        await _plantRepository.ClearAllAsync();
+    }
+
+    public async Task DeleteAllPhotosAsync()
+    {
+        List<PlantDbModel> plants = await _plantRepository.GetAllAsync();
+        if (plants.Count > 0)
+        {
+            await Task.Run(() =>
+            {
+                foreach (PlantDbModel plant in plants)
+                {
+                    DeletePhotoFile(plant.PhotoPath);
+                }
+            });
+        }
     }
 }

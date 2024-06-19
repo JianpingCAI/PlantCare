@@ -29,4 +29,10 @@ public interface IPlantService
     Task DeleteFertilizationHistoryAsync(Guid plantId, Guid historyId);
 
     Task<List<PlantCareHistory>> GetAllPlantsWithCareHistoryAsync();
+
+    Task AddPlantsAsync(List<PlantDbModel> plants);
+
+    Task ClearAllAsync();
+
+    Task DeleteAllPhotosAsync();
 }

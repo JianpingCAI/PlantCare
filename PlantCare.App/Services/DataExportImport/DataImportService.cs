@@ -1,29 +1,29 @@
 ﻿using System.IO.Compression;
 using System.Text;
-using PlantCare.Data.Repositories;
 using System.Text.Json;
 using PlantCare.Data.DbModels;
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
+using PlantCare.App.Services.DBService;
 
 namespace PlantCare.App.Services.DataExportImport;
 
 public class DataImportService : IDataImportService
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IPlantService _plantService;
     private readonly IAppSettingsService _appSettingsService;
 
     public DataImportService(
-        ApplicationDbContext context,
+        IPlantService plantService,
         IAppSettingsService appSettingsService)
     {
-        _context = context;
+        _plantService = plantService;
         _appSettingsService = appSettingsService;
     }
 
     public Task<int> ImportDataAsync(string zipFilePath, bool isRemoveExistingData)
     {
-        return Task.Run(async () => {
+        return Task.Run(async () =>
+        {
             string localAppDirectory = FileSystem.AppDataDirectory;
             string extractDirectory = Path.Combine(localAppDirectory, "PlantCareImport");
             string photoDirectory = Path.Combine(localAppDirectory, "photos");
@@ -81,10 +81,8 @@ public class DataImportService : IDataImportService
             }
 
             // Add new data
-            await _context.Plants.AddRangeAsync(importData.Plants);
-            await _context.SaveChangesAsync();
+            await _plantService.AddPlantsAsync(importData.Plants);
 
-            //SavePreferences(importData.Preferences);
             await _appSettingsService.SaveAppSettingsAsync(importData.AppSettings);
 
             return importData.Plants.Count;
@@ -96,15 +94,12 @@ public class DataImportService : IDataImportService
         // Cascading deletes are not configured/enabled
 
         // Remove existing data from foreign tables first
-        await _context.Database.ExecuteSqlRawAsync($"DELETE FROM {nameof(WateringHistory)}");
-        await _context.Database.ExecuteSqlRawAsync($"DELETE FROM {nameof(FertilizationHistory)}");
-        await _context.Database.ExecuteSqlRawAsync("DELETE FROM Plants");
+        await _plantService.DeleteAllPhotosAsync();
+        await _plantService.ClearAllAsync();
 
         //_context.WateringHistories.RemoveRange(_context.WateringHistories.ToList());
         //_context.FertilizationHistories.RemoveRange(_context.FertilizationHistories.ToList());
-
         //_context.Plants.RemoveRange(_context.Plants.ToList());
-
         //return _context.SaveChangesAsync();
     }
 

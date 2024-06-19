@@ -37,4 +37,20 @@ public class PlantRepository(ApplicationDbContext context) : GenericRepository<P
                              .Include(p => p.FertilizationHistories)
                              .ToListAsync();
     }
+
+    public async Task AddPlantsAsync(List<PlantDbModel> plants)
+    {
+        if (plants == null || plants.Count == 0)
+            return;
+
+        await _context.Plants.AddRangeAsync(plants);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task ClearAllAsync()
+    {
+        await _context.Database.ExecuteSqlRawAsync($"DELETE FROM {nameof(WateringHistory)}");
+        await _context.Database.ExecuteSqlRawAsync($"DELETE FROM {nameof(FertilizationHistory)}");
+        await _context.Database.ExecuteSqlRawAsync("DELETE FROM Plants");
+    }
 }
