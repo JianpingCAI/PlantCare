@@ -296,7 +296,7 @@ namespace PlantCare.App.ViewModels
                     }
                 }
 
-                plantEvents.Sort((p1,p2) => p1.ScheduledTime.CompareTo(p2.ScheduledTime));
+                plantEvents.Sort((p1, p2) => p1.ScheduledTime.CompareTo(p2.ScheduledTime));
 
                 return plantEvents;
             });
@@ -562,7 +562,7 @@ namespace PlantCare.App.ViewModels
 
             try
             {
-                await MainThread.InvokeOnMainThreadAsync(() =>
+                await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     ////Set DefaultThreadCurrentCulture because CurrentCulture gets automatically reset when changed.
                     ////CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CurrentCulture; // new CultureInfo(TargetCultureCode);
@@ -581,8 +581,8 @@ namespace PlantCare.App.ViewModels
                     ReminderCalendar.DayNamesOrder.ReplaceRange(oldDayNamesOlder);
 
                     //NavigationView Title
-                    NavigateCalendar(1);
-                    NavigateCalendar(-1);
+                    await NavigateCalendar(1);
+                    await NavigateCalendar(-1);
                 });
             }
             catch (Exception ex)
