@@ -257,6 +257,7 @@ namespace PlantCare.App.ViewModels
         {
             try
             {
+                IsLoading = true;
                 FileResult? photoFileResult = await FilePicker.PickAsync(new PickOptions
                 {
                     FileTypes = FilePickerFileType.Images,
@@ -283,6 +284,10 @@ namespace PlantCare.App.ViewModels
             {
                 await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message, "OK");
             }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         [RelayCommand]
@@ -290,6 +295,8 @@ namespace PlantCare.App.ViewModels
         {
             try
             {
+                IsLoading = true;
+
                 if (MediaPicker.Default.IsCaptureSupported)
                 {
                     FileResult? photo = await MediaPicker.Default.CapturePhotoAsync();
@@ -315,6 +322,10 @@ namespace PlantCare.App.ViewModels
             catch (Exception ex)
             {
                 await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message, "OK");
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 

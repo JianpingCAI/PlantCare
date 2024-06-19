@@ -7,7 +7,7 @@ using IImage = Microsoft.Maui.Graphics.IImage;
 
 public static class ImageHelper
 {
-    public const int DefaultPhotoMaxWidthOrHeight = 600;
+    public const int DefaultPhotoMaxWidthOrHeight = 800;
 
     public static byte[] ResizeImage(Stream imageStream, int maxWidth, int maxHeight)
     {
