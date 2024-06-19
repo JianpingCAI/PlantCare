@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Maui.Graphics.Platform;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
 using PlantCare.App.Services.DBService;
@@ -264,15 +265,18 @@ namespace PlantCare.App.ViewModels
 
                 if (photoFileResult != null)
                 {
-                    Stream stream = await photoFileResult.OpenReadAsync();
-                    string filePath = Path.Combine(FileSystem.AppDataDirectory, photoFileResult.FileName);
+                    using Stream sourceStream = await photoFileResult.OpenReadAsync();
 
                     // Resize the image
-                    byte[] resizedImage = ImageHelper.ResizeImage(imageStream: stream, maxWidth: 600, maxHeight: 600);
+                    byte[] resizedImage = await ImageHelper.ResizeImageAsync(sourceStream, ImageHelper.DefaultPhotoMaxWidthOrHeight);
 
-                    await File.WriteAllBytesAsync(filePath, resizedImage);
+                    string localFilePath = Path.Combine(FileSystem.AppDataDirectory, ConstStrings.Photos, photoFileResult.FileName);
+                    await File.WriteAllBytesAsync(localFilePath, resizedImage);
 
-                    PhotoPath = filePath;
+                    //using FileStream localFileStream = File.OpenWrite(localFilePath);
+                    //await sourceStream.CopyToAsync(localFileStream);
+
+                    await MainThread.InvokeOnMainThreadAsync(() => { PhotoPath = localFilePath; });
                 }
             }
             catch (Exception ex)
@@ -295,13 +299,13 @@ namespace PlantCare.App.ViewModels
                         using Stream sourceStream = await photo.OpenReadAsync();
 
                         // Resize the photo
-                        byte[] resizedImage = ImageHelper.ResizeImage(sourceStream, 600, 600);
+                        byte[] resizedImage = await ImageHelper.ResizeImageAsync(sourceStream, ImageHelper.DefaultPhotoMaxWidthOrHeight);
 
                         // save the file into local storage
-                        string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+                        string localFilePath = Path.Combine(FileSystem.AppDataDirectory, ConstStrings.Photos, photo.FileName);
                         await File.WriteAllBytesAsync(localFilePath, resizedImage);
-                        //using FileStream localFileStream = File.OpenWrite(localFilePath);
 
+                        //using FileStream localFileStream = File.OpenWrite(localFilePath);
                         //await sourceStream.CopyToAsync(localFileStream);
 
                         await MainThread.InvokeOnMainThreadAsync(() => { PhotoPath = localFilePath; });

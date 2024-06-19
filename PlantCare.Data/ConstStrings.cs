@@ -30,4 +30,5 @@ public static class ConstStrings
     public const string Days = "Days";
     public const string Hours = "Hours";
 
+    public const string Photos = "photos";
 }

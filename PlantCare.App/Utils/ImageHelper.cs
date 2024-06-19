@@ -1,9 +1,14 @@
-﻿using SkiaSharp;
+﻿using Microsoft.Maui.Graphics.Platform;
+using SkiaSharp;
 
 namespace PlantCare.App.Utils;
 
+using IImage = Microsoft.Maui.Graphics.IImage;
+
 public static class ImageHelper
 {
+    public const int DefaultPhotoMaxWidthOrHeight = 600;
+
     public static byte[] ResizeImage(Stream imageStream, int maxWidth, int maxHeight)
     {
         using var inputStream = new SKManagedStream(imageStream);
@@ -35,5 +40,30 @@ public static class ImageHelper
         using var outputStream = new MemoryStream();
         image.Encode(SKEncodedImageFormat.Jpeg, 90).SaveTo(outputStream);
         return outputStream.ToArray();
+    }
+
+    public static Task<byte[]> ResizeImageAsync(Stream sourceImageStream, int maxWidthOrHeight)
+    {
+        return Task.Run(() =>
+        {
+            IImage sourceImage = PlatformImage.FromStream(sourceImageStream/*, ImageFormat.Jpeg ???*/);
+
+            if (sourceImage != null)
+            {
+                if (sourceImage.Width > maxWidthOrHeight || sourceImage.Height > maxWidthOrHeight)
+                {
+                    IImage downsizedImage = sourceImage.Downsize(maxWidthOrHeight, disposeOriginal: true);
+
+                    byte[] result = downsizedImage.AsBytes();
+                    return result;
+                }
+            }
+
+            using (var binaryReader = new BinaryReader(sourceImageStream))
+            {
+                byte[] result = binaryReader.ReadBytes((int)sourceImageStream.Length);
+                return result;
+            }
+        });
     }
 }
