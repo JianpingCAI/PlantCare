@@ -98,6 +98,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
@@ -136,8 +137,29 @@
                 </HorizontalStackLayout>
             </Grid>
 
+            <!--  Selected Dates  -->
+            <CollectionView
+                Grid.Row="1"
+                HorizontalOptions="CenterAndExpand"
+                ItemsSource="{Binding ReminderCalendar.SelectedDates}"
+                SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label
+                            Margin="5,0,0,5"
+                            FontAttributes="Bold"
+                            Text="{Binding ., StringFormat='{0:MM/dd}'}"
+                            TextColor="DeepSkyBlue" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
             <!--  Plant Events  -->
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="2">
 
                 <RefreshView Command="{Binding RefreshPlantEventsCommand}" IsRefreshing="{Binding IsPlantEventRefreshing}">
                     <CollectionView
@@ -256,7 +278,7 @@
 
             <!--  Calendar  -->
             <toolkit:Expander
-                Grid.Row="2"
+                Grid.Row="3"
                 Margin="0,5,0,0"
                 IsExpanded="{Binding IsChecked, Source={x:Reference chkCalendar}}">
                 <!--<toolkit:Expander.Header>
