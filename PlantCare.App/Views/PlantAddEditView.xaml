@@ -292,6 +292,23 @@
                         </Grid>
                     </Border>
 
+                    <Border Padding="2">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="5" />
+                        </Border.StrokeShape>
+                        <toolkit:Expander>
+                            <toolkit:Expander.Header>
+                                <Label
+                                    Margin="10,0"
+                                    FontAttributes="Bold"
+                                    FontSize="Medium"
+                                    Text="{Binding Path=[Notes], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            </toolkit:Expander.Header>
+                            <Editor IsReadOnly="False" Text="{Binding Notes}" />
+                        </toolkit:Expander>
+                    </Border>
+
+                    <!--  Data Validiation  -->
                     <VerticalStackLayout Margin="0,10,0,0" BindableLayout.ItemsSource="{Binding Errors}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="dataAnnotations:ValidationResult">

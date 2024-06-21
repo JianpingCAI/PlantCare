@@ -267,4 +267,7 @@
   <data name="NextFertilization" xml:space="preserve">
     <value>Next Fertilization</value>
   </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
 </root>

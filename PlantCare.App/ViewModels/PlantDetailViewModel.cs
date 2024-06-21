@@ -22,6 +22,9 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
     [ObservableProperty]
     private int _age;
 
+    [ObservableProperty]
+    private string _notes = string.Empty;
+
     [RelayCommand]
     private async Task NavigateToEditPlant()
     {
@@ -137,6 +140,8 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
 
         LastFertilized = plant.LastFertilized;
         FertilizeFrequencyInHours = plant.FertilizeFrequencyInHours;
+
+        Notes = plant.Notes;
     }
 
     private static Plant MapToDataModel(PlantDetailViewModel viewModel)
@@ -152,7 +157,9 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
             LastWatered = viewModel.LastWatered,
             WateringFrequencyInHours = viewModel.WateringFrequencyInHours,
             LastFertilized = viewModel.LastFertilized,
-            FertilizeFrequencyInHours = viewModel.FertilizeFrequencyInHours
+            FertilizeFrequencyInHours = viewModel.FertilizeFrequencyInHours,
+
+            Notes = viewModel.Notes
         };
     }
 }

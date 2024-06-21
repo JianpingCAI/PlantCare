@@ -13,4 +13,6 @@ public class Plant
 
     public DateTime LastFertilized { get; set; } = DateTime.Now;
     public int FertilizeFrequencyInHours { get; set; }
+
+    public string Notes { get; set; } = string.Empty;
 }

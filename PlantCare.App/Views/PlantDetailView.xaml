@@ -64,7 +64,7 @@
                 <Grid
                     ColumnDefinitions="auto,*"
                     HorizontalOptions="Center"
-                    RowDefinitions="*,*,*,*,*,*,*,*">
+                    RowDefinitions="*,*,*,*,*,*,*,*,auto">
 
                     <Label
                         Margin="0,0,10,0"
@@ -186,6 +186,26 @@
                             Text="{Binding HoursUntilNextFertilize, Converter={StaticResource HoursToDayHourStringConverter}}"
                             TextColor="DeepSkyBlue" />
                     </Grid>
+
+                    <Border
+                        Grid.Row="7"
+                        Grid.ColumnSpan="2"
+                        Padding="2">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="5" />
+                        </Border.StrokeShape>
+                        <toolkit:Expander IsExpanded="True">
+                            <toolkit:Expander.Header>
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="Medium"
+                                    Text="{Binding Path=[Notes], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            </toolkit:Expander.Header>
+                            <ScrollView MaximumHeightRequest="100" VerticalScrollBarVisibility="Always">
+                                <Editor IsReadOnly="True" Text="{Binding Notes}" />
+                            </ScrollView>
+                        </toolkit:Expander>
+                    </Border>
                 </Grid>
 
                 <Grid Margin="5,10">

@@ -9,3 +9,8 @@ PlantCare is a mobile application that helps users keep track of their plants an
 - **Notifications**: Users receive notifications when it's time to water or fertilize their plants.
 
 - All data is stored locally on the user's device.
+
+## Privacy Policy
+
+<https://www.freeprivacypolicy.com/live/ce9df1df-a33e-4e29-a481-a9360608a147>
+<https://www.freeprivacypolicy.com/free-privacy-policy-generator/>

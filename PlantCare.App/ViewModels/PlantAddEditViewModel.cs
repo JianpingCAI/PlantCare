@@ -50,6 +50,9 @@ namespace PlantCare.App.ViewModels
         [Range(0, 3000)]
         private int _age = 1;
 
+        [ObservableProperty]
+        private string _notes = string.Empty;
+
         // For detecting changes
         private DateTime _originalLastWatered;
 
@@ -394,7 +397,9 @@ namespace PlantCare.App.ViewModels
                 WateringFrequencyInHours = WateringFrequencyInHours,
 
                 LastFertilized = LastFertilization,
-                FertilizeFrequencyInHours = FertilizationFrequencyInHours
+                FertilizeFrequencyInHours = FertilizationFrequencyInHours,
+
+                Notes = Notes,
             };
 
             // An existing plant
@@ -432,6 +437,8 @@ namespace PlantCare.App.ViewModels
 
             _originalLastWatered = plant.LastWatered;
             _originalLastFertilized = plant.LastFertilized;
+
+            Notes = plant.Notes;
         }
 
         public void Dispose()
