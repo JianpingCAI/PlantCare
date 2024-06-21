@@ -43,6 +43,9 @@
 	  <ApplicationTitle>MyPlantCare</ApplicationTitle>
 	  <ApplicationId>com.jianping.myplantcare.app</ApplicationId>
 	  <ApplicationDisplayVersion>0.1</ApplicationDisplayVersion>
+	  <AndroidUseAapt2>True</AndroidUseAapt2>
+	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+	  <AndroidPackageFormat>aab</AndroidPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
@@ -68,6 +71,9 @@
 	  <ApplicationId>com.jianping.myplantcare.app</ApplicationId>
 	  <ApplicationDisplayVersion>0.1</ApplicationDisplayVersion>
 	  <AndroidLinkTool>r8</AndroidLinkTool>
+	  <AndroidPackageFormat>aab</AndroidPackageFormat>
+	  <AndroidUseAapt2>True</AndroidUseAapt2>
+	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
