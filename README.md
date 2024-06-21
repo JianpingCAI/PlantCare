@@ -10,6 +10,14 @@ PlantCare is a mobile application that helps users keep track of their plants an
 
 - All data is stored locally on the user's device.
 
+## Some Screenshots
+
+<img src="./screenshots/homepage.jpg" alt="HomeScreen" width="300"/>
+<img src="./screenshots/editview.jpg" alt="HomeScreen" width="300"/>
+<img src="./screenshots/calendarview.jpg" alt="Calendar" width="300"/>
+<img src="./screenshots/historyview.jpg" alt="HomeScreen" width="300"/>
+<img src="./screenshots/historyview.jpg" alt="HomeScreen" width="300"/>
+
 ## Privacy Policy
 
 <https://www.freeprivacypolicy.com/live/ce9df1df-a33e-4e29-a481-a9360608a147>
