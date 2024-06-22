@@ -13,10 +13,9 @@ PlantCare is a mobile application that helps users keep track of their plants an
 ## Some Screenshots
 
 <img src="./screenshots/homepage.jpg" alt="HomeScreen" width="300"/>
-<img src="./screenshots/editview.jpg" alt="HomeScreen" width="300"/>
+<img src="./screenshots/editview.jpg" alt="Edit" width="300"/>
 <img src="./screenshots/calendarview.jpg" alt="Calendar" width="300"/>
-<img src="./screenshots/historyview.jpg" alt="HomeScreen" width="300"/>
-<img src="./screenshots/historyview.jpg" alt="HomeScreen" width="300"/>
+<img src="./screenshots/historyview.jpg" alt="History" width="300"/>
 
 ## Privacy Policy
 
