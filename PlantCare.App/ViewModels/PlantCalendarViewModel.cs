@@ -68,6 +68,9 @@ namespace PlantCare.App.ViewModels
 
             //LocalizationManager.Instance.LanguageChanged += OnLanguageChanged;
             WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this);
+
+            AdjustSpan();
+            DeviceDisplay.MainDisplayInfoChanged += OnDeviceDisplay_MainDisplayInfoChanged;
         }
 
         [ObservableProperty]
@@ -546,15 +549,6 @@ namespace PlantCare.App.ViewModels
 
         #endregion Refresh plant events
 
-        void IDisposable.Dispose()
-        {
-            //LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
-            if (ReminderCalendar is not null)
-            {
-                ReminderCalendar.SelectedDates.CollectionChanged -= SelectedDates_CollectionChanged;
-            }
-        }
-
         async void IRecipient<LanguageChangedMessage>.Receive(LanguageChangedMessage message)
         {
             if (string.IsNullOrEmpty(message?.CultureCode) || ReminderCalendar is null)
@@ -592,6 +586,42 @@ namespace PlantCare.App.ViewModels
                     await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
                 });
             }
+        }
+
+        #region Layout related
+
+        [ObservableProperty]
+        private int _photoWidth = 110;
+
+        [ObservableProperty]
+        private int _photoHeight = 120;
+
+        [ObservableProperty]
+        private int _photoSpan = 3;
+
+        private void AdjustSpan()
+        {
+            DisplayInfo mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
+            double width = mainDisplayInfo.Width / mainDisplayInfo.Density;
+
+            PhotoSpan = ((int)width - 10) / PhotoWidth;
+        }
+
+        private void OnDeviceDisplay_MainDisplayInfoChanged(object? sender, DisplayInfoChangedEventArgs e)
+        {
+            AdjustSpan();
+        }
+
+        #endregion Layout related
+
+        void IDisposable.Dispose()
+        {
+            //LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
+            if (ReminderCalendar is not null)
+            {
+                ReminderCalendar.SelectedDates.CollectionChanged -= SelectedDates_CollectionChanged;
+            }
+            DeviceDisplay.MainDisplayInfoChanged -= OnDeviceDisplay_MainDisplayInfoChanged;
         }
     }
 }

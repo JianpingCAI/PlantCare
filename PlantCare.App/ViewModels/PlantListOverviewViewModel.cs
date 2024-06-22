@@ -25,7 +25,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     IRecipient<IsNotificationEnabledMessage>,
     IRecipient<PlantStateChangedMessage>,
     IRecipient<PlantCareHistoryChangedMessage>,
-    IRecipient<DataImportMessage>
+    IRecipient<DataImportMessage>,
+    IDisposable
 {
     private readonly IPlantService _plantService;
     private readonly INavigationService _navigationService;
@@ -65,6 +66,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             //_notificationService.NotificationReceived += OnNotificationReceived;
             _notificationService.NotificationActionTapped += OnNotificationActionTapped;
         }
+
+        AdjustSpan();
+        DeviceDisplay.MainDisplayInfoChanged += OnDeviceDisplay_MainDisplayInfoChanged;
     }
 
     public ObservableCollection<PlantListItemViewModel> Plants { get; } = [];
@@ -935,4 +939,35 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             IsLoading = false;
         }
     }
+
+    #region Layout related
+
+    [ObservableProperty]
+    private int _photoWidth = 110;
+
+    [ObservableProperty]
+    private int _photoHeight = 120;
+
+    [ObservableProperty]
+    private int _photoSpan = 3;
+
+    private void AdjustSpan()
+    {
+        DisplayInfo mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
+        double width = mainDisplayInfo.Width / mainDisplayInfo.Density;
+
+        PhotoSpan = ((int)width - 10) / PhotoWidth;
+    }
+
+    private void OnDeviceDisplay_MainDisplayInfoChanged(object? sender, DisplayInfoChangedEventArgs e)
+    {
+        AdjustSpan();
+    }
+
+    public void Dispose()
+    {
+        DeviceDisplay.MainDisplayInfoChanged -= OnDeviceDisplay_MainDisplayInfoChanged;
+    }
+
+    #endregion Layout related
 }

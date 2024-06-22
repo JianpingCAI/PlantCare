@@ -8,6 +8,7 @@
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
+    x:Name="thisPage"
     x:DataType="vm:PlantListOverviewViewModel">
 
     <Shell.TitleView>
@@ -76,9 +77,13 @@
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout
                             Orientation="Vertical"
-                            Span="{OnIdiom Phone=3,
-                                           Desktop=5}"
+                            Span="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoSpan}"
                             VerticalItemSpacing="3" />
+                        <!--
+                            Span="{OnIdiom Phone=3,
+                            Desktop=5,
+                            Default=3}"
+                        -->
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
@@ -101,11 +106,11 @@
                                             <Grid>
                                                 <Image
                                                     Aspect="AspectFill"
-                                                    HeightRequest="120"
+                                                    HeightRequest="{Binding Source={Reference thisPage}, Path=BindingContext.PhotoHeight}"
                                                     HorizontalOptions="Center"
                                                     Source="{Binding PhotoPath}"
                                                     VerticalOptions="Center"
-                                                    WidthRequest="110" />
+                                                    WidthRequest="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoWidth}" />
                                                 <Label
                                                     Background="DarkSeaGreen"
                                                     FontAttributes="Bold"
