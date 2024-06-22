@@ -221,7 +221,7 @@ public partial class SettingsViewModel : ViewModelBase
         {
             IsLoading = true;
 
-            var zipFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            FilePickerFileType zipFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
                                                   {
                                                      { DevicePlatform.iOS, new[] { "public.archive" } },
                                                      { DevicePlatform.Android, new[] { "application/zip" } },
@@ -235,15 +235,30 @@ public partial class SettingsViewModel : ViewModelBase
                 FileTypes = zipFileType
             });
 
-            if (result != null && !string.IsNullOrEmpty(result.FullPath) 
+            if (result != null && !string.IsNullOrEmpty(result.FullPath)
                 && File.Exists(result.FullPath))
             {
-                int plantsCount = await _dataImportService.ImportDataAsync(result.FullPath, IsRemoveExistingData);
+                ExportDataModel importedData = await _dataImportService.ImportDataAsync(result.FullPath, IsRemoveExistingData);
+                if (importedData == null)
+                {
+                    throw new Exception("Failed to import data");
+                }
 
-                WeakReferenceMessenger.Default.Send<DataImportMessage>(new DataImportMessage { PlantsCount = plantsCount });
+                AppSettings importedSettings = importedData.AppSettings;
 
-                var toast = Toast.Make($"{plantsCount} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}", ToastDuration.Short);
-                await toast.Show();
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                 {
+                     IsWateringNotificationEnabled = importedSettings.WateringNotificationEnabled;
+                     IsFertilizationNotificationEnabled = importedSettings.FertilizationNotificationEnabled;
+
+                     SelectedLanguage = importedSettings.Language;
+                     SelectedTheme = importedSettings.Theme;
+
+                     WeakReferenceMessenger.Default.Send<DataImportMessage>(new DataImportMessage { PlantsCount = importedData.Plants.Count });
+
+                     IToast toast = Toast.Make($"{importedData.Plants.Count} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}", ToastDuration.Short);
+                     await toast.Show();
+                 });
             }
         }
         catch (Exception ex)

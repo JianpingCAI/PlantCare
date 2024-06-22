@@ -22,7 +22,7 @@ public class DataImportService : IDataImportService
         _appSettingsService = appSettingsService;
     }
 
-    public Task<int> ImportDataAsync(string zipFilePath, bool isRemoveExistingData)
+    public Task<ExportDataModel> ImportDataAsync(string zipFilePath, bool isRemoveExistingData)
     {
         return Task.Run(async () =>
         {
@@ -59,6 +59,11 @@ public class DataImportService : IDataImportService
 
             ResetIds(importData.Plants);
 
+            if (isRemoveExistingData)
+            {
+                await ClearExistingAppData();
+            }
+
             // Restore photo files
             foreach (PlantDbModel plant in importData.Plants)
             {
@@ -84,17 +89,12 @@ public class DataImportService : IDataImportService
                 }
             }
 
-            if (isRemoveExistingData)
-            {
-                await ClearExistingAppData();
-            }
-
             // Add new data
             await _plantService.AddPlantsAsync(importData.Plants);
 
             await _appSettingsService.SaveAppSettingsAsync(importData.AppSettings);
 
-            return importData.Plants.Count;
+            return importData;
         });
     }
 

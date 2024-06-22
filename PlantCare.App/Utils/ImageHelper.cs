@@ -60,12 +60,26 @@ public static class ImageHelper
                 }
             }
 
-            using (var binaryReader = new BinaryReader(sourceImageStream))
-            {
-                byte[] result = binaryReader.ReadBytes((int)sourceImageStream.Length);
-                return result;
-            }
+            return StreamToByteArray(sourceImageStream);
+
+            //using (var binaryReader = new BinaryReader(sourceImageStream))
+            //{
+            //    byte[] result = binaryReader.ReadBytes((int)sourceImageStream.Length);
+            //    return result;
+            //}
         });
+    }
+
+    private static byte[] StreamToByteArray(Stream inputStream)
+    {
+        if (inputStream.CanSeek)
+        {
+            inputStream.Position = 0; // Ensure the position is at the beginning
+        }
+
+        using MemoryStream memoryStream = new();
+        inputStream.CopyTo(memoryStream);
+        return memoryStream.ToArray();
     }
 
     public static Task SaveResizedPhotoAsync(string sourcePhotoPath, string resizedPhotoPath)
