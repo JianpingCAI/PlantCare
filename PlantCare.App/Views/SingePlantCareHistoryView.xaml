@@ -10,30 +10,38 @@
         <Grid>
             <CollectionView ItemsSource="{Binding TimestampRecords}">
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout
-                        HorizontalItemSpacing="2"
-                        Orientation="Vertical"
-                        Span="1"
-                        VerticalItemSpacing="5" />
+                    <GridItemsLayout Orientation="Vertical" Span="1" />
                 </CollectionView.ItemsLayout>
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="vm:TimeStampRecord">
-                        <Grid ColumnDefinitions="*,auto">
-                            <Label FontAttributes="Bold" Text="{Binding Timestamp, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
-                            <Button
-                                Grid.Column="1"
-                                Margin="0,0,5,0"
-                                Padding="0"
-                                Command="{Binding Source={x:Reference thisPage}, Path=BindingContext.DeleteRecordCommand}"
-                                CommandParameter="{Binding .}"
-                                CornerRadius="20"
-                                FontFamily="MaterialIconsRegular"
-                                FontSize="20"
-                                HorizontalOptions="End"
-                                Text="&#xe92b;"
-                                VerticalOptions="Center" />
-                        </Grid>
+                        <Border
+                            Padding="3"
+                            StrokeThickness="1"
+                            VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="5" />
+                            </Border.StrokeShape>
+                            <Grid ColumnDefinitions="*,*">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="20"
+                                    HorizontalOptions="End"
+                                    Text="{Binding Timestamp, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+                                <Button
+                                    Grid.Column="1"
+                                    Margin="0,0,5,0"
+                                    Padding="0"
+                                    Command="{Binding Source={x:Reference thisPage}, Path=BindingContext.DeleteRecordCommand}"
+                                    CommandParameter="{Binding .}"
+                                    CornerRadius="20"
+                                    FontFamily="MaterialIconsRegular"
+                                    FontSize="20"
+                                    HorizontalOptions="End"
+                                    Text="&#xe92b;"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
