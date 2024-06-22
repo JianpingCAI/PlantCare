@@ -267,6 +267,8 @@ namespace PlantCare.App.ViewModels
                     PickerTitle = $"{LocalizationManager.Instance[ConstStrings.PickPhoto] ?? ConstStrings.PickPhoto}"
                 });
 
+                
+
                 if (photoFileResult != null)
                 {
                     using Stream sourceStream = await photoFileResult.OpenReadAsync();
@@ -274,7 +276,12 @@ namespace PlantCare.App.ViewModels
                     // Resize the image
                     byte[] resizedImage = await ImageHelper.ResizeImageAsync(sourceStream, ImageHelper.DefaultPhotoMaxWidthOrHeight);
 
-                    string localFilePath = Path.Combine(FileSystem.AppDataDirectory, ConstStrings.Photos, photoFileResult.FileName);
+                    string photosDirectory = Path.Combine(FileSystem.AppDataDirectory, ConstStrings.Photos);
+                    if (!Directory.Exists(photosDirectory))
+                    {
+                        Directory.CreateDirectory(photosDirectory);
+                    }
+                    string localFilePath = Path.Combine(photosDirectory, photoFileResult.FileName);
                     await File.WriteAllBytesAsync(localFilePath, resizedImage);
 
                     //using FileStream localFileStream = File.OpenWrite(localFilePath);
@@ -312,7 +319,12 @@ namespace PlantCare.App.ViewModels
                         byte[] resizedImage = await ImageHelper.ResizeImageAsync(sourceStream, ImageHelper.DefaultPhotoMaxWidthOrHeight);
 
                         // save the file into local storage
-                        string localFilePath = Path.Combine(FileSystem.AppDataDirectory, ConstStrings.Photos, photo.FileName);
+                        string photosDirectory = Path.Combine(FileSystem.AppDataDirectory, ConstStrings.Photos);
+                        if (!Directory.Exists(photosDirectory))
+                        {
+                            Directory.CreateDirectory(photosDirectory);
+                        }
+                        string localFilePath = Path.Combine(photosDirectory, photo.FileName);
                         await File.WriteAllBytesAsync(localFilePath, resizedImage);
 
                         //using FileStream localFileStream = File.OpenWrite(localFilePath);
