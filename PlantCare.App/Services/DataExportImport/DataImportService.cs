@@ -48,11 +48,10 @@ public class DataImportService : IDataImportService
             string json = await File.ReadAllTextAsync(jsonFilePath, Encoding.UTF8);
 
             // Configure JsonSerializerOptions to handle reference loops
-            JsonSerializerOptions jsonOptions = new()
+            ExportDataModel? importData = JsonSerializer.Deserialize<ExportDataModel>(json, new JsonSerializerOptions()
             {
                 ReferenceHandler = ReferenceHandler.Preserve
-            };
-            ExportDataModel? importData = JsonSerializer.Deserialize<ExportDataModel>(json, jsonOptions);
+            });
             if (importData is null)
             {
                 throw new ArgumentNullException("Failed to convert the imported data");
@@ -87,7 +86,7 @@ public class DataImportService : IDataImportService
 
             if (isRemoveExistingData)
             {
-                await ClearTablesAsync();
+                await ClearExistingAppData();
             }
 
             // Add new data
@@ -99,13 +98,13 @@ public class DataImportService : IDataImportService
         });
     }
 
-    private async Task ClearTablesAsync()
+    private async Task ClearExistingAppData()
     {
         // Cascading deletes are not configured/enabled
 
         // Remove existing data from foreign tables first
         await _plantService.DeleteAllPhotosAsync();
-        await _plantService.ClearAllAsync();
+        await _plantService.ClearAllTablesAsync();
 
         //_context.WateringHistories.RemoveRange(_context.WateringHistories.ToList());
         //_context.FertilizationHistories.RemoveRange(_context.FertilizationHistories.ToList());

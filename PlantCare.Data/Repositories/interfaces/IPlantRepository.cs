@@ -12,5 +12,7 @@ public interface IPlantRepository : IRepository<PlantDbModel>
 
     Task AddPlantsAsync(List<PlantDbModel> plants);
 
-    Task ClearAllAsync();
+    Task ClearAllTablesAsync();
+
+    Task<List<string>> GetAllPhotoPathsAsync();
 }

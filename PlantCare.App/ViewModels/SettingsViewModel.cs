@@ -235,7 +235,8 @@ public partial class SettingsViewModel : ViewModelBase
                 FileTypes = zipFileType
             });
 
-            if (result != null && !string.IsNullOrEmpty(result.FullPath))
+            if (result != null && !string.IsNullOrEmpty(result.FullPath) 
+                && File.Exists(result.FullPath))
             {
                 int plantsCount = await _dataImportService.ImportDataAsync(result.FullPath, IsRemoveExistingData);
 

@@ -32,7 +32,7 @@ public interface IPlantService
 
     Task AddPlantsAsync(List<PlantDbModel> plants);
 
-    Task ClearAllAsync();
+    Task ClearAllTablesAsync();
 
     Task DeleteAllPhotosAsync();
 }

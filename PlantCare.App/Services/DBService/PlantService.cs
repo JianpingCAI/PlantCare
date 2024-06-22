@@ -176,21 +176,21 @@ public class PlantService : IPlantService
         await _plantRepository.AddPlantsAsync(plants);
     }
 
-    public async Task ClearAllAsync()
+    public async Task ClearAllTablesAsync()
     {
-        await _plantRepository.ClearAllAsync();
+        await _plantRepository.ClearAllTablesAsync();
     }
 
     public async Task DeleteAllPhotosAsync()
     {
-        List<PlantDbModel> plants = await _plantRepository.GetAllAsync();
-        if (plants.Count > 0)
+        List<string> photoPaths = await _plantRepository.GetAllPhotoPathsAsync();
+        if (photoPaths.Count > 0)
         {
             await Task.Run(() =>
             {
-                foreach (PlantDbModel plant in plants)
+                foreach (string photoPath in photoPaths)
                 {
-                    DeletePhotoFile(plant.PhotoPath);
+                    DeletePhotoFile(photoPath);
                 }
             });
         }

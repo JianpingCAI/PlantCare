@@ -47,10 +47,18 @@ public class PlantRepository(ApplicationDbContext context) : GenericRepository<P
         await _context.SaveChangesAsync();
     }
 
-    public async Task ClearAllAsync()
+    public async Task ClearAllTablesAsync()
     {
         await _context.Database.ExecuteSqlRawAsync($"DELETE FROM {nameof(WateringHistory)}");
         await _context.Database.ExecuteSqlRawAsync($"DELETE FROM {nameof(FertilizationHistory)}");
         await _context.Database.ExecuteSqlRawAsync("DELETE FROM Plants");
+    }
+
+    public Task<List<string>> GetAllPhotoPathsAsync()
+    {
+        return Task.Run(() =>
+        {
+            return _context.Plants.Select(x => x.PhotoPath).ToList();
+        });
     }
 }
