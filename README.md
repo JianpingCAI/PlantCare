@@ -1,6 +1,7 @@
 # PlantCare
 
 PlantCare is a mobile application that helps users keep track of their plants and schedule reminders for watering and fertilizing.
+It is developed base on .NET MAUI, and is currently only tested on Android devices.
 
 ## Features
 
