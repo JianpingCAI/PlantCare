@@ -161,19 +161,22 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             });
 
             IList<NotificationRequest> pendingNotifications = await _notificationService.GetPendingNotificationList();
-            if (pendingNotifications.Count > 0)
+            if (pendingNotifications.Count == 0)
             {
-                _notificationService.CancelAll();
-                _logger.LogInformation($"{pendingNotifications.Count} pending notifications cancelled.");
-            }
+                //    _notificationService.CancelAll();
+                //    _logger.LogInformation($"{pendingNotifications.Count} pending notifications cancelled.");
+                //}
 
-            if (await _settingsService.GetWateringNotificationSettingAsync())
-            {
-                await ScheduleNotifications(CareType.Watering);
-            }
-            if (await _settingsService.GetFertilizationNotificationSettingAsync())
-            {
-                await ScheduleNotifications(CareType.Fertilization);
+                //else
+                //{
+                if (await _settingsService.GetWateringNotificationSettingAsync())
+                {
+                    await ScheduleNotifications(CareType.Watering);
+                }
+                if (await _settingsService.GetFertilizationNotificationSettingAsync())
+                {
+                    await ScheduleNotifications(CareType.Fertilization);
+                }
             }
         }
     }
