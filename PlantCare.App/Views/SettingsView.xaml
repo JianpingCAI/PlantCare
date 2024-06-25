@@ -105,57 +105,58 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid Padding="5,2,5,0">
-        <VerticalStackLayout>
-            <!--  IsWateringNotificationEnabled  -->
-            <Grid
-                ColumnDefinitions="2*,1*"
-                HorizontalOptions="Fill"
-                RowDefinitions="*,*,*">
-                <Label
-                    HorizontalTextAlignment="Start"
-                    Text="{Binding Path=[WateringNotification], Source={x:Static utils:LocalizationManager.Instance}}"
-                    VerticalTextAlignment="Center" />
-                <!--  Text="{x:Static strings:LocalizationResources.WateringNotification}"  -->
-                <Switch
-                    x:Name="wateringSwitch"
-                    Grid.Column="1"
-                    HorizontalOptions="Start"
-                    IsToggled="{Binding IsWateringNotificationEnabled}"
-                    VerticalOptions="End">
-                    <Switch.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            Command="{Binding ToggleWateringNotificationCommand}"
-                            CommandParameter="{Binding Source={x:Reference wateringSwitch}, Path=IsToggled}"
-                            EventName="Toggled" />
-                    </Switch.Behaviors>
-                </Switch>
+        <ScrollView>
+            <VerticalStackLayout>
+                <!--  IsWateringNotificationEnabled  -->
+                <Grid
+                    ColumnDefinitions="2*,1*"
+                    HorizontalOptions="Fill"
+                    RowDefinitions="*,*,*">
+                    <Label
+                        HorizontalTextAlignment="Start"
+                        Text="{Binding Path=[WateringNotification], Source={x:Static utils:LocalizationManager.Instance}}"
+                        VerticalTextAlignment="Center" />
+                    <!--  Text="{x:Static strings:LocalizationResources.WateringNotification}"  -->
+                    <Switch
+                        x:Name="wateringSwitch"
+                        Grid.Column="1"
+                        HorizontalOptions="Start"
+                        IsToggled="{Binding IsWateringNotificationEnabled}"
+                        VerticalOptions="End">
+                        <Switch.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding ToggleWateringNotificationCommand}"
+                                CommandParameter="{Binding Source={x:Reference wateringSwitch}, Path=IsToggled}"
+                                EventName="Toggled" />
+                        </Switch.Behaviors>
+                    </Switch>
 
-                <!--  IsFertilizationNotificationEnabled  -->
-                <Label
-                    Grid.Row="1"
-                    HorizontalTextAlignment="Start"
-                    Text="{Binding Path=[FertilizationNotification], Source={x:Static utils:LocalizationManager.Instance}}"
-                    VerticalTextAlignment="Center" />
-                <!--  Text="{x:Static strings:LocalizationResources.FertilizationNotification}"  -->
+                    <!--  IsFertilizationNotificationEnabled  -->
+                    <Label
+                        Grid.Row="1"
+                        HorizontalTextAlignment="Start"
+                        Text="{Binding Path=[FertilizationNotification], Source={x:Static utils:LocalizationManager.Instance}}"
+                        VerticalTextAlignment="Center" />
+                    <!--  Text="{x:Static strings:LocalizationResources.FertilizationNotification}"  -->
 
-                <Switch
-                    x:Name="fertilizationSwitch"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    HorizontalOptions="Start"
-                    IsToggled="{Binding IsFertilizationNotificationEnabled}"
-                    VerticalOptions="End">
-                    <Switch.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            Command="{Binding ToggleFertilizationNotificationCommand}"
-                            CommandParameter="{Binding Source={x:Reference fertilizationSwitch}, Path=IsToggled}"
-                            EventName="Toggled" />
-                    </Switch.Behaviors>
-                </Switch>
-            </Grid>
+                    <Switch
+                        x:Name="fertilizationSwitch"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        HorizontalOptions="Start"
+                        IsToggled="{Binding IsFertilizationNotificationEnabled}"
+                        VerticalOptions="End">
+                        <Switch.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding ToggleFertilizationNotificationCommand}"
+                                CommandParameter="{Binding Source={x:Reference fertilizationSwitch}, Path=IsToggled}"
+                                EventName="Toggled" />
+                        </Switch.Behaviors>
+                    </Switch>
+                </Grid>
 
-            <!--  Debugging Mode  -->
-            <!--
+                <!--  Debugging Mode  -->
+                <!--
             <Grid ColumnDefinitions="2*,1*">
                 <Label
                     HorizontalTextAlignment="Start"
@@ -168,151 +169,151 @@
                     VerticalOptions="End" />
             </Grid>-->
 
-            <BoxView Margin="0,5" class="HRule" />
+                <BoxView Margin="0,5" class="HRule" />
 
-            <!--  Language  -->
-            <Label
-                FontAttributes="Bold"
-                Text="{Binding Path=[Language], Source={x:Static utils:LocalizationManager.Instance}}"
-                class="Head" />
-            <Picker
-                x:Name="langPicker"
-                ItemDisplayBinding="{Binding Converter={StaticResource EnumDescConverter}}"
-                ItemsSource="{Binding Source={x:Static utils:LanguageProvider.All}}"
-                SelectedItem="{Binding SelectedLanguage}">
-                <Picker.Behaviors>
-                    <toolkit:EventToCommandBehavior
-                        Command="{Binding SelectLanguageChangedCommand}"
-                        CommandParameter="{Binding Source={x:Reference langPicker}, Path=SelectedItem}"
-                        EventName="SelectedIndexChanged" />
-                </Picker.Behaviors>
-            </Picker>
+                <!--  Language  -->
+                <Label
+                    FontAttributes="Bold"
+                    Text="{Binding Path=[Language], Source={x:Static utils:LocalizationManager.Instance}}"
+                    class="Head" />
+                <Picker
+                    x:Name="langPicker"
+                    ItemDisplayBinding="{Binding Converter={StaticResource EnumDescConverter}}"
+                    ItemsSource="{Binding Source={x:Static utils:LanguageProvider.All}}"
+                    SelectedItem="{Binding SelectedLanguage}">
+                    <Picker.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            Command="{Binding SelectLanguageChangedCommand}"
+                            CommandParameter="{Binding Source={x:Reference langPicker}, Path=SelectedItem}"
+                            EventName="SelectedIndexChanged" />
+                    </Picker.Behaviors>
+                </Picker>
 
-            <BoxView Margin="0,5" class="HRule" />
+                <BoxView Margin="0,5" class="HRule" />
 
-            <!--  Theme  -->
-            <Label
-                FontAttributes="Bold"
-                Text="{Binding Path=[Theme], Source={x:Static utils:LocalizationManager.Instance}}"
-                class="Head" />
+                <!--  Theme  -->
+                <Label
+                    FontAttributes="Bold"
+                    Text="{Binding Path=[Theme], Source={x:Static utils:LocalizationManager.Instance}}"
+                    class="Head" />
 
-            <Grid
-                Margin="5"
-                ColumnDefinitions="*,*,*"
-                HorizontalOptions="Fill"
-                RadioButtonGroup.GroupName="AppTheme"
-                RadioButtonGroup.SelectedValue="{Binding SelectedTheme}">
+                <Grid
+                    Margin="5"
+                    ColumnDefinitions="*,*,*"
+                    HorizontalOptions="Fill"
+                    RadioButtonGroup.GroupName="AppTheme"
+                    RadioButtonGroup.SelectedValue="{Binding SelectedTheme}">
 
-                <Grid.Resources>
-                    <Style TargetType="RadioButton">
-                        <Setter Property="ControlTemplate" Value="{StaticResource ThemeRadioTemplate}" />
-                    </Style>
-                </Grid.Resources>
-                <RadioButton
-                    CheckedChanged="RadioButton_CheckedChanged"
-                    HorizontalOptions="Center"
-                    IsChecked="True"
-                    Value="{x:Static am:AppTheme.Unspecified}">
-                    <RadioButton.Content>
-                        <Grid RowDefinitions="4*,1*">
-                            <!--  Color={StaticResource NeutralDark},  -->
-                            <Image
-                                HorizontalOptions="Center"
-                                Source="{FontImage FontFamily=FontAwesome,
-                                                   Glyph={x:Static local:IconFont.Mobile},
-                                                   Size=32}"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Row="1"
-                                HorizontalOptions="Center"
-                                Text="{Binding Path=[Default], Source={x:Static utils:LocalizationManager.Instance}}"
-                                VerticalOptions="Center" />
-                        </Grid>
-                    </RadioButton.Content>
-                </RadioButton>
-                <RadioButton
-                    Grid.Column="1"
-                    CheckedChanged="RadioButton_CheckedChanged"
-                    HorizontalOptions="Center"
-                    Value="{x:Static am:AppTheme.Dark}">
-                    <RadioButton.Content>
-                        <Grid RowDefinitions="4*,1*">
-                            <Image
-                                HorizontalOptions="Center"
-                                Source="{FontImage FontFamily=FontAwesome,
-                                                   Glyph={x:Static local:IconFont.Lightbulb},
-                                                   Color=Black,
-                                                   Size=32}"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Row="1"
-                                HorizontalOptions="Center"
-                                Text="{Binding Path=[Dark], Source={x:Static utils:LocalizationManager.Instance}}"
-                                VerticalOptions="Center" />
-                        </Grid>
-                    </RadioButton.Content>
-                    <!--<RadioButton.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SettingsViewModel}}, Path=SelectThemeCommand}" CommandParameter="{x:Reference Name}" />
-                    </RadioButton.GestureRecognizers>-->
-                </RadioButton>
-                <RadioButton
-                    Grid.Column="2"
-                    CheckedChanged="RadioButton_CheckedChanged"
-                    HorizontalOptions="Center"
-                    Value="{x:Static am:AppTheme.Light}">
-                    <RadioButton.Content>
-                        <Grid RowDefinitions="4*,1*">
-                            <Image
-                                HorizontalOptions="Center"
-                                Source="{FontImage FontFamily=FontAwesome,
-                                                   Glyph={x:Static local:IconFont.Lightbulb},
-                                                   Color=White,
-                                                   Size=32}"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Row="1"
-                                HorizontalOptions="Center"
-                                Text="{Binding Path=[Light], Source={x:Static utils:LocalizationManager.Instance}}"
-                                VerticalOptions="Center" />
-                        </Grid>
-                    </RadioButton.Content>
-                    <!--<RadioButton.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SettingsViewModel}}, Path=SelectThemeCommand}" CommandParameter="{x:Reference Name}" />
-                    </RadioButton.GestureRecognizers>-->
-                </RadioButton>
-            </Grid>
-
-            <BoxView Margin="0,5" class="HRule" />
-
-            <!--  Export and Import  -->
-            <Label
-                FontAttributes="Bold"
-                Text="{Binding Path=[DataImportExport], Source={x:Static utils:LocalizationManager.Instance}}"
-                class="Head" />
-            <Grid
-                Margin="0,5"
-                ColumnDefinitions="*,*"
-                HorizontalOptions="Center"
-                VerticalOptions="Center">
-                <Button
-                    Margin="0,0,5,0"
-                    Command="{Binding ExportDataCommand}"
-                    HorizontalOptions="Center"
-                    Text="{Binding Path=[Export], Source={x:Static utils:LocalizationManager.Instance}}"
-                    VerticalOptions="Start" />
-                <VerticalStackLayout Grid.Column="1" Margin="5,0,0,0">
-                    <Button
-                        Command="{Binding ImportDataCommand}"
+                    <Grid.Resources>
+                        <Style TargetType="RadioButton">
+                            <Setter Property="ControlTemplate" Value="{StaticResource ThemeRadioTemplate}" />
+                        </Style>
+                    </Grid.Resources>
+                    <RadioButton
+                        CheckedChanged="RadioButton_CheckedChanged"
                         HorizontalOptions="Center"
-                        Text="{Binding Path=[Import], Source={x:Static utils:LocalizationManager.Instance}}" />
-                    <HorizontalStackLayout>
-                        <CheckBox HorizontalOptions="Start" IsChecked="{Binding IsRemoveExistingData}" />
-                        <Label Text="{Binding Path=[RemoveExistingData], Source={x:Static utils:LocalizationManager.Instance}}" />
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Grid>
-        </VerticalStackLayout>
+                        IsChecked="True"
+                        Value="{x:Static am:AppTheme.Unspecified}">
+                        <RadioButton.Content>
+                            <Grid RowDefinitions="4*,1*">
+                                <!--  Color={StaticResource NeutralDark},  -->
+                                <Image
+                                    HorizontalOptions="Center"
+                                    Source="{FontImage FontFamily=FontAwesome,
+                                                       Glyph={x:Static local:IconFont.Mobile},
+                                                       Size=32}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="1"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Path=[Default], Source={x:Static utils:LocalizationManager.Instance}}"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </RadioButton.Content>
+                    </RadioButton>
+                    <RadioButton
+                        Grid.Column="1"
+                        CheckedChanged="RadioButton_CheckedChanged"
+                        HorizontalOptions="Center"
+                        Value="{x:Static am:AppTheme.Dark}">
+                        <RadioButton.Content>
+                            <Grid RowDefinitions="4*,1*">
+                                <Image
+                                    HorizontalOptions="Center"
+                                    Source="{FontImage FontFamily=FontAwesome,
+                                                       Glyph={x:Static local:IconFont.Lightbulb},
+                                                       Color=Black,
+                                                       Size=32}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="1"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Path=[Dark], Source={x:Static utils:LocalizationManager.Instance}}"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </RadioButton.Content>
+                        <!--<RadioButton.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SettingsViewModel}}, Path=SelectThemeCommand}" CommandParameter="{x:Reference Name}" />
+                    </RadioButton.GestureRecognizers>-->
+                    </RadioButton>
+                    <RadioButton
+                        Grid.Column="2"
+                        CheckedChanged="RadioButton_CheckedChanged"
+                        HorizontalOptions="Center"
+                        Value="{x:Static am:AppTheme.Light}">
+                        <RadioButton.Content>
+                            <Grid RowDefinitions="4*,1*">
+                                <Image
+                                    HorizontalOptions="Center"
+                                    Source="{FontImage FontFamily=FontAwesome,
+                                                       Glyph={x:Static local:IconFont.Lightbulb},
+                                                       Color=White,
+                                                       Size=32}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="1"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Path=[Light], Source={x:Static utils:LocalizationManager.Instance}}"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </RadioButton.Content>
+                        <!--<RadioButton.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SettingsViewModel}}, Path=SelectThemeCommand}" CommandParameter="{x:Reference Name}" />
+                    </RadioButton.GestureRecognizers>-->
+                    </RadioButton>
+                </Grid>
 
+                <BoxView Margin="0,5" class="HRule" />
+
+                <!--  Export and Import  -->
+                <Label
+                    FontAttributes="Bold"
+                    Text="{Binding Path=[DataImportExport], Source={x:Static utils:LocalizationManager.Instance}}"
+                    class="Head" />
+                <Grid
+                    Margin="0,5"
+                    ColumnDefinitions="*,*"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Button
+                        Margin="0,0,5,0"
+                        Command="{Binding ExportDataCommand}"
+                        HorizontalOptions="Center"
+                        Text="{Binding Path=[Export], Source={x:Static utils:LocalizationManager.Instance}}"
+                        VerticalOptions="Start" />
+                    <VerticalStackLayout Grid.Column="1" Margin="5,0,0,0">
+                        <Button
+                            Command="{Binding ImportDataCommand}"
+                            HorizontalOptions="Center"
+                            Text="{Binding Path=[Import], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        <HorizontalStackLayout>
+                            <CheckBox HorizontalOptions="Start" IsChecked="{Binding IsRemoveExistingData}" />
+                            <Label Text="{Binding Path=[RemoveExistingData], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
         <Grid
             BackgroundColor="{AppThemeBinding Light={StaticResource Gray200},
                                               Dark={StaticResource Gray500}}"
