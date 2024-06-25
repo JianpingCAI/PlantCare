@@ -55,7 +55,6 @@ namespace PlantCare.App.ViewModels
     }
 
     public partial class PlantCalendarViewModel : ViewModelBase,
-        IDisposable,
         IRecipient<LanguageChangedMessage>
     {
         private readonly IPlantService _plantService;
@@ -69,8 +68,8 @@ namespace PlantCare.App.ViewModels
             //LocalizationManager.Instance.LanguageChanged += OnLanguageChanged;
             WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this);
 
-            AdjustSpan();
-            DeviceDisplay.MainDisplayInfoChanged += OnDeviceDisplay_MainDisplayInfoChanged;
+            //AdjustSpan();
+            //DeviceDisplay.MainDisplayInfoChanged += OnDeviceDisplay_MainDisplayInfoChanged;
         }
 
         [ObservableProperty]
@@ -90,7 +89,7 @@ namespace PlantCare.App.ViewModels
         [ObservableProperty]
         private string _selectAllButtonText = ConstStrings.SelectAll;
 
-        [ObservableProperty]
+        //[ObservableProperty]
         private bool _isShowCalendar = true;
 
         [RelayCommand]
@@ -591,6 +590,32 @@ namespace PlantCare.App.ViewModels
         #region Layout related
 
         [ObservableProperty]
+        private string _orientationState;
+
+        public double Width { get; set; }
+
+        public double Height { get; set; }
+
+        public bool IsShowCalendar
+        {
+            get => _isShowCalendar;
+            set
+            {
+                SetProperty(ref _isShowCalendar, value);
+                AdjustPlantsGridSpan();
+            }
+        }
+
+        public void UpdateOrientation()
+        {
+            if (Width > 0 && Height > 0)
+            {
+                OrientationState = Width > Height ? "Landscape" : "Portrait";
+                AdjustPlantsGridSpan();
+            }
+        }
+
+        [ObservableProperty]
         private int _photoWidth = 110;
 
         [ObservableProperty]
@@ -599,29 +624,42 @@ namespace PlantCare.App.ViewModels
         [ObservableProperty]
         private int _photoSpan = 3;
 
-        private void AdjustSpan()
+        private void AdjustPlantsGridSpan()
         {
-            DisplayInfo mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
-            double width = mainDisplayInfo.Width / mainDisplayInfo.Density;
+            //DisplayInfo mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
+            //double width = mainDisplayInfo.Width / mainDisplayInfo.Density;
 
-            PhotoSpan = ((int)width - 10) / PhotoWidth;
+            //PhotoSpan = ((int)width - 10) / PhotoWidth;
+
+            // Landscape
+            if (Width > Height)
+            {
+                //int displayWidth = IsShowCalendar ? ((int)Width / 2 - 10) : ((int)Width - 10);
+                //PhotoSpan = (displayWidth - 10) / PhotoWidth;
+                PhotoSpan = ((int)Width - 10) / PhotoWidth;
+            }
+            // Portrait
+            else
+            {
+                PhotoSpan = ((int)Width - 10) / PhotoWidth;
+            }
         }
 
-        private void OnDeviceDisplay_MainDisplayInfoChanged(object? sender, DisplayInfoChangedEventArgs e)
-        {
-            AdjustSpan();
-        }
+        //private void OnDeviceDisplay_MainDisplayInfoChanged(object? sender, DisplayInfoChangedEventArgs e)
+        //{
+        //    AdjustSpan();
+        //}
 
         #endregion Layout related
 
-        void IDisposable.Dispose()
-        {
-            //LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
-            if (ReminderCalendar is not null)
-            {
-                ReminderCalendar.SelectedDates.CollectionChanged -= SelectedDates_CollectionChanged;
-            }
-            DeviceDisplay.MainDisplayInfoChanged -= OnDeviceDisplay_MainDisplayInfoChanged;
-        }
+        //void IDisposable.Dispose()
+        //{
+        //    //LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
+        //    if (ReminderCalendar is not null)
+        //    {
+        //        ReminderCalendar.SelectedDates.CollectionChanged -= SelectedDates_CollectionChanged;
+        //    }
+        //    DeviceDisplay.MainDisplayInfoChanged -= OnDeviceDisplay_MainDisplayInfoChanged;
+        //}
     }
 }
