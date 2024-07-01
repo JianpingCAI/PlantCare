@@ -173,7 +173,7 @@ namespace PlantCare.App.ViewModels
             {
                 List<PlantEvent> plantEventsOnSelectedDates
                     = [.. ReminderCalendar!.Events
-                     .Where(pEvt => ReminderCalendar.SelectedDates.Any(selectedDate => selectedDate.Date == pEvt.StartDate.AddDays(1).Date))
+                     .Where(pEvt => ReminderCalendar.SelectedDates.Any(selectedDate => selectedDate == pEvt.StartDate))
                      .OrderBy(pEvt => pEvt.StartDate)];
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
@@ -232,8 +232,8 @@ namespace PlantCare.App.ViewModels
                                 ReminderType = CareType.Watering,
                                 Name = plant.Name,
                                 PhotoPath = plant.PhotoPath,
-                                StartDate = expectedWaterTime.AddDays(-1), // a trick needed here to use XCalendar
-                                EndDate = expectedWaterTime,
+                                StartDate = expectedWaterTime.Date,
+                                EndDate = expectedWaterTime.Date.AddDays(1),
                                 Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime)),
 
                                 ScheduledTime = expectedWaterTime,
@@ -250,8 +250,8 @@ namespace PlantCare.App.ViewModels
                             ReminderType = CareType.Watering,
                             Name = plant.Name,
                             PhotoPath = plant.PhotoPath,
-                            StartDate = expectedWaterTime.AddDays(-1), // a trick needed here to use XCalendar
-                            EndDate = expectedWaterTime,
+                            StartDate = expectedWaterTime.Date,
+                            EndDate = expectedWaterTime.Date.AddDays(1),
                             Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime)),
 
                             ScheduledTime = expectedWaterTime,
@@ -271,8 +271,8 @@ namespace PlantCare.App.ViewModels
                                 ReminderType = CareType.Fertilization,
                                 Name = plant.Name,
                                 PhotoPath = plant.PhotoPath,
-                                StartDate = fertilizationTime.AddDays(-1),
-                                EndDate = fertilizationTime,
+                                StartDate = fertilizationTime.Date,
+                                EndDate = fertilizationTime.Date.AddDays(1),
                                 Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime)),
 
                                 ScheduledTime = fertilizationTime,
@@ -289,8 +289,8 @@ namespace PlantCare.App.ViewModels
                             ReminderType = CareType.Fertilization,
                             Name = plant.Name,
                             PhotoPath = plant.PhotoPath,
-                            StartDate = fertilizationTime.AddDays(-1),
-                            EndDate = fertilizationTime,
+                            StartDate = fertilizationTime.Date,
+                            EndDate = fertilizationTime.Date.AddDays(1),
                             Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime)),
 
                             ScheduledTime = fertilizationTime,
@@ -347,7 +347,7 @@ namespace PlantCare.App.ViewModels
         /// <param name="args"></param>
         /// <returns></returns>
         [RelayCommand]
-        public async Task TickedPlantEventsChanged(/*SelectionChangedEventArgs args*/object args)
+        public async Task TickedPlantEventsChanged(object args)
         {
             try
             {
