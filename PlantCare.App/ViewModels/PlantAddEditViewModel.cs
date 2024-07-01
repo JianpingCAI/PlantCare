@@ -1,8 +1,6 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Maui.Graphics.Platform;
 using PlantCare.App.Messaging;
 using PlantCare.App.Services;
 using PlantCare.App.Services.DBService;

@@ -252,9 +252,6 @@
                                     VerticalOptions="Center" />
                             </Grid>
                         </RadioButton.Content>
-                        <!--<RadioButton.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SettingsViewModel}}, Path=SelectThemeCommand}" CommandParameter="{x:Reference Name}" />
-                    </RadioButton.GestureRecognizers>-->
                     </RadioButton>
                     <RadioButton
                         Grid.Column="2"

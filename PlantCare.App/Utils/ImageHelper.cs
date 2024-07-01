@@ -1,5 +1,4 @@
 ﻿using Microsoft.Maui.Graphics.Platform;
-using PlantCare.Data;
 using SkiaSharp;
 
 namespace PlantCare.App.Utils;

@@ -10,9 +10,7 @@ using PlantCare.App.Services.DataExportImport;
 using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
 using PlantCare.Data;
-using PlantCare.Data.Models;
 using System.Diagnostics;
-using System.Globalization;
 
 namespace PlantCare.App.ViewModels;
 
@@ -49,7 +47,7 @@ public partial class SettingsViewModel : ViewModelBase
     public Language[] LanguageOptions { get; } = Enum.GetValues(typeof(Language)).Cast<Language>().ToArray();
 
     [ObservableProperty]
-    private AppTheme _selectedTheme = AppTheme.Unspecified;
+    private AppTheme _selectedTheme = AppTheme.Light;
 
     private bool _isSettingsLoaded = false;
 
@@ -153,7 +151,6 @@ public partial class SettingsViewModel : ViewModelBase
         catch (Exception ex)
         {
             Debug.WriteLine($"Exception thrown: {ex.Message}");
-            throw;
         }
     }
 

@@ -8,7 +8,6 @@ using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
 using PlantCare.Data;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace PlantCare.App.ViewModels
 {

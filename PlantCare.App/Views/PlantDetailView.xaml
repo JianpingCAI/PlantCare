@@ -61,96 +61,104 @@
                     </Button>
                 </Grid>
 
-                <Grid RowDefinitions="*,auto">
-                    <Grid
-                        ColumnDefinitions="auto,*"
-                        HorizontalOptions="Center"
-                        RowDefinitions="*,*,*,*,*,*,*,*,auto">
-
-                        <!--  Species  -->
-                        <Label
-                            Margin="0,0,10,0"
-                            FontAttributes="Bold"
-                            FontSize="Medium"
-                            HorizontalTextAlignment="End"
-                            Text="{Binding Path=[Species], Source={x:Static utils:LocalizationManager.Instance}}" />
-                        <Label
-                            Grid.Column="1"
-                            FontSize="Medium"
-                            HorizontalOptions="Start"
-                            Text="{Binding Species}" />
-
-                        <!--  Age  -->
-                        <Label
-                            Grid.Row="1"
-                            Margin="0,0,10,0"
-                            FontAttributes="Bold"
-                            FontSize="Medium"
-                            HorizontalTextAlignment="End"
-                            Text="{Binding Path=[Age], Source={x:Static utils:LocalizationManager.Instance}}" />
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            FontSize="Medium"
-                            Text="{Binding Age}" />
-
-                        <!--  LastWatered  -->
-                        <Label
-                            Grid.Row="2"
-                            Margin="0,0,10,0"
-                            FontAttributes="Bold"
-                            FontSize="Medium"
-                            HorizontalTextAlignment="End"
-                            Text="{Binding Path=[LastWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            FontSize="Medium"
-                            Text="{Binding LastWatered, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
-
-                        <Label
-                            Grid.Row="3"
-                            Margin="0,0,10,0"
-                            FontAttributes="Bold"
-                            FontSize="Medium"
-                            HorizontalTextAlignment="End"
-                            Text="{Binding Path=[NextWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
-                        <Label
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            FontSize="Medium"
-                            Text="{Binding NextWateringTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
-
-                        <Label
-                            Grid.Row="4"
-                            Margin="0,0,10,0"
-                            FontAttributes="Bold"
-                            FontSize="Medium"
-                            HorizontalTextAlignment="End"
-                            Text="{Binding Path=[LastFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
-                        <Label
-                            Grid.Row="4"
-                            Grid.Column="1"
-                            FontSize="Medium"
-                            Text="{Binding LastFertilized, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
-
-                        <Label
-                            Grid.Row="5"
-                            Margin="0,0,10,0"
-                            FontAttributes="Bold"
-                            FontSize="Medium"
-                            HorizontalTextAlignment="End"
-                            Text="{Binding Path=[NextFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
-                        <Label
-                            Grid.Row="5"
-                            Grid.Column="1"
-                            FontSize="Medium"
-                            Text="{Binding NextFertilizeTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
-
-                        <!--  TillNextWatering  -->
+                <Grid RowDefinitions="*, *, auto">
+                    <Border Margin="0,5,0,0" Padding="0,5">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="5" />
+                        </Border.StrokeShape>
                         <Grid
-                            Grid.Row="6"
-                            Grid.ColumnSpan="2"
+                            ColumnDefinitions="auto,*"
+                            HorizontalOptions="Center"
+                            RowDefinitions="*,*,*,*,*,*">
+
+                            <!--  Species  -->
+                            <Label
+                                Margin="0,0,10,0"
+                                FontAttributes="Bold"
+                                FontSize="Medium"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Path=[Species], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Label
+                                Grid.Column="1"
+                                FontSize="Medium"
+                                HorizontalOptions="Start"
+                                Text="{Binding Species}" />
+
+                            <!--  Age  -->
+                            <Label
+                                Grid.Row="1"
+                                Margin="0,0,10,0"
+                                FontAttributes="Bold"
+                                FontSize="Medium"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Path=[Age], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                FontSize="Medium"
+                                Text="{Binding Age}" />
+
+                            <!--  LastWatered  -->
+                            <Label
+                                Grid.Row="2"
+                                Margin="0,0,10,0"
+                                FontAttributes="Bold"
+                                FontSize="Medium"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Path=[LastWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                FontSize="Medium"
+                                Text="{Binding LastWatered, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+
+                            <Label
+                                Grid.Row="3"
+                                Margin="0,0,10,0"
+                                FontAttributes="Bold"
+                                FontSize="Medium"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Path=[NextWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Label
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                FontSize="Medium"
+                                Text="{Binding NextWateringTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+
+                            <Label
+                                Grid.Row="4"
+                                Margin="0,0,10,0"
+                                FontAttributes="Bold"
+                                FontSize="Medium"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Path=[LastFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Label
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                FontSize="Medium"
+                                Text="{Binding LastFertilized, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+
+                            <Label
+                                Grid.Row="5"
+                                Margin="0,0,10,0"
+                                FontAttributes="Bold"
+                                FontSize="Medium"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Path=[NextFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Label
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                FontSize="Medium"
+                                Text="{Binding NextFertilizeTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+                        </Grid>
+                    </Border>
+
+                    <!--  TillNextWatering  -->
+                    <Border Grid.Row="1" Margin="0,3">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="5" />
+                        </Border.StrokeShape>
+                        <Grid
                             Margin="10,10"
                             ColumnDefinitions="*,auto"
                             HorizontalOptions="Start"
@@ -190,20 +198,17 @@
                                 Text="{Binding HoursUntilNextFertilize, Converter={StaticResource HoursToDayHourStringConverter}}"
                                 TextColor="DeepSkyBlue" />
                         </Grid>
-
-                    </Grid>
+                    </Border>
 
                     <!--  Notes  -->
-                    <Border
-                        Grid.Row="1"
-                        Margin="5,5"
-                        Padding="10">
+                    <Border Grid.Row="2" Padding="0,5">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="5" />
                         </Border.StrokeShape>
                         <toolkit:Expander IsExpanded="False">
                             <toolkit:Expander.Header>
                                 <Label
+                                    Margin="5,5"
                                     FontAttributes="Bold"
                                     FontSize="Medium"
                                     Text="{Binding Path=[Notes], Source={x:Static utils:LocalizationManager.Instance}}" />
@@ -213,7 +218,6 @@
                             </ScrollView>
                         </toolkit:Expander>
                     </Border>
-
                 </Grid>
 
                 <!--  Delete Button  -->

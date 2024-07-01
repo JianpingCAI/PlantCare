@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PlantCare.App.Utils
+﻿namespace PlantCare.App.Utils
 {
     internal class MathTool
     {

@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
-using PlantCare.Data.Models;
 
 namespace PlantCare.App.ViewModels;
 
