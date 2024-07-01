@@ -45,7 +45,7 @@ public class AppSettingsService : IAppSettingsService
 
             if (string.IsNullOrEmpty(strTheme))
             {
-                return AppTheme.Unspecified;
+                return AppTheme.Light;
             }
 
             try
@@ -55,7 +55,7 @@ public class AppSettingsService : IAppSettingsService
             }
             catch (Exception)
             {
-                return AppTheme.Unspecified;
+                return AppTheme.Light;
             }
         });
     }
