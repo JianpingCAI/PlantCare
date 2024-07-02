@@ -174,7 +174,7 @@ namespace PlantCare.App.ViewModels
                 List<PlantEvent> plantEventsOnSelectedDates
                     = [.. ReminderCalendar!.Events
                      .Where(pEvt => ReminderCalendar.SelectedDates.Any(selectedDate => selectedDate == pEvt.StartDate))
-                     .OrderBy(pEvt => pEvt.StartDate)];
+                     .OrderBy(pEvt => pEvt.ScheduledTime)];
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
