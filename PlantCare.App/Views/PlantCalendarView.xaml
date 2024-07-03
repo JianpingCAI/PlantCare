@@ -302,20 +302,19 @@
 
                             <xcViews:CalendarView.NavigationViewTemplate>
                                 <ControlTemplate>
-                                    <Grid ColumnDefinitions="auto, *,*" HeightRequest="30">
-                                        <!--  Nagivation  -->
-                                        <xcViews:NavigationView
-                                            ArrowColor="{StaticResource ContentTextColor}"
-                                            BackgroundColor="Transparent"
-                                            HorizontalOptions="Start"
-                                            LeftArrowCommand="{Binding LeftArrowCommand, Source={RelativeSource TemplatedParent}}"
-                                            LeftArrowCommandParameter="{Binding LeftArrowCommandParameter, Source={RelativeSource TemplatedParent}}"
-                                            RightArrowCommand="{Binding RightArrowCommand, Source={RelativeSource TemplatedParent}}"
-                                            RightArrowCommandParameter="{Binding RightArrowCommandParameter, Source={RelativeSource TemplatedParent}}"
-                                            Style="{StaticResource DefaultNavigationViewStyle}"
-                                            Text="{Binding Text, Source={RelativeSource TemplatedParent}}"
-                                            TextColor="{StaticResource ContentTextColor}" />
-                                    </Grid>
+                                    <!--  Nagivation  -->
+                                    <xcViews:NavigationView
+                                        ArrowColor="{StaticResource ContentTextColor}"
+                                        BackgroundColor="Transparent"
+                                        HeightRequest="40"
+                                        HorizontalOptions="Start"
+                                        LeftArrowCommand="{Binding LeftArrowCommand, Source={RelativeSource TemplatedParent}}"
+                                        LeftArrowCommandParameter="{Binding LeftArrowCommandParameter, Source={RelativeSource TemplatedParent}}"
+                                        RightArrowCommand="{Binding RightArrowCommand, Source={RelativeSource TemplatedParent}}"
+                                        RightArrowCommandParameter="{Binding RightArrowCommandParameter, Source={RelativeSource TemplatedParent}}"
+                                        Style="{StaticResource DefaultNavigationViewStyle}"
+                                        Text="{Binding Text, Source={RelativeSource TemplatedParent}}"
+                                        TextColor="{StaticResource ContentTextColor}" />
                                 </ControlTemplate>
                             </xcViews:CalendarView.NavigationViewTemplate>
 
@@ -323,7 +322,6 @@
                                 <DataTemplate x:DataType="vm:PlantEventDay">
                                     <!--  x:DataType="{x:Null}"  -->
                                     <Border Margin="2.5" BackgroundColor="Transparent">
-
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="100" />
                                         </Border.StrokeShape>
@@ -380,16 +378,15 @@
                 </ScrollView>
                 <Button
                     Grid.Column="1"
-                    Padding="5"
                     Command="{Binding HideCalendarCommand}"
-                    CornerRadius="100"
+                    CornerRadius="15"
                     FontFamily="MaterialIconsRegular"
-                    FontSize="18"
-                    HeightRequest="30"
+                    FontSize="20"
+                    HeightRequest="40"
                     HorizontalOptions="End"
                     Text="&#xead0;"
                     VerticalOptions="Start"
-                    WidthRequest="80" />
+                    WidthRequest="100" />
             </Grid>
 
             <!--  Orientation: Portraint / Landscape  -->

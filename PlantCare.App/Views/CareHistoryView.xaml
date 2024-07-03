@@ -90,13 +90,9 @@
                                         VerticalOptions="Center"
                                         WidthRequest="90" />
                                 </Border>
-                                <Grid RowDefinitions="*,auto">
-                                    <!--  Plant Name  -->
-                                    <Label
-                                        FontAttributes="Bold"
-                                        HorizontalOptions="Center"
-                                        Text="{Binding Name}"
-                                        VerticalOptions="Start" />
+
+                                <!--  Chart  -->
+                                <Grid>
 
                                     <lvc:CartesianChart
                                         HeightRequest="90"
@@ -105,17 +101,6 @@
                                         VerticalOptions="End"
                                         XAxes="{Binding XAxesWatering}" />
 
-                                    <!--  WateringFrequencyInfo  -->
-                                    <Label
-                                        Grid.Row="1"
-                                        Margin="0,0,0,2"
-                                        FontSize="10"
-                                        HorizontalOptions="Center"
-                                        IsVisible="{Binding Source={x:Reference radioWatering}, Path=IsChecked}"
-                                        Text="{Binding WateringFrequencyInfo}"
-                                        TextColor="DeepSkyBlue"
-                                        VerticalOptions="End" />
-
                                     <lvc:CartesianChart
                                         HeightRequest="90"
                                         IsVisible="{Binding Source={x:Reference radioFertilization}, Path=IsChecked}"
@@ -123,15 +108,36 @@
                                         VerticalOptions="EndAndExpand"
                                         XAxes="{Binding XAxesFertilization}" />
 
-                                    <Label
-                                        Grid.Row="1"
-                                        Margin="0,0,0,2"
-                                        FontSize="10"
-                                        HorizontalOptions="Center"
-                                        IsVisible="{Binding Source={x:Reference radioFertilization}, Path=IsChecked}"
-                                        Text="{Binding FertilizationFrequencyInfo}"
-                                        TextColor="DeepSkyBlue"
-                                        VerticalOptions="End" />
+                                    <!--  Plant Name  -->
+                                    <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Start">
+                                        <Label
+                                            Margin="0,0,10,0"
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Name}"
+                                            VerticalOptions="Start" />
+
+                                        <!--  WateringFrequencyInfo  -->
+                                        <Label
+                                            Grid.Row="1"
+                                            Margin="0,0,0,2"
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            IsVisible="{Binding Source={x:Reference radioWatering}, Path=IsChecked}"
+                                            Text="{Binding WateringFrequencyInfo}"
+                                            TextColor="DeepSkyBlue"
+                                            VerticalOptions="End" />
+
+                                        <Label
+                                            Grid.Row="1"
+                                            Margin="0,0,0,2"
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            IsVisible="{Binding Source={x:Reference radioFertilization}, Path=IsChecked}"
+                                            Text="{Binding FertilizationFrequencyInfo}"
+                                            TextColor="DeepSkyBlue"
+                                            VerticalOptions="End" />
+                                    </HorizontalStackLayout>
                                 </Grid>
                             </Grid>
                         </Border>

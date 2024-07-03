@@ -65,7 +65,6 @@ namespace PlantCare.App.ViewModels
             _plantService = plantService;
             _dialogService = dialogService;
 
-            //LocalizationManager.Instance.LanguageChanged += OnLanguageChanged;
             WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this);
 
             //AdjustSpan();
@@ -654,7 +653,6 @@ namespace PlantCare.App.ViewModels
 
         void IDisposable.Dispose()
         {
-            //LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
             if (ReminderCalendar is not null)
             {
                 ReminderCalendar.SelectedDates.CollectionChanged -= SelectedDates_CollectionChanged;
