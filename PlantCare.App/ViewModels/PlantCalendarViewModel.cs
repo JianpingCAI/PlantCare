@@ -55,7 +55,7 @@ namespace PlantCare.App.ViewModels
     }
 
     public partial class PlantCalendarViewModel : ViewModelBase,
-        IRecipient<LanguageChangedMessage>
+        IRecipient<LanguageChangedMessage>, IDisposable
     {
         private readonly IPlantService _plantService;
         private readonly IDialogService _dialogService;
@@ -121,7 +121,7 @@ namespace PlantCare.App.ViewModels
                 var calendar = new Calendar<PlantEventDay, PlantEvent>()
                 {
                     SelectedDates = [],
-                    SelectionAction = SelectionAction.Modify,
+                    SelectionAction = SelectionAction.Modify, // add if not exist, or remove otherwise
                     SelectionType = SelectionType.Single
                 };
 
@@ -652,14 +652,14 @@ namespace PlantCare.App.ViewModels
 
         #endregion Layout related
 
-        //void IDisposable.Dispose()
-        //{
-        //    //LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
-        //    if (ReminderCalendar is not null)
-        //    {
-        //        ReminderCalendar.SelectedDates.CollectionChanged -= SelectedDates_CollectionChanged;
-        //    }
-        //    DeviceDisplay.MainDisplayInfoChanged -= OnDeviceDisplay_MainDisplayInfoChanged;
-        //}
+        void IDisposable.Dispose()
+        {
+            //LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
+            if (ReminderCalendar is not null)
+            {
+                ReminderCalendar.SelectedDates.CollectionChanged -= SelectedDates_CollectionChanged;
+            }
+            //DeviceDisplay.MainDisplayInfoChanged -= OnDeviceDisplay_MainDisplayInfoChanged;
+        }
     }
 }
