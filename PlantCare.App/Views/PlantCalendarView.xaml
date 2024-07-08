@@ -98,6 +98,10 @@
 
             <xcConverters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter" />
             <xcConverters:LocalizeDayOfWeekAndCharLimitConverter x:Key="LocalizeDayOfWeekAndCharLimitConverter" />
+
+            <utils:CalendarWidthConverter x:Key="CalendarWidthConverter" />
+            <utils:CalendarHeightConverter x:Key="CalendarHeightConverter" />
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -285,7 +289,10 @@
             </Grid>
 
             <!--  Calendar  -->
-            <Grid x:Name="calenderView" IsVisible="{Binding IsChecked, Source={x:Reference chkCalendar}}">
+            <Grid
+                x:Name="calenderView"
+                Grid.Row="3"
+                IsVisible="{Binding IsChecked, Source={x:Reference chkCalendar}}">
                 <ScrollView HorizontalScrollBarVisibility="Always" VerticalScrollBarVisibility="Always">
                     <Border>
                         <Border.StrokeShape>
@@ -418,7 +425,7 @@
                                     <RowDefinition Height="auto" />
                                     <RowDefinition Height="auto" />
                                     <RowDefinition Height="*" />
-                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="{Binding IsShowCalendar, Converter={StaticResource CalendarHeightConverter}}" />
                                 </RowDefinitionCollection>
                             </Setter>
                             <Setter TargetName="MainGrid" Property="ColumnDefinitions">
@@ -428,13 +435,11 @@
                             </Setter>
                             <!--  selectedDatesList  -->
                             <Setter TargetName="selectedDatesList" Property="Grid.Row" Value="1" />
-                            <!--<Setter TargetName="selectedDatesList" Property="Grid.Column" Value="0" />-->
+                            <Setter TargetName="selectedDatesList" Property="Grid.Column" Value="0" />
 
                             <!--  plantsGrid  -->
                             <Setter TargetName="plantsGrid" Property="Grid.Row" Value="2" />
                             <Setter TargetName="plantsGrid" Property="Grid.Column" Value="0" />
-
-                            <!--<Setter TargetName="plantsGrid" Property="Grid.Row" Value="0" />-->
 
                             <!--  calendarExpander  -->
                             <Setter TargetName="calenderView" Property="Grid.Row" Value="3" />
@@ -454,12 +459,12 @@
                             <Setter TargetName="MainGrid" Property="ColumnDefinitions">
                                 <ColumnDefinitionCollection>
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="{Binding IsShowCalendar, Converter={StaticResource CalendarWidthConverter}}" />
                                 </ColumnDefinitionCollection>
                             </Setter>
                             <!--  selectedDatesList  -->
                             <Setter TargetName="selectedDatesList" Property="Grid.Row" Value="1" />
-                            <!--<Setter TargetName="selectedDatesList" Property="Grid.Column" Value="0" />-->
+                            <Setter TargetName="selectedDatesList" Property="Grid.Column" Value="0" />
 
                             <!--  plantsGrid  -->
                             <Setter TargetName="plantsGrid" Property="Grid.Row" Value="2" />
@@ -468,8 +473,9 @@
                             <!--  calendarExpander  -->
                             <Setter TargetName="calenderView" Property="Grid.Row" Value="0" />
                             <Setter TargetName="calenderView" Property="Grid.Column" Value="1" />
+
                             <Setter TargetName="calenderView" Property="Grid.RowSpan" Value="3" />
-                            <Setter TargetName="calenderView" Property="WidthRequest" Value="400" />
+                            <!--<Setter TargetName="calenderView" Property="WidthRequest" Value="400" />-->
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>

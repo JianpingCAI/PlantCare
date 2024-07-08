@@ -635,7 +635,7 @@ namespace PlantCare.App.ViewModels
             {
                 //int displayWidth = IsShowCalendar ? ((int)Width / 2 - 10) : ((int)Width - 10);
                 //PhotoSpan = (displayWidth - 10) / PhotoWidth;
-                PhotoSpan = ((int)Width - 10) / PhotoWidth;
+                PhotoSpan = ((int)Width - 10 - (IsShowCalendar ? ConstantValues.CalendarWidth : 0)) / PhotoWidth;
             }
             // Portrait
             else
