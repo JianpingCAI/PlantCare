@@ -9,15 +9,25 @@
     <Color x:Key="Primary">#48752C</Color>
     <Color x:Key="PrimaryDark">#9DC384</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>
+
     <Color x:Key="Secondary">#DFD8F7</Color>
     <Color x:Key="SecondaryDarkText">#9880e5</Color>
+
     <Color x:Key="Tertiary">#2B0B98</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>
+
     <Color x:Key="Magenta">#D600AA</Color>
     <Color x:Key="MidnightBlue">#190649</Color>
     <Color x:Key="OffBlack">#1f1f1f</Color>
+
+    <Color x:Key="DarkGray">#212125</Color>
+    <Color x:Key="MidGray">#CFCFD3</Color>
+    <Color x:Key="LightGray">#EFEFEF</Color>
+
+    <Color x:Key="Light">#DFD8F7</Color>
+    <Color x:Key="Dark">#2B0B98</Color>
 
     <Color x:Key="Error">Red</Color>
 
@@ -30,11 +40,6 @@
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
 
-    <!--  light theme alternatives  -->
-    <Color x:Key="DarkGray">#212125</Color>
-    <Color x:Key="MidGray">#CFCFD3</Color>
-    <Color x:Key="LightGray">#EFEFEF</Color>
-
     <Color x:Key="Background_Dark">#081B25</Color>
     <Color x:Key="Background_Mid">#152C39</Color>
 
@@ -44,6 +49,11 @@
     <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
     <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}" />
 
+    <SolidColorBrush x:Key="DarkBrush" Color="{StaticResource Dark}"/>
+    <SolidColorBrush x:Key="LightGrayBrush" Color="{StaticResource LightGray}"/>
+    <SolidColorBrush x:Key="MidGrayBrush" Color="{StaticResource MidGray}"/>
+    <SolidColorBrush x:Key="DarkGrayBrush" Color="{StaticResource DarkGray}"/>
+
     <SolidColorBrush x:Key="Gray100Brush" Color="{StaticResource Gray100}" />
     <SolidColorBrush x:Key="Gray200Brush" Color="{StaticResource Gray200}" />
     <SolidColorBrush x:Key="Gray300Brush" Color="{StaticResource Gray300}" />
@@ -52,4 +62,14 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}" />
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}" />
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}" />
+
+    <Color x:Key="Yellow100Accent">#F7B548</Color>
+    <Color x:Key="Yellow200Accent">#FFD590</Color>
+    <Color x:Key="Yellow300Accent">#FFE5B9</Color>
+    <Color x:Key="Cyan100Accent">#28C2D1</Color>
+    <Color x:Key="Cyan200Accent">#7BDDEF</Color>
+    <Color x:Key="Cyan300Accent">#C3F2F4</Color>
+    <Color x:Key="Blue100Accent">#3E8EED</Color>
+    <Color x:Key="Blue200Accent">#72ACF1</Color>
+    <Color x:Key="Blue300Accent">#A7CBF6</Color>
 </ResourceDictionary>
