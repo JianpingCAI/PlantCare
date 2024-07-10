@@ -53,9 +53,16 @@
         <Grid HorizontalOptions="FillAndExpand" RowDefinitions="auto,*">
             <!--  Search Bar for quick filtering  -->
             <SearchBar
+                BackgroundColor="Transparent"
+                CancelButtonColor="{AppThemeBinding Light={StaticResource Gray900},
+                                                    Dark={StaticResource Gray100}}"
                 Placeholder="{Binding Path=[SearchPlantByName], Source={x:Static utils:LocalizationManager.Instance}}"
+                PlaceholderColor="{AppThemeBinding Light={StaticResource Gray900},
+                                                   Dark={StaticResource Gray100}}"
                 SearchCommand="{Binding SearchCommand}"
                 Text="{Binding SearchText}"
+                TextColor="{AppThemeBinding Light={StaticResource Gray900},
+                                            Dark={StaticResource White}}"
                 VerticalOptions="Center"
                 VerticalTextAlignment="Center">
                 <SearchBar.Behaviors>

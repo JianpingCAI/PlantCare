@@ -180,13 +180,13 @@
                         SelectedItems="{Binding TickedPlantEvents}"
                         SelectionChangedCommand="{Binding TickedPlantEventsChangedCommand}"
                         SelectionMode="Multiple">
-                        <CollectionView.Shadow>
+                        <!--<CollectionView.Shadow>
                             <Shadow
                                 Brush="{AppThemeBinding Light={StaticResource White},
                                                         Dark={StaticResource Black}}"
                                 Opacity="0.3"
                                 Radius="3" />
-                        </CollectionView.Shadow>
+                        </CollectionView.Shadow>-->
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout
                                 Orientation="Vertical"
@@ -232,7 +232,7 @@
                                             <Label
                                                 FontFamily="MaterialIconsRegular"
                                                 FontSize="20"
-                                                HorizontalOptions="Start"
+                                                HorizontalOptions="End"
                                                 IsVisible="{Binding IsSelected}"
                                                 Text="&#xe86c;"
                                                 TextColor="Green"
