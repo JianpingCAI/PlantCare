@@ -49,10 +49,10 @@
     <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
     <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}" />
 
-    <SolidColorBrush x:Key="DarkBrush" Color="{StaticResource Dark}"/>
-    <SolidColorBrush x:Key="LightGrayBrush" Color="{StaticResource LightGray}"/>
-    <SolidColorBrush x:Key="MidGrayBrush" Color="{StaticResource MidGray}"/>
-    <SolidColorBrush x:Key="DarkGrayBrush" Color="{StaticResource DarkGray}"/>
+    <SolidColorBrush x:Key="DarkBrush" Color="{StaticResource Dark}" />
+    <SolidColorBrush x:Key="LightGrayBrush" Color="{StaticResource LightGray}" />
+    <SolidColorBrush x:Key="MidGrayBrush" Color="{StaticResource MidGray}" />
+    <SolidColorBrush x:Key="DarkGrayBrush" Color="{StaticResource DarkGray}" />
 
     <SolidColorBrush x:Key="Gray100Brush" Color="{StaticResource Gray100}" />
     <SolidColorBrush x:Key="Gray200Brush" Color="{StaticResource Gray200}" />
