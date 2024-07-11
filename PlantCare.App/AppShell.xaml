@@ -7,6 +7,14 @@
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     Title="PlantCare.App">
+    <Shell.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TabBar">
+                <Setter Property="Shell.TabBarForegroundColor" Value="MediumPurple" />
+                <Setter Property="Shell.TabBarTitleColor" Value="MediumOrchid" />
+            </Style>
+        </ResourceDictionary>
+    </Shell.Resources>
     <!--  Shell.FlyoutBehavior="Disabled"  -->
 
     <!--<FlyoutItem>
