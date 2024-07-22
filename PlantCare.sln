@@ -12,10 +12,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documents", "documents", "{
 		documents\design_document.md = documents\design_document.md
 		documents\design_document_v2.md = documents\design_document_v2.md
 		documents\notes.md = documents\notes.md
-		documents\require_document.md = documents\require_document.md
 		notes_debounce.md = notes_debounce.md
+		documents\require_document.md = documents\require_document.md
 		TODO.md = TODO.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlantCare.App.Tests", "PlantCare.App.Tests\PlantCare.App.Tests.csproj", "{5DEF9AFC-7B2B-4EC2-A7D7-116E2AA1F296}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DE04DDB9-6B84-4CC8-8FA8-FC27F285ED3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE04DDB9-6B84-4CC8-8FA8-FC27F285ED3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE04DDB9-6B84-4CC8-8FA8-FC27F285ED3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DEF9AFC-7B2B-4EC2-A7D7-116E2AA1F296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DEF9AFC-7B2B-4EC2-A7D7-116E2AA1F296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DEF9AFC-7B2B-4EC2-A7D7-116E2AA1F296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DEF9AFC-7B2B-4EC2-A7D7-116E2AA1F296}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

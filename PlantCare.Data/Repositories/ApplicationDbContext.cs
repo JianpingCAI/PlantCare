@@ -22,11 +22,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<PlantDbModel>()
             .HasMany<WateringHistory>(p => p.WateringHistories)
             .WithOne(w => w.Plant)
-            .HasForeignKey(w => w.PlantId);
+            .HasForeignKey(w => w.PlantId)
+            .OnDelete(DeleteBehavior.Cascade); // This ensures cascade delete
 
         modelBuilder.Entity<PlantDbModel>()
             .HasMany<FertilizationHistory>(p => p.FertilizationHistories)
             .WithOne(f => f.Plant)
-            .HasForeignKey(f => f.PlantId);
+            .HasForeignKey(f => f.PlantId)
+            .OnDelete(DeleteBehavior.Cascade); // This ensures cascade delete
     }
 }

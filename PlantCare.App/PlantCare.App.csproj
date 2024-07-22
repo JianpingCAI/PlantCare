@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net8.0;net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
@@ -13,7 +13,10 @@
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
-		<OutputType>Exe</OutputType>
+		<PackageVersion>0.4.0</PackageVersion>		<!-- Define PackageVersion here -->
+		
+		<!--<OutputType>Exe</OutputType>-->
+		<OutputType Condition="'$(TargetFramework)' != 'net8.0'">Exe</OutputType> <!--for unit tests-->
 		<RootNamespace>PlantCare.App</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
@@ -40,67 +43,67 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
-	  <ApplicationTitle>MyPlantCare</ApplicationTitle>
-	  <ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-	  <ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
-	  <AndroidUseAapt2>True</AndroidUseAapt2>
-	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-	  <AndroidPackageFormat>aab</AndroidPackageFormat>
-	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-	  <ApplicationVersion>4</ApplicationVersion>
+		<ApplicationTitle>MyPlantCare</ApplicationTitle>
+		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
+		<ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
+		<AndroidUseAapt2>True</AndroidUseAapt2>
+		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+		<AndroidPackageFormat>aab</AndroidPackageFormat>
+		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+		<ApplicationVersion>4</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
-	  <ApplicationTitle>MyPlantCare</ApplicationTitle>
-	  <ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-	  <ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
-	  <ApplicationVersion>4</ApplicationVersion>
+		<ApplicationTitle>MyPlantCare</ApplicationTitle>
+		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
+		<ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
+		<ApplicationVersion>4</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
-	  <ApplicationTitle>MyPlantCare</ApplicationTitle>
-	  <ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-	  <ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
-	  <ApplicationVersion>4</ApplicationVersion>
+		<ApplicationTitle>MyPlantCare</ApplicationTitle>
+		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
+		<ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
+		<ApplicationVersion>4</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationTitle>MyPlantCare</ApplicationTitle>
-	  <ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-	  <ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
-	  <ApplicationVersion>4</ApplicationVersion>
+		<ApplicationTitle>MyPlantCare</ApplicationTitle>
+		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
+		<ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
+		<ApplicationVersion>4</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
-	  <ApplicationTitle>MyPlantCare</ApplicationTitle>
-	  <ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-	  <ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
-	  <AndroidPackageFormat>aab</AndroidPackageFormat>
-	  <AndroidUseAapt2>True</AndroidUseAapt2>
-	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-	  <ApplicationVersion>4</ApplicationVersion>
-	  <AndroidLinkTool>r8</AndroidLinkTool>
+		<ApplicationTitle>MyPlantCare</ApplicationTitle>
+		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
+		<ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
+		<AndroidPackageFormat>aab</AndroidPackageFormat>
+		<AndroidUseAapt2>True</AndroidUseAapt2>
+		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+		<ApplicationVersion>4</ApplicationVersion>
+		<AndroidLinkTool>r8</AndroidLinkTool>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
-	  <ApplicationTitle>MyPlantCare</ApplicationTitle>
-	  <ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-	  <ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
-	  <ApplicationVersion>4</ApplicationVersion>
+		<ApplicationTitle>MyPlantCare</ApplicationTitle>
+		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
+		<ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
+		<ApplicationVersion>4</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
-	  <ApplicationTitle>MyPlantCare</ApplicationTitle>
-	  <ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-	  <ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
-	  <ApplicationVersion>4</ApplicationVersion>
+		<ApplicationTitle>MyPlantCare</ApplicationTitle>
+		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
+		<ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
+		<ApplicationVersion>4</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationTitle>MyPlantCare</ApplicationTitle>
-	  <ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-	  <ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
-	  <ApplicationVersion>4</ApplicationVersion>
+		<ApplicationTitle>MyPlantCare</ApplicationTitle>
+		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
+		<ApplicationDisplayVersion>0.4.0</ApplicationDisplayVersion>
+		<ApplicationVersion>4</ApplicationVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -159,37 +162,37 @@
 
 	<ItemGroup>
 		<Compile Update="Resources\LocalizationResources.Designer.cs">
-		  <DependentUpon>LocalizationResources.resx</DependentUpon>
-		  <DesignTime>True</DesignTime>
-		  <AutoGen>True</AutoGen>
+			<DependentUpon>LocalizationResources.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
 		</Compile>
 		<Compile Update="Views\SingePlantCareHistoryView.xaml.cs">
-		  <DependentUpon>SingePlantCareHistoryView.xaml</DependentUpon>
+			<DependentUpon>SingePlantCareHistoryView.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\PlantOverviewView.xaml.cs">
 			<DependentUpon>PlantOverviewView.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\PlantCalendarView.xaml.cs">
-		  <DependentUpon>PlantCalendarView.xaml</DependentUpon>
+			<DependentUpon>PlantCalendarView.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\CareHistoryView.xaml.cs">
-		  <DependentUpon>CareHistoryView.xaml</DependentUpon>
+			<DependentUpon>CareHistoryView.xaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Resources\LocalizationResources.resx">
-	    <LastGenOutput>LocalizationResources.Designer.cs</LastGenOutput>
-	    <Generator>ResXFileCodeGenerator</Generator>
-	  </EmbeddedResource>
-	  <EmbeddedResource Update="Resources\LocalizationResources.zh-CN.resx">
-	    <Generator></Generator>
-	  </EmbeddedResource>
+		<EmbeddedResource Update="Resources\LocalizationResources.resx">
+			<LastGenOutput>LocalizationResources.Designer.cs</LastGenOutput>
+			<Generator>ResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\LocalizationResources.zh-CN.resx">
+			<Generator></Generator>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
 		<MauiXaml Update="Views\SingePlantCareHistoryView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\NotificationPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -207,13 +210,13 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\PlantCalendarView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SettingsView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\CareHistoryView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
 
