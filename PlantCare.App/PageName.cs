@@ -9,5 +9,6 @@
         public const string Calendar = "calendar";
         public const string History = "careHistory";
         public const string SinglePlantCareHistory = "singlePlantHistoryDetails";
+        public const string About = "about";
     }
 }

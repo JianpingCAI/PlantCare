@@ -21,7 +21,7 @@ namespace PlantCare.App
             //FileHelper.DeleteDatabaseFile();
 
             // Apply migrations at startup
-            using (var scope = serviceProvider.CreateScope())
+            using (IServiceScope scope = serviceProvider.CreateScope())
             {
                 ApplicationDbContext db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 db.Database.Migrate();

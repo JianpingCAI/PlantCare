@@ -13,7 +13,7 @@ namespace PlantCare.App.Services.DBService.Tests
         }
 
         [Fact]
-        public async Task DeletePlantAsyncTest1()
+        public async Task DeletePlant_ShouldPerformCascadeDeletion()
         {
             PlantService? plantService = _serviceProvider.GetService<PlantService>();
 

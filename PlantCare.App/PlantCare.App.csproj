@@ -191,10 +191,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<MauiXaml Update="Views\SingePlantCareHistoryView.xaml">
-			<Generator>MSBuild:Compile</Generator>
+		<MauiXaml Update="Views\AboutPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\NotificationPage.xaml">
+		<MauiXaml Update="Views\SingePlantCareHistoryView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\PlantAddEditView.xaml">
@@ -204,9 +204,6 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\PlantDetailView.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\RegisterView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\PlantCalendarView.xaml">

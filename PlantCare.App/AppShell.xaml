@@ -15,20 +15,7 @@
             </Style>
         </ResourceDictionary>
     </Shell.Resources>
-    <!--  Shell.FlyoutBehavior="Disabled"  -->
 
-    <!--<FlyoutItem>
-        <Tab>
-            <ShellContent
-                Title="Home1"
-                ContentTemplate="{DataTemplate views:HomeView}"
-                Route="overview" />
-            <ShellContent
-                Title="Home2"
-                ContentTemplate="{DataTemplate views:HomeView}"
-                Route="overview" />
-        </Tab>
-    </FlyoutItem>-->
 
     <Shell.TitleView>
         <Grid ColumnDefinitions="auto,*">

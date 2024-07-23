@@ -1,4 +1,5 @@
 ﻿using PlantCare.App.Utils;
+using PlantCare.App.ViewModels;
 using PlantCare.App.Views;
 
 namespace PlantCare.App
@@ -17,6 +18,8 @@ namespace PlantCare.App
             Routing.RegisterRoute(PageName.Calendar, typeof(PlantCalendarView));
 
             Routing.RegisterRoute(PageName.SinglePlantCareHistory, typeof(SingePlantCareHistoryView));
+
+            Routing.RegisterRoute(PageName.About, typeof(AboutPage));
 
             LocalizationManager.Instance.LanguageChanged += OnLanguageChanged;
         }

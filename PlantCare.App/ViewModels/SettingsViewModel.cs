@@ -218,7 +218,7 @@ public partial class SettingsViewModel : ViewModelBase
         {
             IsLoading = true;
 
-            FilePickerFileType zipFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            FilePickerFileType zipFileType = new(new Dictionary<DevicePlatform, IEnumerable<string>>
                                                   {
                                                      { DevicePlatform.iOS, new[] { "public.archive" } },
                                                      { DevicePlatform.Android, new[] { "application/zip" } },

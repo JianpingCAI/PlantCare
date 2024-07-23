@@ -504,9 +504,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     #region Notification methods
 
-    private readonly List<int> _wateringNotificationIds = [];
-    private readonly List<int> _fertilizationNotificationIds = [];
-
     private async Task ScheduleNotifications(CareType careType)
     {
         if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
@@ -514,45 +511,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         string actionName = careType.GetActionName();
 
-        switch (careType)
-        {
-            case CareType.Watering:
-                {
-                    _wateringNotificationIds.Clear();
-                }
-                break;
-
-            case CareType.Fertilization:
-                {
-                    _fertilizationNotificationIds.Clear();
-                }
-                break;
-
-            default:
-                break;
-        }
-
         for (int i = 0; i < Plants.Count; i++)
         {
             PlantListItemViewModel plant = Plants[i];
             int notificationId = await ScheduleNotificationAsync(careType, actionName, plant);
-
-            if (notificationId > 0)
-            {
-                switch (careType)
-                {
-                    case CareType.Watering:
-                        _wateringNotificationIds.Add(notificationId);
-                        break;
-
-                    case CareType.Fertilization:
-                        _fertilizationNotificationIds.Add(notificationId);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
         }
     }
 
@@ -595,7 +557,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 };
             string serializeReturningData = JsonSerializer.Serialize(list);
 
-            var notificationRequest = new NotificationRequest
+            NotificationRequest notificationRequest = new()
             {
                 NotificationId = notificationId,
                 Title = title,
