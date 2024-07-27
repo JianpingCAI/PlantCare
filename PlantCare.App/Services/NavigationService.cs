@@ -48,6 +48,11 @@ public class NavigationService : INavigationService
         return Shell.Current.GoToAsync($"//{PageName.History}/{PageName.SinglePlantCareHistory}", navigationParameters);
     }
 
+    public Task GotoLogsViewer()
+    {
+        return Shell.Current.GoToAsync($"{PageName.LogViewer}");
+    }
+
     //public async Task GoBack()
     //{
     //    try

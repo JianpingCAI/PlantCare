@@ -270,4 +270,10 @@
   <data name="Notes" xml:space="preserve">
     <value>备注</value>
   </data>
+  <data name="ShowLogs" xml:space="preserve">
+    <value>显示日志文件</value>
+  </data>
+  <data name="AdvancedOptions" xml:space="preserve">
+    <value>高级选项</value>
+  </data>
 </root>

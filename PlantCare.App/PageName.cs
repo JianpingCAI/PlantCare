@@ -10,5 +10,6 @@
         public const string History = "careHistory";
         public const string SinglePlantCareHistory = "singlePlantHistoryDetails";
         public const string About = "about";
+        public const string LogViewer = "logsViewer";
     }
 }

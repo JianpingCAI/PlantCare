@@ -25,7 +25,17 @@ public static class MauiProgram
 
         // Configure Serilog
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.File(Path.Combine(Microsoft.Maui.Storage.FileSystem.AppDataDirectory, "app.log"), rollingInterval: RollingInterval.Day)
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning) // Exclude Microsoft logs below warning level
+            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning) // Exclude EF logs below warning level
+            //.MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning) // Exclude ASP.NET Core logs below warning level
+            //.MinimumLevel.Override("System.Net.Http", Serilog.Events.LogEventLevel.Warning) // Exclude HTTP client logs below warning level
+            //.MinimumLevel.Override("Microsoft.Hosting.Lifetime", Serilog.Events.LogEventLevel.Warning) // Exclude hosting lifetime logs below warning level
+            //.MinimumLevel.Override("Microsoft.Maui", Serilog.Events.LogEventLevel.Warning) // Exclude MAUI framework logs below warning level
+            //.MinimumLevel.Override("Microsoft.Extensions.Hosting.Internal.Host", Serilog.Events.LogEventLevel.Warning) // Exclude host logs below warning level
+            //.MinimumLevel.Override("Microsoft.Extensions.Logging", Serilog.Events.LogEventLevel.Warning) // Exclude logging infrastructure logs below warning level
+            .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Warning) // Exclude general .NET runtime logs below warning level
+            .WriteTo.File(ConstantValues.LogFilePath, rollingInterval: RollingInterval.Month, shared: true)
             .CreateLogger();
 
         builder
@@ -33,12 +43,12 @@ public static class MauiProgram
             .UseMauiApp<App>()
             // Initialize the .NET MAUI Community Toolkit by adding the below line of code
             .UseMauiCommunityToolkit(
-//            options =>
-//            {
-//#if WINDOWS
-//                options.SetShouldEnableSnackbarOnWindows(true);
-//#endif
-//            }
+            //            options =>
+            //            {
+            //#if WINDOWS
+            //                options.SetShouldEnableSnackbarOnWindows(true);
+            //#endif
+            //            }
             )
             .ConfigureFonts(fonts =>
             {
@@ -95,6 +105,7 @@ public static class MauiProgram
 
         //builder.Services.AddHostedService<TestBackGroundService>();
 
+        builder.Logging.ClearProviders();
 #if DEBUG
         builder.Logging.AddDebug();
 
@@ -137,5 +148,8 @@ public static class MauiProgram
 
         builder.Services.AddTransient<SingePlantCareHistoryView>();
         builder.Services.AddTransient<SinglePlantCareHistoryViewModel>();
+
+        builder.Services.AddTransient<LogViewerPage>();
+        builder.Services.AddTransient<LogViewerViewModel>();
     }
 }

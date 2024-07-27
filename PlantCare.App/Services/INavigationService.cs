@@ -15,5 +15,7 @@ public interface INavigationService
 
     Task GoToCareHistory(string plantName, CareType careType, List<TimeStampRecord> timestampRecords);
 
+    Task GotoLogsViewer();
+
     //Task GoBack();
 }

@@ -21,19 +21,22 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IFolderPicker _folderPicker;
     private readonly IDataExportService _dataExportService;
     private readonly IDataImportService _dataImportService;
+    private readonly INavigationService _navigationService;
 
     public SettingsViewModel(
         IAppSettingsService settingsService,
         IDialogService dialogService,
         IFolderPicker folderPicker,
         IDataExportService dataExportService,
-        IDataImportService dataImportService)
+        IDataImportService dataImportService,
+        INavigationService navigationService)
     {
         _settingsService = settingsService;
         _dialogService = dialogService;
         _folderPicker = folderPicker;
         _dataExportService = dataExportService;
         _dataImportService = dataImportService;
+        _navigationService = navigationService;
     }
 
     [ObservableProperty]
@@ -262,6 +265,25 @@ public partial class SettingsViewModel : ViewModelBase
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
             //await DisplayAlert("Import Failed", ex.Message, "OK");
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    [RelayCommand]
+    public async Task CheckLogs()
+    {
+        try
+        {
+            IsLoading = true;
+
+            await _navigationService.GotoLogsViewer();
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
         finally
         {

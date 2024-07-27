@@ -21,6 +21,8 @@ namespace PlantCare.App
 
             Routing.RegisterRoute(PageName.About, typeof(AboutPage));
 
+            Routing.RegisterRoute(PageName.LogViewer, typeof(LogViewerPage));
+
             LocalizationManager.Instance.LanguageChanged += OnLanguageChanged;
         }
 
