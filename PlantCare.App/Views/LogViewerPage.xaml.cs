@@ -9,5 +9,7 @@ public partial class LogViewerPage : ContentPageBase
         InitializeComponent();
 
         BindingContext = viewModel;
+
+        Shell.SetTitleView(this, null);
     }
 }

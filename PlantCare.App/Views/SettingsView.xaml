@@ -40,7 +40,8 @@
         <ControlTemplate x:Key="ThemeRadioTemplate">
             <Border
                 Padding="2"
-                BackgroundColor="Transparent"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},
+                                                  Dark={StaticResource Gray900}}"
                 HeightRequest="120"
                 HorizontalOptions="Start"
                 Stroke="Transparent"
@@ -73,6 +74,8 @@
                             WidthRequest="8" />
                     </Grid>
                     <ContentPresenter />
+                    <!--  This is where RadioButton.Content will be injected  -->
+                    <!--  ContentPresenter allows the Content of the RadioButton to be displayed within the template.  -->
                 </Grid>
 
                 <VisualStateManager.VisualStateGroups>
@@ -215,7 +218,6 @@
                                 Value="{x:Static am:AppTheme.Unspecified}">
                                 <RadioButton.Content>
                                     <Grid RowDefinitions="4*,1*">
-                                        <!--  Color={StaticResource NeutralDark},  -->
                                         <Image
                                             HorizontalOptions="Center"
                                             Source="{FontImage FontFamily=FontAwesome,
