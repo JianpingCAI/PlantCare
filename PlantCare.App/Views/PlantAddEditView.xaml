@@ -85,14 +85,14 @@
                                 Margin="5,0,0,0"
                                 Text="{Binding Name, Mode=TwoWay}"
                                 VerticalOptions="End">
-                                <Entry.Behaviors>
-                                    <!--<toolkit:SelectAllTextBehavior />-->
+                                <!--<Entry.Behaviors>
+                                    --><!--<toolkit:SelectAllTextBehavior />--><!--
                                     <OnIdiom x:TypeArguments="Behavior">
                                         <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
                                         <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                        <!--  Specify other idioms or a default if needed  -->
+                                        --><!--  Specify other idioms or a default if needed  --><!--
                                     </OnIdiom>
-                                </Entry.Behaviors>
+                                </Entry.Behaviors>-->
                             </Entry>
 
                             <Label
@@ -106,14 +106,14 @@
                                 Margin="5,0,0,0"
                                 Text="{Binding Species, Mode=TwoWay}"
                                 VerticalOptions="Start">
-                                <Entry.Behaviors>
-                                    <!--<toolkit:SelectAllTextBehavior />-->
+                                <!--<Entry.Behaviors>
+                                    --><!--<toolkit:SelectAllTextBehavior />--><!--
                                     <OnIdiom x:TypeArguments="Behavior">
                                         <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
                                         <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                        <!--  Specify other idioms or a default if needed  -->
+                                        --><!--  Specify other idioms or a default if needed  --><!--
                                     </OnIdiom>
-                                </Entry.Behaviors>
+                                </Entry.Behaviors>-->
                             </Entry>
 
                             <Label
@@ -127,14 +127,14 @@
                                     HorizontalTextAlignment="Center"
                                     Text="{Binding Age, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
                                     VerticalOptions="End">
-                                    <Entry.Behaviors>
-                                        <!--<toolkit:SelectAllTextBehavior />-->
+                                    <!--<Entry.Behaviors>
+                                        --><!--<toolkit:SelectAllTextBehavior />--><!--
                                         <OnIdiom x:TypeArguments="Behavior">
                                             <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
                                             <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                            <!--  Specify other idioms or a default if needed  -->
+                                            --><!--  Specify other idioms or a default if needed  --><!--
                                         </OnIdiom>
-                                    </Entry.Behaviors>
+                                    </Entry.Behaviors>-->
                                 </Entry>
                                 <Stepper
                                     HeightRequest="50"
@@ -194,14 +194,14 @@
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding WateringFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
                                         VerticalOptions="Center">
-                                        <Entry.Behaviors>
-                                            <!--<toolkit:SelectAllTextBehavior />-->
+                                        <!--<Entry.Behaviors>
+                                            --><!--<toolkit:SelectAllTextBehavior />--><!--
                                             <OnIdiom x:TypeArguments="Behavior">
                                                 <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
                                                 <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                                <!--  Specify other idioms or a default if needed  -->
+                                                --><!--  Specify other idioms or a default if needed  --><!--
                                             </OnIdiom>
-                                        </Entry.Behaviors>
+                                        </Entry.Behaviors>-->
                                     </Entry>
                                     <Stepper
                                         Increment="1"
@@ -218,14 +218,14 @@
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding WateringFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
                                         VerticalOptions="Center">
-                                        <Entry.Behaviors>
-                                            <!--<toolkit:SelectAllTextBehavior />-->
+                                        <!--<Entry.Behaviors>
+                                            --><!--<toolkit:SelectAllTextBehavior />--><!--
                                             <OnIdiom x:TypeArguments="Behavior">
                                                 <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
                                                 <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                                <!--  Specify other idioms or a default if needed  -->
+                                                --><!--  Specify other idioms or a default if needed  --><!--
                                             </OnIdiom>
-                                        </Entry.Behaviors>
+                                        </Entry.Behaviors>-->
                                     </Entry>
                                     <Stepper
                                         Increment="1"
@@ -281,14 +281,14 @@
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding FertilizationFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
                                         VerticalOptions="Center">
-                                        <Entry.Behaviors>
-                                            <!--<toolkit:SelectAllTextBehavior />-->
+                                        <!--<Entry.Behaviors>
+                                            --><!--<toolkit:SelectAllTextBehavior />--><!--
                                             <OnIdiom x:TypeArguments="Behavior">
                                                 <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
                                                 <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                                <!--  Specify other idioms or a default if needed  -->
+                                                --><!--  Specify other idioms or a default if needed  --><!--
                                             </OnIdiom>
-                                        </Entry.Behaviors>
+                                        </Entry.Behaviors>-->
                                     </Entry>
                                     <Stepper
                                         Increment="1"
@@ -305,14 +305,14 @@
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding FertilizationFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
                                         VerticalOptions="Center">
-                                        <Entry.Behaviors>
-                                            <!--<toolkit:SelectAllTextBehavior />-->
+                                        <!--<Entry.Behaviors>
+                                            --><!--<toolkit:SelectAllTextBehavior />--><!--
                                             <OnIdiom x:TypeArguments="Behavior">
                                                 <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
                                                 <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                                <!--  Specify other idioms or a default if needed  -->
+                                                --><!--  Specify other idioms or a default if needed  --><!--
                                             </OnIdiom>
-                                        </Entry.Behaviors>
+                                        </Entry.Behaviors>-->
                                     </Entry>
                                     <Stepper
                                         Increment="1"

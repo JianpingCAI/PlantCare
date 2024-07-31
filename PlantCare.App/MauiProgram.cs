@@ -27,16 +27,18 @@ public static class MauiProgram
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning) // Exclude Microsoft logs below warning level
-            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning) // Exclude EF logs below warning level
-            //.MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning) // Exclude ASP.NET Core logs below warning level
-            //.MinimumLevel.Override("System.Net.Http", Serilog.Events.LogEventLevel.Warning) // Exclude HTTP client logs below warning level
-            //.MinimumLevel.Override("Microsoft.Hosting.Lifetime", Serilog.Events.LogEventLevel.Warning) // Exclude hosting lifetime logs below warning level
-            //.MinimumLevel.Override("Microsoft.Maui", Serilog.Events.LogEventLevel.Warning) // Exclude MAUI framework logs below warning level
-            //.MinimumLevel.Override("Microsoft.Extensions.Hosting.Internal.Host", Serilog.Events.LogEventLevel.Warning) // Exclude host logs below warning level
-            //.MinimumLevel.Override("Microsoft.Extensions.Logging", Serilog.Events.LogEventLevel.Warning) // Exclude logging infrastructure logs below warning level
+            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Error) // Exclude EF logs below warning level
+            .MinimumLevel.Override("Microsoft.Maui", Serilog.Events.LogEventLevel.Error) // Exclude MAUI framework logs below warning level
             .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Warning) // Exclude general .NET runtime logs below warning level
             .WriteTo.File(ConstantValues.LogFilePath, rollingInterval: RollingInterval.Month, shared: true)
             .CreateLogger();
+
+        //.MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning) // Exclude ASP.NET Core logs below warning level
+        //.MinimumLevel.Override("System.Net.Http", Serilog.Events.LogEventLevel.Warning) // Exclude HTTP client logs below warning level
+        //.MinimumLevel.Override("Microsoft.Hosting.Lifetime", Serilog.Events.LogEventLevel.Warning) // Exclude hosting lifetime logs below warning level
+
+        //.MinimumLevel.Override("Microsoft.Extensions.Hosting.Internal.Host", Serilog.Events.LogEventLevel.Warning) // Exclude host logs below warning level
+        //.MinimumLevel.Override("Microsoft.Extensions.Logging", Serilog.Events.LogEventLevel.Warning) // Exclude logging infrastructure logs below warning level
 
         builder
             .UseSkiaSharp(registerRenderers: true)
