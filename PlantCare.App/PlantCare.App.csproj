@@ -45,7 +45,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.5.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>0.5.1</ApplicationDisplayVersion>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 		<AndroidPackageFormat>aab</AndroidPackageFormat>
@@ -56,28 +56,28 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.5.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>0.5.1</ApplicationDisplayVersion>
 		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.5.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>0.5.1</ApplicationDisplayVersion>
 		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.5.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>0.5.1</ApplicationDisplayVersion>
 		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.5.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>0.5.1</ApplicationDisplayVersion>
 		<AndroidPackageFormat>aab</AndroidPackageFormat>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -88,31 +88,31 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.5.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>0.5.1</ApplicationDisplayVersion>
 		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.5.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>0.5.1</ApplicationDisplayVersion>
 		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.5.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>0.5.1</ApplicationDisplayVersion>
 		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
-	  <ApplicationDisplayVersion>0.5.0</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.5.1</ApplicationDisplayVersion>
 	  <ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
-	  <ApplicationDisplayVersion>0.5.0</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>0.5.1</ApplicationDisplayVersion>
 	  <ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
@@ -156,8 +156,8 @@
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc2" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.70" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.70" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.71" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.71" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Plugin.LocalNotification" Version="11.1.3" />
 		<PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
