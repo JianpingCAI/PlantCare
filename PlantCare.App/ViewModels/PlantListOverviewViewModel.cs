@@ -784,6 +784,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         plantVM.Id = plant.Id;
 
         plantVM.Name = plant.Name;
+
+        string originPhotoPath = plantVM.PhotoPath;
         plantVM.PhotoPath = plant.PhotoPath;
 
         plantVM.LastWatered = plant.LastWatered;
@@ -791,6 +793,14 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         plantVM.LastFertilized = plant.LastFertilized;
         plantVM.FertilizeFrequencyInHours = plant.FertilizeFrequencyInHours;
+
+        // delete old photo file if changed
+        if (originPhotoPath != ConstStrings.DefaultPhotoPath
+            && originPhotoPath != plantVM.PhotoPath
+            && File.Exists(originPhotoPath))
+        {
+            File.Delete(originPhotoPath);
+        }
     }
 
     /// <summary>
