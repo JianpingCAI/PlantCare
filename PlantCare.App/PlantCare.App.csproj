@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0;net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net8.0-android;net8.0-ios</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.26100.0</TargetFrameworks>
+
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 
@@ -13,8 +14,7 @@
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
-		<PackageVersion>0.6.0</PackageVersion>		<!-- Define PackageVersion here -->
-    <WindowsSdkPackageVersion>10.0.19041.41</WindowsSdkPackageVersion>
+		<PackageVersion>0.7.0</PackageVersion>		<!-- Define PackageVersion here -->
 		
 		<!--<OutputType>Exe</OutputType>-->
 		<OutputType Condition="'$(TargetFramework)' != 'net8.0'">Exe</OutputType> <!--for unit tests-->
@@ -37,8 +37,8 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
-		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.18362.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.18362.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<NeutralLanguage>en</NeutralLanguage>
 	</PropertyGroup>
@@ -46,75 +46,77 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.6.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>0.7.0</ApplicationDisplayVersion>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 		<AndroidPackageFormat>aab</AndroidPackageFormat>
 		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationVersion>7</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.6.0</ApplicationDisplayVersion>
-		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>0.7.0</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.6.0</ApplicationDisplayVersion>
-		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>0.7.0</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.6.0</ApplicationDisplayVersion>
-		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>0.7.0</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.6.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>0.7.0</ApplicationDisplayVersion>
 		<AndroidPackageFormat>aab</AndroidPackageFormat>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationVersion>7</ApplicationVersion>
 		<AndroidLinkTool>r8</AndroidLinkTool>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.6.0</ApplicationDisplayVersion>
-		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>0.7.0</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.6.0</ApplicationDisplayVersion>
-		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>0.7.0</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<ApplicationDisplayVersion>0.6.0</ApplicationDisplayVersion>
-		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>0.7.0</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
-	  <ApplicationDisplayVersion>0.6.0</ApplicationDisplayVersion>
-	  <ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>0.7.0</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
+		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
-	  <ApplicationDisplayVersion>0.6.0</ApplicationDisplayVersion>
-	  <ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>0.7.0</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
+		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -203,10 +205,10 @@
 
 	<ItemGroup>
 		<MauiXaml Update="Views\AboutPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\LogViewerPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SingePlantCareHistoryView.xaml">
 			<Generator>MSBuild:Compile</Generator>
