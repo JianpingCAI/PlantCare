@@ -1,5 +1,4 @@
 ﻿using PlantCare.App.Utils;
-using PlantCare.App.ViewModels;
 using PlantCare.App.Views;
 
 namespace PlantCare.App

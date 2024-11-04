@@ -14,7 +14,6 @@ namespace PlantCare.App.Tests.Common
                 options.UseInMemoryDatabase("TestDatabase"));
 
             services.AddTransient<PlantService>();
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPlantRepository, PlantRepository>();
             services.AddScoped<IWateringHistoryRepository, WateringHistoryRepository>();
             services.AddScoped<IFertilizationHistoryRepository, FertilizationHistoryRepository>();

@@ -7,11 +7,12 @@
 
 ```cmd
 
-Add-Migration InitialCreate -Project PlantCare.Data -StartupProject PlantCare.Data
+Add-Migration xxx -Project PlantCare.Data -StartupProject PlantCare.Data
+Add-Migration "remove user table" -Project PlantCare.Data -StartupProject PlantCare.Data
 
 ```
 
-No need to run the following command,
+No need to run the following command (which is used for a local database file),
 ```
 Update-Database -Project PlantCare.Data -StartupProject PlantCare.Data
 ```

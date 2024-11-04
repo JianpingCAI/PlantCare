@@ -73,13 +73,11 @@ public static class MauiProgram
         });
 
         // Repository registrations
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IPlantRepository, PlantRepository>();
         builder.Services.AddScoped<IWateringHistoryRepository, WateringHistoryRepository>();
         builder.Services.AddScoped<IFertilizationHistoryRepository, FertilizationHistoryRepository>();
 
         // Service registrations
-        builder.Services.AddSingleton<IAuthService, AuthService>();
         builder.Services.AddSingleton<IPlantService, PlantService>();
         builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
 

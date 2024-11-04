@@ -63,7 +63,6 @@ namespace PlantCare.App
             // Optionally, display an alert to the user
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                //await Current.MainPage.DisplayAlert("Error", $"An unexpected error occurred. Please try again later: {ex.Message}.", "OK");
                 await Shell.Current.DisplayAlert("Error", $"An unexpected error occurred. Please try again later: {ex.Message}.", "OK");
             });
         }
@@ -92,12 +91,16 @@ namespace PlantCare.App
                 {
                     Current.UserAppTheme = appTheme;
                 }
+                else
+                {
+                    Current.UserAppTheme = AppTheme.Light;
+                }
             }
             catch (Exception ex)
             {
                 if (Current is not null)
-                    Current.UserAppTheme = AppTheme.Unspecified;
-                Debug.WriteLine($"?????????? Exception occurs: {ex.Message}");
+                    Current.UserAppTheme = AppTheme.Light;
+                Debug.WriteLine($"Exception occurs: {ex.Message}");
             }
         }
 
@@ -107,12 +110,12 @@ namespace PlantCare.App
             {
                 Shell.Current.Navigating += (sender, args) =>
                 {
-                    Debug.WriteLine("?????????????Navigating to: " + args.Target.Location.ToString());
+                    Debug.WriteLine("Navigating to: " + args.Target.Location.ToString());
                 };
 
                 Shell.Current.Navigated += (sender, args) =>
                 {
-                    Debug.WriteLine("?????????????Navigated to: " + args.Current.Location.ToString());
+                    Debug.WriteLine("Navigated to: " + args.Current.Location.ToString());
                 };
             }
         }
