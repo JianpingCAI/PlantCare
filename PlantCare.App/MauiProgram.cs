@@ -15,6 +15,8 @@ using CommunityToolkit.Maui.Storage;
 using PlantCare.App.Services.DataExportImport;
 using PlantCare.App.Services.Security;
 using PlantCare.App.Services.Accessibility;
+using SkiaSharp.Views.Maui.Controls.Hosting;
+using LiveChartsCore.SkiaSharpView.Maui;
 
 namespace PlantCare.App;
 
@@ -29,6 +31,8 @@ public static class MauiProgram
 
         builder
             .UseMauiApp<App>()
+            .UseSkiaSharp()
+            .UseLiveCharts()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
