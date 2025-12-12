@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PlantCare.Data.Repositories;
 using PlantCare.App.Services;
@@ -11,9 +11,10 @@ using Plugin.LocalNotification;
 using Serilog;
 using PlantCare.Data.Repositories.interfaces;
 using PlantCare.App.Services.DBService;
-using SkiaSharp.Views.Maui.Controls.Hosting;
 using CommunityToolkit.Maui.Storage;
 using PlantCare.App.Services.DataExportImport;
+using PlantCare.App.Services.Security;
+using PlantCare.App.Services.Accessibility;
 
 namespace PlantCare.App;
 
@@ -23,35 +24,11 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
 
-        // Configure Serilog
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
-            .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning) // Exclude Microsoft logs below warning level
-            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Error) // Exclude EF logs below warning level
-            .MinimumLevel.Override("Microsoft.Maui", Serilog.Events.LogEventLevel.Error) // Exclude MAUI framework logs below warning level
-            .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Warning) // Exclude general .NET runtime logs below warning level
-            .WriteTo.File(ConstantValues.LogFilePath, rollingInterval: RollingInterval.Month, shared: true)
-            .CreateLogger();
-
-        //.MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning) // Exclude ASP.NET Core logs below warning level
-        //.MinimumLevel.Override("System.Net.Http", Serilog.Events.LogEventLevel.Warning) // Exclude HTTP client logs below warning level
-        //.MinimumLevel.Override("Microsoft.Hosting.Lifetime", Serilog.Events.LogEventLevel.Warning) // Exclude hosting lifetime logs below warning level
-
-        //.MinimumLevel.Override("Microsoft.Extensions.Hosting.Internal.Host", Serilog.Events.LogEventLevel.Warning) // Exclude host logs below warning level
-        //.MinimumLevel.Override("Microsoft.Extensions.Logging", Serilog.Events.LogEventLevel.Warning) // Exclude logging infrastructure logs below warning level
+        // Configure Serilog before building
+        ConfigureSerilog();
 
         builder
-            .UseSkiaSharp(registerRenderers: true)
             .UseMauiApp<App>()
-            // Initialize the .NET MAUI Community Toolkit by adding the below line of code
-            .UseMauiCommunityToolkit(
-            //            options =>
-            //            {
-            //#if WINDOWS
-            //                options.SetShouldEnableSnackbarOnWindows(true);
-            //#endif
-            //            }
-            )
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -59,97 +36,151 @@ public static class MauiProgram
                 fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIconsRegular");
                 fonts.AddFont("fa-solid-900.ttf", "FontAwesome");
             })
+            .UseMauiCommunityToolkit()
             .UseLocalNotification();
 
-        // Configure services
-
-        // Database context
-        string dbPath = Path.Combine(Microsoft.Maui.Storage.FileSystem.AppDataDirectory, ConstStrings.DatabaseFileName);
-
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        {
-            options.UseSqlite($"Data Source={dbPath}")
-                   .UseLazyLoadingProxies(useLazyLoadingProxies: true);
-        });
-
-        // Repository registrations
-        builder.Services.AddScoped<IPlantRepository, PlantRepository>();
-        builder.Services.AddScoped<IWateringHistoryRepository, WateringHistoryRepository>();
-        builder.Services.AddScoped<IFertilizationHistoryRepository, FertilizationHistoryRepository>();
-
-        // Service registrations
-        builder.Services.AddSingleton<IPlantService, PlantService>();
-        builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
-
-        // Register Views and ViewModels
-        RegisterViewWithViewModels(builder);
-
-        // Register the navigation service
-        builder.Services.AddSingleton<INavigationService, NavigationService>();
-
-        // Register the dialog service
-        builder.Services.AddSingleton<IDialogService, DialogService>();
-
-        // Register the FolderPicker as a singleton
-        builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
-
-        // Register AutoMapper
-        builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-        // Register Data Export and Import services
-        builder.Services.AddTransient<IDataExportService, DataExportService>();
-        builder.Services.AddTransient<IDataImportService, DataImportService>();
-
-        // Register background service
-        //builder.Services.AddHostedService<PlantStateCheckingService>();
-
-        //builder.Services.AddHostedService<TestBackGroundService>();
-
-        builder.Logging.ClearProviders();
-#if DEBUG
-        builder.Logging.AddDebug();
-
-        //LocalNotificationCenter.LogLevel = LogLevel.Debug;
-        //builder.Logging.AddConsole();
-#endif
-        builder.Logging.AddSerilog(dispose: true);
-        builder.Services.AddSingleton(typeof(IAppLogger<>), typeof(AppLogger<>));
+        // Configure application services
+        ConfigureDatabase(builder);
+        ConfigureRepositories(builder);
+        ConfigureAppServices(builder);
+        ConfigureSecurityServices(builder);
+        ConfigureAccessibilityServices(builder);
+        ConfigureViewsAndViewModels(builder);
+        ConfigureNavigation(builder);
+        ConfigureDataServices(builder);
+        ConfigureLogging(builder);
 
         return builder.Build();
     }
 
-    private static void RegisterViewWithViewModels(MauiAppBuilder builder)
+    private static void ConfigureSerilog()
     {
-        builder.Services.AddSingleton<PlantOverviewView>();
-        builder.Services.AddSingleton<PlantListOverviewViewModel>();
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Error)
+            .MinimumLevel.Override("Microsoft.Maui", Serilog.Events.LogEventLevel.Error)
+            .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Warning)
+            .WriteTo.File(
+                ConstantValues.LogFilePath,
+                rollingInterval: RollingInterval.Month,
+                shared: true,
+                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}] [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+            .CreateLogger();
+    }
 
-        builder.Services.AddSingleton<PlantDetailView>();
-        builder.Services.AddSingleton<PlantDetailViewModel>();
+    private static void ConfigureDatabase(MauiAppBuilder builder)
+    {
+        string dbPath = Path.Combine(
+            Microsoft.Maui.Storage.FileSystem.AppDataDirectory,
+            ConstStrings.DatabaseFileName);
 
-        builder.Services.AddTransient<PlantAddEditView>();
-        builder.Services.AddTransient<PlantAddEditViewModel>();
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options
+                .UseSqlite($"Data Source={dbPath}")
+                .UseLazyLoadingProxies(useLazyLoadingProxies: true)
+#if DEBUG
+                .EnableSensitiveDataLogging()
+#endif
+        );
+    }
 
-        //builder.Services.AddTransient<LoginViewModel>();
+    private static void ConfigureRepositories(MauiAppBuilder builder)
+    {
+        builder.Services.AddScoped<IPlantRepository, PlantRepository>();
+        builder.Services.AddScoped<IWateringHistoryRepository, WateringHistoryRepository>();
+        builder.Services.AddScoped<IFertilizationHistoryRepository, FertilizationHistoryRepository>();
+    }
 
-        //builder.Services.AddTransient<ReminderView>();
-        //builder.Services.AddTransient<ReminderViewModel>();
+    private static void ConfigureAppServices(MauiAppBuilder builder)
+    {
+        builder.Services.AddSingleton<IPlantService, PlantService>();
+        builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
+    }
 
-        //builder.Services.AddTransient<ReminderCalendarView>();
-        //builder.Services.AddTransient<ReminderCalendarViewModel>();
+    private static void ConfigureSecurityServices(MauiAppBuilder builder)
+    {
+        builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
+    }
 
-        builder.Services.AddTransient<PlantCalendarView>();
-        builder.Services.AddTransient<PlantCalendarViewModel>();
+    private static void ConfigureAccessibilityServices(MauiAppBuilder builder)
+    {
+        builder.Services.AddSingleton<IAccessibilityService, AccessibilityService>();
+    }
 
-        builder.Services.AddSingleton<SettingsView>();
-        builder.Services.AddSingleton<SettingsViewModel>();
+    private static void ConfigureViewsAndViewModels(MauiAppBuilder builder)
+    {
+        // Singleton Views/ViewModels (long-lived, shared state)
+        builder.Services
+            .AddSingleton<PlantOverviewView>()
+            .AddSingleton<PlantListOverviewViewModel>();
 
-        builder.Services.AddTransient<CareHistoryView>();
-        builder.Services.AddTransient<CareHistoryViewModel>();
+        builder.Services
+            .AddSingleton<PlantDetailView>()
+            .AddSingleton<PlantDetailViewModel>();
 
-        builder.Services.AddTransient<SingePlantCareHistoryView>();
-        builder.Services.AddTransient<SinglePlantCareHistoryViewModel>();
+        builder.Services
+            .AddSingleton<SettingsView>()
+            .AddSingleton<SettingsViewModel>();
 
-        builder.Services.AddTransient<LogViewerPage>();
-        builder.Services.AddTransient<LogViewerViewModel>();
+        // Transient Views/ViewModels (new instance each time)
+        builder.Services
+            .AddTransient<PlantAddEditView>()
+            .AddTransient<PlantAddEditViewModel>();
+
+        builder.Services
+            .AddTransient<PlantCalendarView>()
+            .AddTransient<PlantCalendarViewModel>();
+
+        builder.Services
+            .AddTransient<CareHistoryView>()
+            .AddTransient<CareHistoryViewModel>();
+
+        builder.Services
+            .AddTransient<SingePlantCareHistoryView>()
+            .AddTransient<SinglePlantCareHistoryViewModel>();
+
+        builder.Services
+            .AddTransient<LogViewerPage>()
+            .AddTransient<LogViewerViewModel>();
+
+        // Commented out views - uncomment when ready to implement
+        // builder.Services
+        //     .AddTransient<LoginView>()
+        //     .AddTransient<LoginViewModel>();
+
+        // builder.Services
+        //     .AddTransient<ReminderView>()
+        //     .AddTransient<ReminderViewModel>();
+
+        // builder.Services
+        //     .AddTransient<ReminderCalendarView>()
+        //     .AddTransient<ReminderCalendarViewModel>();
+    }
+
+    private static void ConfigureNavigation(MauiAppBuilder builder)
+    {
+        builder.Services.AddSingleton<INavigationService, NavigationService>();
+        builder.Services.AddSingleton<IDialogService, DialogService>();
+    }
+
+    private static void ConfigureDataServices(MauiAppBuilder builder)
+    {
+        builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
+        builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(App).Assembly));
+        builder.Services.AddTransient<IDataExportService, DataExportService>();
+        builder.Services.AddTransient<IDataImportService, DataImportService>();
+    }
+
+    private static void ConfigureLogging(MauiAppBuilder builder)
+    {
+        builder.Logging.ClearProviders();
+
+#if DEBUG
+        builder.Logging.AddDebug();
+#endif
+
+        builder.Logging.AddSerilog(dispose: true);
+        builder.Services.AddSingleton(typeof(IAppLogger<>), typeof(AppLogger<>));
     }
 }

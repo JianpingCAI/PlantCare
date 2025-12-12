@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.10.34902.84
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11304.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlantCare.App", "PlantCare.App\PlantCare.App.csproj", "{0A4C56C9-88D3-48F4-98C8-F4C6D560FCAF}"
 EndProject
@@ -10,14 +10,18 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documents", "documents", "{5D69017E-E8FD-4F57-9B81-A8CB3F071C47}"
 	ProjectSection(SolutionItems) = preProject
 		documents\design_document.md = documents\design_document.md
-		documents\design_document_v2.md = documents\design_document_v2.md
 		documents\notes.md = documents\notes.md
-		notes_debounce.md = notes_debounce.md
+		documents\notes_debounce.md = documents\notes_debounce.md
 		documents\require_document.md = documents\require_document.md
-		TODO.md = TODO.md
+		documents\tools.md = documents\tools.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlantCare.App.Tests", "PlantCare.App.Tests\PlantCare.App.Tests.csproj", "{5DEF9AFC-7B2B-4EC2-A7D7-116E2AA1F296}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6DA92A57-6B8A-4C4A-975A-2B93279BE702}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
