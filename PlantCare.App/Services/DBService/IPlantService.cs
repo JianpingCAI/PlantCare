@@ -1,4 +1,4 @@
-﻿using PlantCare.App.ViewModels;
+using PlantCare.App.ViewModels;
 using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
 
@@ -35,4 +35,10 @@ public interface IPlantService
     Task ClearAllTablesAsync();
 
     Task DeleteAllPhotosAsync();
+    
+    /// <summary>
+    /// Validates and regenerates missing thumbnails for all plants
+    /// </summary>
+    /// <returns>Number of thumbnails regenerated</returns>
+    Task<int> ValidateAndRegenerateThumbnailsAsync();
 }

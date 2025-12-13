@@ -39,6 +39,13 @@ public interface IImageOptimizationService
     /// Cleans up orphaned images and thumbnails
     /// </summary>
     Task CleanupOrphanedImagesAsync(IEnumerable<string> validImagePaths);
+    
+    /// <summary>
+    /// Regenerates missing thumbnails for all provided photo paths
+    /// </summary>
+    /// <param name="photoPaths">Collection of photo paths to check and regenerate thumbnails for</param>
+    /// <returns>Number of thumbnails regenerated</returns>
+    Task<int> RegenerateMissingThumbnailsAsync(IEnumerable<string> photoPaths);
 }
 
 public class ImageOptimizationService : IImageOptimizationService
@@ -160,6 +167,46 @@ public class ImageOptimizationService : IImageOptimizationService
                 }
             }
         });
+    }
+
+    public async Task<int> RegenerateMissingThumbnailsAsync(IEnumerable<string> photoPaths)
+    {
+        int regeneratedCount = 0;
+
+        foreach (var photoPath in photoPaths)
+        {
+            // Skip default or empty paths
+            if (string.IsNullOrEmpty(photoPath) || photoPath.Contains("default_plant.png"))
+                continue;
+
+            // Check if photo file exists
+            if (!File.Exists(photoPath))
+                continue;
+
+            string thumbnailPath = GetThumbnailPath(photoPath);
+
+            // Regenerate thumbnail if missing
+            if (!File.Exists(thumbnailPath))
+            {
+                try
+                {
+                    await CreateThumbnailAsync(photoPath);
+                    regeneratedCount++;
+                    Debug.WriteLine($"Regenerated thumbnail for: {Path.GetFileName(photoPath)}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Failed to regenerate thumbnail for {photoPath}: {ex.Message}");
+                }
+            }
+        }
+
+        if (regeneratedCount > 0)
+        {
+            Debug.WriteLine($"Regenerated {regeneratedCount} missing thumbnails");
+        }
+
+        return regeneratedCount;
     }
 
     private static async Task<byte[]> ResizeImageAsync(Stream sourceStream, int maxWidth, int maxHeight)

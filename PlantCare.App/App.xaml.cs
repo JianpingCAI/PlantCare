@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PlantCare.App.Services;
+using PlantCare.App.Services.DBService;
 using PlantCare.App.Utils;
 using PlantCare.Data.Repositories;
 using System.Diagnostics;
@@ -9,6 +10,7 @@ namespace PlantCare.App
     public partial class App : Application
     {
         private readonly IAppSettingsService _settingsService;
+        private readonly IServiceProvider _serviceProvider;
 
         public static Language AppLanguage { get; private set; }
 
@@ -17,6 +19,7 @@ namespace PlantCare.App
             InitializeComponent();
 
             _settingsService = settingsService;
+            _serviceProvider = serviceProvider;
 
             //FileHelper.DeleteDatabaseFile();
 
@@ -40,6 +43,41 @@ namespace PlantCare.App
             // Global exception handling
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
             TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+            
+            // Validate and regenerate thumbnails on startup (async fire-and-forget)
+            _ = ValidateThumbnailsOnStartupAsync();
+        }
+
+        /// <summary>
+        /// Validates thumbnails on app startup and regenerates missing ones.
+        /// This runs asynchronously without blocking app startup.
+        /// </summary>
+        private async Task ValidateThumbnailsOnStartupAsync()
+        {
+            try
+            {
+                // Small delay to let app finish initializing
+                await Task.Delay(2000);
+
+                using var scope = _serviceProvider.CreateScope();
+                var plantService = scope.ServiceProvider.GetRequiredService<IPlantService>();
+
+                int regeneratedCount = await plantService.ValidateAndRegenerateThumbnailsAsync();
+
+                if (regeneratedCount > 0)
+                {
+                    Debug.WriteLine($"[Thumbnail Health Check] Regenerated {regeneratedCount} missing thumbnails");
+                }
+                else
+                {
+                    Debug.WriteLine("[Thumbnail Health Check] All thumbnails are valid");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Thumbnail Health Check] Failed: {ex.Message}");
+                // Don't crash the app if thumbnail validation fails
+            }
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

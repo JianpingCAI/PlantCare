@@ -206,4 +206,29 @@ public class PlantService : IPlantService
             }
         }
     }
+
+    public async Task<int> ValidateAndRegenerateThumbnailsAsync()
+    {
+        if (_imageOptimizationService == null)
+        {
+            return 0;
+        }
+
+        // Get all plants from database
+        List<PlantDbModel> plants = await _plantRepository.GetAllAsync();
+        
+        // Extract photo paths (excluding default)
+        var photoPaths = plants
+            .Select(p => p.PhotoPath)
+            .Where(path => !string.IsNullOrEmpty(path) && !path.Contains(ConstStrings.DefaultPhotoPath))
+            .ToList();
+
+        if (photoPaths.Count == 0)
+        {
+            return 0;
+        }
+
+        // Regenerate missing thumbnails
+        return await _imageOptimizationService.RegenerateMissingThumbnailsAsync(photoPaths);
+    }
 }
