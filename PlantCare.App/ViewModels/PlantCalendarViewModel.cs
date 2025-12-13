@@ -74,7 +74,19 @@ namespace PlantCare.App.ViewModels
         [ObservableProperty]
         private Calendar<PlantEventDay, PlantEvent>? _reminderCalendar = null;
 
-        public bool IsShowUnattendedOnly { get; set; } = true;
+        private bool _isShowUnattendedOnly = true;
+
+        public bool IsShowUnattendedOnly
+        {
+            get => _isShowUnattendedOnly;
+            set
+            {
+                if (SetProperty(ref _isShowUnattendedOnly, value))
+                {
+                    _ = UpdateCalendarAndEventListAsync();
+                }
+            }
+        }
 
         // Displayed events
         public ObservableRangeCollection<PlantEvent> PlantEvents { get; } = [];
@@ -88,7 +100,6 @@ namespace PlantCare.App.ViewModels
         [ObservableProperty]
         private string _selectAllButtonText = ConstStrings.SelectAll;
 
-        //[ObservableProperty]
         private bool _isShowCalendar = true;
 
         [RelayCommand]
@@ -305,46 +316,8 @@ namespace PlantCare.App.ViewModels
 
         #endregion Load Data
 
-        /// <summary>
-        /// Checkbox: whether only to show unattended plants
-        /// </summary>
-        /// <param name="isChecked"></param>
-        /// <returns></returns>
-        [RelayCommand]
-        public async Task SelectUnattendedPlants(object isChecked)
-        {
-            if (IsBusy) return;
+        #region Mark done
 
-            try
-            {
-                IsBusy = true;
-                IsLoading = true;
-
-                bool state = (bool)isChecked;
-
-                if (IsShowUnattendedOnly != state)
-                {
-                    IsShowUnattendedOnly = state;
-
-                    await UpdateCalendarAndEventListAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
-            }
-            finally
-            {
-                IsBusy = false;
-                IsLoading = false;
-            }
-        }
-
-        /// <summary>
-        /// Selection for checking done
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
         [RelayCommand]
         public async Task TickedPlantEventsChanged(object args)
         {
@@ -378,8 +351,6 @@ namespace PlantCare.App.ViewModels
                 Debug.WriteLine(ex.Message);
             }
         }
-
-        #region Mark done
 
         [RelayCommand]
         public async Task SetSelectedRemindersDone()

@@ -126,14 +126,7 @@
                     <CheckBox
                         x:Name="chkUnattended"
                         HorizontalOptions="Start"
-                        IsChecked="True">
-                        <CheckBox.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                Command="{Binding SelectUnattendedPlantsCommand}"
-                                CommandParameter="{Binding Source={x:Reference chkUnattended}, Path=IsChecked}"
-                                EventName="CheckedChanged" />
-                        </CheckBox.Behaviors>
-                    </CheckBox>
+                        IsChecked="{Binding IsShowUnattendedOnly, Mode=TwoWay}" />
                     <Label Text="{Binding Path=[UnattendedOnly], Source={x:Static utils:LocalizationManager.Instance}}" />
                 </HorizontalStackLayout>
 
@@ -292,7 +285,7 @@
             <Grid
                 x:Name="calenderView"
                 Grid.Row="3"
-                IsVisible="{Binding IsChecked, Source={x:Reference chkCalendar}}">
+                IsVisible="{Binding IsShowCalendar}">
                 <ScrollView HorizontalScrollBarVisibility="Always" VerticalScrollBarVisibility="Always">
                     <Border>
                         <Border.StrokeShape>
@@ -420,19 +413,6 @@
                     <!--  Portrait  -->
                     <VisualState x:Name="Portrait">
                         <VisualState.Setters>
-                            <Setter TargetName="MainGrid" Property="RowDefinitions">
-                                <RowDefinitionCollection>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="{Binding IsShowCalendar, Converter={StaticResource CalendarHeightConverter}}" />
-                                </RowDefinitionCollection>
-                            </Setter>
-                            <Setter TargetName="MainGrid" Property="ColumnDefinitions">
-                                <ColumnDefinitionCollection>
-                                    <ColumnDefinition Width="*" />
-                                </ColumnDefinitionCollection>
-                            </Setter>
                             <!--  selectedDatesList  -->
                             <Setter TargetName="selectedDatesList" Property="Grid.Row" Value="1" />
                             <Setter TargetName="selectedDatesList" Property="Grid.Column" Value="0" />
@@ -441,7 +421,7 @@
                             <Setter TargetName="plantsGrid" Property="Grid.Row" Value="2" />
                             <Setter TargetName="plantsGrid" Property="Grid.Column" Value="0" />
 
-                            <!--  calendarExpander  -->
+                            <!--  calenderView  -->
                             <Setter TargetName="calenderView" Property="Grid.Row" Value="3" />
                             <Setter TargetName="calenderView" Property="Grid.Column" Value="0" />
                         </VisualState.Setters>
@@ -449,19 +429,6 @@
                     <!--  Landscape  -->
                     <VisualState x:Name="Landscape">
                         <VisualState.Setters>
-                            <Setter TargetName="MainGrid" Property="RowDefinitions">
-                                <RowDefinitionCollection>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="*" />
-                                </RowDefinitionCollection>
-                            </Setter>
-                            <Setter TargetName="MainGrid" Property="ColumnDefinitions">
-                                <ColumnDefinitionCollection>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="{Binding IsShowCalendar, Converter={StaticResource CalendarWidthConverter}}" />
-                                </ColumnDefinitionCollection>
-                            </Setter>
                             <!--  selectedDatesList  -->
                             <Setter TargetName="selectedDatesList" Property="Grid.Row" Value="1" />
                             <Setter TargetName="selectedDatesList" Property="Grid.Column" Value="0" />
@@ -470,12 +437,10 @@
                             <Setter TargetName="plantsGrid" Property="Grid.Row" Value="2" />
                             <Setter TargetName="plantsGrid" Property="Grid.Column" Value="0" />
 
-                            <!--  calendarExpander  -->
+                            <!--  calenderView  -->
                             <Setter TargetName="calenderView" Property="Grid.Row" Value="0" />
                             <Setter TargetName="calenderView" Property="Grid.Column" Value="1" />
-
                             <Setter TargetName="calenderView" Property="Grid.RowSpan" Value="3" />
-                            <!--<Setter TargetName="calenderView" Property="WidthRequest" Value="400" />-->
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>

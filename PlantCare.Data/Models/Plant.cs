@@ -1,4 +1,4 @@
-﻿namespace PlantCare.Data.Models;
+namespace PlantCare.Data.Models;
 
 public class Plant
 {
@@ -7,6 +7,7 @@ public class Plant
     public string Species { get; set; } = string.Empty;
     public int Age { get; set; }
     public string PhotoPath { get; set; } = string.Empty;
+    public string ThumbnailPath { get; set; } = string.Empty;
 
     public DateTime LastWatered { get; set; } = DateTime.Now;
     public int WateringFrequencyInHours { get; set; }

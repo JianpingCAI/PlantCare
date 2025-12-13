@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PlantCare.App.Utils;
 using PlantCare.App.ViewModels.Base;
 
@@ -13,6 +13,9 @@ public partial class PlantViewModelBase : ViewModelBase
 
     [ObservableProperty]
     private string _photoPath = string.Empty;
+
+    [ObservableProperty]
+    private string _thumbnailPath = string.Empty;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(NextWateringTime))]

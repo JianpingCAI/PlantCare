@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
@@ -66,9 +66,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
             await _plantService.DeletePlantAsync(Id);
             WeakReferenceMessenger.Default.Send(new PlantDeletedMessage(Id, Name));
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            _navigationService.GoToPlantsOverview();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            await _navigationService.GoToPlantsOverview();
         }
         catch (Exception ex)
         {

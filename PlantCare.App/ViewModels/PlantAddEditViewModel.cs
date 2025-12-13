@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
@@ -20,13 +20,19 @@ namespace PlantCare.App.ViewModels
         private readonly IPlantService _plantService;
         private readonly IDialogService _dialogService;
         private readonly INavigationService _navigationService;
+        private readonly IImageOptimizationService _imageOptimizationService;
 
-        public PlantAddEditViewModel(IPlantService plantService, IDialogService dialogService, INavigationService navigationService)
+        public PlantAddEditViewModel(
+            IPlantService plantService, 
+            IDialogService dialogService, 
+            INavigationService navigationService,
+            IImageOptimizationService imageOptimizationService)
         {
             ErrorsChanged += ViewModel_ErrorsChanged;
             _plantService = plantService;
             _dialogService = dialogService;
             _navigationService = navigationService;
+            _imageOptimizationService = imageOptimizationService;
         }
 
         [ObservableProperty]
@@ -181,10 +187,7 @@ namespace PlantCare.App.ViewModels
 
                     WeakReferenceMessenger.Default.Send(new PlantAddedMessage(Id));
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    _navigationService.GoToPlantsOverview();
-
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    await _navigationService.GoToPlantsOverview();
                 }
                 // Edit/Update a plant
                 else
@@ -225,9 +228,7 @@ namespace PlantCare.App.ViewModels
                     {
                         WeakReferenceMessenger.Default.Send(new PlantModifiedMessage(Id));
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                        _navigationService.GoToPlantDetail(Id);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                        await _navigationService.GoToPlantDetail(Id);
                     }
                     else
                     {
@@ -265,25 +266,18 @@ namespace PlantCare.App.ViewModels
                     PickerTitle = $"{LocalizationManager.Instance[ConstStrings.PickPhoto] ?? ConstStrings.PickPhoto}"
                 });
 
-                
-
                 if (photoFileResult != null)
                 {
                     using Stream sourceStream = await photoFileResult.OpenReadAsync();
 
-                    // Resize the image
-                    byte[] resizedImage = await ImageHelper.ResizeImageAsync(sourceStream, ImageHelper.DefaultPhotoMaxWidthOrHeight);
+                    // Generate unique filename
+                    string fileExtension = Path.GetExtension(photoFileResult.FileName) ?? ".jpg";
+                    string fileName = $"{Guid.NewGuid()}{fileExtension}";
 
-                    string photosDirectory = Path.Combine(FileSystem.AppDataDirectory, ConstStrings.Photos);
-                    if (!Directory.Exists(photosDirectory))
-                    {
-                        Directory.CreateDirectory(photosDirectory);
-                    }
-                    string localFilePath = Path.Combine(photosDirectory, photoFileResult.FileName);
-                    await File.WriteAllBytesAsync(localFilePath, resizedImage);
-
-                    //using FileStream localFileStream = File.OpenWrite(localFilePath);
-                    //await sourceStream.CopyToAsync(localFileStream);
+                    // Optimize and save the image (includes thumbnail generation)
+                    string localFilePath = await _imageOptimizationService.OptimizeAndSaveImageAsync(
+                        sourceStream, 
+                        fileName);
 
                     await MainThread.InvokeOnMainThreadAsync(() => { PhotoPath = localFilePath; });
                 }
@@ -313,20 +307,14 @@ namespace PlantCare.App.ViewModels
                     {
                         using Stream sourceStream = await photo.OpenReadAsync();
 
-                        // Resize the photo
-                        byte[] resizedImage = await ImageHelper.ResizeImageAsync(sourceStream, ImageHelper.DefaultPhotoMaxWidthOrHeight);
+                        // Generate unique filename
+                        string fileExtension = Path.GetExtension(photo.FileName) ?? ".jpg";
+                        string fileName = $"{Guid.NewGuid()}{fileExtension}";
 
-                        // save the file into local storage
-                        string photosDirectory = Path.Combine(FileSystem.AppDataDirectory, ConstStrings.Photos);
-                        if (!Directory.Exists(photosDirectory))
-                        {
-                            Directory.CreateDirectory(photosDirectory);
-                        }
-                        string localFilePath = Path.Combine(photosDirectory, photo.FileName);
-                        await File.WriteAllBytesAsync(localFilePath, resizedImage);
-
-                        //using FileStream localFileStream = File.OpenWrite(localFilePath);
-                        //await sourceStream.CopyToAsync(localFileStream);
+                        // Optimize and save the photo (includes thumbnail generation)
+                        string localFilePath = await _imageOptimizationService.OptimizeAndSaveImageAsync(
+                            sourceStream, 
+                            fileName);
 
                         await MainThread.InvokeOnMainThreadAsync(() => { PhotoPath = localFilePath; });
                     }

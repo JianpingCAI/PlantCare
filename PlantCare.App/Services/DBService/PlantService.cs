@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using PlantCare.App.ViewModels;
 using PlantCare.Data;
 using PlantCare.Data.DbModels;
@@ -13,17 +13,20 @@ public class PlantService : IPlantService
     private readonly IWateringHistoryRepository _waterHistoryRepository;
     private readonly IFertilizationHistoryRepository _fertilizationHistoryRepository;
     private readonly IMapper _mapper;
+    private readonly IImageOptimizationService? _imageOptimizationService;
 
     public PlantService(
         IPlantRepository plantRepository,
         IWateringHistoryRepository waterHistoryRepository,
         IFertilizationHistoryRepository fertilizationHistoryRepository,
-        IMapper mapper)
+        IMapper mapper,
+        IImageOptimizationService? imageOptimizationService = null)
     {
         _plantRepository = plantRepository;
         _waterHistoryRepository = waterHistoryRepository;
         _fertilizationHistoryRepository = fertilizationHistoryRepository;
         _mapper = mapper;
+        _imageOptimizationService = imageOptimizationService;
     }
 
     public Task<List<Plant>> GetAllPlantsAsync()
@@ -62,16 +65,27 @@ public class PlantService : IPlantService
     {
         PlantDbModel? deletedPlant = await _plantRepository.DeleteAsync(plantId);
         if (deletedPlant != null)
-            DeletePhotoFile(deletedPlant.PhotoPath);
+        {
+            await DeletePhotoFileAsync(deletedPlant.PhotoPath);
+        }
     }
 
-    private static void DeletePhotoFile(string photoPath)
+    private async Task DeletePhotoFileAsync(string photoPath)
     {
-        if (!string.IsNullOrEmpty(photoPath)
-            && !(photoPath.Contains(ConstStrings.DefaultPhotoPath))
-            && File.Exists(photoPath))
+        if (string.IsNullOrEmpty(photoPath) || photoPath.Contains(ConstStrings.DefaultPhotoPath))
         {
-            File.Delete(photoPath);
+            return;
+        }
+
+        // Use image optimization service if available (deletes both image and thumbnail)
+        if (_imageOptimizationService != null)
+        {
+            await _imageOptimizationService.DeleteImageAndThumbnailAsync(photoPath);
+        }
+        // Fallback to simple file deletion
+        else if (File.Exists(photoPath))
+        {
+            await Task.Run(() => File.Delete(photoPath));
         }
     }
 
@@ -186,13 +200,10 @@ public class PlantService : IPlantService
         List<string> photoPaths = await _plantRepository.GetAllPhotoPathsAsync();
         if (photoPaths.Count > 0)
         {
-            await Task.Run(() =>
+            foreach (string photoPath in photoPaths)
             {
-                foreach (string photoPath in photoPaths)
-                {
-                    DeletePhotoFile(photoPath);
-                }
-            });
+                await DeletePhotoFileAsync(photoPath);
+            }
         }
     }
 }

@@ -82,7 +82,6 @@ public static class MauiProgram
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options
                 .UseSqlite($"Data Source={dbPath}")
-                .UseLazyLoadingProxies(useLazyLoadingProxies: true)
 #if DEBUG
                 .EnableSensitiveDataLogging()
 #endif
@@ -100,6 +99,7 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<IPlantService, PlantService>();
         builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
+        builder.Services.AddSingleton<IImageOptimizationService, ImageOptimizationService>();
     }
 
     private static void ConfigureSecurityServices(MauiAppBuilder builder)

@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PlantCare.App.Services;
 
@@ -787,6 +787,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         string originPhotoPath = plantVM.PhotoPath;
         plantVM.PhotoPath = plant.PhotoPath;
+        plantVM.ThumbnailPath = plant.ThumbnailPath;
 
         plantVM.LastWatered = plant.LastWatered;
         plantVM.WateringFrequencyInHours = plant.WateringFrequencyInHours;

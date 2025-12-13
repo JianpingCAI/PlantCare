@@ -1,0 +1,178 @@
+# PlantCare Development Workspace Guidelines
+
+## 📌 Global Development Standards
+
+This file documents the PlantCare project development guidelines for consistent code quality and design system adherence.
+
+---
+
+## 🎨 Design System Quick Reference
+
+### Colors
+```
+Primary:      #2D5016 (Deep Sage Green)
+Secondary:    #5EC383 (Vibrant Mint)
+Accent:       #A8D5BA (Light Sage)
+Success:      #5EC383 (Green)
+Warning:      #F39C12 (Orange)
+Danger:       #E74C3C (Red)
+Info:         #3498DB (Blue)
+```
+
+### Typography
+```
+Display:   32px, 28px, 24px (Bold) - Page titles
+Headline:  28px, 24px, 20px (Bold) - Section headers
+Title:     22px, 18px, 16px (Bold) - Subsection headers
+Body:      16px, 14px, 12px (Regular) - Main content
+Label:     14px, 12px, 11px (Bold) - Labels
+Caption:   12px, 11px (Regular) - Helper text
+```
+
+### Spacing Grid
+```
+8px   - Element spacing
+12px  - Section spacing
+16px  - Card padding
+20px  - Page padding
+```
+
+---
+
+## 🛠️ File Location Reference
+
+### Core Style Files (Reference Only)
+- `PlantCare.App\Resources\Styles\Colors.xaml` → Color definitions
+- `PlantCare.App\Resources\Styles\Typography.xaml` → Text styles
+- `PlantCare.App\Resources\Styles\Styles.xaml` → Component styles
+
+### View Files (Implementation)
+- `PlantCare.App\Views\PlantOverviewView.xaml` → Plant grid
+- `PlantCare.App\Views\PlantDetailView.xaml` → Plant details
+- `PlantCare.App\Views\PlantAddEditView.xaml` → Add/edit form
+
+---
+
+## ✨ Phase 2 Implementation Rules
+
+### For Text Elements
+```xaml
+✅ CORRECT:
+<Label Style="{StaticResource TitleSmallStyle}" Text="Plant Name" />
+
+❌ WRONG:
+<Label FontSize="16" Text="Plant Name" />
+```
+
+### For Colors
+```xaml
+✅ CORRECT:
+<Label TextColor="{AppThemeBinding Light={StaticResource DarkGray}, Dark={StaticResource Gray100}}" />
+
+❌ WRONG:
+<Label TextColor="#2F2F2F" />
+```
+
+### For Cards
+```xaml
+✅ CORRECT:
+<Border Style="{StaticResource ModernCardStyle}" Padding="16">
+
+❌ WRONG:
+<Border CornerRadius="10" Padding="10">
+```
+
+---
+
+## 📋 Common Development Patterns
+
+### Pattern 1: Styled Label
+```xaml
+<Label 
+    Style="{StaticResource BodyStyle}" 
+    Text="{Binding PropertyName}" />
+```
+
+### Pattern 2: Titled Section
+```xaml
+<Label Style="{StaticResource TitleStyle}" Text="Section Header" />
+<Label Style="{StaticResource BodyStyle}" Text="Section content" />
+```
+
+### Pattern 3: Modern Card
+```xaml
+<Border Style="{StaticResource ModernCardStyle}">
+    <StackLayout Spacing="12" Padding="16">
+        <Label Style="{StaticResource TitleSmallStyle}" Text="Title" />
+        <Label Style="{StaticResource BodyStyle}" Text="Content" />
+    </StackLayout>
+</Border>
+```
+
+### Pattern 4: Form Field
+```xaml
+<StackLayout Spacing="8">
+    <Label Style="{StaticResource LabelStyle}" Text="Field Label" />
+    <Entry 
+        Style="{StaticResource BodyStyle}"
+        Text="{Binding FieldValue}" 
+        Placeholder="Enter value" />
+</StackLayout>
+```
+
+### Pattern 5: Action Button
+```xaml
+<Button 
+    Style="{StaticResource ...}"
+    Command="{Binding ActionCommand}"
+    Text="Action" 
+    CornerRadius="12" 
+    HeightRequest="48" />
+```
+
+---
+
+## 🚀 Before Each Commit
+
+Run this checklist:
+- [ ] Code builds without errors
+- [ ] No build warnings
+- [ ] Typography styles used (no hardcoded sizes)
+- [ ] Colors from Colors.xaml
+- [ ] Dark/light mode tested
+- [ ] Multiple screen sizes tested
+- [ ] All platforms tested (Android, iOS, Windows)
+- [ ] No performance issues
+- [ ] Changes follow established patterns
+
+---
+
+## 🐛 Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| Build fails | Check XAML syntax, verify closing tags |
+| Colors look wrong | Verify AppThemeBinding, check Colors.xaml |
+| Text size inconsistent | Use typography styles, never hardcode |
+| Dark mode broken | Ensure AppThemeBinding in all colors |
+| Layout issues | Check spacing grid (8px multiples) |
+
+---
+
+## 📚 Key Documentation
+
+- PHASE_2_READY_FOR_IMPLEMENTATION.md
+- PLANTCARE_PROJECT_OVERVIEW.md
+- UI_UX_MODERNIZATION_PLAN.md
+- .github/COPILOT_INSTRUCTIONS.md (This system prompt)
+
+---
+
+## 🔗 Repository
+
+https://github.com/JianpingCAI/PlantCare (master branch)
+
+---
+
+**These guidelines ensure consistency, quality, and beautiful user experience across all platforms.** ✨
+

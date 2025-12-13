@@ -10,8 +10,8 @@
     <Shell.Resources>
         <ResourceDictionary>
             <Style TargetType="TabBar">
-                <Setter Property="Shell.TabBarForegroundColor" Value="MediumPurple" />
-                <Setter Property="Shell.TabBarTitleColor" Value="MediumOrchid" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource Primary}" />
             </Style>
         </ResourceDictionary>
     </Shell.Resources>

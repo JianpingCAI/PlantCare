@@ -29,7 +29,7 @@
                             StrokeThickness="0"
                             VerticalOptions="Center">
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="10" />
+                                <RoundRectangle CornerRadius="12" />
                             </Border.StrokeShape>
                             <Grid>
                                 <Image
@@ -44,21 +44,20 @@
                                     <!--  Upload image  -->
                                     <Button
                                         Command="{Binding UploadImageCommand}"
-                                        CornerRadius="10"
+                                        CornerRadius="12"
                                         FontFamily="MaterialIconsRegular"
                                         FontSize="25"
                                         HorizontalOptions="Start"
-                                        Opacity="0.75"
                                         Text="&#xe413;"
                                         VerticalOptions="Center" />
                                     <!--  Take photo  -->
                                     <Button
                                         Grid.Column="1"
                                         Command="{Binding TakePhotoCommand}"
+                                        CornerRadius="12"
                                         FontFamily="MaterialIconsRegular"
                                         FontSize="25"
                                         HorizontalOptions="End"
-                                        Opacity="0.75"
                                         Text="&#xe439;"
                                         VerticalOptions="Center" />
                                 </Grid>
@@ -67,41 +66,25 @@
                     </Grid>
 
                     <!--  Basic Info  -->
-                    <Border Padding="2">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="5" />
-                        </Border.StrokeShape>
+                    <Border Margin="0,5" Style="{StaticResource ModernCardStyle}">
                         <Grid
                             ColumnDefinitions="90,*"
                             HorizontalOptions="CenterAndExpand"
                             RowDefinitions="35,35,*">
 
                             <Label
-                                FontAttributes="Bold"
+                                Style="{StaticResource LabelStyle}"
                                 HorizontalTextAlignment="End"
                                 Text="{Binding Path=[Name], Source={x:Static utils:LocalizationManager.Instance}}" />
                             <Entry
                                 Grid.Column="1"
                                 Margin="5,0,0,0"
                                 Text="{Binding Name, Mode=TwoWay}"
-                                VerticalOptions="End">
-                                <!--<Entry.Behaviors>
-                                -->
-                                <!--<toolkit:SelectAllTextBehavior />-->
-                                <!--
-                                    <OnIdiom x:TypeArguments="Behavior">
-                                        <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
-                                        <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                -->
-                                <!--  Specify other idioms or a default if needed  -->
-                                <!--
-                                    </OnIdiom>
-                                </Entry.Behaviors>-->
-                            </Entry>
+                                VerticalOptions="End" />
 
                             <Label
                                 Grid.Row="1"
-                                FontAttributes="Bold"
+                                Style="{StaticResource LabelStyle}"
                                 HorizontalTextAlignment="End"
                                 Text="{Binding Path=[Species], Source={x:Static utils:LocalizationManager.Instance}}" />
                             <Entry
@@ -109,24 +92,11 @@
                                 Grid.Column="1"
                                 Margin="5,0,0,0"
                                 Text="{Binding Species, Mode=TwoWay}"
-                                VerticalOptions="Start">
-                                <!--<Entry.Behaviors>
-                                -->
-                                <!--<toolkit:SelectAllTextBehavior />-->
-                                <!--
-                                    <OnIdiom x:TypeArguments="Behavior">
-                                        <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
-                                        <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                -->
-                                <!--  Specify other idioms or a default if needed  -->
-                                <!--
-                                    </OnIdiom>
-                                </Entry.Behaviors>-->
-                            </Entry>
+                                VerticalOptions="Start" />
 
                             <Label
                                 Grid.Row="2"
-                                FontAttributes="Bold"
+                                Style="{StaticResource LabelStyle}"
                                 HorizontalTextAlignment="End"
                                 Text="{Binding Path=[Age], Source={x:Static utils:LocalizationManager.Instance}}" />
                             <HorizontalStackLayout Grid.Row="2" Grid.Column="1">
@@ -134,20 +104,7 @@
                                     Margin="5,0,0,0"
                                     HorizontalTextAlignment="Center"
                                     Text="{Binding Age, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                    VerticalOptions="End">
-                                    <!--<Entry.Behaviors>
-                                    -->
-                                    <!--<toolkit:SelectAllTextBehavior />-->
-                                    <!--
-                                        <OnIdiom x:TypeArguments="Behavior">
-                                            <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
-                                            <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                    -->
-                                    <!--  Specify other idioms or a default if needed  -->
-                                    <!--
-                                        </OnIdiom>
-                                    </Entry.Behaviors>-->
-                                </Entry>
+                                    VerticalOptions="End" />
                                 <Stepper
                                     HeightRequest="50"
                                     Increment="1"
@@ -161,16 +118,13 @@
                     </Border>
 
                     <!--  Watering  -->
-                    <Border Margin="0,5" Padding="2">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="5" />
-                        </Border.StrokeShape>
+                    <Border Margin="0,5" Style="{StaticResource ModernCardStyle}">
                         <Grid
                             ColumnDefinitions="90,*"
                             HorizontalOptions="CenterAndExpand"
                             RowDefinitions="*,*">
                             <Label
-                                FontAttributes="Bold"
+                                Style="{StaticResource LabelStyle}"
                                 HorizontalTextAlignment="End"
                                 Text="{Binding Path=[LastWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
 
@@ -181,9 +135,8 @@
                                 <!--  Now button  -->
                                 <Button
                                     Margin="30,0,0,0"
-                                    Padding="5"
                                     Command="{Binding SetCurrentTimeAsLastWateredCommand}"
-                                    HeightRequest="35"
+                                    HeightRequest="40"
                                     Text="{Binding Path=[Now], Source={x:Static utils:LocalizationManager.Instance}}"
                                     VerticalOptions="Center" />
                             </HorizontalStackLayout>
@@ -191,10 +144,9 @@
                             <!--  Watering Interval  -->
                             <Label
                                 Grid.Row="1"
-                                FontAttributes="Bold"
+                                Style="{StaticResource LabelStyle}"
                                 HorizontalTextAlignment="End"
                                 Text="{Binding Path=[WateringInterval], Source={x:Static utils:LocalizationManager.Instance}}" />
-                            <!--  Text="Waterting&#10;Interval"  -->
 
                             <VerticalStackLayout
                                 Grid.Row="1"
@@ -205,20 +157,7 @@
                                     <Entry
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding WateringFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                        VerticalOptions="Center">
-                                        <!--<Entry.Behaviors>
-                                        -->
-                                        <!--<toolkit:SelectAllTextBehavior />-->
-                                        <!--
-                                            <OnIdiom x:TypeArguments="Behavior">
-                                                <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
-                                                <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                        -->
-                                        <!--  Specify other idioms or a default if needed  -->
-                                        <!--
-                                            </OnIdiom>
-                                        </Entry.Behaviors>-->
-                                    </Entry>
+                                        VerticalOptions="Center" />
                                     <Stepper
                                         Increment="1"
                                         Maximum="365"
@@ -226,27 +165,14 @@
                                                                       Default=200}"
                                         Minimum="0"
                                         Value="{Binding WateringFrequencyDays, Mode=TwoWay}" />
-                                    <Label Margin="5,0,10,0" Text="{Binding Path=[Days], Source={x:Static utils:LocalizationManager.Instance}}" />
+                                    <Label Style="{StaticResource BodySmallStyle}" Margin="5,0,10,0" Text="{Binding Path=[Days], Source={x:Static utils:LocalizationManager.Instance}}" />
                                 </HorizontalStackLayout>
                                 <!--  Hours  -->
                                 <HorizontalStackLayout>
                                     <Entry
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding WateringFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                        VerticalOptions="Center">
-                                        <!--<Entry.Behaviors>
-                                        -->
-                                        <!--<toolkit:SelectAllTextBehavior />-->
-                                        <!--
-                                            <OnIdiom x:TypeArguments="Behavior">
-                                                <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
-                                                <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                        -->
-                                        <!--  Specify other idioms or a default if needed  -->
-                                        <!--
-                                            </OnIdiom>
-                                        </Entry.Behaviors>-->
-                                    </Entry>
+                                        VerticalOptions="Center" />
                                     <Stepper
                                         Increment="1"
                                         Maximum="23"
@@ -254,23 +180,20 @@
                                                                       Default=200}"
                                         Minimum="0"
                                         Value="{Binding WateringFrequencyHours, Mode=TwoWay}" />
-                                    <Label Margin="5,0,0,0" Text="{Binding Path=[Hours], Source={x:Static utils:LocalizationManager.Instance}}" />
+                                    <Label Style="{StaticResource BodySmallStyle}" Margin="5,0,0,0" Text="{Binding Path=[Hours], Source={x:Static utils:LocalizationManager.Instance}}" />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </Grid>
                     </Border>
 
                     <!--  Fertilization  -->
-                    <Border Padding="2">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="5" />
-                        </Border.StrokeShape>
+                    <Border Margin="0,5" Style="{StaticResource ModernCardStyle}">
                         <Grid
                             ColumnDefinitions="90,*"
                             HorizontalOptions="CenterAndExpand"
                             RowDefinitions="*,*">
                             <Label
-                                FontAttributes="Bold"
+                                Style="{StaticResource LabelStyle}"
                                 HorizontalTextAlignment="End"
                                 Text="{Binding Path=[LastFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
 
@@ -279,16 +202,15 @@
                                 <TimePicker Time="{Binding LastFertilizationTime, Mode=TwoWay}" VerticalOptions="End" />
                                 <Button
                                     Margin="30,0,0,0"
-                                    Padding="5"
                                     Command="{Binding SetCurrentTimeAsLastFertilizationCommand}"
-                                    HeightRequest="35"
+                                    HeightRequest="40"
                                     Text="{Binding Path=[Now], Source={x:Static utils:LocalizationManager.Instance}}"
                                     VerticalOptions="Center" />
                             </HorizontalStackLayout>
 
                             <Label
                                 Grid.Row="1"
-                                FontAttributes="Bold"
+                                Style="{StaticResource LabelStyle}"
                                 HorizontalTextAlignment="End"
                                 Text="{Binding Path=[FertilizationInterval], Source={x:Static utils:LocalizationManager.Instance}}" />
 
@@ -300,20 +222,7 @@
                                     <Entry
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding FertilizationFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                        VerticalOptions="Center">
-                                        <!--<Entry.Behaviors>
-                                        -->
-                                        <!--<toolkit:SelectAllTextBehavior />-->
-                                        <!--
-                                            <OnIdiom x:TypeArguments="Behavior">
-                                                <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
-                                                <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                        -->
-                                        <!--  Specify other idioms or a default if needed  -->
-                                        <!--
-                                            </OnIdiom>
-                                        </Entry.Behaviors>-->
-                                    </Entry>
+                                        VerticalOptions="Center" />
                                     <Stepper
                                         Increment="1"
                                         Maximum="365"
@@ -321,27 +230,14 @@
                                                                       Default=200}"
                                         Minimum="0"
                                         Value="{Binding FertilizationFrequencyDays, Mode=TwoWay}" />
-                                    <Label Margin="5,0,10,0" Text="{Binding Path=[Days], Source={x:Static utils:LocalizationManager.Instance}}" />
+                                    <Label Style="{StaticResource BodySmallStyle}" Margin="5,0,10,0" Text="{Binding Path=[Days], Source={x:Static utils:LocalizationManager.Instance}}" />
                                 </HorizontalStackLayout>
 
                                 <HorizontalStackLayout>
                                     <Entry
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding FertilizationFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                        VerticalOptions="Center">
-                                        <!--<Entry.Behaviors>
-                                        -->
-                                        <!--<toolkit:SelectAllTextBehavior />-->
-                                        <!--
-                                            <OnIdiom x:TypeArguments="Behavior">
-                                                <OnIdiom.Phone Value="{toolkit:SelectAllTextBehavior}" />
-                                                <OnIdiom.Tablet Value="{toolkit:SelectAllTextBehavior}" />
-                                        -->
-                                        <!--  Specify other idioms or a default if needed  -->
-                                        <!--
-                                            </OnIdiom>
-                                        </Entry.Behaviors>-->
-                                    </Entry>
+                                        VerticalOptions="Center" />
                                     <Stepper
                                         Increment="1"
                                         Maximum="23"
@@ -349,22 +245,18 @@
                                                                       Default=200}"
                                         Minimum="0"
                                         Value="{Binding FertilizationFrequencyHours, Mode=TwoWay}" />
-                                    <Label Margin="5,0,0,0" Text="{Binding Path=[Hours], Source={x:Static utils:LocalizationManager.Instance}}" />
+                                    <Label Style="{StaticResource BodySmallStyle}" Margin="5,0,0,0" Text="{Binding Path=[Hours], Source={x:Static utils:LocalizationManager.Instance}}" />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </Grid>
                     </Border>
 
-                    <Border Margin="5,5" Padding="10">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="5" />
-                        </Border.StrokeShape>
+                    <Border Margin="5" Style="{StaticResource ModernCardStyle}">
                         <toolkit:Expander>
                             <toolkit:Expander.Header>
                                 <Label
                                     Margin="10,0"
-                                    FontAttributes="Bold"
-                                    FontSize="Medium"
+                                    Style="{StaticResource TitleSmallStyle}"
                                     Text="{Binding Path=[Notes], Source={x:Static utils:LocalizationManager.Instance}}" />
                             </toolkit:Expander.Header>
                             <Editor IsReadOnly="False" Text="{Binding Notes}" />

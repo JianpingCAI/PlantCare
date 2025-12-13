@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PlantCare.Data.DbModels;
 using PlantCare.Data.Repositories.interfaces;
 
@@ -10,7 +10,10 @@ public class PlantRepository(ApplicationDbContext context) : GenericRepository<P
 
     public async Task UpdateLastWateringTime(Guid plantId, DateTime time)
     {
-        PlantDbModel? plant = await _context.Plants.FindAsync(plantId);
+        PlantDbModel? plant = await _context.Plants
+            .Include(p => p.WateringHistories)
+            .FirstOrDefaultAsync(p => p.Id == plantId);
+            
         if (plant != null)
         {
             plant.LastWatered = time;
@@ -21,7 +24,10 @@ public class PlantRepository(ApplicationDbContext context) : GenericRepository<P
 
     public async Task UpdateLastFertilizationTime(Guid plantId, DateTime time)
     {
-        PlantDbModel? plant = await _context.Plants.FindAsync(plantId);
+        PlantDbModel? plant = await _context.Plants
+            .Include(p => p.FertilizationHistories)
+            .FirstOrDefaultAsync(p => p.Id == plantId);
+            
         if (plant != null)
         {
             plant.LastFertilized = time;
