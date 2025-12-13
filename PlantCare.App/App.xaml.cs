@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PlantCare.App.Services;
 using PlantCare.App.Utils;
 using PlantCare.Data.Repositories;
@@ -31,8 +31,8 @@ namespace PlantCare.App
 
             LoadLocalizationLanguage();
 
+            // Initialize main page
             MainPage = new AppShell();
-            //MainPage = new NavigationPage(serviceProvider.GetRequiredService<HomeView>());
 
             // Add navigation event handlers
             RegisterNavigationEventHandlers();
@@ -40,6 +40,16 @@ namespace PlantCare.App
             // Global exception handling
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
             TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+        }
+
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            var window = base.CreateWindow(activationState);
+            if (window?.Page == null)
+            {
+                window!.Page = new AppShell();
+            }
+            return window;
         }
 
         private void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
@@ -63,7 +73,11 @@ namespace PlantCare.App
             // Optionally, display an alert to the user
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Shell.Current.DisplayAlert("Error", $"An unexpected error occurred. Please try again later: {ex.Message}.", "OK");
+                var current = Shell.Current;
+                if (current != null)
+                {
+                    await current.DisplayAlert("Error", $"An unexpected error occurred. Please try again later: {ex.Message}.", "OK");
+                }
             });
         }
 
@@ -106,14 +120,15 @@ namespace PlantCare.App
 
         private static void RegisterNavigationEventHandlers()
         {
-            if (Shell.Current != null)
+            var current = Shell.Current;
+            if (current != null)
             {
-                Shell.Current.Navigating += (sender, args) =>
+                current.Navigating += (sender, args) =>
                 {
                     Debug.WriteLine("Navigating to: " + args.Target.Location.ToString());
                 };
 
-                Shell.Current.Navigated += (sender, args) =>
+                current.Navigated += (sender, args) =>
                 {
                     Debug.WriteLine("Navigated to: " + args.Current.Location.ToString());
                 };

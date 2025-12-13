@@ -1,4 +1,4 @@
-﻿using Microsoft.Maui.Graphics.Platform;
+using Microsoft.Maui.Graphics.Platform;
 using SkiaSharp;
 
 namespace PlantCare.App.Utils;
@@ -35,7 +35,7 @@ public static class ImageHelper
             }
         }
 
-        using var resizedBitmap = original.Resize(new SKImageInfo(width, height), SKFilterQuality.High);
+        using var resizedBitmap = original.Resize(new SKImageInfo(width, height), new SKSamplingOptions(SKFilterMode.Linear));
         using var image = SKImage.FromBitmap(resizedBitmap);
         using var outputStream = new MemoryStream();
         image.Encode(SKEncodedImageFormat.Jpeg, 90).SaveTo(outputStream);

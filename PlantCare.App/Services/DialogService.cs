@@ -1,14 +1,19 @@
-﻿namespace PlantCare.App.Services;
+namespace PlantCare.App.Services;
 
 public class DialogService : IDialogService
 {
-    public Task<bool> Ask(string title, string message, string trueButtonText = "Yes", string falseButtonText = "No")
+    public async Task<bool> Ask(string title, string message, string trueButtonText = "Yes", string falseButtonText = "No")
     {
-        return Shell.Current.DisplayAlert(title, message, trueButtonText, falseButtonText);
+        var current = Shell.Current;
+        return current != null ? await current.DisplayAlert(title, message, trueButtonText, falseButtonText) : false;
     }
 
-    public Task Notify(string title, string message, string buttonText = "OK")
+    public async Task Notify(string title, string message, string buttonText = "OK")
     {
-        return Shell.Current.DisplayAlert(title, message, buttonText);
+        var current = Shell.Current;
+        if (current != null)
+        {
+            await current.DisplayAlert(title, message, buttonText);
+        }
     }
 }

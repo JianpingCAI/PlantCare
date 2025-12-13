@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
@@ -589,7 +589,7 @@ namespace PlantCare.App.ViewModels
         #region Layout related
 
         [ObservableProperty]
-        private string _orientationState;
+        private string _orientationState = "Portrait";
 
         public double Width { get; set; }
 
