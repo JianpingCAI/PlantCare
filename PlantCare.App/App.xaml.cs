@@ -14,6 +14,11 @@ namespace PlantCare.App
 
         public static Language AppLanguage { get; private set; }
 
+#if DEBUG
+        // Set this to true if you want to reset the database on each debug session
+        private const bool RESET_DATABASE_ON_DEBUG = false;
+#endif
+
         public App(IServiceProvider serviceProvider, IAppSettingsService settingsService)
         {
             InitializeComponent();
@@ -21,13 +26,27 @@ namespace PlantCare.App
             _settingsService = settingsService;
             _serviceProvider = serviceProvider;
 
-            //FileHelper.DeleteDatabaseFile();
+#if DEBUG
+            // Optional: Delete database for fresh start during debugging
+            if (RESET_DATABASE_ON_DEBUG)
+            {
+                FileHelper.DeleteDatabaseFile();
+                Debug.WriteLine("[Database] Database deleted for fresh start (DEBUG mode)");
+            }
+#endif
 
             // Apply migrations at startup
             using (IServiceScope scope = serviceProvider.CreateScope())
             {
                 ApplicationDbContext db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 db.Database.Migrate();
+                
+#if DEBUG
+                // Seed test data for development
+                DevelopmentDataSeeder.SeedTestDataIfNeededAsync(db).GetAwaiter().GetResult();
+                
+                Debug.WriteLine($"[Database] Current plant count: {db.Plants.Count()}");
+#endif
             }
 
             LoadTheme();
