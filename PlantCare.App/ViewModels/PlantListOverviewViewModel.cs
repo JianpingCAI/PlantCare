@@ -932,7 +932,36 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         DisplayInfo mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
         double width = mainDisplayInfo.Width / mainDisplayInfo.Density;
 
-        PhotoSpan = ((int)width - 10) / PhotoWidth;
+        // Calculate span based on device width
+        // Phone: 3 columns, Tablet/Desktop: 4-6 columns max
+        if (width < 600)
+        {
+            // Small phone
+            PhotoSpan = 3;
+            PhotoWidth = 110;
+            PhotoHeight = 120;
+        }
+        else if (width < 900)
+        {
+            // Tablet or large phone
+            PhotoSpan = 4;
+            PhotoWidth = 140;
+            PhotoHeight = 150;
+        }
+        else if (width < 1200)
+        {
+            // Small desktop
+            PhotoSpan = 5;
+            PhotoWidth = 160;
+            PhotoHeight = 170;
+        }
+        else
+        {
+            // Large desktop - limit to 6 columns max
+            PhotoSpan = 6;
+            PhotoWidth = 180;
+            PhotoHeight = 190;
+        }
     }
 
     private void OnDeviceDisplay_MainDisplayInfoChanged(object? sender, DisplayInfoChangedEventArgs e)

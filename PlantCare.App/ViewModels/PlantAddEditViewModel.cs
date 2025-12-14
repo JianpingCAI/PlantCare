@@ -153,6 +153,96 @@ namespace PlantCare.App.ViewModels
             }
         }
 
+        [RelayCommand]
+        private void IncrementWateringDays()
+        {
+            if (WateringFrequencyDays < 365)
+            {
+                WateringFrequencyDays++;
+            }
+        }
+
+        [RelayCommand]
+        private void DecrementWateringDays()
+        {
+            if (WateringFrequencyDays > 0)
+            {
+                WateringFrequencyDays--;
+            }
+        }
+
+        [RelayCommand]
+        private void IncrementWateringHours()
+        {
+            if (WateringFrequencyHours < 23)
+            {
+                WateringFrequencyHours++;
+            }
+        }
+
+        [RelayCommand]
+        private void DecrementWateringHours()
+        {
+            if (WateringFrequencyHours > 0)
+            {
+                WateringFrequencyHours--;
+            }
+        }
+
+        [RelayCommand]
+        private void IncrementFertilizationDays()
+        {
+            if (FertilizationFrequencyDays < 365)
+            {
+                FertilizationFrequencyDays++;
+            }
+        }
+
+        [RelayCommand]
+        private void DecrementFertilizationDays()
+        {
+            if (FertilizationFrequencyDays > 0)
+            {
+                FertilizationFrequencyDays--;
+            }
+        }
+
+        [RelayCommand]
+        private void IncrementFertilizationHours()
+        {
+            if (FertilizationFrequencyHours < 23)
+            {
+                FertilizationFrequencyHours++;
+            }
+        }
+
+        [RelayCommand]
+        private void DecrementFertilizationHours()
+        {
+            if (FertilizationFrequencyHours > 0)
+            {
+                FertilizationFrequencyHours--;
+            }
+        }
+
+        [RelayCommand]
+        private void IncrementAge()
+        {
+            if (Age < 3000)
+            {
+                Age++;
+            }
+        }
+
+        [RelayCommand]
+        private void DecrementAge()
+        {
+            if (Age > 0)
+            {
+                Age--;
+            }
+        }
+
         /// <summary>
         /// Save a new plant or changes to a plant
         /// </summary>

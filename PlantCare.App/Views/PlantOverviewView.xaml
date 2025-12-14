@@ -11,9 +11,8 @@
     x:DataType="vm:PlantListOverviewViewModel">
 
     <Shell.TitleView>
-        <Grid ColumnDefinitions="auto,*">
+        <Grid ColumnDefinitions="auto,*" Padding="8,0">
             <Border
-                Margin="5,0,0,0"
                 HorizontalOptions="Start"
                 Stroke="Transparent"
                 StrokeThickness="0"
@@ -21,20 +20,24 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="40" />
                 </Border.StrokeShape>
-                <Image HeightRequest="40" Source="default_plant.png" />
+                <Image HeightRequest="40" WidthRequest="40" Source="default_plant.png" />
             </Border>
 
-            <HorizontalStackLayout Grid.Column="1">
+            <HorizontalStackLayout Grid.Column="1" Spacing="4">
                 <Label
                     Style="{StaticResource BodyStyle}"
-                    Margin="15,0,0,0"
+                    Margin="12,0,0,0"
                     HorizontalOptions="Start"
                     Text="{Binding Path=[MyPlants], Source={x:Static utils:LocalizationManager.Instance}}"
                     VerticalTextAlignment="Center" />
-                <Label Style="{StaticResource BodyStyle}" Text="{Binding Plants.Count, StringFormat='({0})'}" />
+                <Label 
+                    Style="{StaticResource BodyStyle}" 
+                    Text="{Binding Plants.Count, StringFormat='({0})'}"
+                    VerticalTextAlignment="Center" />
             </HorizontalStackLayout>
         </Grid>
     </Shell.TitleView>
+    
     <ContentPage.Resources>
         <utils:ProgressToColorConverter x:Key="ProgressToColorConverter" />
 
@@ -46,28 +49,36 @@
             <Setter Property="WidthRequest" Value="3" />
         </Style>
     </ContentPage.Resources>
+    
     <!--  Main Layout  -->
-    <Grid Padding="5,2,5,0">
+    <Grid Padding="8,4,8,0">
 
         <Grid HorizontalOptions="FillAndExpand" RowDefinitions="auto,*">
             <!--  Search Bar for quick filtering  -->
-            <SearchBar
-                BackgroundColor="Transparent"
-                CancelButtonColor="{AppThemeBinding Light={StaticResource Gray900},
-                                                    Dark={StaticResource Gray100}}"
-                Placeholder="{Binding Path=[SearchPlantByName], Source={x:Static utils:LocalizationManager.Instance}}"
-                PlaceholderColor="{AppThemeBinding Light={StaticResource Gray900},
-                                                   Dark={StaticResource Gray100}}"
-                SearchCommand="{Binding SearchCommand}"
-                Text="{Binding SearchText}"
-                TextColor="{AppThemeBinding Light={StaticResource Gray900},
-                                            Dark={StaticResource White}}"
-                VerticalOptions="Center"
-                VerticalTextAlignment="Center">
-                <SearchBar.Behaviors>
-                    <toolkit:EventToCommandBehavior Command="{Binding SearchTextChangedCommand}" EventName="TextChanged" />
-                </SearchBar.Behaviors>
-            </SearchBar>
+            <Border
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray700}}"
+                StrokeThickness="1"
+                Padding="4,0"
+                Margin="0,4,0,8">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12" />
+                </Border.StrokeShape>
+                <SearchBar
+                    BackgroundColor="Transparent"
+                    CancelButtonColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray100}}"
+                    Placeholder="{Binding Path=[SearchPlantByName], Source={x:Static utils:LocalizationManager.Instance}}"
+                    PlaceholderColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                    SearchCommand="{Binding SearchCommand}"
+                    Text="{Binding SearchText}"
+                    TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center">
+                    <SearchBar.Behaviors>
+                        <toolkit:EventToCommandBehavior Command="{Binding SearchTextChangedCommand}" EventName="TextChanged" />
+                    </SearchBar.Behaviors>
+                </SearchBar>
+            </Border>
 
             <!--  Plants Collection View  -->
             <RefreshView
@@ -79,26 +90,20 @@
                     ItemsSource="{Binding Plants}"
                     SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
                     SelectionChangedCommand="{Binding SelectPlantCommand}"
-                    SelectionMode="Single"
-                    Margin="0,8,0,0">
+                    SelectionMode="Single">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout
                             Orientation="Vertical"
                             Span="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoSpan}"
                             HorizontalItemSpacing="8"
                             VerticalItemSpacing="8" />
-                        <!--
-                            Span="{OnIdiom Phone=3,
-                            Desktop=5,
-                            Default=3}"
-                        -->
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:PlantListItemViewModel">
-                            <Grid Padding="8" HorizontalOptions="CenterAndExpand" Style="{StaticResource GridStyleForCollectionView}">
+                            <Grid Padding="4" HorizontalOptions="CenterAndExpand">
                                 <Border Style="{StaticResource ModernCardStyle}" Padding="0">
-                                    <StackLayout Padding="12" Spacing="8">
+                                    <StackLayout Padding="12" Spacing="6">
 
                                         <!--  Photo  -->
                                         <Border
@@ -111,11 +116,11 @@
                                             </Border.StrokeShape>
                                             <Image
                                                 Aspect="AspectFill"
-                                                HeightRequest="120"
+                                                HeightRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoHeight}"
+                                                WidthRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoWidth}"
                                                 HorizontalOptions="Center"
                                                 Source="{Binding ThumbnailPath}"
-                                                VerticalOptions="Center"
-                                                WidthRequest="120" />
+                                                VerticalOptions="Center" />
                                         </Border>
 
                                         <!--  Plant Name  -->
@@ -123,48 +128,52 @@
                                             Style="{StaticResource TitleSmallStyle}"
                                             Text="{Binding Name}"
                                             HorizontalTextAlignment="Center"
-                                            Margin="0,0,0,0" />
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="2"
+                                            Margin="0,4,0,0" />
 
                                         <!--  Plant Species (muted)  -->
                                         <Label
                                             Style="{StaticResource BodySmallStyle}"
                                             Text="{Binding Species}"
                                             HorizontalTextAlignment="Center"
-                                            Margin="0,-4,0,0" />
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="1"
+                                            Margin="0,0,0,4" />
 
                                         <!--  Watering Section  -->
-                                        <Grid ColumnDefinitions="auto,*" ColumnSpacing="8" Padding="0,0" Margin="0,2,0,0">
+                                        <Grid ColumnDefinitions="auto,*" ColumnSpacing="6" Padding="0" Margin="0,4,0,0">
                                             <Label
                                                 Grid.Column="0"
                                                 FontFamily="MaterialIconsRegular"
-                                                FontSize="20"
+                                                FontSize="18"
                                                 Text="&#xe798;"
                                                 TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
                                                 VerticalOptions="Center"
-                                                WidthRequest="24" />
+                                                WidthRequest="20" />
 
                                             <ProgressBar
                                                 Grid.Column="1"
-                                                HeightRequest="8"
+                                                HeightRequest="10"
                                                 Progress="{Binding WaterState}"
                                                 ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
                                                 VerticalOptions="Center" />
                                         </Grid>
 
                                         <!--  Fertilization Section  -->
-                                        <Grid ColumnDefinitions="auto,*" ColumnSpacing="8" Padding="0,0">
+                                        <Grid ColumnDefinitions="auto,*" ColumnSpacing="6" Padding="0" Margin="0,2,0,0">
                                             <Label
                                                 Grid.Column="0"
                                                 FontFamily="MaterialIconsRegular"
-                                                FontSize="20"
+                                                FontSize="18"
                                                 Text="&#xe761;"
                                                 TextColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
                                                 VerticalOptions="Center"
-                                                WidthRequest="24" />
+                                                WidthRequest="20" />
 
                                             <ProgressBar
                                                 Grid.Column="1"
-                                                HeightRequest="8"
+                                                HeightRequest="10"
                                                 Progress="{Binding FertilizeState}"
                                                 ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
                                                 VerticalOptions="Center" />
@@ -181,7 +190,7 @@
 
         <!--  Add Plant Button  -->
         <Button
-            Margin="0,0,20,20"
+            Margin="0,0,16,80"
             Command="{Binding AddPlantCommand}"
             CornerRadius="60"
             FontFamily="MaterialIconsRegular"
@@ -199,9 +208,9 @@
                     Offset="0,6" />
             </Button.Shadow>
         </Button>
+        
         <Grid
-            BackgroundColor="{AppThemeBinding Light={StaticResource Gray200},
-                                              Dark={StaticResource Gray500}}"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}"
             IsVisible="{Binding IsLoading}"
             Opacity="0.5">
             <ActivityIndicator

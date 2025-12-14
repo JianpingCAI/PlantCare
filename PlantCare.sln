@@ -9,11 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlantCare.Data", "PlantCare
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documents", "documents", "{5D69017E-E8FD-4F57-9B81-A8CB3F071C47}"
 	ProjectSection(SolutionItems) = preProject
-		documents\design_document.md = documents\design_document.md
 		documents\notes.md = documents\notes.md
 		documents\notes_debounce.md = documents\notes_debounce.md
-		documents\require_document.md = documents\require_document.md
-		documents\tools.md = documents\tools.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlantCare.App.Tests", "PlantCare.App.Tests\PlantCare.App.Tests.csproj", "{5DEF9AFC-7B2B-4EC2-A7D7-116E2AA1F296}"

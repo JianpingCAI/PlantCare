@@ -30,12 +30,15 @@
     <Color x:Key="MidGray">#6B7280</Color>
     <Color x:Key="LightGray">#E8E9EB</Color>
 
+    <Color x:Key="Gray50">#F9FAFB</Color>
     <Color x:Key="Gray100">#F3F4F6</Color>
     <Color x:Key="Gray200">#E8E9EB</Color>
     <Color x:Key="Gray300">#D1D5DB</Color>
     <Color x:Key="Gray400">#9CA3AF</Color>
     <Color x:Key="Gray500">#6B7280</Color>
     <Color x:Key="Gray600">#4B5563</Color>
+    <Color x:Key="Gray700">#374151</Color>
+    <Color x:Key="Gray800">#1F2937</Color>
     <Color x:Key="Gray900">#111827</Color>
     <Color x:Key="Gray950">#030712</Color>
 
@@ -67,12 +70,14 @@
     <SolidColorBrush x:Key="MidGrayBrush" Color="{StaticResource MidGray}" />
     <SolidColorBrush x:Key="DarkGrayBrush" Color="{StaticResource DarkGray}" />
 
+    <SolidColorBrush x:Key="Gray50Brush" Color="{StaticResource Gray50}" />
     <SolidColorBrush x:Key="Gray100Brush" Color="{StaticResource Gray100}" />
     <SolidColorBrush x:Key="Gray200Brush" Color="{StaticResource Gray200}" />
     <SolidColorBrush x:Key="Gray300Brush" Color="{StaticResource Gray300}" />
     <SolidColorBrush x:Key="Gray400Brush" Color="{StaticResource Gray400}" />
     <SolidColorBrush x:Key="Gray500Brush" Color="{StaticResource Gray500}" />
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}" />
+    <SolidColorBrush x:Key="Gray700Brush" Color="{StaticResource Gray700}" />
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}" />
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}" />
 

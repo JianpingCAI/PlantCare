@@ -17,16 +17,17 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid Padding="5,2,5,0">
+    <Grid Padding="8,4,8,0">
         <ScrollView>
-            <StackLayout>
-                <Grid>
-                    <!--  Photo  -->
+            <StackLayout Spacing="12">
+                <!--  Photo Section with Edit Button  -->
+                <Grid Margin="0,8,0,0">
                     <Border
                         HorizontalOptions="Center"
                         Stroke="Transparent"
                         StrokeThickness="0"
-                        VerticalOptions="Center">
+                        VerticalOptions="Center"
+                        MaximumWidthRequest="600">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="12" />
                         </Border.StrokeShape>
@@ -34,189 +35,203 @@
                         <Image
                             Aspect="AspectFit"
                             HorizontalOptions="Center"
-                            MaximumHeightRequest="{OnIdiom Phone=300,
-                                                           Default=500}"
+                            MaximumHeightRequest="{OnIdiom Phone=300, Tablet=400, Default=300}"
                             Source="{Binding PhotoPath}"
                             VerticalOptions="Center" />
                     </Border>
-                    <!--  Edit button  -->
-                    <Button
-                        Margin="0,5,5,0"
-                        Command="{Binding NavigateToEditPlantCommand}"
-                        CornerRadius="60"
-                        FontFamily="MaterialIconsRegular"
-                        FontSize="28"
-                        HorizontalOptions="End"
-                        Text="&#xe3c9;"
-                        ToolTipProperties.Text="Edit the details"
-                        VerticalOptions="End"
-                        WidthRequest="60"
-                        HeightRequest="60">
-                        <Button.Shadow>
-                            <Shadow
-                                Brush="{StaticResource Primary}"
-                                Opacity="0.4"
-                                Radius="16"
-                                Offset="0,6" />
-                        </Button.Shadow>
-                    </Button>
                 </Grid>
+                
+                <!--  Edit Button  -->
+                <Button
+                    Margin="0,8,0,0"
+                    Command="{Binding NavigateToEditPlantCommand}"
+                    CornerRadius="12"
+                    FontFamily="MaterialIconsRegular"
+                    FontSize="24"
+                    HorizontalOptions="End"
+                    Text="&#xe3c9; Edit"
+                    ToolTipProperties.Text="Edit the details"
+                    VerticalOptions="Start"
+                    HeightRequest="48"
+                    Padding="16,0">
+                    <Button.Shadow>
+                        <Shadow
+                            Brush="{StaticResource Primary}"
+                            Opacity="0.3"
+                            Radius="8"
+                            Offset="0,4" />
+                    </Button.Shadow>
+                </Button>
 
-                <Grid RowDefinitions="*, *, auto" Margin="0,5">
-                    <Border Margin="0,5,0,0" Style="{StaticResource ModernCardStyle}">
-                        <Grid
-                            ColumnDefinitions="auto,*"
-                            HorizontalOptions="Center"
-                            RowDefinitions="*,*,*,*,*,*">
+                <!--  Basic Information Card  -->
+                <Border Style="{StaticResource ModernCardStyle}" Padding="16">
+                    <Grid
+                        ColumnDefinitions="120,*"
+                        ColumnSpacing="12"
+                        RowDefinitions="auto,auto,auto,auto,auto,auto"
+                        RowSpacing="12">
 
-                            <!--  Species  -->
-                            <Label
-                                Style="{StaticResource TitleStyle}"
-                                Margin="0,0,10,0"
-                                HorizontalTextAlignment="End"
-                                Text="{Binding Path=[Species], Source={x:Static utils:LocalizationManager.Instance}}" />
-                            <Label
-                                Grid.Column="1"
-                                Style="{StaticResource BodyStyle}"
-                                HorizontalOptions="Start"
-                                Text="{Binding Species}" />
-
-                            <!--  Age  -->
-                            <Label
-                                Grid.Row="1"
-                                Style="{StaticResource TitleStyle}"
-                                Margin="0,0,10,0"
-                                HorizontalTextAlignment="End"
-                                Text="{Binding Path=[Age], Source={x:Static utils:LocalizationManager.Instance}}" />
-                            <Label
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Style="{StaticResource BodyStyle}"
-                                Text="{Binding Age}" />
-
-                            <!--  LastWatered  -->
-                            <Label
-                                Grid.Row="2"
-                                Style="{StaticResource TitleStyle}"
-                                Margin="0,0,10,0"
-                                HorizontalTextAlignment="End"
-                                Text="{Binding Path=[LastWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
-                            <Label
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Style="{StaticResource BodyStyle}"
-                                Text="{Binding LastWatered, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
-
-                            <Label
-                                Grid.Row="3"
-                                Style="{StaticResource TitleStyle}"
-                                Margin="0,0,10,0"
-                                HorizontalTextAlignment="End"
-                                Text="{Binding Path=[NextWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
-                            <Label
-                                Grid.Row="3"
-                                Grid.Column="1"
-                                Style="{StaticResource BodyStyle}"
-                                Text="{Binding NextWateringTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
-
-                            <Label
-                                Grid.Row="4"
-                                Style="{StaticResource TitleStyle}"
-                                Margin="0,0,10,0"
-                                HorizontalTextAlignment="End"
-                                Text="{Binding Path=[LastFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
-                            <Label
-                                Grid.Row="4"
-                                Grid.Column="1"
-                                Style="{StaticResource BodyStyle}"
-                                Text="{Binding LastFertilized, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
-
-                            <Label
-                                Grid.Row="5"
-                                Style="{StaticResource TitleStyle}"
-                                Margin="0,0,10,0"
-                                HorizontalTextAlignment="End"
-                                Text="{Binding Path=[NextFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
-                            <Label
-                                Grid.Row="5"
-                                Grid.Column="1"
-                                Style="{StaticResource BodyStyle}"
-                                Text="{Binding NextFertilizeTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
-                        </Grid>
-                    </Border>
-
-                    <!--  TillNextWatering  -->
-                    <Border Grid.Row="1" Margin="0,5" Style="{StaticResource ElevatedCardStyle}">
-                        <Grid
-                            Margin="10"
-                            ColumnDefinitions="*,auto"
+                        <!--  Species  -->
+                        <Label
+                            Style="{StaticResource TitleStyle}"
+                            HorizontalTextAlignment="End"
+                            VerticalOptions="Center"
+                            Text="{Binding Path=[Species], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        <Label
+                            Grid.Column="1"
+                            Style="{StaticResource BodyStyle}"
+                            VerticalOptions="Center"
                             HorizontalOptions="Start"
-                            RowDefinitions="*,*">
+                            Text="{Binding Species}" />
 
-                            <!--  Next watering  -->
-                            <Label
-                                Style="{StaticResource TitleStyle}"
-                                Margin="0,0,5,0"
-                                HorizontalTextAlignment="End"
-                                Text="{Binding Path=[TillNextWatering], Source={x:Static utils:LocalizationManager.Instance}}"
-                                TextColor="{StaticResource Primary}" />
-                            <Label
-                                Grid.Column="1"
-                                Style="{StaticResource BodyStyle}"
-                                HorizontalTextAlignment="Start"
-                                Text="{Binding HoursUntilNextWatering, Converter={StaticResource HoursToDayHourStringConverter}}"
-                                TextColor="{StaticResource Primary}" />
+                        <!--  Age  -->
+                        <Label
+                            Grid.Row="1"
+                            Style="{StaticResource TitleStyle}"
+                            HorizontalTextAlignment="End"
+                            VerticalOptions="Center"
+                            Text="{Binding Path=[Age], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource BodyStyle}"
+                            VerticalOptions="Center"
+                            Text="{Binding Age}" />
 
-                            <Label
-                                Grid.Row="1"
-                                Style="{StaticResource TitleStyle}"
-                                Margin="0,0,5,0"
-                                HorizontalTextAlignment="End"
-                                Text="{Binding Path=[TillNextFertilization], Source={x:Static utils:LocalizationManager.Instance}}"
-                                TextColor="{StaticResource Primary}" />
-                            <Label
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Style="{StaticResource BodyStyle}"
-                                HorizontalOptions="Start"
-                                HorizontalTextAlignment="Start"
-                                Text="{Binding HoursUntilNextFertilize, Converter={StaticResource HoursToDayHourStringConverter}}"
-                                TextColor="{StaticResource Primary}" />
-                        </Grid>
-                    </Border>
+                        <!--  LastWatered  -->
+                        <Label
+                            Grid.Row="2"
+                            Style="{StaticResource TitleStyle}"
+                            HorizontalTextAlignment="End"
+                            VerticalOptions="Center"
+                            Text="{Binding Path=[LastWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource BodyStyle}"
+                            VerticalOptions="Center"
+                            Text="{Binding LastWatered, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
 
-                    <!--  Notes  -->
-                    <Border Grid.Row="2" Margin="0,5" Style="{StaticResource ModernCardStyle}">
-                        <toolkit:Expander IsExpanded="False">
-                            <toolkit:Expander.Header>
+                        <Label
+                            Grid.Row="3"
+                            Style="{StaticResource TitleStyle}"
+                            HorizontalTextAlignment="End"
+                            VerticalOptions="Center"
+                            Text="{Binding Path=[NextWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Style="{StaticResource BodyStyle}"
+                            VerticalOptions="Center"
+                            Text="{Binding NextWateringTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+
+                        <Label
+                            Grid.Row="4"
+                            Style="{StaticResource TitleStyle}"
+                            HorizontalTextAlignment="End"
+                            VerticalOptions="Center"
+                            Text="{Binding Path=[LastFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Style="{StaticResource BodyStyle}"
+                            VerticalOptions="Center"
+                            Text="{Binding LastFertilized, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+
+                        <Label
+                            Grid.Row="5"
+                            Style="{StaticResource TitleStyle}"
+                            HorizontalTextAlignment="End"
+                            VerticalOptions="Center"
+                            Text="{Binding Path=[NextFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        <Label
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Style="{StaticResource BodyStyle}"
+                            VerticalOptions="Center"
+                            Text="{Binding NextFertilizeTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
+                    </Grid>
+                </Border>
+
+                <!--  Next Care Schedule Card  -->
+                <Border Style="{StaticResource ElevatedCardStyle}" Padding="16">
+                    <Grid
+                        ColumnDefinitions="*,auto"
+                        ColumnSpacing="12"
+                        RowDefinitions="auto,auto"
+                        RowSpacing="12">
+
+                        <!--  Next watering  -->
+                        <Label
+                            Style="{StaticResource TitleStyle}"
+                            HorizontalTextAlignment="End"
+                            VerticalOptions="Center"
+                            Text="{Binding Path=[TillNextWatering], Source={x:Static utils:LocalizationManager.Instance}}"
+                            TextColor="{StaticResource Primary}" />
+                        <Label
+                            Grid.Column="1"
+                            Style="{StaticResource BodyStyle}"
+                            VerticalOptions="Center"
+                            HorizontalTextAlignment="Start"
+                            Text="{Binding HoursUntilNextWatering, Converter={StaticResource HoursToDayHourStringConverter}}"
+                            TextColor="{StaticResource Primary}" />
+
+                        <Label
+                            Grid.Row="1"
+                            Style="{StaticResource TitleStyle}"
+                            HorizontalTextAlignment="End"
+                            VerticalOptions="Center"
+                            Text="{Binding Path=[TillNextFertilization], Source={x:Static utils:LocalizationManager.Instance}}"
+                            TextColor="{StaticResource Primary}" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource BodyStyle}"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Start"
+                            HorizontalTextAlignment="Start"
+                            Text="{Binding HoursUntilNextFertilize, Converter={StaticResource HoursToDayHourStringConverter}}"
+                            TextColor="{StaticResource Primary}" />
+                    </Grid>
+                </Border>
+
+                <!--  Notes Card  -->
+                <Border Style="{StaticResource ModernCardStyle}" Padding="12">
+                    <toolkit:Expander IsExpanded="True">
+                        <toolkit:Expander.Header>
+                            <Grid ColumnDefinitions="auto,*" ColumnSpacing="8">
                                 <Label
+                                    FontFamily="MaterialIconsRegular"
+                                    FontSize="20"
+                                    Text="&#xe24d;"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Column="1"
                                     Style="{StaticResource TitleSmallStyle}"
-                                    Margin="5"
+                                    VerticalOptions="Center"
                                     Text="{Binding Path=[Notes], Source={x:Static utils:LocalizationManager.Instance}}" />
-                            </toolkit:Expander.Header>
-                            <ScrollView MaximumHeightRequest="200" VerticalScrollBarVisibility="Always">
-                                <Editor IsReadOnly="True" Text="{Binding Notes}" />
-                            </ScrollView>
-                        </toolkit:Expander>
-                    </Border>
-                </Grid>
+                            </Grid>
+                        </toolkit:Expander.Header>
+                        <ScrollView MaximumHeightRequest="200" VerticalScrollBarVisibility="Always" Margin="0,8,0,0">
+                            <Label Text="{Binding Notes}" Style="{StaticResource BodyStyle}" />
+                        </ScrollView>
+                    </toolkit:Expander>
+                </Border>
 
                 <!--  Delete Button  -->
-                <Grid Margin="5,10">
-                    <Button
-                        Grid.Column="1"
-                        Command="{Binding DeletePlantCommand}"
-                        HorizontalOptions="Center"
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
-                        MinimumWidthRequest="100"
-                        Style="{StaticResource DangerButtonStyle}"
-                        Text="{Binding Path=[Delete], Source={x:Static utils:LocalizationManager.Instance}}" />
-                </Grid>
+                <Button
+                    Command="{Binding DeletePlantCommand}"
+                    HorizontalOptions="Center"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                    MinimumWidthRequest="200"
+                    Margin="0,8,0,16"
+                    Style="{StaticResource DangerButtonStyle}"
+                    Text="{Binding Path=[Delete], Source={x:Static utils:LocalizationManager.Instance}}" />
             </StackLayout>
         </ScrollView>
+        
         <Grid
-            BackgroundColor="{AppThemeBinding Light={StaticResource Gray200},
-                                              Dark={StaticResource Gray500}}"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}"
             IsVisible="{Binding IsLoading}"
             Opacity="0.5">
             <ActivityIndicator
