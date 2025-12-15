@@ -52,8 +52,8 @@ public class ImageOptimizationService : IImageOptimizationService
 {
     private const int MaxImageWidth = 800;
     private const int MaxImageHeight = 800;
-    private const int ThumbnailSize = 150;
-    private const int JpegQuality = 85;
+    private const int ThumbnailSize = 300;
+    private const int JpegQuality = 90;
 
     private readonly string _photosDirectory;
     private readonly string _thumbnailsDirectory;
