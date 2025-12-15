@@ -73,11 +73,7 @@
                     Text="{Binding SearchText}"
                     TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
                     VerticalOptions="Center"
-                    VerticalTextAlignment="Center">
-                    <SearchBar.Behaviors>
-                        <toolkit:EventToCommandBehavior Command="{Binding SearchTextChangedCommand}" EventName="TextChanged" />
-                    </SearchBar.Behaviors>
-                </SearchBar>
+                    VerticalTextAlignment="Center" />
             </Border>
 
             <!--  Plants Collection View  -->

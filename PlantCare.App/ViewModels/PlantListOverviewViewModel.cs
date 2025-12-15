@@ -76,6 +76,33 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     [ObservableProperty]
     private string _searchText = string.Empty;
 
+    partial void OnSearchTextChanged(string value)
+    {
+        // Automatically reset plants when search text is cleared
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    IsLoading = true;
+                    await ResetPlantsAsync();
+                }
+                catch (Exception ex)
+                {
+                    await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+                }
+                finally
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+                        IsLoading = false;
+                    });
+                }
+            });
+        }
+    }
+
     [ObservableProperty]
     private PlantListItemViewModel? _selectedPlant = null;
 
@@ -259,34 +286,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 IsLoading = false;
                 IsBusy = false;
             });
-        }
-    }
-
-    /// <summary>
-    /// Reset search when search text is empty
-    /// </summary>
-    /// <returns></returns>
-    [RelayCommand]
-    private async Task SearchTextChanged()
-    {
-        if (SearchText.Length == 0)
-        {
-            try
-            {
-                IsLoading = true;
-                await ResetPlantsAsync();
-            }
-            catch (Exception ex)
-            {
-                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
-            }
-            finally
-            {
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    IsLoading = false; IsBusy = false;
-                });
-            }
         }
     }
 
