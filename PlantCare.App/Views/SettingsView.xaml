@@ -177,14 +177,7 @@
                             x:Name="langPicker"
                             ItemDisplayBinding="{Binding Converter={StaticResource EnumDescConverter}}"
                             ItemsSource="{Binding Source={x:Static utils:LanguageProvider.All}}"
-                            SelectedItem="{Binding SelectedLanguage}">
-                            <Picker.Behaviors>
-                                <toolkit:EventToCommandBehavior
-                                    Command="{Binding SelectLanguageChangedCommand}"
-                                    CommandParameter="{Binding Source={x:Reference langPicker}, Path=SelectedItem}"
-                                    EventName="SelectedIndexChanged" />
-                            </Picker.Behaviors>
-                        </Picker>
+                            SelectedItem="{Binding SelectedLanguage}" />
                     </VerticalStackLayout>
                 </Border>
 

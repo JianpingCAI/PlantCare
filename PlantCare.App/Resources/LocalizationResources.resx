@@ -276,4 +276,7 @@
   <data name="AdvancedOptions" xml:space="preserve">
     <value>Advanced Options</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
 </root>

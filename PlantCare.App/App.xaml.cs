@@ -14,6 +14,11 @@ namespace PlantCare.App
 
         public static Language AppLanguage { get; private set; }
 
+        public static void UpdateAppLanguage(Language language)
+        {
+            AppLanguage = language;
+        }
+
 #if DEBUG
         // Set this to true if you want to reset the database on each debug session
         private const bool RESET_DATABASE_ON_DEBUG = false;

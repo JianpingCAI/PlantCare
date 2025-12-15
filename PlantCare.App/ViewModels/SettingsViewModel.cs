@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -56,6 +56,30 @@ public partial class SettingsViewModel : ViewModelBase
 
     [ObservableProperty]
     private Language _selectedLanguage = App.AppLanguage;
+
+    partial void OnSelectedLanguageChanged(Language value)
+    {
+        if (!_isSettingsLoaded)
+        {
+            return;
+        }
+
+        LocalizationManager.Instance.SetLanguage(value);
+        App.UpdateAppLanguage(value);
+        _ = SaveLanguagePreferenceAsync(value);
+    }
+
+    private async Task SaveLanguagePreferenceAsync(Language language)
+    {
+        try
+        {
+            await _settingsService.SaveLanguageAsync(language);
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+        }
+    }
 
     //private partial void OnIsWateringNotificationEnabledChanged(bool isEnabled)
     [RelayCommand]
@@ -154,22 +178,6 @@ public partial class SettingsViewModel : ViewModelBase
         catch (Exception ex)
         {
             Debug.WriteLine($"Exception thrown: {ex.Message}");
-        }
-    }
-
-    [RelayCommand]
-    public async Task SelectLanguageChanged(object? selectedItem)
-    {
-        if (selectedItem is not Language selectedLanguage) return;
-
-        try
-        {
-            LocalizationManager.Instance.SetLanguage(selectedLanguage);
-            await _settingsService.SaveLanguageAsync(SelectedLanguage);
-        }
-        catch (Exception ex)
-        {
-            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
     }
 

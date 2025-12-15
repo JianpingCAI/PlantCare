@@ -45,15 +45,20 @@
                 <Button
                     Margin="0,8,0,0"
                     Command="{Binding NavigateToEditPlantCommand}"
+                    ContentLayout="Left,8"
                     CornerRadius="12"
-                    FontFamily="MaterialIconsRegular"
-                    FontSize="24"
                     HorizontalOptions="End"
-                    Text="&#xe3c9; Edit"
-                    ToolTipProperties.Text="Edit the details"
+                    Text="{Binding Path=[Edit], Source={x:Static utils:LocalizationManager.Instance}}"
+                    ToolTipProperties.Text="{Binding Path=[Edit], Source={x:Static utils:LocalizationManager.Instance}}"
                     VerticalOptions="Start"
                     HeightRequest="48"
                     Padding="16,0">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialIconsRegular"
+                            Glyph="&#xe3c9;"
+                            Size="24" />
+                    </Button.ImageSource>
                     <Button.Shadow>
                         <Shadow
                             Brush="{StaticResource Primary}"

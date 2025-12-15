@@ -57,7 +57,7 @@
                                         Size="20"
                                         Color="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}" />
                                 </Button.ImageSource>
-                                <Button.Text>Gallery</Button.Text>
+                                <!--<Button.Text>Gallery</Button.Text>-->
                             </Button>
                             <Button
                                 Grid.Column="2"
@@ -69,11 +69,11 @@
                                 <Button.ImageSource>
                                     <FontImageSource
                                         FontFamily="MaterialIconsRegular"
-                                        Glyph="&#xe3af;"
+                                        Glyph="&#xe412;"
                                         Size="20"
                                         Color="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}" />
                                 </Button.ImageSource>
-                                <Button.Text>Camera</Button.Text>
+                                <!--<Button.Text>Camera</Button.Text>-->
                             </Button>
                         </Grid>
                     </VerticalStackLayout>

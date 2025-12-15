@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using System.ComponentModel;
 using System.Globalization;
 using System.Resources;
@@ -28,7 +28,7 @@ public class LocalizationManager : INotifyPropertyChanged
             CultureInfo.CurrentUICulture = culture;
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
-            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
             LanguageChanged?.Invoke(this, EventArgs.Empty);
 
             WeakReferenceMessenger.Default.Send<LanguageChangedMessage>(new LanguageChangedMessage
