@@ -88,7 +88,9 @@ public partial class SettingsViewModel : ViewModelBase
         try
         {
             if (isEnabledObj is not bool isEnabled)
+            {
                 return;
+            }
 
             WeakReferenceMessenger.Default.Send(new IsNotificationEnabledMessage
             {
@@ -109,7 +111,9 @@ public partial class SettingsViewModel : ViewModelBase
     public async Task ToggleFertilizationNotification(object? isEnabledObj)
     {
         if (isEnabledObj is not bool isEnabled)
+        {
             return;
+        }
 
         try
         {

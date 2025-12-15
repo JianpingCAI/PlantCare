@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
@@ -113,7 +113,7 @@ public partial class CareHistoryViewModel : ViewModelBase
             {
                 CareHistory.Clear();
 
-                foreach (var item in careHistoryWithPlots)
+                foreach (PlantCareHistoryWithPlot item in careHistoryWithPlots)
                 {
                     CareHistory.Add(item);
                 }
@@ -151,7 +151,10 @@ public partial class CareHistoryViewModel : ViewModelBase
     [RelayCommand]
     public async Task SelectPlant()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
 
         IsBusy = true;
 

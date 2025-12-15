@@ -32,7 +32,7 @@ public class MappingProfileTests
         };
 
         // Act
-        var plant = _mapper.Map<Plant>(plantDb);
+        Plant plant = _mapper.Map<Plant>(plantDb);
 
         // Assert
         Assert.NotNull(plant);
@@ -54,7 +54,7 @@ public class MappingProfileTests
         };
 
         // Act
-        var plant = _mapper.Map<Plant>(plantDb);
+        Plant plant = _mapper.Map<Plant>(plantDb);
 
         // Assert
         Assert.NotNull(plant);
@@ -74,7 +74,7 @@ public class MappingProfileTests
         };
 
         // Act
-        var plant = _mapper.Map<Plant>(plantDb);
+        Plant plant = _mapper.Map<Plant>(plantDb);
 
         // Assert
         Assert.NotNull(plant);
@@ -95,7 +95,7 @@ public class MappingProfileTests
         };
 
         // Act
-        var plantDb = _mapper.Map<PlantDbModel>(plant);
+        PlantDbModel plantDb = _mapper.Map<PlantDbModel>(plant);
 
         // Assert
         Assert.NotNull(plantDb);
@@ -120,7 +120,7 @@ public class MappingProfileTests
         };
 
         // Act
-        var plant = _mapper.Map<Plant>(plantDb);
+        Plant plant = _mapper.Map<Plant>(plantDb);
 
         // Assert
         Assert.Contains(expectedThumbFileName, plant.ThumbnailPath);
@@ -138,7 +138,7 @@ public class MappingProfileTests
         };
 
         // Act
-        var plants = _mapper.Map<List<Plant>>(plantsDb);
+        List<Plant> plants = _mapper.Map<List<Plant>>(plantsDb);
 
         // Assert
         Assert.Equal(3, plants.Count);

@@ -75,7 +75,7 @@ public static class DevelopmentDataSeeder
 
             Debug.WriteLine($"[DevSeeder] Successfully seeded {testPlants.Count} test plants");
             
-            foreach (var plant in testPlants)
+            foreach (PlantDbModel plant in testPlants)
             {
                 Debug.WriteLine($"[DevSeeder]   - {plant.Name} (ID: {plant.Id})");
             }

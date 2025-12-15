@@ -15,6 +15,7 @@ using PlantCare.App.Services.DBService;
 using PlantCare.Data;
 using PlantCare.App.Utils;
 using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 
 namespace PlantCare.App.ViewModels;
 
@@ -110,7 +111,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private async Task SelectPlant()
     {
         if (IsBusy)
+        {
             return;
+        }
 
         try
         {
@@ -227,7 +230,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private async Task AddPlant()
     {
         if (IsBusy)
+        {
             return;
+        }
 
         try
         {
@@ -249,7 +254,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private async Task Search()
     {
         if (IsBusy)
+        {
             return;
+        }
 
         try
         {
@@ -336,7 +343,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
                 _allPlantViewModelsCache.Add(newPlantVM);
                 _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
-                var toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}", CommunityToolkit.Maui.Core.ToastDuration.Short);
+                IToast toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}", CommunityToolkit.Maui.Core.ToastDuration.Short);
                 toast.Show();
             });
 
@@ -405,7 +412,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                     InsertPlant(plantVM);
                 }
 
-                var toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Updated] ?? ConstStrings.Updated}", CommunityToolkit.Maui.Core.ToastDuration.Short);
+                IToast toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Updated] ?? ConstStrings.Updated}", CommunityToolkit.Maui.Core.ToastDuration.Short);
 
                 toast.Show();
             });
@@ -447,7 +454,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 Plants.Remove(deletedPlant);
 
                 _allPlantViewModelsCache.Remove(deletedPlant);
-                var toast = Toast.Make($"{deletedPlant.Name} {LocalizationManager.Instance[ConstStrings.Deleted] ?? ConstStrings.Deleted}", CommunityToolkit.Maui.Core.ToastDuration.Short);
+                IToast toast = Toast.Make($"{deletedPlant.Name} {LocalizationManager.Instance[ConstStrings.Deleted] ?? ConstStrings.Deleted}", CommunityToolkit.Maui.Core.ToastDuration.Short);
                 toast.Show();
             });
 
@@ -475,13 +482,19 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     [RelayCommand]
     public async Task RefreshPlantStates()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
 
         try
         {
             IsBusy = false;
 
-            if (Plants.Count == 0) return;
+            if (Plants.Count == 0)
+            {
+                return;
+            }
 
             foreach (PlantListItemViewModel plant in Plants)
             {
@@ -506,7 +519,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private async Task ScheduleNotifications(CareType careType)
     {
         if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
+        {
             return;
+        }
 
         string actionName = careType.GetActionName();
 
@@ -545,7 +560,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             }
 
             if (scheduledTime == null || scheduledTime < DateTime.Now)
+            {
                 return 0;
+            }
 
             // Data to be returned by the notification
             var list = new List<string>
@@ -659,7 +676,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 }
 
                 // No need to use NotificationSerializer, you can use your own one.
-                var list = JsonSerializer.Deserialize<List<string>>(e.Request.ReturningData);
+                List<string>? list = JsonSerializer.Deserialize<List<string>>(e.Request.ReturningData);
                 if (list is null || list.Count != 3)
                 {
                     //await _dialogService.Notify(e.Request.Title, $"No ReturningData {e.Request.ReturningData}", "OK");
@@ -744,7 +761,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private async Task CancelPendingNotificationAsync(int noticeId, string name)
     {
         if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
+        {
             return;
+        }
 
         List<int> notificationIds = await GetPendingNotificationIdsAsync();
         if (notificationIds.Contains(noticeId))
@@ -821,11 +840,15 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
             PlantListItemViewModel? updatePlant = Plants.FirstOrDefault(x => x.Id == message.PlantId);
             if (updatePlant is null)
+            {
                 return;
+            }
 
             Plant? plantFromDB = await _plantService.GetPlantByIdAsync(message.PlantId);
             if (null == plantFromDB)
+            {
                 return;
+            }
 
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
@@ -873,16 +896,25 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     {
         try
         {
-            if (message is null) return;
+            if (message is null)
+            {
+                return;
+            }
 
             Guid plantId = message.PlantId;
             CareType careType = message.CareType;
 
             Plant? plant = await _plantService.GetPlantByIdAsync(plantId);
-            if (plant is null) return;
+            if (plant is null)
+            {
+                return;
+            }
 
             int plantVMIndex = _allPlantViewModelsCache.FindIndex(x => x.Id == plantId);
-            if (plantVMIndex == -1) return;
+            if (plantVMIndex == -1)
+            {
+                return;
+            }
 
             PlantListItemViewModel plantVM = _allPlantViewModelsCache[plantVMIndex];
 

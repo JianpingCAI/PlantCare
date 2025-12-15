@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using PlantCare.Data.DbModels;
 using PlantCare.Data.Repositories.interfaces;
@@ -55,12 +56,12 @@ public class GenericRepository<T> : IRepository<T> where T : class
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            foreach (var entry in ex.Entries)
+            foreach (EntityEntry entry in ex.Entries)
             {
                 if (entry.Entity is PlantDbModel)
                 {
-                    var proposedValues = entry.CurrentValues;
-                    var databaseValues = await entry.GetDatabaseValuesAsync();
+                    PropertyValues proposedValues = entry.CurrentValues;
+                    PropertyValues? databaseValues = await entry.GetDatabaseValuesAsync();
 
                     if (databaseValues == null)
                     {

@@ -447,7 +447,10 @@ namespace PlantCare.App.ViewModels
                 // edit an existing plant
                 if (query.TryGetValue("Plant", out object? value))
                 {
-                    if (value is not Plant plant) return;
+                    if (value is not Plant plant)
+                    {
+                        return;
+                    }
 
                     MapToViewModel(plant);
                 }

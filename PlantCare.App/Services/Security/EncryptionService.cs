@@ -42,7 +42,9 @@ public class EncryptionService : IEncryptionService
     public string Encrypt(string plainText)
     {
         if (string.IsNullOrEmpty(plainText))
+        {
             return plainText;
+        }
 
         try
         {
@@ -51,7 +53,7 @@ public class EncryptionService : IEncryptionService
                 aes.Key = _key;
                 aes.IV = _iv;
 
-                using (var encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
+                using (ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
                 using (var ms = new MemoryStream())
                 {
                     using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
@@ -73,7 +75,9 @@ public class EncryptionService : IEncryptionService
     public string Decrypt(string cipherText)
     {
         if (string.IsNullOrEmpty(cipherText))
+        {
             return cipherText;
+        }
 
         try
         {
@@ -82,7 +86,7 @@ public class EncryptionService : IEncryptionService
                 aes.Key = _key;
                 aes.IV = _iv;
 
-                using (var decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
+                using (ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
                 using (var ms = new MemoryStream(Convert.FromBase64String(cipherText)))
                 using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
                 using (var sr = new StreamReader(cs, Encoding.UTF8))

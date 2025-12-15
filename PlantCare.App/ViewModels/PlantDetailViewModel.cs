@@ -85,10 +85,12 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
     void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (!query.TryGetValue("PlantId", out object? value))
+        {
             return;
+        }
 
         var plantId = value.ToString();
-        if (Guid.TryParse(plantId, out var selectedId))
+        if (Guid.TryParse(plantId, out Guid selectedId))
         {
             Id = selectedId;
         }

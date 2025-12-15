@@ -47,7 +47,9 @@ public class PlantRepository(ApplicationDbContext context) : GenericRepository<P
     public async Task AddPlantsAsync(List<PlantDbModel> plants)
     {
         if (plants == null || plants.Count == 0)
+        {
             return;
+        }
 
         await _context.Plants.AddRangeAsync(plants);
         await _context.SaveChangesAsync();

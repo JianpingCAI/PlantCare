@@ -1,5 +1,6 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Globalization;
+using System.Reflection;
 
 namespace PlantCare.App.Utils;
 
@@ -16,7 +17,7 @@ public class EnumDescriptionConverter : IValueConverter
 
     private static string GetDescription(Enum value)
     {
-        var fieldInfo = value.GetType().GetField(value.ToString());
+        FieldInfo? fieldInfo = value.GetType().GetField(value.ToString());
         var attributes = (DescriptionAttribute[]?)fieldInfo?.GetCustomAttributes(typeof(DescriptionAttribute), false);
         return attributes?.FirstOrDefault()?.Description ?? value.ToString();
     }

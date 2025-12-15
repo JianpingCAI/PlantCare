@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 
 namespace PlantCare.App.Utils;
 
@@ -10,7 +10,9 @@ public class ProgressToColorConverter : IValueConverter
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is double progress)
+        {
             return Convert(progress);
+        }
 
         return Colors.Transparent;
     }
@@ -23,12 +25,20 @@ public class ProgressToColorConverter : IValueConverter
     public static Color Convert(double progress)
     {
         if (progress < 0.01)
+        {
             return Colors.Red;
+        }
         else if (progress <= _oneDay)
+        {
             return Colors.Orange;
+        }
         else if (progress < _threeDays)
+        {
             return Colors.Yellow;
+        }
         else
+        {
             return Colors.DeepSkyBlue;
+        }
     }
 }

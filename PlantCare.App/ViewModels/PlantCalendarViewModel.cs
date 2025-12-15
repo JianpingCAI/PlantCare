@@ -329,7 +329,9 @@ namespace PlantCare.App.ViewModels
                 IsSetRemindersDoneEnabled = TickedPlantEvents.Count > 0;
 
                 if (null == TickedPlantEvents)
+                {
                     return;
+                }
 
                 foreach (PlantEvent item in PlantEvents)
                 {
@@ -372,7 +374,9 @@ namespace PlantCare.App.ViewModels
                     LocalizationManager.Instance[ConstStrings.Yes] ?? ConstStrings.Yes,
                     LocalizationManager.Instance[ConstStrings.No] ?? ConstStrings.No);
                 if (!isConfirmed)
+                {
                     return;
+                }
 
                 foreach (object item in TickedPlantEvents)
                 {
@@ -498,7 +502,10 @@ namespace PlantCare.App.ViewModels
         [RelayCommand]
         public async Task RefreshPlantEvents()
         {
-            if (IsBusy) return;
+            if (IsBusy)
+            {
+                return;
+            }
 
             try
             {
@@ -521,7 +528,9 @@ namespace PlantCare.App.ViewModels
         async void IRecipient<LanguageChangedMessage>.Receive(LanguageChangedMessage message)
         {
             if (string.IsNullOrEmpty(message?.CultureCode) || ReminderCalendar is null)
+            {
                 return;
+            }
 
             try
             {

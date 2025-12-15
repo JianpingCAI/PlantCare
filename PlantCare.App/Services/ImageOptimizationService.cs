@@ -1,3 +1,4 @@
+using SkiaSharp;
 using System.Diagnostics;
 
 namespace PlantCare.App.Services;
@@ -98,7 +99,7 @@ public class ImageOptimizationService : IImageOptimizationService
             throw new FileNotFoundException("Source image not found", imagePath);
         }
 
-        using var sourceStream = File.OpenRead(imagePath);
+        using FileStream sourceStream = File.OpenRead(imagePath);
         string fileName = Path.GetFileName(imagePath);
         return await CreateThumbnailInternalAsync(sourceStream, fileName);
     }
@@ -177,11 +178,15 @@ public class ImageOptimizationService : IImageOptimizationService
         {
             // Skip default or empty paths
             if (string.IsNullOrEmpty(photoPath) || photoPath.Contains("default_plant.png"))
+            {
                 continue;
+            }
 
             // Check if photo file exists
             if (!File.Exists(photoPath))
+            {
                 continue;
+            }
 
             string thumbnailPath = GetThumbnailPath(photoPath);
 
@@ -241,9 +246,9 @@ public class ImageOptimizationService : IImageOptimizationService
                 }
             }
 
-            using var resizedBitmap = sourceBitmap.Resize(
+            using SKBitmap resizedBitmap = sourceBitmap.Resize(
                 new SkiaSharp.SKImageInfo(width, height),
-                SkiaSharp.SKFilterQuality.High);
+                new SkiaSharp.SKSamplingOptions(SkiaSharp.SKFilterMode.Linear, SkiaSharp.SKMipmapMode.None));
 
             if (resizedBitmap == null)
             {
@@ -251,7 +256,7 @@ public class ImageOptimizationService : IImageOptimizationService
             }
 
             using var image = SkiaSharp.SKImage.FromBitmap(resizedBitmap);
-            using var data = image.Encode(SkiaSharp.SKEncodedImageFormat.Jpeg, JpegQuality);
+            using SKData data = image.Encode(SkiaSharp.SKEncodedImageFormat.Jpeg, JpegQuality);
             
             return data.ToArray();
         });

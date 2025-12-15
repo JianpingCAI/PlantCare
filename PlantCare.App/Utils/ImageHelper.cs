@@ -35,7 +35,7 @@ public static class ImageHelper
             }
         }
 
-        using var resizedBitmap = original.Resize(new SKImageInfo(width, height), new SKSamplingOptions(SKFilterMode.Linear));
+        using SKBitmap resizedBitmap = original.Resize(new SKImageInfo(width, height), new SKSamplingOptions(SKFilterMode.Linear));
         using var image = SKImage.FromBitmap(resizedBitmap);
         using var outputStream = new MemoryStream();
         image.Encode(SKEncodedImageFormat.Jpeg, 90).SaveTo(outputStream);
@@ -84,7 +84,9 @@ public static class ImageHelper
     public static Task SaveResizedPhotoAsync(string sourcePhotoPath, string resizedPhotoPath)
     {
         if (!File.Exists(sourcePhotoPath))
+        {
             return Task.CompletedTask;
+        }
 
         return Task.Run(async () =>
         {

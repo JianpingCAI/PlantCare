@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
@@ -45,11 +45,19 @@ namespace PlantCare.App.ViewModels
                 TimestampRecords.Clear();
 
                 if (!query.TryGetValue("careType", out object? careTypeObject))
+                {
                     return;
+                }
+
                 if (!query.TryGetValue("plantName", out object? plantNameObject))
+                {
                     return;
+                }
+
                 if (!query.TryGetValue("records", out object? recordsObject))
+                {
                     return;
+                }
 
                 if (careTypeObject != null && careTypeObject is CareType careType)
                 {
@@ -80,7 +88,10 @@ namespace PlantCare.App.ViewModels
         [RelayCommand(CanExecute = nameof(CanDeleteRecord))]
         public async Task DeleteRecord(object? target)
         {
-            if (target == null || target is not TimeStampRecord record) return;
+            if (target == null || target is not TimeStampRecord record)
+            {
+                return;
+            }
 
             IsBusy = true;
             try
@@ -135,7 +146,9 @@ namespace PlantCare.App.ViewModels
         private bool CanDeleteRecord()
         {
             if (TimestampRecords.Count == 1)
+            {
                 return false;
+            }
 
             return true;
         }

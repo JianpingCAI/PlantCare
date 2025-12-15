@@ -83,8 +83,8 @@ namespace PlantCare.App
                 // Small delay to let app finish initializing
                 await Task.Delay(2000);
 
-                using var scope = _serviceProvider.CreateScope();
-                var plantService = scope.ServiceProvider.GetRequiredService<IPlantService>();
+                using IServiceScope scope = _serviceProvider.CreateScope();
+                IPlantService plantService = scope.ServiceProvider.GetRequiredService<IPlantService>();
 
                 int regeneratedCount = await plantService.ValidateAndRegenerateThumbnailsAsync();
 
@@ -106,7 +106,7 @@ namespace PlantCare.App
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            var window = base.CreateWindow(activationState);
+            Window window = base.CreateWindow(activationState);
             if (window?.Page == null)
             {
                 window!.Page = new AppShell();
@@ -135,7 +135,7 @@ namespace PlantCare.App
             // Optionally, display an alert to the user
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                var current = Shell.Current;
+                Shell current = Shell.Current;
                 if (current != null)
                 {
                     await current.DisplayAlert("Error", $"An unexpected error occurred. Please try again later: {ex.Message}.", "OK");
@@ -175,14 +175,17 @@ namespace PlantCare.App
             catch (Exception ex)
             {
                 if (Current is not null)
+                {
                     Current.UserAppTheme = AppTheme.Light;
+                }
+
                 Debug.WriteLine($"Exception occurs: {ex.Message}");
             }
         }
 
         private static void RegisterNavigationEventHandlers()
         {
-            var current = Shell.Current;
+            Shell current = Shell.Current;
             if (current != null)
             {
                 current.Navigating += (sender, args) =>

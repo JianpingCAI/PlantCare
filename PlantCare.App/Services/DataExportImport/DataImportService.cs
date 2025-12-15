@@ -1,4 +1,4 @@
-﻿using System.IO.Compression;
+using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
 using PlantCare.Data.DbModels;
@@ -114,17 +114,17 @@ public class DataImportService : IDataImportService
 
     private static void ResetIds(IEnumerable<PlantDbModel> plants)
     {
-        foreach (var plant in plants)
+        foreach (PlantDbModel plant in plants)
         {
             plant.Id = Guid.Empty;
 
-            foreach (var wateringHistory in plant.WateringHistories)
+            foreach (WateringHistory wateringHistory in plant.WateringHistories)
             {
                 wateringHistory.Id = Guid.Empty;
                 wateringHistory.PlantId = Guid.Empty; // Reset PlantId to prevent foreign key conflicts
             }
 
-            foreach (var fertilizationHistory in plant.FertilizationHistories)
+            foreach (FertilizationHistory fertilizationHistory in plant.FertilizationHistories)
             {
                 fertilizationHistory.Id = Guid.Empty;
                 fertilizationHistory.PlantId = Guid.Empty; // Reset PlantId to prevent foreign key conflicts
