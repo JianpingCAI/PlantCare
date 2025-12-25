@@ -22,6 +22,7 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IDataExportService _dataExportService;
     private readonly IDataImportService _dataImportService;
     private readonly INavigationService _navigationService;
+    private readonly PlantCare.App.Services.IToastService _toastService;
 
     public SettingsViewModel(
         IAppSettingsService settingsService,
@@ -29,7 +30,8 @@ public partial class SettingsViewModel : ViewModelBase
         IFolderPicker folderPicker,
         IDataExportService dataExportService,
         IDataImportService dataImportService,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        PlantCare.App.Services.IToastService toastService)
     {
         _settingsService = settingsService;
         _dialogService = dialogService;
@@ -37,6 +39,7 @@ public partial class SettingsViewModel : ViewModelBase
         _dataExportService = dataExportService;
         _dataImportService = dataImportService;
         _navigationService = navigationService;
+        _toastService = toastService;
     }
 
     [ObservableProperty]
@@ -343,19 +346,18 @@ public partial class SettingsViewModel : ViewModelBase
 
                 AppSettings importedSettings = importedData.AppSettings;
 
-                await MainThread.InvokeOnMainThreadAsync(async () =>
-                 {
-                     IsWateringNotificationEnabled = importedSettings.WateringNotificationEnabled;
-                     IsFertilizationNotificationEnabled = importedSettings.FertilizationNotificationEnabled;
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    IsWateringNotificationEnabled = importedSettings.WateringNotificationEnabled;
+                    IsFertilizationNotificationEnabled = importedSettings.FertilizationNotificationEnabled;
 
-                     SelectedLanguage = importedSettings.Language;
-                     SelectedTheme = importedSettings.Theme;
+                    SelectedLanguage = importedSettings.Language;
+                    SelectedTheme = importedSettings.Theme;
 
-                     WeakReferenceMessenger.Default.Send<DataImportMessage>(new DataImportMessage { PlantsCount = importedData.Plants.Count });
+                    WeakReferenceMessenger.Default.Send<DataImportMessage>(new DataImportMessage { PlantsCount = importedData.Plants.Count });
+                });
 
-                     IToast toast = Toast.Make($"{importedData.Plants.Count} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}", ToastDuration.Short);
-                     await toast.Show();
-                 });
+                await _toastService.ShowAsync($"{importedData.Plants.Count} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}", ToastType.Success, 2000);
             }
         }
         catch (Exception ex)

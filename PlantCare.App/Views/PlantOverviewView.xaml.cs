@@ -30,8 +30,8 @@ public partial class PlantOverviewView : ContentPageBase
             await Task.Delay(300);
 
             // Animate entrance with spring effect
-            var scaleAnimation = fabButton.ScaleTo(1, 400, Easing.SpringOut);
-            var fadeAnimation = fabButton.FadeTo(1, 300, Easing.CubicOut);
+            var scaleAnimation = fabButton.ScaleToAsync(1, 400, Easing.SpringOut);
+            var fadeAnimation = fabButton.FadeToAsync(1, 300, Easing.CubicOut);
 
             await Task.WhenAll(scaleAnimation, fadeAnimation);
         }

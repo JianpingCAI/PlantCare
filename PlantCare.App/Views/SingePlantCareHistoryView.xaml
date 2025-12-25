@@ -3,6 +3,7 @@
     x:Class="PlantCare.App.Views.SingePlantCareHistoryView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:components="clr-namespace:PlantCare.App.Components"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     x:Name="thisPage"
     Title="{Binding PlantName}">
@@ -45,15 +46,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Grid>
-        <Grid
-            BackgroundColor="{AppThemeBinding Light={StaticResource Gray200},
-                                              Dark={StaticResource Gray500}}"
-            IsVisible="{Binding IsLoading}"
-            Opacity="0.5">
-            <ActivityIndicator
-                HorizontalOptions="Center"
-                IsRunning="{Binding IsLoading}"
-                VerticalOptions="Center" />
-        </Grid>
+
+        <components:LoadingOverlayView IsVisible="{Binding IsLoading}" />
     </Grid>
 </ContentPage>

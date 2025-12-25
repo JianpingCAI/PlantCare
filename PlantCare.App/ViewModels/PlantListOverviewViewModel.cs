@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PlantCare.App.Services;
-
 using System.Collections.ObjectModel;
 using PlantCare.App.ViewModels.Base;
 using CommunityToolkit.Mvvm.Messaging;
@@ -45,7 +44,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         IAppLogger<PlantListOverviewViewModel> logger)
     {
         _plantService = plantService;
-
         _navigationService = navigationService;
         _notificationService = notificationService;
         _dialogService = dialogService;
@@ -343,8 +341,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
                 _allPlantViewModelsCache.Add(newPlantVM);
                 _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
-                IToast toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}", CommunityToolkit.Maui.Core.ToastDuration.Short);
-                toast.Show();
             });
 
             if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
@@ -411,11 +407,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
                     InsertPlant(plantVM);
                 }
-
-                IToast toast = Toast.Make($"{plantDB.Name} {LocalizationManager.Instance[ConstStrings.Updated] ?? ConstStrings.Updated}", CommunityToolkit.Maui.Core.ToastDuration.Short);
-
-                toast.Show();
             });
+
 
             _logger.LogInformation($"Plant {plantVM.Name} is modified.");
 
@@ -444,6 +437,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     {
         try
         {
+            string? deletedName = null;
+
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 IsLoading = true;
@@ -451,12 +446,18 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 PlantListItemViewModel? deletedPlant = Plants.FirstOrDefault(e => e.Id == message.PlantId);
 
                 if (deletedPlant is null) { return; }
+
+                deletedName = deletedPlant.Name;
+
                 Plants.Remove(deletedPlant);
 
                 _allPlantViewModelsCache.Remove(deletedPlant);
-                IToast toast = Toast.Make($"{deletedPlant.Name} {LocalizationManager.Instance[ConstStrings.Deleted] ?? ConstStrings.Deleted}", CommunityToolkit.Maui.Core.ToastDuration.Short);
-                toast.Show();
             });
+
+            if (!string.IsNullOrWhiteSpace(deletedName))
+            {
+                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Deleted] ?? ConstStrings.Deleted, deletedName);
+            }
 
             _logger.LogInformation($"Plant {message.Name} is deleted");
             await CancelPendingNotificationAsync(message.PlantId, message.Name);

@@ -100,6 +100,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IPlantService, PlantService>();
         builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
         builder.Services.AddSingleton<IImageOptimizationService, ImageOptimizationService>();
+        builder.Services.AddSingleton<IToastService, ToastService>();
     }
 
     private static void ConfigureSecurityServices(MauiAppBuilder builder)

@@ -3,6 +3,7 @@
     x:Class="PlantCare.App.Views.PlantAddEditView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:components="clr-namespace:PlantCare.App.Components"
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
     xmlns:local="clr-namespace:PlantCare.App.Utils"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
@@ -471,15 +472,7 @@
                     Text="{Binding Path=[Save], Source={x:Static utils:LocalizationManager.Instance}}" />
             </VerticalStackLayout>
         </ScrollView>
-        
-        <Grid
-            BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}"
-            IsVisible="{Binding IsLoading}"
-            Opacity="0.5">
-            <ActivityIndicator
-                HorizontalOptions="Center"
-                IsRunning="{Binding IsLoading}"
-                VerticalOptions="Center" />
-        </Grid>
+
+        <components:LoadingOverlayView IsVisible="{Binding IsLoading}" />
     </Grid>
 </ContentPage>
