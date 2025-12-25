@@ -1,4 +1,4 @@
-﻿using PlantCare.App.Utils;
+using PlantCare.App.Utils;
 using PlantCare.Data;
 
 namespace PlantCare.App.Services;

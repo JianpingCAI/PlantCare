@@ -89,5 +89,9 @@
     <!--  Background Colors  -->
     <Color x:Key="Background_Dark">#081B25</Color>
     <Color x:Key="Background_Mid">#152C39</Color>
+    
+    <!--  Page Background Colors for Light/Dark Themes  -->
+    <Color x:Key="PageBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="PageBackgroundColorDark">#111827</Color>
 
 </ResourceDictionary>

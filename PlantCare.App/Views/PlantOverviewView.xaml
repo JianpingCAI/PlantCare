@@ -189,26 +189,15 @@
             </RefreshView>
         </Grid>
 
-        <!--  Add Plant Button  -->
+        <!--  Add Plant Button with entrance animation  -->
         <Button
-            Style="{StaticResource DisplayStyle}"
+            x:Name="fabButton"
+            Style="{StaticResource FabButtonStyle}"
             Margin="0,0,16,80"
             Command="{Binding AddPlantCommand}"
-            CornerRadius="60"
-            FontFamily="MaterialIconsRegular"
-            HorizontalOptions="End"
             Text="&#xe147;"
-            VerticalOptions="End"
-            WidthRequest="60"
-            HeightRequest="60">
-            <Button.Shadow>
-                <Shadow
-                    Brush="{StaticResource Primary}"
-                    Opacity="0.4"
-                    Radius="16"
-                    Offset="0,6" />
-            </Button.Shadow>
-        </Button>
+            HorizontalOptions="End"
+            VerticalOptions="End" />
         
         <Grid
             BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}"

@@ -31,42 +31,69 @@ namespace PlantCare.App
             _settingsService = settingsService;
             _serviceProvider = serviceProvider;
 
-#if DEBUG
-            // Optional: Delete database for fresh start during debugging
-            if (RESET_DATABASE_ON_DEBUG)
+            // Initialize app asynchronously to avoid blocking UI thread
+            InitializeAppAsync().SafeFireAndForget(ex =>
             {
-                FileHelper.DeleteDatabaseFile();
-                Debug.WriteLine("[Database] Database deleted for fresh start (DEBUG mode)");
-            }
+                Debug.WriteLine($"[App Initialization] Failed: {ex.Message}");
+            });
+        }
+
+        /// <summary>
+        /// Asynchronously initializes the app without blocking the UI thread
+        /// </summary>
+        private async Task InitializeAppAsync()
+        {
+            try
+            {
+#if DEBUG
+                // Optional: Delete database for fresh start during debugging
+                if (RESET_DATABASE_ON_DEBUG)
+                {
+                    await Task.Run(() => FileHelper.DeleteDatabaseFile());
+                    Debug.WriteLine("[Database] Database deleted for fresh start (DEBUG mode)");
+                }
 #endif
 
-            // Apply migrations at startup
-            using (IServiceScope scope = serviceProvider.CreateScope())
-            {
-                ApplicationDbContext db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                db.Database.Migrate();
-                
+                // Apply migrations on background thread
+                await Task.Run(() =>
+                {
+                    using IServiceScope scope = _serviceProvider.CreateScope();
+                    ApplicationDbContext db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    db.Database.Migrate();
+                    
 #if DEBUG
-                // Seed test data for development
-                DevelopmentDataSeeder.SeedTestDataIfNeededAsync(db).GetAwaiter().GetResult();
-                
-                Debug.WriteLine($"[Database] Current plant count: {db.Plants.Count()}");
+                    // Seed test data for development
+                    DevelopmentDataSeeder.SeedTestDataIfNeededAsync(db).GetAwaiter().GetResult();
+                    Debug.WriteLine($"[Database] Current plant count: {db.Plants.Count()}");
 #endif
+                });
+
+                // Load theme asynchronously
+                await LoadThemeAsync();
+
+                // Load localization asynchronously
+                await LoadLocalizationLanguageAsync();
+
+                // Add navigation event handlers on main thread
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    RegisterNavigationEventHandlers();
+                });
+
+                // Global exception handling
+                AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+                TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+                
+                // Validate and regenerate thumbnails on startup (async fire-and-forget)
+                _ = ValidateThumbnailsOnStartupAsync();
+                
+                Debug.WriteLine("[App Initialization] Completed successfully");
             }
-
-            LoadTheme();
-
-            LoadLocalizationLanguage();
-
-            // Add navigation event handlers
-            RegisterNavigationEventHandlers();
-
-            // Global exception handling
-            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
-            TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
-            
-            // Validate and regenerate thumbnails on startup (async fire-and-forget)
-            _ = ValidateThumbnailsOnStartupAsync();
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[App Initialization] Error: {ex.Message}");
+                Debug.WriteLine($"[App Initialization] Stack Trace: {ex.StackTrace}");
+            }
         }
 
         /// <summary>
@@ -125,7 +152,7 @@ namespace PlantCare.App
             Debug.WriteLine($"Stack trace: {ex.StackTrace}");
 
             // Optionally, display an alert to the user
-            MainThread.BeginInvokeOnMainThread(async () =>
+            MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 Shell current = Shell.Current;
                 if (current != null)
@@ -135,43 +162,55 @@ namespace PlantCare.App
             });
         }
 
-        private void LoadLocalizationLanguage()
+        private async Task LoadLocalizationLanguageAsync()
         {
             try
             {
-                Language language = _settingsService.GetLanguageAsync().Result;
-                LocalizationManager.Instance.SetLanguage(language);
-                AppLanguage = language;
-            }
-            catch (Exception)
-            {
-                LocalizationManager.Instance.SetLanguage(Language.English);
-                AppLanguage = Language.English;
-            }
-        }
-
-        private void LoadTheme()
-        {
-            try
-            {
-                AppTheme appTheme = _settingsService.GetThemeSettingAsync().Result;
-                if (Current is not null)
+                Language language = await _settingsService.GetLanguageAsync();
+                await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    Current.UserAppTheme = appTheme;
-                }
-                else
-                {
-                    Current.UserAppTheme = AppTheme.Light;
-                }
+                    LocalizationManager.Instance.SetLanguage(language);
+                    AppLanguage = language;
+                });
             }
             catch (Exception ex)
             {
-                if (Current is not null)
+                Debug.WriteLine($"[Localization] Failed to load language: {ex.Message}");
+                await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    Current.UserAppTheme = AppTheme.Light;
-                }
+                    LocalizationManager.Instance.SetLanguage(Language.English);
+                    AppLanguage = Language.English;
+                });
+            }
+        }
 
-                Debug.WriteLine($"Exception occurs: {ex.Message}");
+        private async Task LoadThemeAsync()
+        {
+            try
+            {
+                AppTheme appTheme = await _settingsService.GetThemeSettingAsync();
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    if (Current is not null)
+                    {
+                        Current.UserAppTheme = appTheme;
+                    }
+                    else
+                    {
+                        Current.UserAppTheme = AppTheme.Light;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Theme] Failed to load theme: {ex.Message}");
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    if (Current is not null)
+                    {
+                        Current.UserAppTheme = AppTheme.Light;
+                    }
+                });
             }
         }
 
