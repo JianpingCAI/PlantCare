@@ -127,17 +127,22 @@
                         x:Name="chkUnattended"
                         HorizontalOptions="Start"
                         IsChecked="{Binding IsShowUnattendedOnly, Mode=TwoWay}" />
-                    <Label Text="{Binding Path=[UnattendedOnly], Source={x:Static utils:LocalizationManager.Instance}}" />
+                    <Label 
+                        Style="{StaticResource BodyStyle}"
+                        Text="{Binding Path=[UnattendedOnly], Source={x:Static utils:LocalizationManager.Instance}}" />
                 </HorizontalStackLayout>
 
                 <!--  Show Calendar  -->
                 <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
                     <CheckBox x:Name="chkCalendar" IsChecked="{Binding IsShowCalendar, Mode=TwoWay}" />
-                    <Label Margin="0,0,5,0" Text="{Binding Path=[Show], Source={x:Static utils:LocalizationManager.Instance}}" />
+                    <Label 
+                        Style="{StaticResource BodyStyle}"
+                        Margin="0,0,5,0" 
+                        Text="{Binding Path=[Show], Source={x:Static utils:LocalizationManager.Instance}}" />
                     <Label
+                        Style="{StaticResource HeadlineSmallStyle}"
                         Margin="0,0,15,0"
                         FontFamily="MaterialIconsRegular"
-                        FontSize="20"
                         Text="&#xebcc;" />
                 </HorizontalStackLayout>
             </Grid>
@@ -156,6 +161,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Label
+                            Style="{StaticResource BodyStyle}"
                             Margin="5,0,0,5"
                             FontAttributes="Bold"
                             Text="{Binding ., StringFormat='{0:MM/dd}'}"
@@ -213,6 +219,7 @@
                                                         WidthRequest="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoWidth}" />
                                                     <!--  Name  -->
                                                     <Label
+                                                        Style="{StaticResource BodyStyle}"
                                                         Background="DarkSeaGreen"
                                                         HorizontalOptions="Fill"
                                                         HorizontalTextAlignment="Center"
@@ -223,8 +230,8 @@
                                             </Border>
                                             <!--  Selection Tick  -->
                                             <Label
+                                                Style="{StaticResource HeadlineSmallStyle}"
                                                 FontFamily="MaterialIconsRegular"
-                                                FontSize="20"
                                                 HorizontalOptions="End"
                                                 IsVisible="{Binding IsSelected}"
                                                 Text="&#xe86c;"
@@ -235,10 +242,10 @@
                                             <!--  Reminder Time  -->
                                             <HorizontalStackLayout Grid.Row="1">
                                                 <Label
+                                                    Style="{StaticResource DisplaySmallStyle}"
                                                     Grid.Column="2"
                                                     Margin="0,5,0,0"
                                                     FontFamily="MaterialIconsRegular"
-                                                    FontSize="24"
                                                     HorizontalOptions="End"
                                                     HorizontalTextAlignment="End"
                                                     Text="{Binding ReminderType, Converter={StaticResource ReminderTypeIconConverter}}"
@@ -246,6 +253,7 @@
                                                     VerticalOptions="Center"
                                                     VerticalTextAlignment="End" />
                                                 <Label
+                                                    Style="{StaticResource BodyStyle}"
                                                     FontAttributes="Bold"
                                                     HorizontalOptions="Center"
                                                     HorizontalTextAlignment="Center"
@@ -261,11 +269,11 @@
 
                 <!--  Floating 'Done' button  -->
                 <Button
+                    Style="{StaticResource DisplayStyle}"
                     Margin="0,0,20,20"
                     Command="{Binding SetSelectedRemindersDoneCommand}"
                     CornerRadius="50"
                     FontFamily="MaterialIconsRegular"
-                    FontSize="30"
                     HorizontalOptions="End"
                     IsEnabled="{Binding IsSetRemindersDoneEnabled}"
                     Opacity="0.9"
@@ -327,7 +335,7 @@
                             <xcViews:CalendarView.DayNameTemplate>
                                 <DataTemplate x:DataType="System:DayOfWeek">
                                     <Label
-                                        FontSize="12"
+                                        Style="{StaticResource BodySmallStyle}"
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding ., Converter={StaticResource LocalizeDayOfWeekAndCharLimitConverter}, ConverterParameter=3}"
                                         TextColor="{AppThemeBinding Light={StaticResource Black},
@@ -376,7 +384,6 @@
                                                 <Style BasedOn="{StaticResource DefaultDayViewTodayStyle}" TargetType="xcViews:DayView">
                                                     <Setter Property="Command" Value="{Binding BindingContext.ChangeDateSelectionCommand, Source={x:Reference thisPage}}" />
                                                     <Setter Property="CommandParameter" Value="{Binding DateTime}" />
-                                                    <Setter Property="FontSize" Value="24" />
                                                 </Style>
                                             </xcViews:DayView.TodayStyle>
 
@@ -395,11 +402,11 @@
                     </Border>
                 </ScrollView>
                 <Button
+                    Style="{StaticResource HeadlineSmallStyle}"
                     Grid.Column="1"
                     Command="{Binding HideCalendarCommand}"
                     CornerRadius="15"
                     FontFamily="MaterialIconsRegular"
-                    FontSize="20"
                     HeightRequest="40"
                     HorizontalOptions="End"
                     Text="&#xead0;"

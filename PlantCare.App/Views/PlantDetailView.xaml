@@ -206,8 +206,8 @@
                         <toolkit:Expander.Header>
                             <Grid ColumnDefinitions="auto,*" ColumnSpacing="8">
                                 <Label
+                                    Style="{StaticResource HeadlineSmallStyle}"
                                     FontFamily="MaterialIconsRegular"
-                                    FontSize="20"
                                     Text="&#xe24d;"
                                     VerticalOptions="Center" />
                                 <Label

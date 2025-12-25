@@ -58,9 +58,6 @@ namespace PlantCare.App
 
             LoadLocalizationLanguage();
 
-            // Initialize main page
-            MainPage = new AppShell();
-
             // Add navigation event handlers
             RegisterNavigationEventHandlers();
 
@@ -106,12 +103,7 @@ namespace PlantCare.App
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            Window window = base.CreateWindow(activationState);
-            if (window?.Page == null)
-            {
-                window!.Page = new AppShell();
-            }
-            return window;
+            return new Window(new AppShell());
         }
 
         private void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
@@ -138,7 +130,7 @@ namespace PlantCare.App
                 Shell current = Shell.Current;
                 if (current != null)
                 {
-                    await current.DisplayAlert("Error", $"An unexpected error occurred. Please try again later: {ex.Message}.", "OK");
+                    await current.DisplayAlertAsync("Error", $"An unexpected error occurred. Please try again later: {ex.Message}.", "OK");
                 }
             });
         }

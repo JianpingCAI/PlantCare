@@ -140,9 +140,9 @@
                                         <!--  Watering Section  -->
                                         <Grid ColumnDefinitions="auto,*" ColumnSpacing="6" Padding="0" Margin="0,4,0,0">
                                             <Label
+                                                Style="{StaticResource TitleStyle}"
                                                 Grid.Column="0"
                                                 FontFamily="MaterialIconsRegular"
-                                                FontSize="18"
                                                 Text="&#xe798;"
                                                 TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
                                                 VerticalOptions="Center"
@@ -159,9 +159,9 @@
                                         <!--  Fertilization Section  -->
                                         <Grid ColumnDefinitions="auto,*" ColumnSpacing="6" Padding="0" Margin="0,2,0,0">
                                             <Label
+                                                Style="{StaticResource TitleStyle}"
                                                 Grid.Column="0"
                                                 FontFamily="MaterialIconsRegular"
-                                                FontSize="18"
                                                 Text="&#xe761;"
                                                 TextColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
                                                 VerticalOptions="Center"
@@ -186,11 +186,11 @@
 
         <!--  Add Plant Button  -->
         <Button
+            Style="{StaticResource DisplayStyle}"
             Margin="0,0,16,80"
             Command="{Binding AddPlantCommand}"
             CornerRadius="60"
             FontFamily="MaterialIconsRegular"
-            FontSize="28"
             HorizontalOptions="End"
             Text="&#xe147;"
             VerticalOptions="End"

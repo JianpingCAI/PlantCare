@@ -6,11 +6,15 @@
     Title="AboutPage">
     <StackLayout Padding="10">
         <Label
+            Style="{StaticResource TitleLargeStyle}"
             FontAttributes="Bold"
-            FontSize="Large"
             Text="About PlantCare App" />
-        <Label Margin="0,10,0,0" Text="PlantCare helps you take care of your plants by providing reminders and tips for watering and fertilization." />
+        <Label 
+            Style="{StaticResource BodyStyle}"
+            Margin="0,10,0,0" 
+            Text="PlantCare helps you take care of your plants by providing reminders and tips for watering and fertilization." />
         <Label
+            Style="{StaticResource BodySmallStyle}"
             Margin="0,10,0,0"
             FontAttributes="Italic"
             Text="Version 1.0" />

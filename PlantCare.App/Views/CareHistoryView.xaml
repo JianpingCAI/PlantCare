@@ -23,9 +23,9 @@
             </Border>
 
             <Label
+                Style="{StaticResource BodyStyle}"
                 Grid.Column="1"
                 Margin="15,0,0,0"
-                FontSize="Medium"
                 HorizontalOptions="Start"
                 Text="{Binding Path=[History], Source={x:Static utils:LocalizationManager.Instance}}"
                 VerticalTextAlignment="Center" />

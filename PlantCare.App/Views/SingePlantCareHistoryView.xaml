@@ -24,8 +24,8 @@
                             </Border.StrokeShape>
                             <Grid ColumnDefinitions="*,*">
                                 <Label
+                                    Style="{StaticResource HeadlineSmallStyle}"
                                     FontAttributes="Bold"
-                                    FontSize="20"
                                     HorizontalOptions="End"
                                     Text="{Binding Timestamp, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
                                 <Button
@@ -36,7 +36,6 @@
                                     CommandParameter="{Binding .}"
                                     CornerRadius="20"
                                     FontFamily="MaterialIconsRegular"
-                                    FontSize="20"
                                     HorizontalOptions="End"
                                     Text="&#xe92b;"
                                     VerticalOptions="Center" />

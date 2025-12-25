@@ -136,7 +136,7 @@
                                     Command="{Binding DecrementAgeCommand}"
                                     WidthRequest="44"
                                     HeightRequest="44"
-                                    FontSize="24"
+                                    FontAttributes="Bold"
                                     Padding="0" />
                                 <Button
                                     Style="{StaticResource OutlineButtonStyle}"
@@ -144,7 +144,7 @@
                                     Command="{Binding IncrementAgeCommand}"
                                     WidthRequest="44"
                                     HeightRequest="44"
-                                    FontSize="20"
+                                    FontAttributes="Bold"
                                     Padding="0" />
                             </HorizontalStackLayout>
                         </Grid>
@@ -158,8 +158,8 @@
                 <VerticalStackLayout Spacing="16" Padding="16,16,16,16">
                     <HorizontalStackLayout Spacing="8">
                         <Label
+                            Style="{StaticResource DisplaySmallStyle}"
                             FontFamily="MaterialIconsRegular"
-                            FontSize="24"
                             Text="&#xe798;"
                             TextColor="{StaticResource Primary}"
                             VerticalOptions="Center" />
@@ -196,7 +196,6 @@
                             Text="Set to Now"
                             HorizontalOptions="Start"
                             HeightRequest="36"
-                            FontSize="14"
                             Padding="16,0" />
                     </VerticalStackLayout>
 
@@ -226,7 +225,7 @@
                                             Command="{Binding DecrementWateringDaysCommand}"
                                             WidthRequest="44"
                                             HeightRequest="44"
-                                            FontSize="24"
+                                            FontAttributes="Bold"
                                             Padding="0" />
                                         <Button
                                             Style="{StaticResource OutlineButtonStyle}"
@@ -234,7 +233,7 @@
                                             Command="{Binding IncrementWateringDaysCommand}"
                                             WidthRequest="44"
                                             HeightRequest="44"
-                                            FontSize="20"
+                                            FontAttributes="Bold"
                                             Padding="0" />
                                     </HorizontalStackLayout>
                                 </Grid>
@@ -259,7 +258,7 @@
                                             Command="{Binding DecrementWateringHoursCommand}"
                                             WidthRequest="44"
                                             HeightRequest="44"
-                                            FontSize="24"
+                                            FontAttributes="Bold"
                                             Padding="0" />
                                         <Button
                                             Style="{StaticResource OutlineButtonStyle}"
@@ -267,7 +266,7 @@
                                             Command="{Binding IncrementWateringHoursCommand}"
                                             WidthRequest="44"
                                             HeightRequest="44"
-                                            FontSize="20"
+                                            FontAttributes="Bold"
                                             Padding="0" />
                                     </HorizontalStackLayout>
                                 </Grid>
@@ -283,8 +282,8 @@
                 <VerticalStackLayout Spacing="16" Padding="16,16,16,16">
                     <HorizontalStackLayout Spacing="8">
                         <Label
+                            Style="{StaticResource DisplaySmallStyle}"
                             FontFamily="MaterialIconsRegular"
-                            FontSize="24"
                             Text="&#xe761;"
                             TextColor="{StaticResource Secondary}"
                             VerticalOptions="Center" />
@@ -321,7 +320,6 @@
                             Text="Set to Now"
                             HorizontalOptions="Start"
                             HeightRequest="36"
-                            FontSize="14"
                             Padding="16,0" />
                     </VerticalStackLayout>
 
@@ -351,7 +349,7 @@
                                             Command="{Binding DecrementFertilizationDaysCommand}"
                                             WidthRequest="44"
                                             HeightRequest="44"
-                                            FontSize="24"
+                                            FontAttributes="Bold"
                                             Padding="0" />
                                         <Button
                                             Style="{StaticResource OutlineButtonStyle}"
@@ -359,7 +357,7 @@
                                             Command="{Binding IncrementFertilizationDaysCommand}"
                                             WidthRequest="44"
                                             HeightRequest="44"
-                                            FontSize="20"
+                                            FontAttributes="Bold"
                                             Padding="0" />
                                     </HorizontalStackLayout>
                                 </Grid>
@@ -384,7 +382,7 @@
                                             Command="{Binding DecrementFertilizationHoursCommand}"
                                             WidthRequest="44"
                                             HeightRequest="44"
-                                            FontSize="24"
+                                            FontAttributes="Bold"
                                             Padding="0" />
                                         <Button
                                             Style="{StaticResource OutlineButtonStyle}"
@@ -392,7 +390,7 @@
                                             Command="{Binding IncrementFertilizationHoursCommand}"
                                             WidthRequest="44"
                                             HeightRequest="44"
-                                            FontSize="20"
+                                            FontAttributes="Bold"
                                             Padding="0" />
                                     </HorizontalStackLayout>
                                 </Grid>
@@ -408,8 +406,8 @@
                 <VerticalStackLayout Spacing="12" Padding="16,16,16,24">
                     <HorizontalStackLayout Spacing="8">
                         <Label
+                            Style="{StaticResource DisplaySmallStyle}"
                             FontFamily="MaterialIconsRegular"
-                            FontSize="24"
                             Text="&#xe24d;"
                             TextColor="{StaticResource Tertiary}"
                             VerticalOptions="Center" />
@@ -446,12 +444,13 @@
                                 </Border.StrokeShape>
                                 <HorizontalStackLayout Spacing="8">
                                     <Label 
+                                        Style="{StaticResource HeadlineSmallStyle}"
                                         FontFamily="MaterialIconsRegular"
                                         Text="&#xe002;"
-                                        FontSize="20"
                                         TextColor="{AppThemeBinding Light=#FF6F00, Dark=#FF8A65}"
                                         VerticalOptions="Center" />
                                     <Label 
+                                        Style="{StaticResource BodyStyle}"
                                         Text="{Binding ErrorMessage}"
                                         TextColor="{AppThemeBinding Light=#E65100, Dark=#FFAB91}"
                                         VerticalOptions="Center" />
@@ -468,7 +467,6 @@
                     IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                     HeightRequest="52"
                     Margin="16,0,16,32"
-                    FontSize="16"
                     FontAttributes="Bold"
                     Text="{Binding Path=[Save], Source={x:Static utils:LocalizationManager.Instance}}" />
             </VerticalStackLayout>
