@@ -191,16 +191,101 @@ public partial class SettingsViewModel : ViewModelBase
         try
         {
             IsLoading = true;
+
+#if ANDROID
+            // On Android, use FileSaver instead of FolderPicker for better compatibility
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    string tempDirectory = FileSystem.CacheDirectory;
+                    string tempFilePath = await _dataExportService.ExportDataAsync(tempDirectory);
+                    
+                    if (File.Exists(tempFilePath))
+                    {
+                        // Read file into memory first
+                        byte[] fileBytes = await File.ReadAllBytesAsync(tempFilePath);
+                        
+                        // Save using FileSaver on main thread
+                        await MainThread.InvokeOnMainThreadAsync(async () =>
+                        {
+                            using MemoryStream memoryStream = new MemoryStream(fileBytes);
+                            FileSaverResult result = await FileSaver.Default.SaveAsync("PlantCareExport.zip", memoryStream, CancellationToken.None);
+                            
+                            if (result.IsSuccessful)
+                            {
+                                await _dialogService.Notify(
+                                    "Export Completed",
+                                    $"Data exported successfully to {result.FilePath}",
+                                    "OK");
+                            }
+                            // Don't show error if user cancelled
+                            else if (result.Exception != null && 
+                                     result.Exception is not TaskCanceledException && 
+                                     result.Exception is not OperationCanceledException)
+                            {
+                                await _dialogService.Notify(
+                                    LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error,
+                                    result.Exception.Message,
+                                    "OK");
+                            }
+                            // If cancelled or no exception, silently do nothing
+                        });
+                        
+                        // Clean up temp file
+                        try
+                        {
+                            File.Delete(tempFilePath);
+                        }
+                        catch { }
+                    }
+                }
+                catch (TaskCanceledException)
+                {
+                    // User cancelled - do nothing
+                }
+                catch (OperationCanceledException)
+                {
+                    // User cancelled - do nothing
+                }
+                catch (Exception ex)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(async () =>
+                    {
+                        await _dialogService.Notify(
+                            LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error,
+                            ex.Message,
+                            "OK");
+                    });
+                }
+            });
+#else
+            // On iOS/Windows, use FolderPicker
             string exportDirectory = await PickFolderAsync();
             if (!string.IsNullOrEmpty(exportDirectory))
             {
                 string filePath = await _dataExportService.ExportDataAsync(exportDirectory);
-                await _dialogService.Notify("Export Completed", $"Data exported to {filePath}", "OK");
+                await _dialogService.Notify(
+                    "Export Completed",
+                    $"Data exported to {filePath}",
+                    "OK");
             }
+#endif
+        }
+        catch (TaskCanceledException)
+        {
+            // User cancelled - do nothing
+        }
+        catch (OperationCanceledException)
+        {
+            // User cancelled - do nothing
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+            await _dialogService.Notify(
+                LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error,
+                ex.Message,
+                "OK");
         }
         finally
         {

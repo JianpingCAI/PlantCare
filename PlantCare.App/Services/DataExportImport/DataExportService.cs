@@ -1,4 +1,4 @@
-﻿using System.IO.Compression;
+using System.IO.Compression;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using PlantCare.Data.Repositories;
@@ -21,24 +21,24 @@ public class DataExportService : IDataExportService
         _appSettingsService = appSettingsService;
     }
 
-    public Task<string> ExportDataAsync(string exportDirectory)
+    public async Task<string> ExportDataAsync(string exportDirectory)
     {
-        return Task.Run(async () =>
+        ExportDataModel exportData = new()
         {
-            ExportDataModel exportData = new()
-            {
-                Plants = await _context.Plants
-               .Include(p => p.WateringHistories)
-               .Include(p => p.FertilizationHistories)
-               .ToListAsync(),
-                AppSettings = await _appSettingsService.GetAppSettingsAsync()
-            };
+            Plants = await _context.Plants
+           .Include(p => p.WateringHistories)
+           .Include(p => p.FertilizationHistories)
+           .ToListAsync(),
+            AppSettings = await _appSettingsService.GetAppSettingsAsync()
+        };
 
-            // Define paths
-            string tempExportDirectory = Path.Combine(exportDirectory, "TempExport");
-            string jsonFilePath = Path.Combine(tempExportDirectory, "exportedData.json");
-            string zipFilePath = Path.Combine(exportDirectory, "PlantCareExport.zip");
+        // Define paths
+        string tempExportDirectory = Path.Combine(exportDirectory, "TempExport");
+        string jsonFilePath = Path.Combine(tempExportDirectory, "exportedData.json");
+        string zipFilePath = Path.Combine(exportDirectory, "PlantCareExport.zip");
 
+        try
+        {
             // Ensure directory exists
             if (Directory.Exists(tempExportDirectory))
             {
@@ -47,8 +47,6 @@ public class DataExportService : IDataExportService
             Directory.CreateDirectory(tempExportDirectory);
 
             // Save JSON data
-            //var json = JsonConvert.SerializeObject(exportData, Formatting.Indented);
-            // Configure JsonSerializerOptions to handle reference loops
             string json = JsonSerializer.Serialize(exportData, new JsonSerializerOptions()
             {
                 WriteIndented = true,
@@ -62,7 +60,8 @@ public class DataExportService : IDataExportService
                 if (!string.IsNullOrEmpty(plant.PhotoPath) && File.Exists(plant.PhotoPath))
                 {
                     string photoFileName = Path.GetFileName(plant.PhotoPath);
-                    File.Copy(plant.PhotoPath, Path.Combine(tempExportDirectory, photoFileName), true);
+                    string destPath = Path.Combine(tempExportDirectory, photoFileName);
+                    File.Copy(plant.PhotoPath, destPath, true);
                 }
             }
 
@@ -71,12 +70,32 @@ public class DataExportService : IDataExportService
             {
                 File.Delete(zipFilePath);
             }
+            
+            // Create ZIP file synchronously to ensure it's complete
             ZipFile.CreateFromDirectory(tempExportDirectory, zipFilePath);
 
-            // Clean up temporary export directory
-            Directory.Delete(tempExportDirectory, true);
+            // Verify ZIP file was created successfully
+            if (!File.Exists(zipFilePath))
+            {
+                throw new IOException("Failed to create ZIP file");
+            }
 
             return zipFilePath;
-        });
+        }
+        finally
+        {
+            // Clean up temporary export directory
+            try
+            {
+                if (Directory.Exists(tempExportDirectory))
+                {
+                    Directory.Delete(tempExportDirectory, true);
+                }
+            }
+            catch
+            {
+                // Ignore cleanup errors
+            }
+        }
     }
 }
