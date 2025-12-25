@@ -86,6 +86,10 @@
 		<!-- Disable AOT to fix .NET 10 preview build issues -->
 		<RunAOTCompilation>false</RunAOTCompilation>
 		<EnableLLVM>false</EnableLLVM>
+		<!-- Ensure fonts are embedded in APK/AAB -->
+		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+		<!-- Preserve fonts during linking -->
+		<AndroidLinkMode>SdkOnly</AndroidLinkMode>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-ios|AnyCPU'">
@@ -133,8 +137,7 @@
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
-		<!-- Custom Fonts -->
-		<MauiFont Include="Resources\Fonts\*" />
+		<!-- Custom Fonts - Explicitly declared below to ensure they're not stripped -->
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
@@ -152,6 +155,22 @@
 		<None Remove="Resources\Images\tab_settings.svg" />
 		<None Remove="Resources\Images\tab_settings_on.svg" />
 		<None Remove="Resources\Splash\painted_plant.svg" />
+	</ItemGroup>
+
+	<!-- Explicitly ensure fonts are embedded and not stripped by linker -->
+	<ItemGroup>
+		<MauiFont Include="Resources\Fonts\OpenSans-Regular.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</MauiFont>
+		<MauiFont Include="Resources\Fonts\OpenSans-Semibold.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</MauiFont>
+		<MauiFont Include="Resources\Fonts\MaterialIcons-Regular.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</MauiFont>
+		<MauiFont Include="Resources\Fonts\fa-solid-900.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</MauiFont>
 	</ItemGroup>
 
 	<ItemGroup>
