@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:components="clr-namespace:PlantCare.App.Components"
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
@@ -54,16 +55,8 @@
     <Grid Padding="8,4,8,0">
 
         <Grid HorizontalOptions="FillAndExpand" RowDefinitions="auto,*">
-            <!--  Search Bar for quick filtering  -->
-            <Border
-                BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
-                Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray700}}"
-                StrokeThickness="1"
-                Padding="4,0"
-                Margin="0,4,0,8">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="12" />
-                </Border.StrokeShape>
+            <!--  Enhanced Search Bar for quick filtering  -->
+            <Border Style="{StaticResource EnhancedSearchBarStyle}" Margin="0,4,0,8">
                 <SearchBar
                     BackgroundColor="Transparent"
                     CancelButtonColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray100}}"
@@ -82,11 +75,22 @@
                 Command="{Binding RefreshPlantStatesCommand}"
                 IsRefreshing="{Binding IsPlantStatesRefreshing}">
                 <CollectionView
-                    EmptyView="{Binding Path=[AddMyPlants], Source={x:Static utils:LocalizationManager.Instance}}"
                     ItemsSource="{Binding Plants}"
                     SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
                     SelectionChangedCommand="{Binding SelectPlantCommand}"
                     SelectionMode="Single">
+                    
+                    <!--  Empty State View  -->
+                    <CollectionView.EmptyView>
+                        <components:EmptyStateView 
+                            IconSource="default_plant.png"
+                            Title="{Binding Path=[NoPlants], Source={x:Static utils:LocalizationManager.Instance}}"
+                            Message="{Binding Path=[AddMyPlants], Source={x:Static utils:LocalizationManager.Instance}}"
+                            ActionText="{Binding Path=[AddPlant], Source={x:Static utils:LocalizationManager.Instance}}"
+                            ActionCommand="{Binding AddPlantCommand}"
+                            HasAction="True" />
+                    </CollectionView.EmptyView>
+                    
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout
                             Orientation="Vertical"
@@ -98,7 +102,8 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:PlantListItemViewModel">
                             <Grid Padding="4" HorizontalOptions="CenterAndExpand">
-                                <Border Style="{StaticResource ModernCardStyle}" Padding="0">
+                                <!--  Interactive Card with Press Effects  -->
+                                <Border Style="{StaticResource InteractiveCardStyle}" Padding="0">
                                     <StackLayout Padding="12" Spacing="6">
 
                                         <!--  Photo  -->
@@ -137,7 +142,7 @@
                                             MaxLines="1"
                                             Margin="0,0,0,4" />
 
-                                        <!--  Watering Section  -->
+                                        <!--  Watering Section with Enhanced ProgressBar  -->
                                         <Grid ColumnDefinitions="auto,*" ColumnSpacing="6" Padding="0" Margin="0,4,0,0">
                                             <Label
                                                 Style="{StaticResource TitleStyle}"
@@ -150,13 +155,13 @@
 
                                             <ProgressBar
                                                 Grid.Column="1"
-                                                HeightRequest="10"
+                                                Style="{StaticResource RoundedProgressBarStyle}"
                                                 Progress="{Binding WaterState}"
                                                 ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
                                                 VerticalOptions="Center" />
                                         </Grid>
 
-                                        <!--  Fertilization Section  -->
+                                        <!--  Fertilization Section with Enhanced ProgressBar  -->
                                         <Grid ColumnDefinitions="auto,*" ColumnSpacing="6" Padding="0" Margin="0,2,0,0">
                                             <Label
                                                 Style="{StaticResource TitleStyle}"
@@ -169,7 +174,7 @@
 
                                             <ProgressBar
                                                 Grid.Column="1"
-                                                HeightRequest="10"
+                                                Style="{StaticResource RoundedProgressBarStyle}"
                                                 Progress="{Binding FertilizeState}"
                                                 ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
                                                 VerticalOptions="Center" />
