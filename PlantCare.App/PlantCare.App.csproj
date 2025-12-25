@@ -208,6 +208,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Components\EmptyStateView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Resources\Styles\Typography.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

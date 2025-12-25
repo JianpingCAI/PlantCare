@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView x:Class="PlantCare.App.Components.EmptyStateView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="thisView">
+    <VerticalStackLayout Spacing="20" 
+                        HorizontalOptions="Center" 
+                        VerticalOptions="Center"
+                        Padding="40">
+        
+        <!--  Icon  -->
+        <Image Source="{Binding Source={x:Reference thisView}, Path=IconSource}"
+               HeightRequest="120"
+               WidthRequest="120"
+               Aspect="AspectFit"
+               Opacity="0.5"
+               HorizontalOptions="Center" />
+        
+        <!--  Title  -->
+        <Label Style="{StaticResource TitleLargeStyle}"
+               Text="{Binding Source={x:Reference thisView}, Path=Title}"
+               HorizontalTextAlignment="Center"
+               HorizontalOptions="Center" />
+        
+        <!--  Message  -->
+        <Label Style="{StaticResource BodyStyle}"
+               Text="{Binding Source={x:Reference thisView}, Path=Message}"
+               HorizontalTextAlignment="Center"
+               HorizontalOptions="Center"
+               Opacity="0.7"
+               MaximumWidthRequest="300" />
+        
+        <!--  Action Button  -->
+        <Button Style="{StaticResource OutlineButtonStyle}"
+                Text="{Binding Source={x:Reference thisView}, Path=ActionText}"
+                Command="{Binding Source={x:Reference thisView}, Path=ActionCommand}"
+                IsVisible="{Binding Source={x:Reference thisView}, Path=HasAction}"
+                HorizontalOptions="Center"
+                Margin="0,8,0,0" />
+    </VerticalStackLayout>
+</ContentView>
