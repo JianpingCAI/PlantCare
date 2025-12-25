@@ -197,22 +197,108 @@
         </Setter>
     </Style>
 
-    <Style TargetType="CheckBox">
-        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
+    <!--  Enhanced Switch Style  -->
+    <Style TargetType="Switch">
+        <Setter Property="OnColor" Value="{StaticResource Primary}" />
+        <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray100}}" />
         <Setter Property="MinimumHeightRequest" Value="44" />
-        <Setter Property="MinimumWidthRequest" Value="44" />
+        <Setter Property="MinimumWidthRequest" Value="51" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="1" />
+                        </VisualState.Setters>
+                    </VisualState>
                     <VisualState x:Name="Disabled">
                         <VisualState.Setters>
-                            <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
+                            <Setter Property="Opacity" Value="0.5" />
+                            <Setter Property="OnColor" Value="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray600}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="On">
+                        <VisualState.Setters>
+                            <Setter Property="OnColor" Value="{StaticResource Primary}" />
+                            <Setter Property="ThumbColor" Value="{StaticResource White}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Off">
+                        <VisualState.Setters>
+                            <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray500}}" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+    </Style>
+
+    <!--  Enhanced CheckBox Style  -->
+    <Style TargetType="CheckBox">
+        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Secondary}}" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+        <Setter Property="MinimumWidthRequest" Value="44" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="1" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
+                            <Setter Property="Opacity" Value="0.5" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="IsChecked">
+                        <VisualState.Setters>
+                            <Setter Property="Color" Value="{StaticResource Primary}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  Settings Item Card Style  -->
+    <Style x:Key="SettingsCardStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Padding" Value="16,12" />
+        <Setter Property="Margin" Value="0,4" />
+        <Setter Property="StrokeShape">
+            <RoundRectangle CornerRadius="12" />
+        </Setter>
+    </Style>
+
+    <!--  Settings Section Header Style  -->
+    <Style x:Key="SettingsSectionHeaderStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+        <Setter Property="TextTransform" Value="Uppercase" />
+        <Setter Property="Margin" Value="4,16,4,4" />
+        <Setter Property="CharacterSpacing" Value="1" />
+    </Style>
+
+    <!--  Settings Item Row Style (for label in settings row)  -->
+    <Style x:Key="SettingsItemLabelStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray100}}" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+    </Style>
+
+    <!--  Settings Item Description Style  -->
+    <Style x:Key="SettingsItemDescriptionStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray500}}" />
+        <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
     <Style TargetType="DatePicker">
@@ -493,40 +579,6 @@
         </Setter>
     </Style>
 
-    <!--  Enhanced Switch Style  -->
-    <Style TargetType="Switch">
-        <Setter Property="OnColor" Value="{StaticResource Primary}" />
-        <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray100}}" />
-        <Setter Property="MinimumHeightRequest" Value="44" />
-        <Setter Property="MinimumWidthRequest" Value="44" />
-        <Setter Property="VisualStateManager.VisualStateGroups">
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal">
-                        <VisualState.Setters>
-                            <Setter Property="Opacity" Value="1" />
-                        </VisualState.Setters>
-                    </VisualState>
-                    <VisualState x:Name="Disabled">
-                        <VisualState.Setters>
-                            <Setter Property="Opacity" Value="0.5" />
-                        </VisualState.Setters>
-                    </VisualState>
-                    <VisualState x:Name="On">
-                        <VisualState.Setters>
-                            <Setter Property="Opacity" Value="1" />
-                        </VisualState.Setters>
-                    </VisualState>
-                    <VisualState x:Name="Off">
-                        <VisualState.Setters>
-                            <Setter Property="Opacity" Value="0.9" />
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateGroupList>
-        </Setter>
-    </Style>
-
     <!--  Interactive Card Style with Press Effect  -->
     <Style x:Key="InteractiveCardStyle" TargetType="Border">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
@@ -617,4 +669,5 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
+
 </ResourceDictionary>
