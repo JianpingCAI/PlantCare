@@ -1098,12 +1098,40 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         AdjustSpan();
     }
 
+    #endregion Layout related
+
+    #region IDisposable
+
+    private bool _disposed = false;
+
     public void Dispose()
     {
+        if (_disposed)
+            return;
+
+        _disposed = true;
+
+        // Unsubscribe from device display changes
         DeviceDisplay.MainDisplayInfoChanged -= OnDeviceDisplay_MainDisplayInfoChanged;
+
+        // Cancel and dispose search cancellation token
         _searchCts?.Cancel();
         _searchCts?.Dispose();
+        _searchCts = null;
+
+        // Unsubscribe from notification events
+        if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
+        {
+            _notificationService.NotificationActionTapped -= OnNotificationActionTapped;
+        }
+
+        // Unregister from all messenger messages
+        WeakReferenceMessenger.Default.UnregisterAll(this);
+
+        // Clear collections
+        Plants.Clear();
+        _allPlantViewModelsCache.Clear();
     }
 
-    #endregion Layout related
+    #endregion IDisposable
 }

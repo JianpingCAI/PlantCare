@@ -151,15 +151,44 @@ namespace PlantCare.App
             Debug.WriteLine($"Unhandled exception: {ex.Message}");
             Debug.WriteLine($"Stack trace: {ex.StackTrace}");
 
-            // Optionally, display an alert to the user
-            MainThread.InvokeOnMainThreadAsync(async () =>
+            // Don't try to show UI alerts during shutdown
+            try
             {
-                Shell current = Shell.Current;
+                // Check if the app is still running and has active windows
+                if (Current?.Windows?.Count > 0)
+                {
+                    if (MainThread.IsMainThread)
+                    {
+                        ShowErrorAlert(ex.Message);
+                    }
+                    else
+                    {
+                        MainThread.BeginInvokeOnMainThread(() => ShowErrorAlert(ex.Message));
+                    }
+                }
+            }
+            catch
+            {
+                // Silently fail if we can't access the main thread (app shutting down)
+                Debug.WriteLine("[LogException] Could not display alert - app may be shutting down");
+            }
+        }
+
+        private async void ShowErrorAlert(string message)
+        {
+            try
+            {
+                Shell? current = Shell.Current;
                 if (current != null)
                 {
-                    await current.DisplayAlertAsync("Error", $"An unexpected error occurred. Please try again later: {ex.Message}.", "OK");
+                    await current.DisplayAlertAsync("Error", $"An unexpected error occurred. Please try again later: {message}.", "OK");
                 }
-            });
+            }
+            catch
+            {
+                // Ignore UI errors during shutdown
+                Debug.WriteLine("[ShowErrorAlert] Could not display alert");
+            }
         }
 
         private async Task LoadLocalizationLanguageAsync()

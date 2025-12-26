@@ -10,7 +10,26 @@ public partial class PlantCalendarView : ContentPageBase
     {
         InitializeComponent();
         BindingContext = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
-        viewModel.PropertyChanged += OnViewModelPropertyChanged;
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        
+        if (BindingContext is PlantCalendarViewModel viewModel)
+        {
+            viewModel.PropertyChanged += OnViewModelPropertyChanged;
+        }
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        
+        if (BindingContext is PlantCalendarViewModel viewModel)
+        {
+            viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+        }
     }
 
     protected override void OnSizeAllocated(double width, double height)

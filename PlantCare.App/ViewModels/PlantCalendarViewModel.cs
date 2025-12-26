@@ -598,14 +598,38 @@ namespace PlantCare.App.ViewModels
 
         #region IDisposable
 
+        private bool _disposed = false;
+
         void IDisposable.Dispose()
         {
-            _updateLock?.Dispose();
-            EventsInCalendar?.Clear();
-            _cachedAllEvents?.Clear();
-            _cachedAllEvents = null;
-            WeakReferenceMessenger.Default.Unregister<LanguageChangedMessage>(this);
-            Debug.WriteLine("[PlantCalendarViewModel] Disposed");
+            if (_disposed)
+                return;
+
+            _disposed = true;
+
+            try
+            {
+                // Unregister from messenger first
+                WeakReferenceMessenger.Default.Unregister<LanguageChangedMessage>(this);
+
+                // Dispose semaphore
+                _updateLock?.Dispose();
+
+                // Clear collections
+                EventsInCalendar?.Clear();
+                PlantEvents?.Clear();
+                TickedPlantEvents?.Clear();
+
+                // Clear cached data
+                _cachedAllEvents?.Clear();
+                _cachedAllEvents = null;
+
+                Debug.WriteLine("[PlantCalendarViewModel] Disposed");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[PlantCalendarViewModel] Dispose error: {ex.Message}");
+            }
         }
 
         #endregion IDisposable
