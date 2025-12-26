@@ -97,7 +97,7 @@ public static class MauiProgram
 
     private static void ConfigureAppServices(MauiAppBuilder builder)
     {
-        builder.Services.AddSingleton<IPlantService, PlantService>();
+        builder.Services.AddScoped<IPlantService, PlantService>();
         builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
         builder.Services.AddSingleton<IImageOptimizationService, ImageOptimizationService>();
         builder.Services.AddSingleton<IToastService, ToastService>();
@@ -122,8 +122,8 @@ public static class MauiProgram
             .AddSingleton<PlantListOverviewViewModel>();
 
         builder.Services
-            .AddSingleton<PlantDetailView>()
-            .AddSingleton<PlantDetailViewModel>();
+            .AddTransient<PlantDetailView>()
+            .AddTransient<PlantDetailViewModel>();
 
         builder.Services
             .AddSingleton<SettingsView>()
@@ -135,8 +135,8 @@ public static class MauiProgram
             .AddTransient<PlantAddEditViewModel>();
 
         builder.Services
-            .AddTransient<PlantCalendarView>()
-            .AddTransient<PlantCalendarViewModel>();
+            .AddSingleton<PlantCalendarView>()
+            .AddSingleton<PlantCalendarViewModel>();
 
         builder.Services
             .AddTransient<CareHistoryView>()
