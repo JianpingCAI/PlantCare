@@ -168,10 +168,10 @@
   <data name="Language" xml:space="preserve">
     <value>Language</value>
   </data>
-  <data name="LastFertilization" xml:space="preserve">
+  <data name="ModifyLastFertilization" xml:space="preserve">
     <value>Last Fertilization</value>
   </data>
-  <data name="LastWatering" xml:space="preserve">
+  <data name="ModifyLastWatering" xml:space="preserve">
     <value>Last Watering</value>
   </data>
   <data name="Light" xml:space="preserve">
@@ -210,8 +210,8 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="Show" xml:space="preserve">
-    <value>Show</value>
+  <data name="SetAsNow" xml:space="preserve">
+    <value>Set As Now</value>
   </data>
   <data name="Species" xml:space="preserve">
     <value>Species</value>
@@ -278,5 +278,17 @@
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="BasicInformation" xml:space="preserve">
+    <value>Basic Information</value>
+  </data>
+  <data name="WateringSchedule" xml:space="preserve">
+    <value>Watering Schedule</value>
+  </data>
+  <data name="FertilizationSchedule" xml:space="preserve">
+    <value>Fertilization Schedule</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Show</value>
   </data>
 </root>

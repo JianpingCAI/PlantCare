@@ -168,11 +168,11 @@
   <data name="Language" xml:space="preserve">
     <value>语言</value>
   </data>
-  <data name="LastFertilization" xml:space="preserve">
-    <value>上次施肥时间</value>
+  <data name="ModifyLastFertilization" xml:space="preserve">
+    <value>更正上次施肥时间</value>
   </data>
-  <data name="LastWatering" xml:space="preserve">
-    <value>上次浇水时间</value>
+  <data name="ModifyLastWatering" xml:space="preserve">
+    <value>更正上次浇水时间</value>
   </data>
   <data name="Light" xml:space="preserve">
     <value>明亮</value>
@@ -210,8 +210,8 @@
   <data name="Settings" xml:space="preserve">
     <value>设置</value>
   </data>
-  <data name="Show" xml:space="preserve">
-    <value>显示</value>
+  <data name="SetAsNow" xml:space="preserve">
+    <value>当前时间</value>
   </data>
   <data name="Species" xml:space="preserve">
     <value>种类</value>
@@ -256,7 +256,7 @@
     <value>导入数据</value>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>导出所有数据</value>
+    <value>导出数据</value>
   </data>
   <data name="DataImportExport" xml:space="preserve">
     <value>数据导出/导入</value>
@@ -278,5 +278,17 @@
   </data>
   <data name="Edit" xml:space="preserve">
     <value>编辑</value>
+  </data>
+  <data name="BasicInformation" xml:space="preserve">
+    <value>基本信息</value>
+  </data>
+  <data name="WateringSchedule" xml:space="preserve">
+    <value>浇水安排</value>
+  </data>
+  <data name="FertilizationSchedule" xml:space="preserve">
+    <value>施肥安排</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>显示</value>
   </data>
 </root>

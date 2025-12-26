@@ -90,7 +90,7 @@
                     <Label
                         Margin="0,0,0,8"
                         Style="{StaticResource TitleStyle}"
-                        Text="Basic Information" />
+                        Text="{Binding Path=[BasicInformation], Source={x:Static utils:LocalizationManager.Instance}}" />
 
                     <!--  Name Field  -->
                     <VerticalStackLayout Spacing="4">
@@ -159,40 +159,9 @@
                             VerticalOptions="Center" />
                         <Label
                             Style="{StaticResource TitleStyle}"
-                            Text="Watering Schedule"
+                            Text="{Binding Path=[WateringSchedule], Source={x:Static utils:LocalizationManager.Instance}}"
                             VerticalOptions="Center" />
                     </HorizontalStackLayout>
-
-                    <!--  Last Watering  -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[LastWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
-
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                            <Border Padding="8,0" Style="{StaticResource InputBorderStyle}">
-                                <DatePicker
-                                    BackgroundColor="Transparent"
-                                    Date="{Binding LastWateredDate, Mode=TwoWay}"
-                                    HorizontalOptions="Fill" />
-                            </Border>
-                            <Border
-                                Grid.Column="1"
-                                Padding="8,0"
-                                Style="{StaticResource InputBorderStyle}">
-                                <TimePicker
-                                    BackgroundColor="Transparent"
-                                    HorizontalOptions="Fill"
-                                    Time="{Binding LastWateredTime, Mode=TwoWay}" />
-                            </Border>
-                        </Grid>
-
-                        <Button
-                            Padding="16,0"
-                            Command="{Binding SetCurrentTimeAsLastWateredCommand}"
-                            HeightRequest="36"
-                            HorizontalOptions="Start"
-                            Style="{StaticResource OutlineButtonStyle}"
-                            Text="Set to Now" />
-                    </VerticalStackLayout>
 
                     <!--  Watering Interval  -->
                     <VerticalStackLayout Spacing="8">
@@ -270,6 +239,39 @@
                             </VerticalStackLayout>
                         </Grid>
                     </VerticalStackLayout>
+
+                    <!--  Last Watering  -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[ModifyLastWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
+
+                        <Grid ColumnDefinitions="5*,3*,auto" ColumnSpacing="8">
+                            <Border Padding="8,0" Style="{StaticResource InputBorderStyle}">
+                                <DatePicker
+                                    BackgroundColor="Transparent"
+                                    Date="{Binding LastWateredDate, Mode=TwoWay}"
+                                    HorizontalOptions="Fill" />
+                            </Border>
+                            <Border
+                                Grid.Column="1"
+                                Padding="8,0"
+                                Style="{StaticResource InputBorderStyle}">
+                                <TimePicker
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="Fill"
+                                    Time="{Binding LastWateredTime, Mode=TwoWay}" />
+                            </Border>
+
+                            <Button
+                                Grid.Column="2"
+                                Padding="16,0"
+                                Command="{Binding SetCurrentTimeAsLastWateredCommand}"
+                                HeightRequest="36"
+                                HorizontalOptions="Start"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Text="{Binding Path=[SetAsNow], Source={x:Static utils:LocalizationManager.Instance}}" />
+
+                        </Grid>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
 
                 <!--  Divider  -->
@@ -290,40 +292,9 @@
                             VerticalOptions="Center" />
                         <Label
                             Style="{StaticResource TitleStyle}"
-                            Text="Fertilization Schedule"
+                            Text="{Binding Path=[FertilizationSchedule], Source={x:Static utils:LocalizationManager.Instance}}"
                             VerticalOptions="Center" />
                     </HorizontalStackLayout>
-
-                    <!--  Last Fertilization  -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[LastFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
-
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                            <Border Padding="8,0" Style="{StaticResource InputBorderStyle}">
-                                <DatePicker
-                                    BackgroundColor="Transparent"
-                                    Date="{Binding LastFertilizationDate, Mode=TwoWay}"
-                                    HorizontalOptions="Fill" />
-                            </Border>
-                            <Border
-                                Grid.Column="1"
-                                Padding="8,0"
-                                Style="{StaticResource InputBorderStyle}">
-                                <TimePicker
-                                    BackgroundColor="Transparent"
-                                    HorizontalOptions="Fill"
-                                    Time="{Binding LastFertilizationTime, Mode=TwoWay}" />
-                            </Border>
-                        </Grid>
-
-                        <Button
-                            Padding="16,0"
-                            Command="{Binding SetCurrentTimeAsLastFertilizationCommand}"
-                            HeightRequest="36"
-                            HorizontalOptions="Start"
-                            Style="{StaticResource OutlineButtonStyle}"
-                            Text="Set to Now" />
-                    </VerticalStackLayout>
 
                     <!--  Fertilization Interval  -->
                     <VerticalStackLayout Spacing="8">
@@ -396,6 +367,40 @@
                                 </Grid>
                             </VerticalStackLayout>
                         </Grid>
+                    </VerticalStackLayout>
+
+                    <!--  Last Fertilization  -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[ModifyLastFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
+
+                        <Grid ColumnDefinitions="5*,3*,auto" ColumnSpacing="8">
+                            <Border Padding="8,0" Style="{StaticResource InputBorderStyle}">
+                                <DatePicker
+                                    BackgroundColor="Transparent"
+                                    Date="{Binding LastFertilizationDate, Mode=TwoWay}"
+                                    HorizontalOptions="Fill" />
+                            </Border>
+                            <Border
+                                Grid.Column="1"
+                                Padding="8,0"
+                                Style="{StaticResource InputBorderStyle}">
+                                <TimePicker
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="Fill"
+                                    Time="{Binding LastFertilizationTime, Mode=TwoWay}" />
+                            </Border>
+
+                            <Button
+                                Grid.Column="2"
+                                Padding="16,0"
+                                Command="{Binding SetCurrentTimeAsLastFertilizationCommand}"
+                                HeightRequest="36"
+                                HorizontalOptions="Start"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Text="{Binding Path=[SetAsNow], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        </Grid>
+
+
                     </VerticalStackLayout>
                 </VerticalStackLayout>
 

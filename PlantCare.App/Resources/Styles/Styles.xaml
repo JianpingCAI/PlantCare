@@ -19,7 +19,11 @@
             <RoundRectangle CornerRadius="16" />
         </Setter>
         <Setter Property="Shadow">
-            <Shadow Brush="Black" Opacity="0.08" Radius="12" Offset="0,2" />
+            <Shadow
+                Brush="Black"
+                Opacity="0.08"
+                Radius="12"
+                Offset="0,2" />
         </Setter>
     </Style>
 
@@ -46,7 +50,11 @@
         <Setter Property="MinimumHeightRequest" Value="48" />
         <Setter Property="MinimumWidthRequest" Value="48" />
         <Setter Property="Shadow">
-            <Shadow Brush="Black" Opacity="0.12" Radius="12" Offset="0,4" />
+            <Shadow
+                Brush="Black"
+                Opacity="0.12"
+                Radius="12"
+                Offset="0,4" />
         </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -160,10 +168,12 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderWidth" Value="0" />
         <Setter Property="Shadow">
-            <Shadow Brush="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" 
-                    Opacity="0.4" 
-                    Radius="16" 
-                    Offset="0,6" />
+            <Shadow
+                Brush="{AppThemeBinding Light={StaticResource Primary},
+                                        Dark={StaticResource PrimaryDark}}"
+                Opacity="0.4"
+                Radius="16"
+                Offset="0,6" />
         </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -416,7 +426,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+    <Style ApplyToDerivedTypes="True" TargetType="ContentPage">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PageBackgroundColor}, Dark={StaticResource PageBackgroundColorDark}}" />
     </Style>
 
@@ -559,7 +569,11 @@
             <RoundRectangle CornerRadius="12" />
         </Setter>
         <Setter Property="Shadow">
-            <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+            <Shadow
+                Brush="Black"
+                Opacity="0.05"
+                Radius="8"
+                Offset="0,2" />
         </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -588,7 +602,11 @@
             <RoundRectangle CornerRadius="16" />
         </Setter>
         <Setter Property="Shadow">
-            <Shadow Brush="Black" Opacity="0.08" Radius="12" Offset="0,2" />
+            <Shadow
+                Brush="Black"
+                Opacity="0.08"
+                Radius="12"
+                Offset="0,2" />
         </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -624,14 +642,25 @@
             <RoundRectangle CornerRadius="16" />
         </Setter>
         <Setter Property="Shadow">
-            <Shadow Brush="Black" Opacity="0.08" Radius="12" Offset="0,2" />
+            <Shadow
+                Brush="Black"
+                Opacity="0.08"
+                Radius="12"
+                Offset="0,2" />
         </Setter>
     </Style>
 
     <!--  Elevated Card Style - Card with more prominent shadow  -->
-    <Style x:Key="ElevatedCardStyle" TargetType="Border" BasedOn="{StaticResource ModernCardStyle}">
+    <Style
+        x:Key="ElevatedCardStyle"
+        BasedOn="{StaticResource ModernCardStyle}"
+        TargetType="Border">
         <Setter Property="Shadow">
-            <Shadow Brush="Black" Opacity="0.12" Radius="16" Offset="0,4" />
+            <Shadow
+                Brush="Black"
+                Opacity="0.12"
+                Radius="16"
+                Offset="0,4" />
         </Setter>
     </Style>
 
