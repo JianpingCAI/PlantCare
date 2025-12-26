@@ -78,8 +78,14 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     [ObservableProperty]
     private string _searchText = string.Empty;
 
+    private CancellationTokenSource? _searchCts;
+
     partial void OnSearchTextChanged(string value)
     {
+        // Cancel any pending search
+        _searchCts?.Cancel();
+        _searchCts = new CancellationTokenSource();
+        
         // Automatically reset plants when search text is cleared
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -87,8 +93,13 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 try
                 {
+                    await Task.Delay(100, _searchCts.Token); // Small debounce for clear
                     IsLoading = true;
                     await ResetPlantsAsync();
+                }
+                catch (TaskCanceledException)
+                {
+                    // Search was cancelled - this is expected
                 }
                 catch (Exception ex)
                 {
@@ -100,6 +111,26 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                     {
                         IsLoading = false;
                     });
+                }
+            });
+        }
+        else
+        {
+            // Debounce search by 300ms
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await Task.Delay(300, _searchCts.Token);
+                    await PerformSearchAsync(value, _searchCts.Token);
+                }
+                catch (TaskCanceledException)
+                {
+                    // Search was cancelled - this is expected
+                }
+                catch (Exception ex)
+                {
+                    await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
                 }
             });
         }
@@ -251,6 +282,39 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     #region Search methods
 
+    private async Task PerformSearchAsync(string searchText, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            await ResetPlantsAsync();
+            return;
+        }
+
+        try
+        {
+            await MainThread.InvokeOnMainThreadAsync(() => IsLoading = true);
+
+            // Search from cache, not from already filtered Plants collection
+            List<PlantListItemViewModel> searchedPlants = await SearchPlantsByNameAsync(_allPlantViewModelsCache, searchText, cancellationToken);
+
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    Plants.Clear();
+                    foreach (PlantListItemViewModel plant in searchedPlants)
+                    {
+                        Plants.Add(plant);
+                    }
+                });
+            }
+        }
+        finally
+        {
+            await MainThread.InvokeOnMainThreadAsync(() => IsLoading = false);
+        }
+    }
+
     [RelayCommand]
     private async Task Search()
     {
@@ -262,12 +326,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         try
         {
             IsBusy = true;
-
             IsLoading = true;
 
             if (!string.IsNullOrEmpty(SearchText))
             {
-                List<PlantListItemViewModel> searchedPlants = await SearchPlantsByNameAsync(Plants, SearchText);
+                // Use the cache, not the already filtered Plants collection
+                List<PlantListItemViewModel> searchedPlants = await SearchPlantsByNameAsync(_allPlantViewModelsCache, SearchText, CancellationToken.None);
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
@@ -297,13 +361,19 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
-    private static Task<List<PlantListItemViewModel>> SearchPlantsByNameAsync(IEnumerable<PlantListItemViewModel> plants, string searchText)
+    private static Task<List<PlantListItemViewModel>> SearchPlantsByNameAsync(IEnumerable<PlantListItemViewModel> plants, string searchText, CancellationToken cancellationToken)
     {
         return Task.Run(() =>
         {
             List<PlantListItemViewModel> filtered = [];
+            
             foreach (PlantListItemViewModel item in plants)
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
+
                 if (item.Name.Contains(searchText.Trim(), StringComparison.CurrentCultureIgnoreCase))
                 {
                     filtered.Add(item);
@@ -311,7 +381,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             }
 
             return filtered;
-        });
+        }, cancellationToken);
     }
 
     #endregion Search methods
@@ -329,13 +399,17 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
+            // Fetch plant from database on background thread
             Plant? plantDB = await _plantService.GetPlantByIdAsync(message.PlantId);
             if (plantDB is null)
             {
                 return;
             }
+
+            // Create ViewModel on background thread
             PlantListItemViewModel newPlantVM = MapToViewModel(plantDB);
 
+            // Only update UI on main thread
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 IsLoading = true;
@@ -346,10 +420,23 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
             });
 
+            // Schedule notifications in parallel (don't await)
             if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
             {
-                await ScheduleNotificationAsync(CareType.Watering, CareType.Watering.GetActionName(), newPlantVM);
-                await ScheduleNotificationAsync(CareType.Fertilization, CareType.Fertilization.GetActionName(), newPlantVM);
+                var notificationTasks = new[]
+                {
+                    ScheduleNotificationAsync(CareType.Watering, CareType.Watering.GetActionName(), newPlantVM),
+                    ScheduleNotificationAsync(CareType.Fertilization, CareType.Fertilization.GetActionName(), newPlantVM)
+                };
+                
+                // Run notifications in background without blocking
+                _ = Task.WhenAll(notificationTasks).ContinueWith(t =>
+                {
+                    if (t.IsFaulted && t.Exception != null)
+                    {
+                        _logger.LogError($"Failed to schedule notifications for plant {message.PlantId}", t.Exception);
+                    }
+                }, TaskScheduler.Default);
             }
 
             _logger.LogInformation($"New plant {plantDB.Name} is added, with id: {message.PlantId}");
@@ -360,6 +447,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
+            // Delay loading indicator dismissal slightly to avoid flicker
+            await Task.Delay(100);
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 IsLoading = false;
@@ -1012,6 +1101,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     public void Dispose()
     {
         DeviceDisplay.MainDisplayInfoChanged -= OnDeviceDisplay_MainDisplayInfoChanged;
+        _searchCts?.Cancel();
+        _searchCts?.Dispose();
     }
 
     #endregion Layout related

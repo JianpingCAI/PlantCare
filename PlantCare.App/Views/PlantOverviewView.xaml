@@ -78,7 +78,9 @@
                     ItemsSource="{Binding Plants}"
                     SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
                     SelectionChangedCommand="{Binding SelectPlantCommand}"
-                    SelectionMode="Single">
+                    SelectionMode="Single"
+                    RemainingItemsThreshold="10"
+                    ItemsUpdatingScrollMode="KeepItemsInView">
                     
                     <!--  Empty State View  -->
                     <CollectionView.EmptyView>

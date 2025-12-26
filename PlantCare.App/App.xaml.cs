@@ -63,7 +63,7 @@ namespace PlantCare.App
                     
 #if DEBUG
                     // Seed test data for development
-                    DevelopmentDataSeeder.SeedTestDataIfNeededAsync(db).GetAwaiter().GetResult();
+                    DevelopmentDataSeeder.SeedTestDataIfNeededAsync(db, 10).GetAwaiter().GetResult();
                     Debug.WriteLine($"[Database] Current plant count: {db.Plants.Count()}");
 #endif
                 });

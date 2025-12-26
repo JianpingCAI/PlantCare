@@ -11,7 +11,30 @@ namespace PlantCare.App.Utils;
 /// </summary>
 public static class DevelopmentDataSeeder
 {
-    public static async Task SeedTestDataIfNeededAsync(ApplicationDbContext context)
+    private static readonly string[] PlantNames = 
+    {
+        "Rose", "Tulip", "Daisy", "Sunflower", "Orchid", "Lily", "Iris", "Peony", "Violet", "Jasmine",
+        "Cactus", "Succulent", "Aloe", "Jade Plant", "Snake Plant", "Spider Plant", "Fern", "Ivy", "Pothos", "Monstera",
+        "Basil", "Mint", "Rosemary", "Thyme", "Lavender", "Sage", "Parsley", "Cilantro", "Dill", "Oregano",
+        "Tomato", "Pepper", "Cucumber", "Lettuce", "Spinach", "Carrot", "Radish", "Beet", "Kale", "Broccoli",
+        "Maple", "Oak", "Pine", "Birch", "Willow", "Cherry", "Apple", "Pear", "Plum", "Peach",
+        "Bamboo", "Palm", "Rubber Tree", "Fiddle Leaf", "Money Tree", "Peace Lily", "Philodendron", "Dracaena", "ZZ Plant", "Calathea",
+        "Azalea", "Hydrangea", "Camellia", "Gardenia", "Magnolia", "Hibiscus", "Begonia", "Geranium", "Marigold", "Zinnia",
+        "Ficus", "Yucca", "Croton", "Dieffenbachia", "Anthurium", "Bromeliad", "Alocasia", "Aglaonema", "Cordyline", "Schefflera",
+        "Bonsai", "Carnation", "Chrysanthemum", "Dahlia", "Gladiolus", "Poppy", "Ranunculus", "Anemone", "Cosmos", "Aster",
+        "Coleus", "Impatiens", "Nasturtium", "Petunia", "Pansy", "Salvia", "Snapdragon", "Sweet Pea", "Verbena", "Vinca"
+    };
+
+    private static readonly string[] Species = 
+    {
+        "Rosa", "Tulipa", "Bellis", "Helianthus", "Orchidaceae", "Lilium", "Iris", "Paeonia", "Viola", "Jasminum",
+        "Cactaceae", "Crassula", "Aloe", "Crassula ovata", "Sansevieria", "Chlorophytum", "Polypodiopsida", "Hedera", "Epipremnum", "Monstera deliciosa",
+        "Ocimum basilicum", "Mentha", "Rosmarinus", "Thymus", "Lavandula", "Salvia officinalis", "Petroselinum", "Coriandrum", "Anethum", "Origanum",
+        "Solanum lycopersicum", "Capsicum", "Cucumis", "Lactuca", "Spinacia", "Daucus carota", "Raphanus", "Beta vulgaris", "Brassica oleracea", "Brassica",
+        "Acer", "Quercus", "Pinus", "Betula", "Salix", "Prunus", "Malus", "Pyrus", "Prunus domestica", "Prunus persica"
+    };
+
+    public static async Task SeedTestDataIfNeededAsync(ApplicationDbContext context, int seeds)
     {
         try
         {
@@ -24,61 +47,105 @@ public static class DevelopmentDataSeeder
                 return;
             }
 
-            Debug.WriteLine("[DevSeeder] Database is empty - seeding test data...");
+            Debug.WriteLine("[DevSeeder] Database is empty - seeding 100 test plants for performance testing...");
 
-            // Create test plants
-            var testPlants = new List<PlantDbModel>
+            var testPlants = new List<PlantDbModel>();
+            var random = new Random(42); // Fixed seed for reproducibility
+
+            // Generate 100 varied test plants
+            for (int i = 0; i < seeds; i++)
             {
-                new PlantDbModel
+                // Vary watering frequency (6 hours to 30 days)
+                int wateringHours = random.Next(1, 6) switch
                 {
-                    Id = Guid.NewGuid(),
-                    Name = "Rose",
-                    Species = "Rosa",
-                    Age = 2,
-                    PhotoPath = "default_plant.png",
-                    LastWatered = DateTime.Now.AddDays(-1),
-                    WateringFrequencyInHours = 48,
-                    LastFertilized = DateTime.Now.AddDays(-7),
-                    FertilizeFrequencyInHours = 168,
-                    Notes = "Beautiful red rose - test data"
-                },
-                new PlantDbModel
+                    1 => 6,      // Every 6 hours (very thirsty)
+                    2 => 24,     // Daily
+                    3 => 48,     // Every 2 days
+                    4 => 168,    // Weekly
+                    _ => 720     // Monthly (30 days)
+                };
+
+                // Vary fertilization frequency (1 week to 3 months)
+                int fertilizeHours = random.Next(1, 5) switch
                 {
-                    Id = Guid.NewGuid(),
-                    Name = "Cactus",
-                    Species = "Cactaceae",
-                    Age = 1,
-                    PhotoPath = "default_plant.png",
-                    LastWatered = DateTime.Now.AddDays(-10),
-                    WateringFrequencyInHours = 336, // 2 weeks
-                    LastFertilized = DateTime.Now.AddDays(-30),
-                    FertilizeFrequencyInHours = 720, // 30 days
-                    Notes = "Desert cactus - test data"
-                },
-                new PlantDbModel
+                    1 => 168,    // Weekly
+                    2 => 336,    // Bi-weekly
+                    3 => 720,    // Monthly
+                    _ => 2160    // 90 days
+                };
+
+                // Vary last watered (overdue, due soon, or healthy)
+                int wateringDaysAgo = random.Next(0, 40);
+                
+                // Vary last fertilized
+                int fertilizingDaysAgo = random.Next(0, 100);
+
+                // Vary age
+                int age = random.Next(0, 10);
+
+                // Select plant name and species
+                string name = PlantNames[i % PlantNames.Length];
+                if (i >= PlantNames.Length)
                 {
-                    Id = Guid.NewGuid(),
-                    Name = "Fern",
-                    Species = "Polypodiopsida",
-                    Age = 3,
-                    PhotoPath = "default_plant.png",
-                    LastWatered = DateTime.Now.AddHours(-12),
-                    WateringFrequencyInHours = 24, // Daily
-                    LastFertilized = DateTime.Now.AddDays(-14),
-                    FertilizeFrequencyInHours = 336, // 2 weeks
-                    Notes = "Tropical fern - test data"
+                    name += $" {i / PlantNames.Length + 1}"; // Add number for duplicates
                 }
-            };
+                
+                string species = Species[i % Species.Length];
+
+                // Add some variety in notes
+                string notes = (i % 5) switch
+                {
+                    0 => "Needs frequent watering",
+                    1 => "Prefers indirect sunlight",
+                    2 => "Low maintenance plant",
+                    3 => "Fertilize monthly during growing season",
+                    _ => $"Performance test plant #{i + 1}"
+                };
+
+                testPlants.Add(new PlantDbModel
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name,
+                    Species = species,
+                    Age = age,
+                    PhotoPath = "default_plant.png",
+                    LastWatered = DateTime.Now.AddDays(-wateringDaysAgo),
+                    WateringFrequencyInHours = wateringHours,
+                    LastFertilized = DateTime.Now.AddDays(-fertilizingDaysAgo),
+                    FertilizeFrequencyInHours = fertilizeHours,
+                    Notes = notes
+                });
+            }
 
             context.Plants.AddRange(testPlants);
             await context.SaveChangesAsync();
 
             Debug.WriteLine($"[DevSeeder] Successfully seeded {testPlants.Count} test plants");
+            Debug.WriteLine($"[DevSeeder] Plant care status distribution:");
             
-            foreach (PlantDbModel plant in testPlants)
+            // Count plants by status
+            int overdue = 0, dueSoon = 0, healthy = 0;
+            foreach (var plant in testPlants)
             {
-                Debug.WriteLine($"[DevSeeder]   - {plant.Name} (ID: {plant.Id})");
+                var hoursSinceWatering = (DateTime.Now - plant.LastWatered).TotalHours;
+                var nextWateringHours = plant.WateringFrequencyInHours - hoursSinceWatering;
+                
+                if (nextWateringHours < 0)
+                    overdue++;
+                else if (nextWateringHours < 24)
+                    dueSoon++;
+                else
+                    healthy++;
             }
+            
+            Debug.WriteLine($"[DevSeeder]   - Overdue: {overdue}");
+            Debug.WriteLine($"[DevSeeder]   - Due Soon: {dueSoon}");
+            Debug.WriteLine($"[DevSeeder]   - Healthy: {healthy}");
+            Debug.WriteLine($"[DevSeeder] Use this data to test:");
+            Debug.WriteLine($"[DevSeeder]   - Scroll performance with 100+ plants");
+            Debug.WriteLine($"[DevSeeder]   - Search/filter performance");
+            Debug.WriteLine($"[DevSeeder]   - Collection virtualization");
+            Debug.WriteLine($"[DevSeeder]   - Memory usage");
         }
         catch (Exception ex)
         {
