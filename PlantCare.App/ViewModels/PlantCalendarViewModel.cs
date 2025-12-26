@@ -145,12 +145,58 @@ namespace PlantCare.App.ViewModels
         [ObservableProperty]
         private string _selectAllButtonText = ConstStrings.SelectAll;
 
-        private bool _isShowCalendar = true;
+        private bool _isShowCalendar = false;
 
         [RelayCommand]
         public void HideCalendar()
         {
             IsShowCalendar = false;
+        }
+
+        public bool IsShowCalendar
+        {
+            get => _isShowCalendar;
+            set
+            {
+                if (SetProperty(ref _isShowCalendar, value))
+                {
+                    // Only initialize calendar when user wants to see it
+                    if (value && ReminderCalendar == null)
+                    {
+                        _ = Task.Run(async () =>
+                        {
+                            try
+                            {
+                                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = true);
+                                
+                                // Create calendar on demand
+                                var calendar = await CreateCalendarAsync(null);
+                                
+                                await MainThread.InvokeOnMainThreadAsync(() =>
+                                {
+                                    ReminderCalendar = calendar;
+                                    
+                                    // Load events if we have them cached
+                                    if (_cachedAllEvents != null)
+                                    {
+                                        ReminderCalendar.Events.ReplaceRange(_cachedAllEvents);
+                                    }
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine($"[Calendar] Failed to initialize calendar: {ex.Message}");
+                            }
+                            finally
+                            {
+                                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = false);
+                            }
+                        });
+                    }
+                    
+                    AdjustPlantsGridSpan();
+                }
+            }
         }
 
         /// <summary>
@@ -211,30 +257,18 @@ namespace PlantCare.App.ViewModels
                 // 1) Get plant events (from cache if available)
                 List<PlantEvent> allPlantEvents = await GetPlantEventsAsync();
 
-                // 2) Initialize calendar if needed (lazy loading)
-                Calendar<PlantEventDay, PlantEvent>? calendar = null;
-                if (ReminderCalendar is null)
+                // 2) Initialize calendar ONLY if user has it visible
+                if (ReminderCalendar != null)
                 {
-                    calendar = await CreateCalendarAsync(null);
+                    // Update existing calendar
+                    await MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+                        ReminderCalendar.Events.ReplaceRange(allPlantEvents);
+                        TickedPlantEvents.Clear();
+                    });
                 }
 
-                // 3 & 4) Batch all UI updates into single MainThread invocation
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    // Update calendar if just created
-                    if (calendar != null)
-                    {
-                        ReminderCalendar = calendar;
-                    }
-                    
-                    // Update calendar events
-                    ReminderCalendar!.Events.ReplaceRange(allPlantEvents);
-                    
-                    // Clear selections
-                    TickedPlantEvents.Clear();
-                });
-
-                // 5) Update plant events list (respects filter and date selection)
+                // 3) Update plant events list (always update, even without calendar)
                 await UpdatePlantEventsOnSelectedCalendarDates();
             }
             finally
@@ -622,16 +656,6 @@ namespace PlantCare.App.ViewModels
         public double Width { get; set; }
 
         public double Height { get; set; }
-
-        public bool IsShowCalendar
-        {
-            get => _isShowCalendar;
-            set
-            {
-                SetProperty(ref _isShowCalendar, value);
-                AdjustPlantsGridSpan();
-            }
-        }
 
         public void UpdateOrientation()
         {
