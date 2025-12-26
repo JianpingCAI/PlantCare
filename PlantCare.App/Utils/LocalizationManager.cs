@@ -40,19 +40,7 @@ public class LocalizationManager : INotifyPropertyChanged
 
     internal void SetLanguage(Language selectedLanguage)
     {
-        switch (selectedLanguage)
-        {
-            case Language.English:
-                SetCulture(new CultureInfo("en"));
-                break;
-
-            case Language.ChineseSimplified:
-                SetCulture(new CultureInfo("zh-CN"));
-
-                break;
-
-            default:
-                break;
-        }
+        CultureInfo cultureInfo = LanguageHelper.GetCultureInfo(selectedLanguage);
+        SetCulture(cultureInfo);
     }
 }

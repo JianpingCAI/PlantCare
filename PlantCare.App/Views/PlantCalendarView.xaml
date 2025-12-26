@@ -3,16 +3,13 @@
     x:Class="PlantCare.App.Views.PlantCalendarView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:System="clr-namespace:System;assembly=System.Runtime"
     xmlns:components="clr-namespace:PlantCare.App.Components"
+    xmlns:plugin="clr-namespace:Plugin.Maui.Calendar.Controls;assembly=Plugin.Maui.Calendar"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    xmlns:xcConverters="clr-namespace:XCalendar.Maui.Converters;assembly=XCalendar.Maui"
-    xmlns:xcMauiModels="clr-namespace:XCalendar.Maui.Models;assembly=XCalendar.Maui"
-    xmlns:xcStyles="clr-namespace:XCalendar.Maui.Styles;assembly=XCalendar.Maui"
-    xmlns:xcViews="clr-namespace:XCalendar.Maui.Views;assembly=XCalendar.Maui"
+    xmlns:System="clr-namespace:System;assembly=netstandard"
     x:Name="thisPage"
     Title="{Binding Path=[CareCalendar], Source={x:Static utils:LocalizationManager.Instance}}"
     x:DataType="vm:PlantCalendarViewModel">
@@ -34,74 +31,8 @@
             <Color x:Key="CalendarPrimaryTextColor">White</Color>
             <Color x:Key="CalendarBackgroundTextColor">Black</Color>
 
-            <Style x:Key="DefaultNavigationViewStyle" TargetType="{x:Type xcViews:NavigationView}">
-
-                <Setter Property="ArrowColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
-                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
-
-                <Setter Property="HeightRequest" Value="50" />
-            </Style>
-
-            <Style x:Key="DefaultCalendarViewStyle" TargetType="{x:Type xcViews:CalendarView}">
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CalendarBackgroundColor}, Dark={StaticResource Gray900}}" />
-                <Setter Property="DaysViewHeightRequest" Value="320" />
-            </Style>
-
-            <Style
-                x:Key="DefaultDayViewCurrentMonthStyle"
-                BasedOn="{x:Static xcStyles:DefaultStyles.DefaultDayViewCurrentMonthStyle}"
-                TargetType="{x:Type xcViews:DayView}">
-                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
-            </Style>
-
-            <Style
-                x:Key="DefaultDayViewOtherMonthStyle"
-                BasedOn="{x:Static xcStyles:DefaultStyles.DefaultDayViewOtherMonthStyle}"
-                TargetType="{x:Type xcViews:DayView}">
-                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray300}}" />
-            </Style>
-
-            <Style
-                x:Key="DefaultDayViewTodayStyle"
-                BasedOn="{x:Static xcStyles:DefaultStyles.DefaultDayViewTodayStyle}"
-                TargetType="{x:Type xcViews:DayView}">
-                <Setter Property="TextColor" Value="{StaticResource CalendarPrimaryColor}" />
-            </Style>
-
-            <Style
-                x:Key="DefaultDayViewSelectedStyle"
-                BasedOn="{x:Static xcStyles:DefaultStyles.DefaultDayViewSelectedStyle}"
-                TargetType="{x:Type xcViews:DayView}">
-                <!--<Setter Property="BackgroundColor" Value="{StaticResource CalendarPrimaryColor}" />
-                <Setter Property="TextColor" Value="{StaticResource CalendarPrimaryTextColor}" />-->
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Cyan200Accent}, Dark={StaticResource Cyan300Accent}}" />
-                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource CalendarPrimaryTextColor}, Dark={StaticResource Black}}" />
-            </Style>
-
-            <Style
-                x:Key="DefaultDayViewInvalidStyle"
-                BasedOn="{x:Static xcStyles:DefaultStyles.DefaultDayViewInvalidStyle}"
-                TargetType="{x:Type xcViews:DayView}">
-                <Setter Property="TextColor" Value="{StaticResource CalendarTertiaryColor}" />
-            </Style>
-
-            <Style x:Key="DefaultEventIndicatorRectangleStyle" TargetType="{x:Type Rectangle}">
-                <Setter Property="HeightRequest" Value="8" />
-                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
-                <Setter Property="RadiusX" Value="100" />
-                <Setter Property="RadiusY" Value="100" />
-                <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="WidthRequest" Value="8" />
-            </Style>
-
             <utils:ReminderTypeIconConverter x:Key="ReminderTypeIconConverter" />
             <utils:BooleanToReverseConverter x:Key="BooleanToReverseConverter" />
-
-            <xcConverters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter" />
-            <xcConverters:LocalizeDayOfWeekAndCharLimitConverter x:Key="LocalizeDayOfWeekAndCharLimitConverter" />
-
-            <utils:CalendarWidthConverter x:Key="CalendarWidthConverter" />
-            <utils:CalendarHeightConverter x:Key="CalendarHeightConverter" />
 
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -110,24 +41,22 @@
 
         <Grid x:Name="MainGrid">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
+                <RowDefinition x:Name="calendarRow" Height="Auto" />
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition x:Name="calendarColumn" Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <!--  Checkboxes  -->
-            <Grid x:Name="gridCheckboxes" ColumnDefinitions="*,*">
+            <Grid Grid.ColumnSpan="2" ColumnDefinitions="*,*">
                 <!--  Show Unattended  -->
                 <HorizontalStackLayout HorizontalOptions="Start">
-                    <CheckBox
-                        x:Name="chkUnattended"
-                        HorizontalOptions="Start"
-                        IsChecked="{Binding IsShowUnattendedOnly, Mode=TwoWay}" />
+                    <CheckBox IsChecked="{Binding IsShowUnattendedOnly, Mode=TwoWay}" />
                     <Label 
                         Style="{StaticResource BodyStyle}"
                         Text="{Binding Path=[UnattendedOnly], Source={x:Static utils:LocalizationManager.Instance}}" />
@@ -135,7 +64,7 @@
 
                 <!--  Show Calendar  -->
                 <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
-                    <CheckBox x:Name="chkCalendar" IsChecked="{Binding IsShowCalendar, Mode=TwoWay}" />
+                    <CheckBox IsChecked="{Binding IsShowCalendar, Mode=TwoWay}" />
                     <Label 
                         Style="{StaticResource BodyStyle}"
                         Margin="0,0,5,0" 
@@ -148,53 +77,34 @@
                 </HorizontalStackLayout>
             </Grid>
 
-            <!--  Selected Dates  -->
-            <CollectionView
-                x:Name="selectedDatesList"
+            <!--  Selected Date  -->
+            <Label
+                x:Name="selectedDateLabel"
                 Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Style="{StaticResource BodyStyle}"
+                Margin="5,0,0,5"
+                FontAttributes="Bold"
+                Text="{Binding SelectedDate, StringFormat='{0:MM/dd}'}"
+                TextColor="DeepSkyBlue"
                 HorizontalOptions="CenterAndExpand"
-                ItemsSource="{Binding ReminderCalendar.SelectedDates}"
-                SelectionMode="None">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Horizontal" />
-                </CollectionView.ItemsLayout>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label
-                            Style="{StaticResource BodyStyle}"
-                            Margin="5,0,0,5"
-                            FontAttributes="Bold"
-                            Text="{Binding ., StringFormat='{0:MM/dd}'}"
-                            TextColor="DeepSkyBlue" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                IsVisible="{Binding SelectedDate, Converter={toolkit:IsNotNullConverter}}" />
 
             <!--  Plant Events  -->
-            <Grid x:Name="plantsGrid" Grid.Row="2">
+            <Grid x:Name="plantsGrid" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1">
                 <RefreshView Command="{Binding RefreshPlantEventsCommand}" IsRefreshing="{Binding IsPlantEventRefreshing}">
                     <CollectionView
-                        x:Name="uiCurrentCollection"
                         ItemsSource="{Binding PlantEvents}"
                         SelectedItems="{Binding TickedPlantEvents}"
                         SelectionChangedCommand="{Binding TickedPlantEventsChangedCommand}"
                         SelectionMode="Multiple"
                         RemainingItemsThreshold="10"
                         ItemsUpdatingScrollMode="KeepItemsInView">
-                        <!--<CollectionView.Shadow>
-                            <Shadow
-                                Brush="{AppThemeBinding Light={StaticResource White},
-                                                        Dark={StaticResource Black}}"
-                                Opacity="0.3"
-                                Radius="3" />
-                        </CollectionView.Shadow>-->
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout
                                 Orientation="Vertical"
                                 Span="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoSpan}"
                                 VerticalItemSpacing="3" />
-                            <!--  Span="{OnIdiom Phone=3, Default=6}"  -->
                         </CollectionView.ItemsLayout>
 
                         <CollectionView.ItemTemplate>
@@ -204,23 +114,17 @@
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="10" />
                                         </Border.StrokeShape>
-                                        <Grid RowDefinitions="*,auto">
-                                            <!--  photo  -->
-                                            <Border
-                                                HorizontalOptions="Center"
-                                                StrokeThickness="0"
-                                                VerticalOptions="Center">
+                                        <Grid RowDefinitions="*,Auto">
+                                            <Border StrokeThickness="0">
                                                 <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="10" />
                                                 </Border.StrokeShape>
-                                                <Grid HorizontalOptions="CenterAndExpand">
+                                                <Grid>
                                                     <Image
                                                         Aspect="AspectFill"
                                                         HeightRequest="{Binding Source={Reference thisPage}, Path=BindingContext.PhotoHeight}"
-                                                        HorizontalOptions="Center"
                                                         Source="{Binding PhotoPath}"
                                                         WidthRequest="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoWidth}" />
-                                                    <!--  Name  -->
                                                     <Label
                                                         Style="{StaticResource BodyStyle}"
                                                         Background="DarkSeaGreen"
@@ -231,7 +135,6 @@
                                                         VerticalOptions="End" />
                                                 </Grid>
                                             </Border>
-                                            <!--  Selection Tick  -->
                                             <Label
                                                 Style="{StaticResource HeadlineSmallStyle}"
                                                 FontFamily="MaterialIconsRegular"
@@ -239,27 +142,17 @@
                                                 IsVisible="{Binding IsSelected}"
                                                 Text="&#xe86c;"
                                                 TextColor="Green"
-                                                VerticalOptions="Start"
-                                                VerticalTextAlignment="Start" />
-
-                                            <!--  Reminder Time  -->
+                                                VerticalOptions="Start" />
                                             <HorizontalStackLayout Grid.Row="1">
                                                 <Label
                                                     Style="{StaticResource DisplaySmallStyle}"
-                                                    Grid.Column="2"
                                                     Margin="0,5,0,0"
                                                     FontFamily="MaterialIconsRegular"
-                                                    HorizontalOptions="End"
-                                                    HorizontalTextAlignment="End"
                                                     Text="{Binding ReminderType, Converter={StaticResource ReminderTypeIconConverter}}"
-                                                    TextColor="{Binding Color}"
-                                                    VerticalOptions="Center"
-                                                    VerticalTextAlignment="End" />
+                                                    TextColor="{Binding Color}" />
                                                 <Label
                                                     Style="{StaticResource BodyStyle}"
                                                     FontAttributes="Bold"
-                                                    HorizontalOptions="Center"
-                                                    HorizontalTextAlignment="Center"
                                                     Text="{Binding ScheduledTime, StringFormat='{0:MM/dd HH:mm}'}" />
                                             </HorizontalStackLayout>
                                         </Grid>
@@ -283,174 +176,77 @@
                     Text="&#xe877;"
                     VerticalOptions="End">
                     <Button.Shadow>
-                        <Shadow
-                            Brush="DeepSkyBlue"
-                            Opacity="0.8"
-                            Radius="15"
-                            Offset="5,5" />
+                        <Shadow Brush="DeepSkyBlue" Opacity="0.8" Radius="15" Offset="5,5" />
                     </Button.Shadow>
                 </Button>
             </Grid>
 
             <!--  Calendar  -->
-            <Grid
+            <Border
                 x:Name="calenderView"
                 Grid.Row="3"
-                IsVisible="{Binding IsShowCalendar}">
-                <ScrollView HorizontalScrollBarVisibility="Always" VerticalScrollBarVisibility="Always">
-                    <Border>
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="15" />
-                        </Border.StrokeShape>
+                Grid.Column="0"
+                Padding="5"
+                IsVisible="{Binding IsCalendarRendered}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <Border.Triggers>
+                    <DataTrigger TargetType="Border" Binding="{Binding IsShowCalendar}" Value="False">
+                        <Setter Property="IsVisible" Value="False" />
+                    </DataTrigger>
+                </Border.Triggers>
 
-                        <xcViews:CalendarView
-                            x:Name="CalendarView_Unique"
-                            Days="{Binding ReminderCalendar.Days}"
-                            DaysOfWeek="{Binding ReminderCalendar.DayNamesOrder}"
-                            LeftArrowCommand="{Binding NavigateCalendarCommand}"
-                            NavigatedDate="{Binding ReminderCalendar.NavigatedDate}"
-                            RightArrowCommand="{Binding NavigateCalendarCommand}"
-                            Style="{StaticResource DefaultCalendarViewStyle}">
+                <Grid RowDefinitions="Auto,*">
+                    <Button
+                        Style="{StaticResource HeadlineSmallStyle}"
+                        Command="{Binding HideCalendarCommand}"
+                        CornerRadius="15"
+                        FontFamily="MaterialIconsRegular"
+                        HeightRequest="40"
+                        HorizontalOptions="End"
+                        Text="&#xead0;"
+                        WidthRequest="60" />
 
-                            <xcViews:CalendarView.RightArrowCommandParameter>
-                                <x:Int32>1</x:Int32>
-                            </xcViews:CalendarView.RightArrowCommandParameter>
+                    <plugin:Calendar
+                        x:Name="PluginCalendar"
+                        Grid.Row="1"
+                        Events="{Binding EventsInCalendar}"
+                        ShownDate="{Binding DisplayedMonth}"
+                        SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
+                        Culture="{Binding Culture}"
+                        HeightRequest="380"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource CalendarBackgroundColor}, Dark={StaticResource Gray900}}"
+                        TodayOutlineColor="{StaticResource CalendarPrimaryColor}"
+                        TodayFillColor="Transparent"
+                        EventIndicatorColor="{StaticResource CalendarPrimaryColor}"
+                        EventIndicatorType="BottomDot" />
+                </Grid>
+            </Border>
 
-                            <xcViews:CalendarView.LeftArrowCommandParameter>
-                                <x:Int32>-1</x:Int32>
-                            </xcViews:CalendarView.LeftArrowCommandParameter>
-
-                            <xcViews:CalendarView.NavigationViewTemplate>
-                                <ControlTemplate>
-                                    <!--  Nagivation  -->
-                                    <xcViews:NavigationView
-                                        HeightRequest="40"
-                                        HorizontalOptions="Start"
-                                        LeftArrowCommand="{Binding LeftArrowCommand, Source={RelativeSource TemplatedParent}}"
-                                        LeftArrowCommandParameter="{Binding LeftArrowCommandParameter, Source={RelativeSource TemplatedParent}}"
-                                        RightArrowCommand="{Binding RightArrowCommand, Source={RelativeSource TemplatedParent}}"
-                                        RightArrowCommandParameter="{Binding RightArrowCommandParameter, Source={RelativeSource TemplatedParent}}"
-                                        Style="{StaticResource DefaultNavigationViewStyle}"
-                                        Text="{Binding Text, Source={RelativeSource TemplatedParent}}" />
-                                </ControlTemplate>
-                            </xcViews:CalendarView.NavigationViewTemplate>
-
-                            <xcViews:CalendarView.DayNameTemplate>
-                                <DataTemplate x:DataType="System:DayOfWeek">
-                                    <Label
-                                        Style="{StaticResource BodySmallStyle}"
-                                        HorizontalTextAlignment="Center"
-                                        Text="{Binding ., Converter={StaticResource LocalizeDayOfWeekAndCharLimitConverter}, ConverterParameter=3}"
-                                        TextColor="{AppThemeBinding Light={StaticResource Black},
-                                                                    Dark={StaticResource White}}"
-                                        VerticalTextAlignment="Center" />
-                                </DataTemplate>
-                            </xcViews:CalendarView.DayNameTemplate>
-
-                            <xcViews:CalendarView.DayTemplate>
-                                <DataTemplate x:DataType="vm:PlantEventDay">
-                                    <!--  x:DataType="{x:Null}"  -->
-                                    <Border Margin="2.5" BackgroundColor="Transparent">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="100" />
-                                        </Border.StrokeShape>
-
-                                        <xcViews:DayView
-                                            DateTime="{Binding DateTime}"
-                                            Events="{Binding Events}"
-                                            HeightRequest="42"
-                                            InvalidStyle="{StaticResource DefaultDayViewInvalidStyle}"
-                                            IsCurrentMonth="{Binding IsCurrentMonth}"
-                                            IsInvalid="{Binding IsInvalid}"
-                                            IsSelected="{Binding IsSelected}"
-                                            IsToday="{Binding IsToday}"
-                                            OtherMonthStyle="{StaticResource DefaultDayViewOtherMonthStyle}">
-
-                                            <!--  Events indicator  -->
-                                            <xcViews:DayView.EventTemplate>
-                                                <DataTemplate x:DataType="xcMauiModels:ColoredEvent">
-                                                    <!--  x:DataType="{x:Null}"  -->
-                                                    <Rectangle Fill="{Binding Color}" Style="{StaticResource DefaultEventIndicatorRectangleStyle}" />
-                                                </DataTemplate>
-                                            </xcViews:DayView.EventTemplate>
-
-                                            <!--  Month  -->
-                                            <xcViews:DayView.CurrentMonthStyle>
-                                                <Style BasedOn="{StaticResource DefaultDayViewCurrentMonthStyle}" TargetType="xcViews:DayView">
-                                                    <Setter Property="Command" Value="{Binding BindingContext.ChangeDateSelectionCommand, Source={x:Reference thisPage}}" />
-                                                    <Setter Property="CommandParameter" Value="{Binding DateTime}" />
-                                                </Style>
-                                            </xcViews:DayView.CurrentMonthStyle>
-
-                                            <!--  Today  -->
-                                            <xcViews:DayView.TodayStyle>
-                                                <Style BasedOn="{StaticResource DefaultDayViewTodayStyle}" TargetType="xcViews:DayView">
-                                                    <Setter Property="Command" Value="{Binding BindingContext.ChangeDateSelectionCommand, Source={x:Reference thisPage}}" />
-                                                    <Setter Property="CommandParameter" Value="{Binding DateTime}" />
-                                                </Style>
-                                            </xcViews:DayView.TodayStyle>
-
-                                            <!--  Day selection  -->
-                                            <xcViews:DayView.SelectedStyle>
-                                                <Style BasedOn="{StaticResource DefaultDayViewSelectedStyle}" TargetType="xcViews:DayView">
-                                                    <Setter Property="Command" Value="{Binding BindingContext.ChangeDateSelectionCommand, Source={x:Reference thisPage}}" />
-                                                    <Setter Property="CommandParameter" Value="{Binding DateTime}" />
-                                                </Style>
-                                            </xcViews:DayView.SelectedStyle>
-                                        </xcViews:DayView>
-                                    </Border>
-                                </DataTemplate>
-                            </xcViews:CalendarView.DayTemplate>
-                        </xcViews:CalendarView>
-                    </Border>
-                </ScrollView>
-                <Button
-                    Style="{StaticResource HeadlineSmallStyle}"
-                    Grid.Column="1"
-                    Command="{Binding HideCalendarCommand}"
-                    CornerRadius="15"
-                    FontFamily="MaterialIconsRegular"
-                    HeightRequest="40"
-                    HorizontalOptions="End"
-                    Text="&#xead0;"
-                    VerticalOptions="Start"
-                    WidthRequest="100" />
-            </Grid>
-
-            <!--  Orientation: Portraint / Landscape  -->
+            <!--  Visual States for Portrait/Landscape  -->
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup>
-                    <!--  Portrait  -->
+                    <!--  Portrait: Calendar in row 3, plants span full width  -->
                     <VisualState x:Name="Portrait">
                         <VisualState.Setters>
-                            <!--  selectedDatesList  -->
-                            <Setter TargetName="selectedDatesList" Property="Grid.Row" Value="1" />
-                            <Setter TargetName="selectedDatesList" Property="Grid.Column" Value="0" />
-
-                            <!--  plantsGrid  -->
-                            <Setter TargetName="plantsGrid" Property="Grid.Row" Value="2" />
-                            <Setter TargetName="plantsGrid" Property="Grid.Column" Value="0" />
-
-                            <!--  calenderView  -->
+                            <Setter TargetName="plantsGrid" Property="Grid.ColumnSpan" Value="2" />
                             <Setter TargetName="calenderView" Property="Grid.Row" Value="3" />
+                            <Setter TargetName="calenderView" Property="Grid.RowSpan" Value="1" />
                             <Setter TargetName="calenderView" Property="Grid.Column" Value="0" />
+                            <Setter TargetName="calenderView" Property="Grid.ColumnSpan" Value="2" />
+                            <Setter TargetName="calenderView" Property="WidthRequest" Value="-1" />
                         </VisualState.Setters>
                     </VisualState>
-                    <!--  Landscape  -->
+                    <!--  Landscape: Calendar in column 1, spanning all rows  -->
                     <VisualState x:Name="Landscape">
                         <VisualState.Setters>
-                            <!--  selectedDatesList  -->
-                            <Setter TargetName="selectedDatesList" Property="Grid.Row" Value="1" />
-                            <Setter TargetName="selectedDatesList" Property="Grid.Column" Value="0" />
-
-                            <!--  plantsGrid  -->
-                            <Setter TargetName="plantsGrid" Property="Grid.Row" Value="2" />
-                            <Setter TargetName="plantsGrid" Property="Grid.Column" Value="0" />
-
-                            <!--  calenderView  -->
+                            <Setter TargetName="plantsGrid" Property="Grid.ColumnSpan" Value="1" />
                             <Setter TargetName="calenderView" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="calenderView" Property="Grid.RowSpan" Value="4" />
                             <Setter TargetName="calenderView" Property="Grid.Column" Value="1" />
-                            <Setter TargetName="calenderView" Property="Grid.RowSpan" Value="3" />
+                            <Setter TargetName="calenderView" Property="Grid.ColumnSpan" Value="1" />
+                            <Setter TargetName="calenderView" Property="WidthRequest" Value="400" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>

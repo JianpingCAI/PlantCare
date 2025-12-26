@@ -127,8 +127,8 @@ public static class DevelopmentDataSeeder
             int overdue = 0, dueSoon = 0, healthy = 0;
             foreach (PlantDbModel plant in testPlants)
             {
-                var hoursSinceWatering = (DateTime.Now - plant.LastWatered).TotalHours;
-                var nextWateringHours = plant.WateringFrequencyInHours - hoursSinceWatering;
+                double hoursSinceWatering = (DateTime.Now - plant.LastWatered).TotalHours;
+                double nextWateringHours = plant.WateringFrequencyInHours - hoursSinceWatering;
                 
                 if (nextWateringHours < 0)
                     overdue++;

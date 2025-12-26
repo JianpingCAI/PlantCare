@@ -146,8 +146,8 @@ public class ImageOptimizationService : IImageOptimizationService
             var validPaths = new HashSet<string>(validImagePaths);
 
             // Clean up photos directory
-            var photoFiles = Directory.GetFiles(_photosDirectory);
-            foreach (var photoFile in photoFiles)
+            string[] photoFiles = Directory.GetFiles(_photosDirectory);
+            foreach (string photoFile in photoFiles)
             {
                 if (!validPaths.Contains(photoFile))
                 {
@@ -156,8 +156,8 @@ public class ImageOptimizationService : IImageOptimizationService
             }
 
             // Clean up thumbnails directory
-            var thumbnailFiles = Directory.GetFiles(_thumbnailsDirectory);
-            foreach (var thumbnailFile in thumbnailFiles)
+            string[] thumbnailFiles = Directory.GetFiles(_thumbnailsDirectory);
+            foreach (string thumbnailFile in thumbnailFiles)
             {
                 string originalFileName = Path.GetFileName(thumbnailFile).Replace("thumb_", "");
                 string originalPath = Path.Combine(_photosDirectory, originalFileName);
@@ -174,7 +174,7 @@ public class ImageOptimizationService : IImageOptimizationService
     {
         int regeneratedCount = 0;
 
-        foreach (var photoPath in photoPaths)
+        foreach (string photoPath in photoPaths)
         {
             // Skip default or empty paths
             if (string.IsNullOrEmpty(photoPath) || photoPath.Contains("default_plant.png"))

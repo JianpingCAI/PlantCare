@@ -89,7 +89,7 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
             return;
         }
 
-        var plantId = value.ToString();
+        string? plantId = value.ToString();
         if (Guid.TryParse(plantId, out Guid selectedId))
         {
             Id = selectedId;

@@ -781,8 +781,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                     return;
                 }
 
-                var notificationId = list[0];
-                var plantId = list[1];
+                string notificationId = list[0];
+                string plantId = list[1];
                 string plantName = list[2];
 
                 _logger.LogInformation($"Notification tapped: Notification Id = {notificationId}, Plant {plantName}, Id = {plantId}");

@@ -9,49 +9,30 @@ using PlantCare.App.ViewModels.Base;
 using PlantCare.Data;
 using PlantCare.Data.Models;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
-using XCalendar.Core.Collections;
-using XCalendar.Core.Enums;
-using XCalendar.Core.Extensions;
-using XCalendar.Core.Interfaces;
-using XCalendar.Core.Models;
-using XCalendar.Maui.Models;
+using Plugin.Maui.Calendar.Models;
 
 namespace PlantCare.App.ViewModels
 {
-    public class PlantEvent : ColoredEvent
+    public class PlantEvent : ObservableObject
     {
         public Guid PlantId { get; set; }
         public CareType ReminderType { get; set; }
         public string Name { get; set; } = string.Empty;
         public string PhotoPath { get; set; } = string.Empty;
+        public DateTime Date { get; set; }
+        public Color Color { get; set; } = Colors.Green;
 
         private bool _isSelected = false;
 
         public bool IsSelected
         {
             get => _isSelected;
-            set
-            {
-                if (_isSelected != value)
-                {
-                    _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
-                }
-            }
+            set => SetProperty(ref _isSelected, value);
         }
 
         public DateTime ScheduledTime { get; set; } = default;
-    }
-
-    public class PlantEventDay<TEvent> : CalendarDay<TEvent> where TEvent : IEvent
-    {
-    }
-
-    public class PlantEventDay : PlantEventDay<PlantEvent>
-    {
     }
 
     public partial class PlantCalendarViewModel : ViewModelBase,
@@ -62,13 +43,13 @@ namespace PlantCare.App.ViewModels
 
         public PlantCalendarViewModel(IPlantService plantService, IDialogService dialogService)
         {
-            _plantService = plantService;
-            _dialogService = dialogService;
+            _plantService = plantService ?? throw new ArgumentNullException(nameof(plantService));
+            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+
+            _displayedMonth = DateTime.Today;
+            _culture = CultureInfo.CurrentUICulture;
 
             WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this);
-
-            //AdjustSpan();
-            //DeviceDisplay.MainDisplayInfoChanged += OnDeviceDisplay_MainDisplayInfoChanged;
         }
 
         #region Event Caching
@@ -76,23 +57,49 @@ namespace PlantCare.App.ViewModels
         private List<PlantEvent>? _cachedAllEvents;
         private DateTime _cacheTimestamp;
         private readonly TimeSpan _cacheLifetime = TimeSpan.FromMinutes(5);
-        private readonly SemaphoreSlim _updateLock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _updateLock = new(1, 1);
 
-        /// <summary>
-        /// Invalidates the event cache, forcing regeneration on next load
-        /// </summary>
-        private void InvalidateCache()
-        {
-            _cachedAllEvents = null;
-        }
+        private void InvalidateCache() => _cachedAllEvents = null;
 
         #endregion Event Caching
 
+        #region Calendar Properties
+
         [ObservableProperty]
-        private Calendar<PlantEventDay, PlantEvent>? _reminderCalendar = null;
+        private EventCollection _eventsInCalendar = new();
+
+        private DateTime? _selectedDate = null;
+        public DateTime? SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                if (SetProperty(ref _selectedDate, value))
+                {
+                    _ = UpdateVisiblePlantEventsAsync();
+                }
+            }
+        }
+
+        private DateTime _displayedMonth = DateTime.Today;
+        public DateTime DisplayedMonth
+        {
+            get => _displayedMonth;
+            set => SetProperty(ref _displayedMonth, value);
+        }
+
+        private CultureInfo _culture = CultureInfo.CurrentUICulture;
+        public CultureInfo Culture
+        {
+            get => _culture;
+            private set => SetProperty(ref _culture, value);
+        }
+
+        #endregion Calendar Properties
+
+        #region UI State Properties
 
         private bool _isShowUnattendedOnly = true;
-
         public bool IsShowUnattendedOnly
         {
             get => _isShowUnattendedOnly;
@@ -100,41 +107,12 @@ namespace PlantCare.App.ViewModels
             {
                 if (SetProperty(ref _isShowUnattendedOnly, value))
                 {
-                    // Filter events from cache (synchronous operation, safe on any thread)
-                    _ = Task.Run(async () =>
-                    {
-                        try
-                        {
-                            await MainThread.InvokeOnMainThreadAsync(() => IsLoading = true);
-
-                            // If cache is null, reload everything properly
-                            if (_cachedAllEvents == null)
-                            {
-                                await UpdateCalendarAndEventListAsync();
-                            }
-                            else
-                            {
-                                // Filter cached events (no DB access)
-                                List<PlantEvent> filteredEvents = FilterCachedEvents(_cachedAllEvents);
-
-                                // Only update the displayed events (filtered)
-                                await MainThread.InvokeOnMainThreadAsync(() =>
-                                {
-                                    PlantEvents.ReplaceRange(filteredEvents);
-                                });
-                            }
-                        }
-                        finally
-                        {
-                            await MainThread.InvokeOnMainThreadAsync(() => IsLoading = false);
-                        }
-                    });
+                    _ = OnShowUnattendedOnlyChangedAsync();
                 }
             }
         }
 
-        // Displayed events
-        public ObservableRangeCollection<PlantEvent> PlantEvents { get; } = [];
+        public ObservableRangeCollection<PlantEvent> PlantEvents { get; } = new();
 
         [ObservableProperty]
         private ObservableCollection<object> _tickedPlantEvents = [];
@@ -146,13 +124,6 @@ namespace PlantCare.App.ViewModels
         private string _selectAllButtonText = ConstStrings.SelectAll;
 
         private bool _isShowCalendar = false;
-
-        [RelayCommand]
-        public void HideCalendar()
-        {
-            IsShowCalendar = false;
-        }
-
         public bool IsShowCalendar
         {
             get => _isShowCalendar;
@@ -160,256 +131,59 @@ namespace PlantCare.App.ViewModels
             {
                 if (SetProperty(ref _isShowCalendar, value))
                 {
-                    // Only initialize calendar when user wants to see it
-                    if (value && ReminderCalendar == null)
+                    if (value)
                     {
-                        _ = Task.Run(async () =>
-                        {
-                            try
-                            {
-                                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = true);
-                                
-                                // Create calendar on demand
-                                var calendar = await CreateCalendarAsync(null);
-                                
-                                await MainThread.InvokeOnMainThreadAsync(() =>
-                                {
-                                    ReminderCalendar = calendar;
-                                    
-                                    // Load events if we have them cached
-                                    if (_cachedAllEvents != null)
-                                    {
-                                        ReminderCalendar.Events.ReplaceRange(_cachedAllEvents);
-                                    }
-                                });
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.WriteLine($"[Calendar] Failed to initialize calendar: {ex.Message}");
-                            }
-                            finally
-                            {
-                                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = false);
-                            }
-                        });
+                        _ = ShowCalendarAsync();
                     }
-                    
+                    else
+                    {
+                        IsCalendarRendered = false;
+                    }
                     AdjustPlantsGridSpan();
                 }
             }
         }
 
-        /// <summary>
-        /// When the page is appearing
-        /// </summary>
-        /// <returns></returns>
-        public override async Task LoadDataWhenViewAppearingAsync()
+        [ObservableProperty]
+        private bool _isCalendarRendered = false;
+
+        [ObservableProperty]
+        private bool _isPlantEventRefreshing = false;
+
+        // Property to signal that calendar events need to be refreshed
+        // Incrementing this value triggers ForceCalendarRefresh in code-behind
+        [ObservableProperty]
+        private int _calendarRefreshToken = 0;
+
+        private void RequestCalendarRefresh() => CalendarRefreshToken++;
+
+        #endregion UI State Properties
+
+        #region Commands
+
+        [RelayCommand]
+        public void HideCalendar()
         {
-            try
-            {
-                // Load data synchronously to avoid threading issues
-                // Don't use fire-and-forget Task.Run here
-                await UpdateCalendarAndEventListAsync();
-            }
-            catch (Exception ex)
-            {
-                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
-            }
+            IsShowCalendar = false;
+            IsCalendarRendered = false;
         }
 
-        private Task<Calendar<PlantEventDay, PlantEvent>> CreateCalendarAsync(string? cultureCode)
+        [RelayCommand]
+        public void NavigateCalendar(int months)
         {
-            return Task.Run(() =>
-            {
-                var calendar = new Calendar<PlantEventDay, PlantEvent>()
-                {
-                    SelectedDates = [],
-                    SelectionAction = SelectionAction.Modify, // add if not exist, or remove otherwise
-                    SelectionType = SelectionType.Single
-                };
-
-                //if (!string.IsNullOrEmpty(cultureCode))
-                //{
-                //    CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(CultureInfo.CurrentCulture.Name);
-                //    CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(CultureInfo.CurrentCulture.Name);
-                //}
-                // Dates selection changed event
-                calendar.SelectedDates.CollectionChanged += SelectedDates_CollectionChanged;
-
-                return calendar;
-            });
+            DateTime baseDate = SelectedDate ?? DateTime.Today;
+            DateTime newDate = baseDate.AddMonths(months);
+            SelectedDate = newDate;
+            DisplayedMonth = newDate;
         }
-
-        private async Task UpdateCalendarAndEventListAsync()
-        {
-            // Prevent concurrent calls using semaphore
-            if (!await _updateLock.WaitAsync(0))
-            {
-                // Another update is already in progress, skip this one
-                Debug.WriteLine("[Calendar] Update already in progress, skipping duplicate call");
-                return;
-            }
-
-            try
-            {
-                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = true);
-
-                // 1) Get plant events (from cache if available)
-                List<PlantEvent> allPlantEvents = await GetPlantEventsAsync();
-
-                // 2) Initialize calendar ONLY if user has it visible
-                if (ReminderCalendar != null)
-                {
-                    // Update existing calendar
-                    await MainThread.InvokeOnMainThreadAsync(() =>
-                    {
-                        ReminderCalendar.Events.ReplaceRange(allPlantEvents);
-                        TickedPlantEvents.Clear();
-                    });
-                }
-
-                // 3) Update plant events list (always update, even without calendar)
-                await UpdatePlantEventsOnSelectedCalendarDates();
-            }
-            finally
-            {
-                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = false);
-                _updateLock.Release();
-            }
-        }
-
-        private async Task UpdatePlantEventsOnSelectedCalendarDates()
-        {
-            if (ReminderCalendar == null)
-            {
-                return;
-            }
-
-            List<PlantEvent> eventsToShow;
-
-            if (ReminderCalendar.SelectedDates.Count > 0)
-            {
-                // Optimize: Use HashSet for O(1) lookup instead of O(n) Any()
-                var selectedDatesSet = new HashSet<DateTime>(ReminderCalendar.SelectedDates);
-                
-                eventsToShow = ReminderCalendar.Events
-                    .Where(pEvt => selectedDatesSet.Contains(pEvt.StartDate))
-                    .OrderBy(pEvt => pEvt.ScheduledTime)
-                    .ToList();
-            }
-            else
-            {
-                // Apply current filter to all events
-                eventsToShow = FilterCachedEvents(_cachedAllEvents ?? ReminderCalendar.Events.ToList());
-            }
-
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                PlantEvents.ReplaceRange(eventsToShow);
-            });
-        }
-
-        #region Load Data
-
-        private async Task<List<PlantEvent>> GetPlantEventsAsync()
-        {
-            // Return cached events if still valid
-            if (_cachedAllEvents != null && 
-                DateTime.Now - _cacheTimestamp < _cacheLifetime)
-            {
-                return FilterCachedEvents(_cachedAllEvents);
-            }
-
-            // Regenerate cache
-            List<Plant> plants = await _plantService.GetAllPlantsAsync();
-            _cachedAllEvents = await GenerateAllEventsAsync(plants);
-            _cacheTimestamp = DateTime.Now;
-
-            return FilterCachedEvents(_cachedAllEvents);
-        }
-
-        /// <summary>
-        /// Filters cached events based on current filter settings
-        /// </summary>
-        private List<PlantEvent> FilterCachedEvents(List<PlantEvent> allEvents)
-        {
-            if (!IsShowUnattendedOnly)
-                return allEvents;
-
-            DateTime now = DateTime.Now;
-            return allEvents.Where(e => e.ScheduledTime <= now).ToList();
-        }
-
-        /// <summary>
-        /// Generates all plant events efficiently in a single loop on background thread
-        /// </summary>
-        private Task<List<PlantEvent>> GenerateAllEventsAsync(List<Plant> plants)
-        {
-            return Task.Run(() =>
-            {
-                var events = new List<PlantEvent>(plants.Count * 2);
-
-                foreach (Plant plant in plants)
-                {
-                    // Create both water and fertilize events in single loop
-                    DateTime waterTime = plant.LastWatered.AddHours(plant.WateringFrequencyInHours);
-                    DateTime waterDate = waterTime.Date; // Cache date calculation
-                    var waterState = PlantState.GetCurrentStateValue(waterTime);
-                    
-                    events.Add(new PlantEvent
-                    {
-                        PlantId = plant.Id,
-                        ReminderType = CareType.Watering,
-                        Name = plant.Name,
-                        PhotoPath = plant.ThumbnailPath, // Use thumbnail for better performance
-                        StartDate = waterDate,
-                        EndDate = waterDate.AddDays(1),
-                        Color = ProgressToColorConverter.Convert(waterState),
-                        ScheduledTime = waterTime
-                    });
-
-                    DateTime fertilizeTime = plant.LastFertilized.AddHours(plant.FertilizeFrequencyInHours);
-                    DateTime fertilizeDate = fertilizeTime.Date; // Cache date calculation
-                    var fertilizeState = PlantState.GetCurrentStateValue(fertilizeTime);
-                    
-                    events.Add(new PlantEvent
-                    {
-                        PlantId = plant.Id,
-                        ReminderType = CareType.Fertilization,
-                        Name = plant.Name,
-                        PhotoPath = plant.ThumbnailPath, // Use thumbnail for better performance
-                        StartDate = fertilizeDate,
-                        EndDate = fertilizeDate.AddDays(1),
-                        Color = ProgressToColorConverter.Convert(fertilizeState),
-                        ScheduledTime = fertilizeTime
-                    });
-                }
-
-                // Sort once at the end - more efficient than sorting during insertion
-                events.Sort((a, b) => a.ScheduledTime.CompareTo(b.ScheduledTime));
-
-                return events;
-            });
-        }
-
-        #endregion Load Data
-
-        #region Mark done
 
         [RelayCommand]
         public async Task TickedPlantEventsChanged(object args)
         {
             try
             {
-                //await Task.Run(() =>
-                //{
                 SelectAllButtonText = TickedPlantEvents.Count > 0 ? ConstStrings.Unselect : ConstStrings.SelectAll;
                 IsSetRemindersDoneEnabled = TickedPlantEvents.Count > 0;
-
-                if (null == TickedPlantEvents)
-                {
-                    return;
-                }
 
                 foreach (PlantEvent item in PlantEvents)
                 {
@@ -423,12 +197,11 @@ namespace PlantCare.App.ViewModels
                         plantEvent.IsSelected = true;
                     }
                 }
-                //});
             }
             catch (Exception ex)
             {
                 await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
-                Debug.WriteLine(ex.Message);
+                Debug.WriteLine($"[Calendar] TickedPlantEventsChanged error: {ex.Message}");
             }
         }
 
@@ -436,25 +209,20 @@ namespace PlantCare.App.ViewModels
         public async Task SetSelectedRemindersDone()
         {
             if (IsBusy)
-            {
                 return;
-            }
-
-            List<object> toRemovedSelections = [];
 
             try
             {
-                DateTime updatedTime = DateTime.Now;
+                DateTime updatedCareTime = DateTime.Now;
 
                 bool isConfirmed = await _dialogService.Ask(
                     LocalizationManager.Instance[ConstStrings.Confirm] ?? ConstStrings.Confirm,
-                    $"{LocalizationManager.Instance[ConstStrings.MarkDone]}: {updatedTime.ToShortTimeString()}?",
+                    $"{LocalizationManager.Instance[ConstStrings.MarkDone]}: {updatedCareTime.ToShortTimeString()}?",
                     LocalizationManager.Instance[ConstStrings.Yes] ?? ConstStrings.Yes,
                     LocalizationManager.Instance[ConstStrings.No] ?? ConstStrings.No);
+
                 if (!isConfirmed)
-                {
                     return;
-                }
 
                 IsBusy = true;
 
@@ -462,46 +230,13 @@ namespace PlantCare.App.ViewModels
                 {
                     if (item is PlantEvent plantEvent)
                     {
-                        switch (plantEvent.ReminderType)
-                        {
-                            case CareType.Watering:
-                                {
-                                    await _plantService.UpdateLastWateringTime(plantEvent.PlantId, updatedTime);
-                                }
-                                break;
-
-                            case CareType.Fertilization:
-                                {
-                                    await _plantService.UpdateLastFertilizationTime(plantEvent.PlantId, updatedTime);
-                                }
-                                break;
-
-                            default:
-                                break;
-                        }
-
-                        toRemovedSelections.Add(item);
-
-                        WeakReferenceMessenger.Default.Send<PlantStateChangedMessage>(new PlantStateChangedMessage
-                        (
-                             plantEvent.PlantId,
-                             plantEvent.ReminderType,
-                             updatedTime
-                        ));
+                        await UpdatePlantCareTimeAsync(plantEvent, updatedCareTime);
                     }
                 }
 
-                // Invalidate cache after changes
                 InvalidateCache();
-
-                // Clear selections
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    TickedPlantEvents.Clear();
-                });
-
-                // Refresh the entire list to show updated events
-                await UpdateCalendarAndEventListAsync();
+                await MainThread.InvokeOnMainThreadAsync(() => TickedPlantEvents.Clear());
+                await ReloadAllEventsAsync();
             }
             catch (Exception ex)
             {
@@ -513,86 +248,17 @@ namespace PlantCare.App.ViewModels
             }
         }
 
-        #endregion Mark done
-
-        #region Calendar Methods
-
-        /// <summary>
-        /// Update SelectedEvents when dates selection changed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void SelectedDates_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            try
-            {
-                if (sender is null)
-                {
-                    return;
-                }
-
-                await UpdatePlantEventsOnSelectedCalendarDates();
-            }
-            catch (Exception ex)
-            {
-                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
-            }
-        }
-
-        [RelayCommand]
-        public async Task NavigateCalendar(int amount)
-        {
-            try
-            {
-                if (ReminderCalendar is null)
-                {
-                    return;
-                }
-
-                if (ReminderCalendar.NavigatedDate.TryAddMonths(amount, out DateTime targetDate))
-                {
-                    ReminderCalendar.Navigate(targetDate - ReminderCalendar.NavigatedDate);
-                }
-                else
-                {
-                    ReminderCalendar.Navigate(amount > 0 ? TimeSpan.MaxValue : TimeSpan.MinValue);
-                }
-            }
-            catch (Exception ex)
-            {
-                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
-            }
-        }
-
-        [RelayCommand]
-        public void ChangeDateSelection(DateTime dateTime)
-        {
-            ReminderCalendar?.ChangeDateSelection(dateTime);
-        }
-
-        #endregion Calendar Methods
-
-        #region Refresh plant events
-
-        [ObservableProperty]
-        private bool _isPlantEventRefreshing = false;
-
         [RelayCommand]
         public async Task RefreshPlantEvents()
         {
             if (IsBusy)
-            {
                 return;
-            }
 
             try
             {
                 IsBusy = true;
-                
-                // Invalidate cache to force fresh data
                 InvalidateCache();
-                
-                await UpdateCalendarAndEventListAsync();
+                await ReloadAllEventsAsync();
             }
             catch (Exception ex)
             {
@@ -605,66 +271,295 @@ namespace PlantCare.App.ViewModels
             }
         }
 
-        #endregion Refresh plant events
+        #endregion Commands
 
-        async void IRecipient<LanguageChangedMessage>.Receive(LanguageChangedMessage message)
+        #region Lifecycle Methods
+
+        public override async Task LoadDataWhenViewAppearingAsync()
         {
-            if (string.IsNullOrEmpty(message?.CultureCode) || ReminderCalendar is null)
+            try
             {
+                SyncCultureWithAppLanguage();
+                await ReloadAllEventsAsync();
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
+            }
+        }
+
+        #endregion Lifecycle Methods
+
+        #region Private Methods
+
+        private async Task ShowCalendarAsync()
+        {
+            IsCalendarRendered = false;
+            DisplayedMonth = SelectedDate ?? DateTime.Today;
+            SyncThreadCulture();
+
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                try
+                {
+                    IsLoading = true;
+
+                    PopulateAllEventsInCalendar();
+
+                    List<PlantEvent> eventsToShow = FilterEvents(_cachedAllEvents ?? []);
+                    PlantEvents.ReplaceRange(eventsToShow);
+                    TickedPlantEvents.Clear();
+
+                    // Small delay to ensure EventsInCalendar binding is processed before rendering
+                    await Task.Delay(50);
+
+                    // Setting IsCalendarRendered triggers ForceCalendarRefresh in code-behind
+                    IsCalendarRendered = true;
+                    Debug.WriteLine($"[Calendar] Rendered with {EventsInCalendar.Count} dates containing events");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[Calendar] Failed to show calendar: {ex.Message}");
+                    IsCalendarRendered = true;
+                }
+                finally
+                {
+                    IsLoading = false;
+                }
+            });
+        }
+
+        private async Task OnShowUnattendedOnlyChangedAsync()
+        {
+            try
+            {
+                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = true);
+
+                if (_cachedAllEvents != null)
+                {
+                    List<PlantEvent> filteredEvents = FilterEvents(_cachedAllEvents);
+                    await MainThread.InvokeOnMainThreadAsync(() => PlantEvents.ReplaceRange(filteredEvents));
+                }
+            }
+            finally
+            {
+                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = false);
+            }
+        }
+
+        private async Task ReloadAllEventsAsync()
+        {
+            if (!await _updateLock.WaitAsync(0))
+            {
+                Debug.WriteLine("[Calendar] Update already in progress, skipping");
                 return;
             }
 
             try
             {
-                await MainThread.InvokeOnMainThreadAsync(async () =>
+                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = true);
+
+                await GenerateAllEventsAsync();
+
+                await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    ////Set DefaultThreadCurrentCulture because CurrentCulture gets automatically reset when changed.
-                    ////CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CurrentCulture; // new CultureInfo(TargetCultureCode);
-                    ////CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentUICulture;//new CultureInfo(TargetCultureCode);
+                    PopulateAllEventsInCalendar();
+                    TickedPlantEvents.Clear();
+                });
 
-                    CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(message.CultureCode);
-                    CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(message.CultureCode);
+                await UpdateVisiblePlantEventsAsync();
 
-                    //CultureInfo.CurrentCulture = new CultureInfo(message.CultureCode);
-                    //CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture;
+                // Request calendar to refresh its display if it's visible
+                if (IsCalendarRendered)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() => RequestCalendarRefresh());
+                }
+            }
+            finally
+            {
+                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = false);
+                _updateLock.Release();
+            }
+        }
 
-                    //This causes the binding converters (which use the current culture) to update.
-                    //Day Names
-                    var oldDayNamesOlder = ReminderCalendar.DayNamesOrder.ToList();
-                    ReminderCalendar.DayNamesOrder.ReplaceRange([DayOfWeek.Monday]);
-                    ReminderCalendar.DayNamesOrder.ReplaceRange(oldDayNamesOlder);
+        private void PopulateAllEventsInCalendar()
+        {
+            EventsInCalendar.Clear();
 
-                    //NavigationView Title
-                    await NavigateCalendar(1);
-                    await NavigateCalendar(-1);
+            if (_cachedAllEvents == null || _cachedAllEvents.Count == 0)
+            {
+                Debug.WriteLine("[Calendar] No events to display");
+                return;
+            }
+
+            Dictionary<DateTime, List<object>> eventsByDate = _cachedAllEvents
+                .GroupBy(e => e.Date.Date)
+                .ToDictionary(g => g.Key, g => g.Cast<object>().ToList());
+
+            foreach (KeyValuePair<DateTime, List<object>> kvp in eventsByDate)
+            {
+                EventsInCalendar[kvp.Key] = kvp.Value;
+            }
+
+            Debug.WriteLine($"[Calendar] Populated {EventsInCalendar.Count} dates with {_cachedAllEvents.Count} total events");
+        }
+
+        private async Task UpdateVisiblePlantEventsAsync()
+        {
+            List<PlantEvent> filteredEvents;
+
+            if (_cachedAllEvents == null)
+            {
+                filteredEvents = [];
+            }
+            else
+            {
+                // No date selected - show all events with filter applied
+                filteredEvents = FilterEvents(_cachedAllEvents);
+            }
+
+            await MainThread.InvokeOnMainThreadAsync(() => PlantEvents.ReplaceRange(filteredEvents));
+        }
+
+        private async Task GenerateAllEventsAsync()
+        {
+            if (_cachedAllEvents != null && DateTime.Now - _cacheTimestamp < _cacheLifetime)
+            {
+                return;
+            }
+
+            List<Plant> plants = await _plantService.GetAllPlantsAsync();
+            _cachedAllEvents = GenerateAllEvents(plants);
+            _cacheTimestamp = DateTime.Now;
+        }
+
+        private List<PlantEvent> FilterEvents(List<PlantEvent> events)
+        {
+            if (SelectedDate.HasValue)
+            {
+                // Specific date selected - show events for that date, respecting the filter
+                events = events
+                    .Where(e => e.Date.Date == SelectedDate.Value.Date)
+                    .ToList();
+            }
+
+            if (!IsShowUnattendedOnly)
+                return events;
+
+            DateTime now = DateTime.Now;
+            return events.Where(e => e.ScheduledTime <= now).OrderBy(e => e.ScheduledTime).ToList();
+        }
+
+        private static List<PlantEvent> GenerateAllEvents(List<Plant> plants)
+        {
+            var events = new List<PlantEvent>(plants.Count * 2);
+
+            foreach (Plant plant in plants)
+            {
+                // Watering event
+                DateTime waterTime = plant.LastWatered.AddHours(plant.WateringFrequencyInHours);
+                events.Add(new PlantEvent
+                {
+                    PlantId = plant.Id,
+                    ReminderType = CareType.Watering,
+                    Name = plant.Name,
+                    PhotoPath = plant.ThumbnailPath,
+                    Date = waterTime.Date,
+                    Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(waterTime)),
+                    ScheduledTime = waterTime
+                });
+
+                // Fertilization event
+                DateTime fertilizeTime = plant.LastFertilized.AddHours(plant.FertilizeFrequencyInHours);
+                events.Add(new PlantEvent
+                {
+                    PlantId = plant.Id,
+                    ReminderType = CareType.Fertilization,
+                    Name = plant.Name,
+                    PhotoPath = plant.ThumbnailPath,
+                    Date = fertilizeTime.Date,
+                    Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(fertilizeTime)),
+                    ScheduledTime = fertilizeTime
+                });
+            }
+
+            events.Sort((a, b) => a.ScheduledTime.CompareTo(b.ScheduledTime));
+            return events;
+        }
+
+        private async Task UpdatePlantCareTimeAsync(PlantEvent plantEvent, DateTime updatedTime)
+        {
+            switch (plantEvent.ReminderType)
+            {
+                case CareType.Watering:
+                    await _plantService.UpdateLastWateringTime(plantEvent.PlantId, updatedTime);
+                    break;
+                case CareType.Fertilization:
+                    await _plantService.UpdateLastFertilizationTime(plantEvent.PlantId, updatedTime);
+                    break;
+            }
+
+            WeakReferenceMessenger.Default.Send(new PlantStateChangedMessage(
+                plantEvent.PlantId,
+                plantEvent.ReminderType,
+                updatedTime));
+        }
+
+        private void SyncCultureWithAppLanguage()
+        {
+            Language appLanguage = App.AppLanguage;
+            string expectedCultureName = LanguageHelper.GetCultureName(appLanguage);
+
+            if (Culture.Name != expectedCultureName)
+            {
+                Culture = new CultureInfo(expectedCultureName);
+                Debug.WriteLine($"[Calendar] Culture synchronized to {Culture.Name}");
+            }
+        }
+
+        private static void SyncThreadCulture()
+        {
+            CultureInfo currentCulture = CultureInfo.CurrentUICulture;
+            CultureInfo.DefaultThreadCurrentCulture = currentCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = currentCulture;
+        }
+
+        #endregion Private Methods
+
+        #region Message Handlers
+
+        async void IRecipient<LanguageChangedMessage>.Receive(LanguageChangedMessage message)
+        {
+            if (string.IsNullOrEmpty(message?.CultureCode))
+                return;
+
+            try
+            {
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    var newCulture = new CultureInfo(message.CultureCode);
+                    CultureInfo.DefaultThreadCurrentCulture = newCulture;
+                    CultureInfo.DefaultThreadCurrentUICulture = newCulture;
+                    Culture = newCulture;
+
+                    Debug.WriteLine($"[Calendar] Language changed to {message.CultureCode}");
                 });
             }
             catch (Exception ex)
             {
-                await MainThread.InvokeOnMainThreadAsync(async () =>
-                {
-                    await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
-                });
+                Debug.WriteLine($"[Calendar] Language change error: {ex.Message}");
             }
         }
 
-        #region Layout related
+        #endregion Message Handlers
+
+        #region Layout
 
         [ObservableProperty]
         private string _orientationState = "Portrait";
 
         public double Width { get; set; }
-
         public double Height { get; set; }
-
-        public void UpdateOrientation()
-        {
-            if (Width > 0 && Height > 0)
-            {
-                OrientationState = Width > Height ? "Landscape" : "Portrait";
-                AdjustPlantsGridSpan();
-            }
-        }
 
         [ObservableProperty]
         private int _photoWidth = 110;
@@ -675,44 +570,44 @@ namespace PlantCare.App.ViewModels
         [ObservableProperty]
         private int _photoSpan = 3;
 
-        private void AdjustPlantsGridSpan()
+        public void UpdateOrientation()
         {
-            //DisplayInfo mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
-            //double width = mainDisplayInfo.Width / mainDisplayInfo.Density;
-
-            //PhotoSpan = ((int)width - 10) / PhotoWidth;
-
-            // Landscape
-            if (Width > Height)
+            if (Width > 0 && Height > 0)
             {
-                //int displayWidth = IsShowCalendar ? ((int)Width / 2 - 10) : ((int)Width - 10);
-                //PhotoSpan = (displayWidth - 10) / PhotoWidth;
-                PhotoSpan = ((int)Width - 10 - (IsShowCalendar ? ConstantValues.CalendarWidth : 0)) / PhotoWidth;
-            }
-            // Portrait
-            else
-            {
-                PhotoSpan = ((int)Width - 10) / PhotoWidth;
+                OrientationState = Width > Height ? "Landscape" : "Portrait";
+                AdjustPlantsGridSpan();
             }
         }
 
-        //private void OnDeviceDisplay_MainDisplayInfoChanged(object? sender, DisplayInfoChangedEventArgs e)
-        //{
-        //    AdjustSpan();
-        //}
+        private void AdjustPlantsGridSpan()
+        {
+            int availableWidth = (int)Width - 10;
 
-        #endregion Layout related
+            // In landscape mode with calendar shown, subtract calendar width
+            // In portrait mode, plants always have full width (calendar is below)
+            bool isLandscape = Width > Height;
+            if (isLandscape && IsShowCalendar)
+            {
+                availableWidth -= ConstantValues.CalendarWidth;
+            }
+
+            PhotoSpan = Math.Max(1, availableWidth / PhotoWidth);
+        }
+
+        #endregion Layout
+
+        #region IDisposable
 
         void IDisposable.Dispose()
         {
-            if (ReminderCalendar is not null)
-            {
-                ReminderCalendar.SelectedDates.CollectionChanged -= SelectedDates_CollectionChanged;
-            }
-            
-            _updateLock.Dispose();
-            
-            //DeviceDisplay.MainDisplayInfoChanged -= OnDeviceDisplay_MainDisplayInfoChanged;
+            _updateLock?.Dispose();
+            EventsInCalendar?.Clear();
+            _cachedAllEvents?.Clear();
+            _cachedAllEvents = null;
+            WeakReferenceMessenger.Default.Unregister<LanguageChangedMessage>(this);
+            Debug.WriteLine("[PlantCalendarViewModel] Disposed");
         }
+
+        #endregion IDisposable
     }
 }
