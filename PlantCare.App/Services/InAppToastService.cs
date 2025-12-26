@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Core;
 using PlantCare.App.Components;
 using System.Diagnostics;
 
@@ -74,7 +75,7 @@ public class InAppToastService : IInAppToastService
     {
         try
         {
-            var page = GetCurrentPage();
+            Page? page = GetCurrentPage();
             if (page == null)
             {
                 Debug.WriteLine("[InAppToast] Current page is null");
@@ -147,7 +148,7 @@ public class InAppToastService : IInAppToastService
             // If content is wrapped in another layout, try to find a Grid
             if (contentPage.Content is Layout layout)
             {
-                var childGrid = layout.Children.OfType<Grid>().FirstOrDefault();
+                Grid? childGrid = layout.Children.OfType<Grid>().FirstOrDefault();
                 if (childGrid != null)
                     return childGrid;
             }
@@ -159,12 +160,12 @@ public class InAppToastService : IInAppToastService
     private static InAppToastView? FindExistingToastView(Layout layout)
     {
         // Direct children
-        var toastView = layout.Children.OfType<InAppToastView>().FirstOrDefault();
+        InAppToastView? toastView = layout.Children.OfType<InAppToastView>().FirstOrDefault();
         if (toastView != null)
             return toastView;
 
         // Check nested layouts (one level deep)
-        foreach (var child in layout.Children)
+        foreach (IView? child in layout.Children)
         {
             if (child is Layout childLayout)
             {
@@ -198,7 +199,7 @@ public class InAppToastService : IInAppToastService
     {
         try
         {
-            var toast = CommunityToolkit.Maui.Alerts.Toast.Make(message, CommunityToolkit.Maui.Core.ToastDuration.Short);
+            IToast toast = CommunityToolkit.Maui.Alerts.Toast.Make(message, CommunityToolkit.Maui.Core.ToastDuration.Short);
             await toast.Show();
         }
         catch (Exception ex)

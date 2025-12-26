@@ -125,7 +125,7 @@ public static class DevelopmentDataSeeder
             
             // Count plants by status
             int overdue = 0, dueSoon = 0, healthy = 0;
-            foreach (var plant in testPlants)
+            foreach (PlantDbModel plant in testPlants)
             {
                 var hoursSinceWatering = (DateTime.Now - plant.LastWatered).TotalHours;
                 var nextWateringHours = plant.WateringFrequencyInHours - hoursSinceWatering;

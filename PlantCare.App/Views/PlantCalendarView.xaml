@@ -179,7 +179,9 @@
                         ItemsSource="{Binding PlantEvents}"
                         SelectedItems="{Binding TickedPlantEvents}"
                         SelectionChangedCommand="{Binding TickedPlantEventsChangedCommand}"
-                        SelectionMode="Multiple">
+                        SelectionMode="Multiple"
+                        RemainingItemsThreshold="10"
+                        ItemsUpdatingScrollMode="KeepItemsInView">
                         <!--<CollectionView.Shadow>
                             <Shadow
                                 Brush="{AppThemeBinding Light={StaticResource White},

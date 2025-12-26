@@ -71,6 +71,23 @@ namespace PlantCare.App.ViewModels
             //DeviceDisplay.MainDisplayInfoChanged += OnDeviceDisplay_MainDisplayInfoChanged;
         }
 
+        #region Event Caching
+
+        private List<PlantEvent>? _cachedAllEvents;
+        private DateTime _cacheTimestamp;
+        private readonly TimeSpan _cacheLifetime = TimeSpan.FromMinutes(5);
+        private readonly SemaphoreSlim _updateLock = new SemaphoreSlim(1, 1);
+
+        /// <summary>
+        /// Invalidates the event cache, forcing regeneration on next load
+        /// </summary>
+        private void InvalidateCache()
+        {
+            _cachedAllEvents = null;
+        }
+
+        #endregion Event Caching
+
         [ObservableProperty]
         private Calendar<PlantEventDay, PlantEvent>? _reminderCalendar = null;
 
@@ -83,7 +100,35 @@ namespace PlantCare.App.ViewModels
             {
                 if (SetProperty(ref _isShowUnattendedOnly, value))
                 {
-                    _ = UpdateCalendarAndEventListAsync();
+                    // Filter events from cache (synchronous operation, safe on any thread)
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await MainThread.InvokeOnMainThreadAsync(() => IsLoading = true);
+
+                            // If cache is null, reload everything properly
+                            if (_cachedAllEvents == null)
+                            {
+                                await UpdateCalendarAndEventListAsync();
+                            }
+                            else
+                            {
+                                // Filter cached events (no DB access)
+                                List<PlantEvent> filteredEvents = FilterCachedEvents(_cachedAllEvents);
+
+                                // Only update the displayed events (filtered)
+                                await MainThread.InvokeOnMainThreadAsync(() =>
+                                {
+                                    PlantEvents.ReplaceRange(filteredEvents);
+                                });
+                            }
+                        }
+                        finally
+                        {
+                            await MainThread.InvokeOnMainThreadAsync(() => IsLoading = false);
+                        }
+                    });
                 }
             }
         }
@@ -116,6 +161,8 @@ namespace PlantCare.App.ViewModels
         {
             try
             {
+                // Load data synchronously to avoid threading issues
+                // Don't use fire-and-forget Task.Run here
                 await UpdateCalendarAndEventListAsync();
             }
             catch (Exception ex)
@@ -149,27 +196,52 @@ namespace PlantCare.App.ViewModels
 
         private async Task UpdateCalendarAndEventListAsync()
         {
-            //1) events in the calendar view
-            List<PlantEvent> allPlantEvents = await GetPlantEventsAsync();
-
-            if (ReminderCalendar is null)
+            // Prevent concurrent calls using semaphore
+            if (!await _updateLock.WaitAsync(0))
             {
-                Calendar<PlantEventDay, PlantEvent> calendar = await CreateCalendarAsync(null);
-
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    ReminderCalendar = calendar;
-                });
+                // Another update is already in progress, skip this one
+                Debug.WriteLine("[Calendar] Update already in progress, skipping duplicate call");
+                return;
             }
 
-            await MainThread.InvokeOnMainThreadAsync(() =>
+            try
             {
-                ReminderCalendar!.Events.ReplaceRange(allPlantEvents);
+                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = true);
 
-                TickedPlantEvents.Clear();
-            });
+                // 1) Get plant events (from cache if available)
+                List<PlantEvent> allPlantEvents = await GetPlantEventsAsync();
 
-            await UpdatePlantEventsOnSelectedCalendarDates();
+                // 2) Initialize calendar if needed (lazy loading)
+                Calendar<PlantEventDay, PlantEvent>? calendar = null;
+                if (ReminderCalendar is null)
+                {
+                    calendar = await CreateCalendarAsync(null);
+                }
+
+                // 3 & 4) Batch all UI updates into single MainThread invocation
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    // Update calendar if just created
+                    if (calendar != null)
+                    {
+                        ReminderCalendar = calendar;
+                    }
+                    
+                    // Update calendar events
+                    ReminderCalendar!.Events.ReplaceRange(allPlantEvents);
+                    
+                    // Clear selections
+                    TickedPlantEvents.Clear();
+                });
+
+                // 5) Update plant events list (respects filter and date selection)
+                await UpdatePlantEventsOnSelectedCalendarDates();
+            }
+            finally
+            {
+                await MainThread.InvokeOnMainThreadAsync(() => IsLoading = false);
+                _updateLock.Release();
+            }
         }
 
         private async Task UpdatePlantEventsOnSelectedCalendarDates()
@@ -179,138 +251,110 @@ namespace PlantCare.App.ViewModels
                 return;
             }
 
+            List<PlantEvent> eventsToShow;
+
             if (ReminderCalendar.SelectedDates.Count > 0)
             {
-                List<PlantEvent> plantEventsOnSelectedDates
-                    = [.. ReminderCalendar!.Events
-                     .Where(pEvt => ReminderCalendar.SelectedDates.Any(selectedDate => selectedDate == pEvt.StartDate))
-                     .OrderBy(pEvt => pEvt.ScheduledTime)];
-
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    PlantEvents.ReplaceRange(plantEventsOnSelectedDates);
-                });
+                // Optimize: Use HashSet for O(1) lookup instead of O(n) Any()
+                var selectedDatesSet = new HashSet<DateTime>(ReminderCalendar.SelectedDates);
+                
+                eventsToShow = ReminderCalendar.Events
+                    .Where(pEvt => selectedDatesSet.Contains(pEvt.StartDate))
+                    .OrderBy(pEvt => pEvt.ScheduledTime)
+                    .ToList();
             }
             else
             {
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    PlantEvents.ReplaceRange(ReminderCalendar.Events);
-                });
+                // Apply current filter to all events
+                eventsToShow = FilterCachedEvents(_cachedAllEvents ?? ReminderCalendar.Events.ToList());
             }
+
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                PlantEvents.ReplaceRange(eventsToShow);
+            });
         }
 
         #region Load Data
 
-        private Task<List<PlantEvent>> GetPlantEventsAsync()
+        private async Task<List<PlantEvent>> GetPlantEventsAsync()
         {
-            return Task.Run(async () =>
+            // Return cached events if still valid
+            if (_cachedAllEvents != null && 
+                DateTime.Now - _cacheTimestamp < _cacheLifetime)
             {
-                List<Plant> _allPlantsCache = await _plantService.GetAllPlantsAsync();
+                return FilterCachedEvents(_cachedAllEvents);
+            }
 
-                DateTime nowTime = DateTime.Now;
+            // Regenerate cache
+            List<Plant> plants = await _plantService.GetAllPlantsAsync();
+            _cachedAllEvents = await GenerateAllEventsAsync(plants);
+            _cacheTimestamp = DateTime.Now;
 
-                List<Plant> filteredPlants;
+            return FilterCachedEvents(_cachedAllEvents);
+        }
 
-                // filter by IsShowUnattendedOnly
-                if (IsShowUnattendedOnly)
+        /// <summary>
+        /// Filters cached events based on current filter settings
+        /// </summary>
+        private List<PlantEvent> FilterCachedEvents(List<PlantEvent> allEvents)
+        {
+            if (!IsShowUnattendedOnly)
+                return allEvents;
+
+            DateTime now = DateTime.Now;
+            return allEvents.Where(e => e.ScheduledTime <= now).ToList();
+        }
+
+        /// <summary>
+        /// Generates all plant events efficiently in a single loop on background thread
+        /// </summary>
+        private Task<List<PlantEvent>> GenerateAllEventsAsync(List<Plant> plants)
+        {
+            return Task.Run(() =>
+            {
+                var events = new List<PlantEvent>(plants.Count * 2);
+
+                foreach (Plant plant in plants)
                 {
-                    filteredPlants = _allPlantsCache
-                        .Where(x => x.LastWatered.AddHours(x.WateringFrequencyInHours) <= nowTime
-                            || x.LastFertilized.AddHours(x.FertilizeFrequencyInHours) <= nowTime)
-                        .ToList();
-                }
-                else
-                {
-                    filteredPlants = _allPlantsCache;
-                }
-
-                // Convert to PlantEvent
-                List<PlantEvent> plantEvents = [];
-                foreach (Plant plant in filteredPlants)
-                {
-                    DateTime expectedWaterTime = plant.LastWatered.AddHours(plant.WateringFrequencyInHours);
-                    if (IsShowUnattendedOnly)
+                    // Create both water and fertilize events in single loop
+                    DateTime waterTime = plant.LastWatered.AddHours(plant.WateringFrequencyInHours);
+                    DateTime waterDate = waterTime.Date; // Cache date calculation
+                    var waterState = PlantState.GetCurrentStateValue(waterTime);
+                    
+                    events.Add(new PlantEvent
                     {
-                        if (expectedWaterTime <= nowTime)
-                        {
-                            plantEvents.Add(new PlantEvent
-                            {
-                                //Title = plant.Name,
-                                //Description = plant.PhotoPath,
-                                PlantId = plant.Id,
-                                ReminderType = CareType.Watering,
-                                Name = plant.Name,
-                                PhotoPath = plant.PhotoPath,
-                                StartDate = expectedWaterTime.Date,
-                                EndDate = expectedWaterTime.Date.AddDays(1),
-                                Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime)),
+                        PlantId = plant.Id,
+                        ReminderType = CareType.Watering,
+                        Name = plant.Name,
+                        PhotoPath = plant.ThumbnailPath, // Use thumbnail for better performance
+                        StartDate = waterDate,
+                        EndDate = waterDate.AddDays(1),
+                        Color = ProgressToColorConverter.Convert(waterState),
+                        ScheduledTime = waterTime
+                    });
 
-                                ScheduledTime = expectedWaterTime,
-                            });
-                        }
-                    }
-                    else
+                    DateTime fertilizeTime = plant.LastFertilized.AddHours(plant.FertilizeFrequencyInHours);
+                    DateTime fertilizeDate = fertilizeTime.Date; // Cache date calculation
+                    var fertilizeState = PlantState.GetCurrentStateValue(fertilizeTime);
+                    
+                    events.Add(new PlantEvent
                     {
-                        plantEvents.Add(new PlantEvent
-                        {
-                            //Title = plant.Name,
-                            //Description = plant.PhotoPath,
-                            PlantId = plant.Id,
-                            ReminderType = CareType.Watering,
-                            Name = plant.Name,
-                            PhotoPath = plant.PhotoPath,
-                            StartDate = expectedWaterTime.Date,
-                            EndDate = expectedWaterTime.Date.AddDays(1),
-                            Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(expectedWaterTime)),
-
-                            ScheduledTime = expectedWaterTime,
-                        });
-                    }
-
-                    DateTime fertilizationTime = plant.LastFertilized.AddHours(plant.FertilizeFrequencyInHours);
-                    if (IsShowUnattendedOnly)
-                    {
-                        if (fertilizationTime <= nowTime)
-                        {
-                            plantEvents.Add(new PlantEvent
-                            {
-                                //Title = plant.Name,
-                                //Description = plant.PhotoPath,
-                                PlantId = plant.Id,
-                                ReminderType = CareType.Fertilization,
-                                Name = plant.Name,
-                                PhotoPath = plant.PhotoPath,
-                                StartDate = fertilizationTime.Date,
-                                EndDate = fertilizationTime.Date.AddDays(1),
-                                Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime)),
-
-                                ScheduledTime = fertilizationTime,
-                            });
-                        }
-                    }
-                    else
-                    {
-                        plantEvents.Add(new PlantEvent
-                        {
-                            //Title = plant.Name,
-                            //Description = plant.PhotoPath,
-                            PlantId = plant.Id,
-                            ReminderType = CareType.Fertilization,
-                            Name = plant.Name,
-                            PhotoPath = plant.PhotoPath,
-                            StartDate = fertilizationTime.Date,
-                            EndDate = fertilizationTime.Date.AddDays(1),
-                            Color = ProgressToColorConverter.Convert(PlantState.GetCurrentStateValue(fertilizationTime)),
-
-                            ScheduledTime = fertilizationTime,
-                        });
-                    }
+                        PlantId = plant.Id,
+                        ReminderType = CareType.Fertilization,
+                        Name = plant.Name,
+                        PhotoPath = plant.ThumbnailPath, // Use thumbnail for better performance
+                        StartDate = fertilizeDate,
+                        EndDate = fertilizeDate.AddDays(1),
+                        Color = ProgressToColorConverter.Convert(fertilizeState),
+                        ScheduledTime = fertilizeTime
+                    });
                 }
 
-                plantEvents.Sort((p1, p2) => p1.ScheduledTime.CompareTo(p2.ScheduledTime));
+                // Sort once at the end - more efficient than sorting during insertion
+                events.Sort((a, b) => a.ScheduledTime.CompareTo(b.ScheduledTime));
 
-                return plantEvents;
+                return events;
             });
         }
 
@@ -378,6 +422,8 @@ namespace PlantCare.App.ViewModels
                     return;
                 }
 
+                IsBusy = true;
+
                 foreach (object item in TickedPlantEvents)
                 {
                     if (item is PlantEvent plantEvent)
@@ -410,6 +456,18 @@ namespace PlantCare.App.ViewModels
                         ));
                     }
                 }
+
+                // Invalidate cache after changes
+                InvalidateCache();
+
+                // Clear selections
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    TickedPlantEvents.Clear();
+                });
+
+                // Refresh the entire list to show updated events
+                await UpdateCalendarAndEventListAsync();
             }
             catch (Exception ex)
             {
@@ -417,20 +475,6 @@ namespace PlantCare.App.ViewModels
             }
             finally
             {
-                if (toRemovedSelections.Count > 0)
-                {
-                    foreach (object item in toRemovedSelections)
-                    {
-                        if (item is PlantEvent plantEvent)
-                        {
-                            ReminderCalendar!.Events.Remove(plantEvent);
-
-                            PlantEvents.Remove(plantEvent);
-                        }
-
-                        TickedPlantEvents.Remove(item);
-                    }
-                }
                 IsBusy = false;
             }
         }
@@ -510,6 +554,10 @@ namespace PlantCare.App.ViewModels
             try
             {
                 IsBusy = true;
+                
+                // Invalidate cache to force fresh data
+                InvalidateCache();
+                
                 await UpdateCalendarAndEventListAsync();
             }
             catch (Exception ex)
@@ -637,6 +685,9 @@ namespace PlantCare.App.ViewModels
             {
                 ReminderCalendar.SelectedDates.CollectionChanged -= SelectedDates_CollectionChanged;
             }
+            
+            _updateLock.Dispose();
+            
             //DeviceDisplay.MainDisplayInfoChanged -= OnDeviceDisplay_MainDisplayInfoChanged;
         }
     }

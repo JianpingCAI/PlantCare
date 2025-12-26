@@ -423,7 +423,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             // Schedule notifications in parallel (don't await)
             if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
             {
-                var notificationTasks = new[]
+                Task<int>[] notificationTasks = new[]
                 {
                     ScheduleNotificationAsync(CareType.Watering, CareType.Watering.GetActionName(), newPlantVM),
                     ScheduleNotificationAsync(CareType.Fertilization, CareType.Fertilization.GetActionName(), newPlantVM)
