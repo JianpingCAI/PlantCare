@@ -79,7 +79,7 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="vm:PlantCareHistoryWithPlot">
-                    <Grid Style="{StaticResource GridStyleForCollectionView}">
+                    <Grid>
                         <Border StrokeThickness="1">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="5" />

@@ -109,7 +109,7 @@
 
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="vm:PlantEvent">
-                                <Grid HorizontalOptions="CenterAndExpand" Style="{StaticResource GridStyleForCollectionView}">
+                                <Grid HorizontalOptions="CenterAndExpand">
                                     <Border>
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="10" />
