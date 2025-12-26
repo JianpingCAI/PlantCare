@@ -3,8 +3,8 @@
     x:Class="PlantCare.App.Views.CareHistoryView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
     xmlns:components="clr-namespace:PlantCare.App.Components"
+    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
@@ -24,10 +24,10 @@
             </Border>
 
             <Label
-                Style="{StaticResource BodyStyle}"
                 Grid.Column="1"
                 Margin="15,0,0,0"
                 HorizontalOptions="Start"
+                Style="{StaticResource BodyStyle}"
                 Text="{Binding Path=[History], Source={x:Static utils:LocalizationManager.Instance}}"
                 VerticalTextAlignment="Center" />
 
@@ -60,16 +60,16 @@
             SelectedItem="{Binding SelectedPlant, Mode=TwoWay}"
             SelectionChangedCommand="{Binding SelectPlantCommand}"
             SelectionMode="Single">
-            
+
             <!--  Empty State View  -->
             <CollectionView.EmptyView>
-                <components:EmptyStateView 
-                    IconSource="default_plant.png"
+                <components:EmptyStateView
                     Title="No Care History"
-                    Message="Your plant care history will appear here once you start tracking plant care"
-                    HasAction="False" />
+                    HasAction="False"
+                    IconSource="default_plant.png"
+                    Message="Your plant care history will appear here once you start tracking plant care" />
             </CollectionView.EmptyView>
-            
+
             <CollectionView.ItemsLayout>
                 <GridItemsLayout
                     Orientation="Vertical"

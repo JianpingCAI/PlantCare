@@ -6,43 +6,49 @@
     x:Name="Root">
 
     <Grid BackgroundColor="{AppThemeBinding Light=#80F5F5F5, Dark=#80333333}">
-        <VerticalStackLayout 
-            HorizontalOptions="Center" 
-            VerticalOptions="Center"
-            Spacing="16">
-            
-            <!-- Animated Loading Indicator -->
+        <VerticalStackLayout
+            HorizontalOptions="Center"
+            Spacing="16"
+            VerticalOptions="Center">
+
+            <!--  Animated Loading Indicator  -->
             <Border
-                WidthRequest="80"
+                BackgroundColor="{AppThemeBinding Light={StaticResource White},
+                                                  Dark={StaticResource Gray900}}"
                 HeightRequest="80"
+                HorizontalOptions="Center"
                 StrokeThickness="0"
-                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
-                HorizontalOptions="Center">
+                WidthRequest="80">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="16" />
                 </Border.StrokeShape>
                 <Border.Shadow>
-                    <Shadow Brush="Black" Opacity="0.15" Radius="16" Offset="0,4" />
+                    <Shadow
+                        Brush="Black"
+                        Opacity="0.15"
+                        Radius="16"
+                        Offset="0,4" />
                 </Border.Shadow>
                 <ActivityIndicator
                     x:Name="LoadingIndicator"
-                    WidthRequest="40"
                     HeightRequest="40"
                     HorizontalOptions="Center"
-                    VerticalOptions="Center"
                     IsRunning="True"
+                    VerticalOptions="Center"
+                    WidthRequest="40"
                     Color="{StaticResource Primary}" />
             </Border>
-            
-            <!-- Optional Loading Text -->
+
+            <!--  Optional Loading Text  -->
             <Label
                 x:Name="LoadingLabel"
-                HorizontalOptions="Center"
-                Text="{Binding LoadingText, Source={x:Reference Root}}"
-                IsVisible="{Binding ShowLoadingText, Source={x:Reference Root}}"
-                TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
                 FontFamily="OpenSansRegular"
-                FontSize="14" />
+                FontSize="14"
+                HorizontalOptions="Center"
+                IsVisible="{Binding ShowLoadingText, Source={x:Reference Root}}"
+                Text="{Binding LoadingText, Source={x:Reference Root}}"
+                TextColor="{AppThemeBinding Light={StaticResource Gray600},
+                                            Dark={StaticResource Gray400}}" />
         </VerticalStackLayout>
     </Grid>
 </ContentView>

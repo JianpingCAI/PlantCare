@@ -29,10 +29,10 @@
             </Border>
 
             <Label
-                Style="{StaticResource BodyStyle}"
                 Grid.Column="1"
                 Margin="15,0,0,0"
                 HorizontalOptions="Start"
+                Style="{StaticResource BodyStyle}"
                 Text="{Binding Path=[Settings], Source={x:Static utils:LocalizationManager.Instance}}"
                 VerticalTextAlignment="Center" />
         </Grid>
@@ -105,19 +105,15 @@
     <Grid Padding="12,8,12,0">
         <ScrollView>
             <VerticalStackLayout Spacing="0">
-                
-                <!-- Notifications Section -->
-                <Label 
-                    Style="{StaticResource SettingsSectionHeaderStyle}"
-                    Text="{Binding Path=[Notifications], Source={x:Static utils:LocalizationManager.Instance}, FallbackValue='NOTIFICATIONS'}" />
-                
+
+                <!--  Notifications Section  -->
+                <Label Style="{StaticResource SettingsSectionHeaderStyle}" Text="{Binding Path=[Notifications], Source={x:Static utils:LocalizationManager.Instance}, FallbackValue='NOTIFICATIONS'}" />
+
                 <Border Style="{StaticResource SettingsCardStyle}">
                     <VerticalStackLayout Spacing="12">
                         <!--  IsWateringNotificationEnabled  -->
                         <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
-                            <Label
-                                Style="{StaticResource SettingsItemLabelStyle}"
-                                Text="{Binding Path=[WateringNotification], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[WateringNotification], Source={x:Static utils:LocalizationManager.Instance}}" />
                             <Switch
                                 x:Name="wateringSwitch"
                                 Grid.Column="1"
@@ -132,15 +128,13 @@
                                 </Switch.Behaviors>
                             </Switch>
                         </Grid>
-                        
-                        <!-- Divider -->
+
+                        <!--  Divider  -->
                         <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}" />
 
                         <!--  IsFertilizationNotificationEnabled  -->
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label
-                                Style="{StaticResource SettingsItemLabelStyle}"
-                                Text="{Binding Path=[FertilizationNotification], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[FertilizationNotification], Source={x:Static utils:LocalizationManager.Instance}}" />
                             <Switch
                                 x:Name="fertilizationSwitch"
                                 Grid.Column="1"
@@ -158,17 +152,13 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Appearance Section -->
-                <Label 
-                    Style="{StaticResource SettingsSectionHeaderStyle}"
-                    Text="{Binding Path=[Appearance], Source={x:Static utils:LocalizationManager.Instance}, FallbackValue='APPEARANCE'}" />
+                <!--  Appearance Section  -->
+                <Label Style="{StaticResource SettingsSectionHeaderStyle}" Text="{Binding Path=[Appearance], Source={x:Static utils:LocalizationManager.Instance}, FallbackValue='APPEARANCE'}" />
 
                 <!--  Language  -->
                 <Border Style="{StaticResource SettingsCardStyle}">
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto">
-                        <Label
-                            Style="{StaticResource SettingsItemLabelStyle}"
-                            Text="{Binding Path=[Language], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[Language], Source={x:Static utils:LocalizationManager.Instance}}" />
                         <Picker
                             x:Name="langPicker"
                             Grid.Column="1"
@@ -182,9 +172,7 @@
                 <!--  Theme  -->
                 <Border Style="{StaticResource SettingsCardStyle}">
                     <VerticalStackLayout Spacing="12">
-                        <Label
-                            Style="{StaticResource SettingsItemLabelStyle}"
-                            Text="{Binding Path=[Theme], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[Theme], Source={x:Static utils:LocalizationManager.Instance}}" />
 
                         <Grid
                             ColumnDefinitions="*,*,*"
@@ -269,63 +257,53 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Data Section -->
-                <Label 
-                    Style="{StaticResource SettingsSectionHeaderStyle}"
-                    Text="{Binding Path=[DataImportExport], Source={x:Static utils:LocalizationManager.Instance}}" />
+                <!--  Data Section  -->
+                <Label Style="{StaticResource SettingsSectionHeaderStyle}" Text="{Binding Path=[DataImportExport], Source={x:Static utils:LocalizationManager.Instance}}" />
 
                 <!--  Export and Import  -->
                 <Border Style="{StaticResource SettingsCardStyle}">
                     <VerticalStackLayout Spacing="12">
                         <Grid ColumnDefinitions="*,Auto">
                             <VerticalStackLayout VerticalOptions="Center">
-                                <Label
-                                    Style="{StaticResource SettingsItemLabelStyle}"
-                                    Text="{Binding Path=[Export], Source={x:Static utils:LocalizationManager.Instance}}" />
-                                <Label
-                                    Style="{StaticResource SettingsItemDescriptionStyle}"
-                                    Text="Export all plant data to a file" />
+                                <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[Export], Source={x:Static utils:LocalizationManager.Instance}}" />
+                                <Label Style="{StaticResource SettingsItemDescriptionStyle}" Text="Export all plant data to a file" />
                             </VerticalStackLayout>
                             <Button
                                 Grid.Column="1"
-                                Style="{StaticResource OutlineButtonStyle}"
                                 Padding="16,8"
                                 Command="{Binding ExportDataCommand}"
                                 FontSize="13"
                                 HorizontalOptions="End"
+                                Style="{StaticResource OutlineButtonStyle}"
                                 Text="{Binding Path=[Export], Source={x:Static utils:LocalizationManager.Instance}}"
                                 VerticalOptions="Center" />
                         </Grid>
 
-                        <!-- Divider -->
+                        <!--  Divider  -->
                         <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}" />
 
                         <Grid ColumnDefinitions="*,Auto">
                             <VerticalStackLayout VerticalOptions="Center">
-                                <Label
-                                    Style="{StaticResource SettingsItemLabelStyle}"
-                                    Text="{Binding Path=[Import], Source={x:Static utils:LocalizationManager.Instance}}" />
-                                <Label
-                                    Style="{StaticResource SettingsItemDescriptionStyle}"
-                                    Text="Import plant data from a file" />
+                                <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[Import], Source={x:Static utils:LocalizationManager.Instance}}" />
+                                <Label Style="{StaticResource SettingsItemDescriptionStyle}" Text="Import plant data from a file" />
                             </VerticalStackLayout>
                             <Button
                                 Grid.Column="1"
-                                Style="{StaticResource OutlineButtonStyle}"
                                 Padding="16,8"
                                 Command="{Binding ImportDataCommand}"
                                 FontSize="13"
                                 HorizontalOptions="End"
+                                Style="{StaticResource OutlineButtonStyle}"
                                 Text="{Binding Path=[Import], Source={x:Static utils:LocalizationManager.Instance}}"
                                 VerticalOptions="Center" />
                         </Grid>
 
-                        <Grid ColumnDefinitions="Auto,*" Margin="0,4,0,0">
-                            <CheckBox 
-                                HorizontalOptions="Start" 
+                        <Grid Margin="0,4,0,0" ColumnDefinitions="Auto,*">
+                            <CheckBox
+                                HorizontalOptions="Start"
                                 IsChecked="{Binding IsRemoveExistingData}"
                                 VerticalOptions="Center" />
-                            <Label 
+                            <Label
                                 Grid.Column="1"
                                 Style="{StaticResource SettingsItemDescriptionStyle}"
                                 Text="{Binding Path=[RemoveExistingData], Source={x:Static utils:LocalizationManager.Instance}}"
@@ -334,35 +312,29 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Advanced Section -->
-                <Label 
-                    Style="{StaticResource SettingsSectionHeaderStyle}"
-                    Text="{Binding Path=[AdvancedOptions], Source={x:Static utils:LocalizationManager.Instance}}" />
+                <!--  Advanced Section  -->
+                <Label Style="{StaticResource SettingsSectionHeaderStyle}" Text="{Binding Path=[AdvancedOptions], Source={x:Static utils:LocalizationManager.Instance}}" />
 
                 <!--  Log Viewer  -->
                 <Border Style="{StaticResource SettingsCardStyle}">
                     <Grid ColumnDefinitions="*,Auto">
                         <VerticalStackLayout VerticalOptions="Center">
-                            <Label
-                                Style="{StaticResource SettingsItemLabelStyle}"
-                                Text="{Binding Path=[ShowLogs], Source={x:Static utils:LocalizationManager.Instance}}" />
-                            <Label
-                                Style="{StaticResource SettingsItemDescriptionStyle}"
-                                Text="View application logs for troubleshooting" />
+                            <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[ShowLogs], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Label Style="{StaticResource SettingsItemDescriptionStyle}" Text="View application logs for troubleshooting" />
                         </VerticalStackLayout>
                         <Button
                             Grid.Column="1"
-                            Style="{StaticResource OutlineButtonStyle}"
                             Padding="16,8"
                             Command="{Binding CheckLogsCommand}"
                             FontSize="13"
                             HorizontalOptions="End"
+                            Style="{StaticResource OutlineButtonStyle}"
                             Text="{Binding Path=[ShowLogs], Source={x:Static utils:LocalizationManager.Instance}, FallbackValue='View'}"
                             VerticalOptions="Center" />
                     </Grid>
                 </Border>
-                
-                <!-- Bottom spacing -->
+
+                <!--  Bottom spacing  -->
                 <BoxView HeightRequest="20" Color="Transparent" />
             </VerticalStackLayout>
         </ScrollView>

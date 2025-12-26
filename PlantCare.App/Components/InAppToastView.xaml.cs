@@ -44,7 +44,7 @@ public partial class InAppToastView : ContentView
 
             // Animate in
             await Task.WhenAll(
-                ToastContainer.FadeTo(1, 250, Easing.CubicOut),
+                ToastContainer.FadeToAsync(1, 250, Easing.CubicOut),
                 ToastContainer.TranslateTo(0, 0, 250, Easing.CubicOut)
             );
 
@@ -112,8 +112,8 @@ public partial class InAppToastView : ContentView
 
             // Animate out
             await Task.WhenAll(
-                ToastContainer.FadeTo(0, 200, Easing.CubicIn),
-                ToastContainer.TranslateTo(0, 50, 200, Easing.CubicIn)
+                ToastContainer.FadeToAsync(0, 200, Easing.CubicIn),
+                ToastContainer.TranslateToAsync(0, 50, 200, Easing.CubicIn)
             );
 
             IsVisible = false;

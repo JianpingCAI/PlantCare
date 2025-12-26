@@ -3,13 +3,13 @@
     x:Class="PlantCare.App.Views.PlantCalendarView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:System="clr-namespace:System;assembly=netstandard"
     xmlns:components="clr-namespace:PlantCare.App.Components"
     xmlns:plugin="clr-namespace:Plugin.Maui.Calendar.Controls;assembly=Plugin.Maui.Calendar"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    xmlns:System="clr-namespace:System;assembly=netstandard"
     x:Name="thisPage"
     Title="{Binding Path=[CareCalendar], Source={x:Static utils:LocalizationManager.Instance}}"
     x:DataType="vm:PlantCalendarViewModel">
@@ -57,22 +57,20 @@
                 <!--  Show Unattended  -->
                 <HorizontalStackLayout HorizontalOptions="Start">
                     <CheckBox IsChecked="{Binding IsShowUnattendedOnly, Mode=TwoWay}" />
-                    <Label 
-                        Style="{StaticResource BodyStyle}"
-                        Text="{Binding Path=[UnattendedOnly], Source={x:Static utils:LocalizationManager.Instance}}" />
+                    <Label Style="{StaticResource BodyStyle}" Text="{Binding Path=[UnattendedOnly], Source={x:Static utils:LocalizationManager.Instance}}" />
                 </HorizontalStackLayout>
 
                 <!--  Show Calendar  -->
                 <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
                     <CheckBox IsChecked="{Binding IsShowCalendar, Mode=TwoWay}" />
-                    <Label 
+                    <Label
+                        Margin="0,0,5,0"
                         Style="{StaticResource BodyStyle}"
-                        Margin="0,0,5,0" 
                         Text="{Binding Path=[Show], Source={x:Static utils:LocalizationManager.Instance}}" />
                     <Label
-                        Style="{StaticResource HeadlineSmallStyle}"
                         Margin="0,0,15,0"
                         FontFamily="MaterialIconsRegular"
+                        Style="{StaticResource HeadlineSmallStyle}"
                         Text="&#xebcc;" />
                 </HorizontalStackLayout>
             </Grid>
@@ -82,24 +80,28 @@
                 x:Name="selectedDateLabel"
                 Grid.Row="1"
                 Grid.ColumnSpan="2"
-                Style="{StaticResource BodyStyle}"
                 Margin="5,0,0,5"
                 FontAttributes="Bold"
-                Text="{Binding SelectedDate, StringFormat='{0:MM/dd}'}"
-                TextColor="DeepSkyBlue"
                 HorizontalOptions="CenterAndExpand"
-                IsVisible="{Binding SelectedDate, Converter={toolkit:IsNotNullConverter}}" />
+                IsVisible="{Binding SelectedDate, Converter={toolkit:IsNotNullConverter}}"
+                Style="{StaticResource BodyStyle}"
+                Text="{Binding SelectedDate, StringFormat='{0:MM/dd}'}"
+                TextColor="DeepSkyBlue" />
 
             <!--  Plant Events  -->
-            <Grid x:Name="plantsGrid" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1">
+            <Grid
+                x:Name="plantsGrid"
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="1">
                 <RefreshView Command="{Binding RefreshPlantEventsCommand}" IsRefreshing="{Binding IsPlantEventRefreshing}">
                     <CollectionView
                         ItemsSource="{Binding PlantEvents}"
+                        ItemsUpdatingScrollMode="KeepItemsInView"
+                        RemainingItemsThreshold="10"
                         SelectedItems="{Binding TickedPlantEvents}"
                         SelectionChangedCommand="{Binding TickedPlantEventsChangedCommand}"
-                        SelectionMode="Multiple"
-                        RemainingItemsThreshold="10"
-                        ItemsUpdatingScrollMode="KeepItemsInView">
+                        SelectionMode="Multiple">
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout
                                 Orientation="Vertical"
@@ -126,33 +128,33 @@
                                                         Source="{Binding PhotoPath}"
                                                         WidthRequest="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoWidth}" />
                                                     <Label
-                                                        Style="{StaticResource BodyStyle}"
                                                         Background="DarkSeaGreen"
                                                         HorizontalOptions="Fill"
                                                         HorizontalTextAlignment="Center"
                                                         Opacity="0.75"
+                                                        Style="{StaticResource BodyStyle}"
                                                         Text="{Binding Name}"
                                                         VerticalOptions="End" />
                                                 </Grid>
                                             </Border>
                                             <Label
-                                                Style="{StaticResource HeadlineSmallStyle}"
                                                 FontFamily="MaterialIconsRegular"
                                                 HorizontalOptions="End"
                                                 IsVisible="{Binding IsSelected}"
+                                                Style="{StaticResource HeadlineSmallStyle}"
                                                 Text="&#xe86c;"
                                                 TextColor="Green"
                                                 VerticalOptions="Start" />
                                             <HorizontalStackLayout Grid.Row="1">
                                                 <Label
-                                                    Style="{StaticResource DisplaySmallStyle}"
                                                     Margin="0,5,0,0"
                                                     FontFamily="MaterialIconsRegular"
+                                                    Style="{StaticResource DisplaySmallStyle}"
                                                     Text="{Binding ReminderType, Converter={StaticResource ReminderTypeIconConverter}}"
                                                     TextColor="{Binding Color}" />
                                                 <Label
-                                                    Style="{StaticResource BodyStyle}"
                                                     FontAttributes="Bold"
+                                                    Style="{StaticResource BodyStyle}"
                                                     Text="{Binding ScheduledTime, StringFormat='{0:MM/dd HH:mm}'}" />
                                             </HorizontalStackLayout>
                                         </Grid>
@@ -165,18 +167,21 @@
 
                 <!--  Floating 'Done' button  -->
                 <Button
-                    Style="{StaticResource DisplayStyle}"
                     Margin="0,0,20,20"
                     Command="{Binding SetSelectedRemindersDoneCommand}"
                     CornerRadius="50"
                     FontFamily="MaterialIconsRegular"
                     HorizontalOptions="End"
                     IsEnabled="{Binding IsSetRemindersDoneEnabled}"
-                    Opacity="0.9"
+                    Style="{StaticResource FabButtonStyle}"
                     Text="&#xe877;"
                     VerticalOptions="End">
                     <Button.Shadow>
-                        <Shadow Brush="DeepSkyBlue" Opacity="0.8" Radius="15" Offset="5,5" />
+                        <Shadow
+                            Brush="{StaticResource Primary}"
+                            Opacity="0.3"
+                            Radius="8"
+                            Offset="0,4" />
                     </Button.Shadow>
                 </Button>
             </Grid>
@@ -192,35 +197,39 @@
                     <RoundRectangle CornerRadius="15" />
                 </Border.StrokeShape>
                 <Border.Triggers>
-                    <DataTrigger TargetType="Border" Binding="{Binding IsShowCalendar}" Value="False">
+                    <DataTrigger
+                        Binding="{Binding IsShowCalendar}"
+                        TargetType="Border"
+                        Value="False">
                         <Setter Property="IsVisible" Value="False" />
                     </DataTrigger>
                 </Border.Triggers>
 
                 <Grid RowDefinitions="Auto,*">
                     <Button
-                        Style="{StaticResource HeadlineSmallStyle}"
                         Command="{Binding HideCalendarCommand}"
                         CornerRadius="15"
                         FontFamily="MaterialIconsRegular"
                         HeightRequest="40"
                         HorizontalOptions="End"
+                        Style="{StaticResource HeadlineSmallStyle}"
                         Text="&#xead0;"
                         WidthRequest="60" />
 
                     <plugin:Calendar
                         x:Name="PluginCalendar"
                         Grid.Row="1"
-                        Events="{Binding EventsInCalendar}"
-                        ShownDate="{Binding DisplayedMonth}"
-                        SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource CalendarBackgroundColor},
+                                                          Dark={StaticResource Gray900}}"
                         Culture="{Binding Culture}"
-                        HeightRequest="380"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource CalendarBackgroundColor}, Dark={StaticResource Gray900}}"
-                        TodayOutlineColor="{StaticResource CalendarPrimaryColor}"
-                        TodayFillColor="Transparent"
                         EventIndicatorColor="{StaticResource CalendarPrimaryColor}"
-                        EventIndicatorType="BottomDot" />
+                        EventIndicatorType="BottomDot"
+                        Events="{Binding EventsInCalendar}"
+                        HeightRequest="380"
+                        SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
+                        ShownDate="{Binding DisplayedMonth}"
+                        TodayFillColor="Transparent"
+                        TodayOutlineColor="{StaticResource CalendarPrimaryColor}" />
                 </Grid>
             </Border>
 
