@@ -82,13 +82,84 @@
                     
                     <!--  Empty State View  -->
                     <CollectionView.EmptyView>
-                        <components:EmptyStateView 
-                            IconSource="default_plant.png"
-                            Title="{Binding Path=[NoPlants], Source={x:Static utils:LocalizationManager.Instance}}"
-                            Message="{Binding Path=[AddMyPlants], Source={x:Static utils:LocalizationManager.Instance}}"
-                            ActionText="{Binding Path=[AddPlant], Source={x:Static utils:LocalizationManager.Instance}}"
-                            ActionCommand="{Binding AddPlantCommand}"
-                            HasAction="True" />
+                        <Grid>
+                            <!-- Show skeleton cards while loading -->
+                            <ScrollView IsVisible="{Binding IsLoading}">
+                                <Grid Padding="4">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Row 1 -->
+                                    <components:SkeletonCardView 
+                                        Grid.Row="0" Grid.Column="0"
+                                        Margin="4"
+                                        ImageHeight="{Binding PhotoHeight}"
+                                        ImageWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonCardView 
+                                        Grid.Row="0" Grid.Column="1"
+                                        Margin="4"
+                                        ImageHeight="{Binding PhotoHeight}"
+                                        ImageWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonCardView 
+                                        Grid.Row="0" Grid.Column="2"
+                                        Margin="4"
+                                        ImageHeight="{Binding PhotoHeight}"
+                                        ImageWidth="{Binding PhotoWidth}" />
+
+                                    <!-- Row 2 -->
+                                    <components:SkeletonCardView 
+                                        Grid.Row="1" Grid.Column="0"
+                                        Margin="4"
+                                        ImageHeight="{Binding PhotoHeight}"
+                                        ImageWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonCardView 
+                                        Grid.Row="1" Grid.Column="1"
+                                        Margin="4"
+                                        ImageHeight="{Binding PhotoHeight}"
+                                        ImageWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonCardView 
+                                        Grid.Row="1" Grid.Column="2"
+                                        Margin="4"
+                                        ImageHeight="{Binding PhotoHeight}"
+                                        ImageWidth="{Binding PhotoWidth}" />
+
+                                    <!-- Row 3 -->
+                                    <components:SkeletonCardView 
+                                        Grid.Row="2" Grid.Column="0"
+                                        Margin="4"
+                                        ImageHeight="{Binding PhotoHeight}"
+                                        ImageWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonCardView 
+                                        Grid.Row="2" Grid.Column="1"
+                                        Margin="4"
+                                        ImageHeight="{Binding PhotoHeight}"
+                                        ImageWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonCardView 
+                                        Grid.Row="2" Grid.Column="2"
+                                        Margin="4"
+                                        ImageHeight="{Binding PhotoHeight}"
+                                        ImageWidth="{Binding PhotoWidth}" />
+                                </Grid>
+                            </ScrollView>
+
+                            <!-- Show empty state when not loading and no plants -->
+                            <components:EmptyStateView 
+                                IsVisible="{Binding IsLoading, Converter={toolkit:InvertedBoolConverter}}"
+                                IconSource="default_plant.png"
+                                Title="{Binding Path=[NoPlants], Source={x:Static utils:LocalizationManager.Instance}}"
+                                Message="{Binding Path=[AddMyPlants], Source={x:Static utils:LocalizationManager.Instance}}"
+                                ActionText="{Binding Path=[AddPlant], Source={x:Static utils:LocalizationManager.Instance}}"
+                                ActionCommand="{Binding AddPlantCommand}"
+                                HasAction="True" />
+                        </Grid>
                     </CollectionView.EmptyView>
                     
                     <CollectionView.ItemsLayout>
@@ -199,6 +270,7 @@
             HorizontalOptions="End"
             VerticalOptions="End" />
 
+        <!-- Loading overlay for non-initial operations -->
         <components:LoadingOverlayView IsVisible="{Binding IsLoading}" />
     </Grid>
 </views:ContentPageBase>

@@ -22,7 +22,8 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IDataExportService _dataExportService;
     private readonly IDataImportService _dataImportService;
     private readonly INavigationService _navigationService;
-    private readonly PlantCare.App.Services.IToastService _toastService;
+    private readonly IToastService _toastService;
+    private readonly IInAppToastService _inAppToastService;
 
     public SettingsViewModel(
         IAppSettingsService settingsService,
@@ -31,7 +32,8 @@ public partial class SettingsViewModel : ViewModelBase
         IDataExportService dataExportService,
         IDataImportService dataImportService,
         INavigationService navigationService,
-        PlantCare.App.Services.IToastService toastService)
+        IToastService toastService,
+        IInAppToastService inAppToastService)
     {
         _settingsService = settingsService;
         _dialogService = dialogService;
@@ -40,6 +42,7 @@ public partial class SettingsViewModel : ViewModelBase
         _dataImportService = dataImportService;
         _navigationService = navigationService;
         _toastService = toastService;
+        _inAppToastService = inAppToastService;
     }
 
     [ObservableProperty]
@@ -357,13 +360,14 @@ public partial class SettingsViewModel : ViewModelBase
                     WeakReferenceMessenger.Default.Send<DataImportMessage>(new DataImportMessage { PlantsCount = importedData.Plants.Count });
                 });
 
-                await _toastService.ShowAsync($"{importedData.Plants.Count} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}", ToastType.Success, 2000);
+                // Use the new in-app toast for success message
+                await _inAppToastService.ShowSuccessAsync($"{importedData.Plants.Count} {LocalizationManager.Instance[ConstStrings.Added] ?? ConstStrings.Added}");
             }
         }
         catch (Exception ex)
         {
-            await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
-            //await DisplayAlert("Import Failed", ex.Message, "OK");
+            // Use in-app toast for errors too
+            await _inAppToastService.ShowErrorAsync(ex.Message);
         }
         finally
         {

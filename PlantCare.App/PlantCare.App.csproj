@@ -200,6 +200,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Update="Components\LoadingOverlayView.xaml.cs">
+		  <DependentUpon>LoadingOverlayView.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Resources\LocalizationResources.Designer.cs">
 			<DependentUpon>LocalizationResources.resx</DependentUpon>
 			<DesignTime>True</DesignTime>
@@ -230,10 +233,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Components\BottomSheetView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Components\EmptyStateView.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Components\InAppToastView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Components\LoadingOverlayView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\ShimmerView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\SkeletonCardView.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\Styles\Typography.xaml">

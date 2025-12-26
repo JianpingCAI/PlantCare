@@ -34,6 +34,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     private readonly IDialogService _dialogService;
     private readonly IAppSettingsService _settingsService;
     private readonly IAppLogger<PlantListOverviewViewModel> _logger;
+    private readonly IInAppToastService _inAppToastService;
 
     public PlantListOverviewViewModel(
         IPlantService plantService,
@@ -41,7 +42,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         INotificationService notificationService,
         IDialogService dialogService,
         IAppSettingsService settingsService,
-        IAppLogger<PlantListOverviewViewModel> logger)
+        IAppLogger<PlantListOverviewViewModel> logger,
+        IInAppToastService inAppToastService)
     {
         _plantService = plantService;
         _navigationService = navigationService;
@@ -49,6 +51,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         _dialogService = dialogService;
         _settingsService = settingsService;
         _logger = logger;
+        _inAppToastService = inAppToastService;
 
         WeakReferenceMessenger.Default.Register<PlantAddedMessage>(this);
         WeakReferenceMessenger.Default.Register<PlantModifiedMessage>(this);
@@ -435,10 +438,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     /// <param name="message"></param>
     async void IRecipient<PlantDeletedMessage>.Receive(PlantDeletedMessage message)
     {
+        string? deletedName = null;
+        
         try
         {
-            string? deletedName = null;
-
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 IsLoading = true;
@@ -454,11 +457,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 _allPlantViewModelsCache.Remove(deletedPlant);
             });
 
-            if (!string.IsNullOrWhiteSpace(deletedName))
-            {
-                await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Deleted] ?? ConstStrings.Deleted, deletedName);
-            }
-
             _logger.LogInformation($"Plant {message.Name} is deleted");
             await CancelPendingNotificationAsync(message.PlantId, message.Name);
         }
@@ -472,6 +470,16 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 IsLoading = false;
             });
+            
+            // Show toast after loading is complete
+            if (!string.IsNullOrWhiteSpace(deletedName))
+            {
+                // Small delay to ensure loading overlay is fully hidden
+                await Task.Delay(100);
+                
+                string deleteMessage = $"{deletedName} {LocalizationManager.Instance[ConstStrings.Deleted] ?? ConstStrings.Deleted}";
+                await _inAppToastService.ShowSuccessAsync(deleteMessage);
+            }
         }
     }
 

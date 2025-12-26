@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="PlantCare.App.Components.SkeletonCardView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:components="clr-namespace:PlantCare.App.Components"
+    x:Name="Root">
+
+    <Border 
+        Style="{StaticResource ModernCardStyle}" 
+        Padding="12">
+        <VerticalStackLayout Spacing="8">
+            
+            <!-- Image Placeholder -->
+            <components:ShimmerView 
+                ShimmerHeight="{Binding ImageHeight, Source={x:Reference Root}}"
+                ShimmerWidth="{Binding ImageWidth, Source={x:Reference Root}}"
+                CornerRadius="12"
+                HorizontalOptions="Center"
+                ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+
+            <!-- Title Placeholder -->
+            <components:ShimmerView 
+                ShimmerHeight="18"
+                CornerRadius="4"
+                HorizontalOptions="Center"
+                ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+
+            <!-- Subtitle Placeholder -->
+            <components:ShimmerView 
+                ShimmerHeight="14"
+                CornerRadius="4"
+                HorizontalOptions="Center"
+                ShimmerColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}" />
+
+            <!-- Progress Bar 1 Placeholder -->
+            <Grid ColumnDefinitions="24,*" ColumnSpacing="8" Margin="0,4,0,0">
+                <components:ShimmerView 
+                    ShimmerHeight="20"
+                    ShimmerWidth="20"
+                    CornerRadius="10"
+                    ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                <components:ShimmerView 
+                    Grid.Column="1"
+                    ShimmerHeight="8"
+                    CornerRadius="4"
+                    VerticalOptions="Center"
+                    ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+            </Grid>
+
+            <!-- Progress Bar 2 Placeholder -->
+            <Grid ColumnDefinitions="24,*" ColumnSpacing="8">
+                <components:ShimmerView 
+                    ShimmerHeight="20"
+                    ShimmerWidth="20"
+                    CornerRadius="10"
+                    ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                <components:ShimmerView 
+                    Grid.Column="1"
+                    ShimmerHeight="8"
+                    CornerRadius="4"
+                    VerticalOptions="Center"
+                    ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+            </Grid>
+        </VerticalStackLayout>
+    </Border>
+</ContentView>
