@@ -50,28 +50,28 @@
                 <!--  Edit Button  -->
                 <Button
                     Margin="0,0,10,0"
-                    Padding="16,0"
                     Command="{Binding NavigateToEditPlantCommand}"
                     ContentLayout="Left,8"
                     CornerRadius="12"
                     HeightRequest="48"
                     HorizontalOptions="End"
+                    Style="{StaticResource OutlineButtonStyle}"
                     Text="{Binding Path=[Edit], Source={x:Static utils:LocalizationManager.Instance}}"
-                    ToolTipProperties.Text="{Binding Path=[Edit], Source={x:Static utils:LocalizationManager.Instance}}"
                     VerticalOptions="Start">
                     <Button.ImageSource>
                         <FontImageSource
                             FontFamily="MaterialIconsRegular"
                             Glyph="&#xe3c9;"
-                            Size="24" />
+                            Size="24" Color="{AppThemeBinding Light={StaticResource Gray900},
+                        Dark={StaticResource Gray200}}"/>
                     </Button.ImageSource>
-                    <Button.Shadow>
+                    <!--<Button.Shadow>
                         <Shadow
                             Brush="{StaticResource Primary}"
                             Opacity="0.3"
                             Radius="8"
                             Offset="0,4" />
-                    </Button.Shadow>
+                    </Button.Shadow>-->
                 </Button>
 
                 <!--  Basic Information Card  -->

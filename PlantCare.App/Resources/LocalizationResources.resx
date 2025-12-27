@@ -300,4 +300,10 @@
   <data name="NotificationSettings" xml:space="preserve">
     <value>Notification Settings</value>
   </data>
+  <data name="LogsSetting" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

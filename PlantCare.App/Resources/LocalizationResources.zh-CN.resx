@@ -300,4 +300,10 @@
   <data name="NotificationSettings" xml:space="preserve">
     <value>通知设置</value>
   </data>
+  <data name="LogsSetting" xml:space="preserve">
+    <value>运行日志</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
 </root>

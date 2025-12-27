@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlantCare.Data", "PlantCare
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documents", "documents", "{5D69017E-E8FD-4F57-9B81-A8CB3F071C47}"
 	ProjectSection(SolutionItems) = preProject
+		docs\ARCHITECTURE.md = docs\ARCHITECTURE.md
 		documents\notes.md = documents\notes.md
 		documents\notes_debounce.md = documents\notes_debounce.md
 	EndProjectSection

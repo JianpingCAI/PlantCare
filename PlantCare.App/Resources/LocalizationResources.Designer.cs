@@ -124,6 +124,15 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Care Calendar.
         /// </summary>
         internal static string CareCalendar {
@@ -327,6 +336,15 @@ namespace PlantCare.App.Resources {
         internal static string Light {
             get {
                 return ResourceManager.GetString("Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logs.
+        /// </summary>
+        internal static string LogsSetting {
+            get {
+                return ResourceManager.GetString("LogsSetting", resourceCulture);
             }
         }
         

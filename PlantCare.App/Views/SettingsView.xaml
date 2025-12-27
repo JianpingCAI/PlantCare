@@ -14,8 +14,10 @@
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     x:DataType="vm:SettingsViewModel">
 
+    <!--  Title area: shows page icon and localized title text bound via LocalizationManager  -->
     <Shell.TitleView>
         <Grid ColumnDefinitions="auto,*">
+            <!--  Circular image container for page icon  -->
             <Border
                 Margin="5,0,0,0"
                 HorizontalOptions="Start"
@@ -28,6 +30,7 @@
                 <Image HeightRequest="40" Source="default_plant.png" />
             </Border>
 
+            <!--  Localized page title label  -->
             <Label
                 Grid.Column="1"
                 Margin="15,0,0,0"
@@ -37,7 +40,13 @@
                 VerticalTextAlignment="Center" />
         </Grid>
     </Shell.TitleView>
+
+    <!--  Resources: control template for theme radio buttons and converters  -->
     <ContentPage.Resources>
+        <!--
+            Template used by RadioButton theme selectors.
+            Visual states control the checked/unchecked appearance (stroke + inner ellipse opacity).
+        -->
         <ControlTemplate x:Key="ThemeRadioTemplate">
             <Border
                 Padding="2"
@@ -52,6 +61,7 @@
                     <RoundRectangle CornerRadius="10" />
                 </Border.StrokeShape>
                 <Grid Margin="8">
+                    <!--  Check indicator: outer and inner ellipse  -->
                     <Grid
                         HeightRequest="18"
                         HorizontalOptions="End"
@@ -74,9 +84,11 @@
                             VerticalOptions="Center"
                             WidthRequest="8" />
                     </Grid>
+                    <!--  ContentPresenter hosts the RadioButton content (icon + label)  -->
                     <ContentPresenter />
                 </Grid>
 
+                <!--  Visual states to toggle stroke color and inner ellipse visibility  -->
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CheckedStates">
@@ -98,20 +110,31 @@
                 </VisualStateManager.VisualStateGroups>
             </Border>
         </ControlTemplate>
+
+        <!--  Converters and other shared resources  -->
         <ResourceDictionary>
             <utils:EnumDescriptionConverter x:Key="EnumDescConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
+
+    <!--  Main content grid with padding; includes a ScrollView for all settings sections  -->
     <Grid Padding="12,8,12,0">
         <ScrollView>
             <VerticalStackLayout Spacing="0">
 
-                <!--  Notifications Section  -->
-                <Label Style="{StaticResource SettingsSectionHeaderStyle}" Text="{Binding Path=[Notifications], Source={x:Static utils:LocalizationManager.Instance}, FallbackValue='NOTIFICATIONS'}" />
+                <!--  Notifications Section header  -->
+                <!--
+                <Label Style="{StaticResource SettingsSectionHeaderStyle}" Text="{Binding Path=[NotificationSettings], Source={x:Static utils:LocalizationManager.Instance}, FallbackValue='NOTIFICATIONS'}" />-->
 
+                <!--  Notifications card: contains toggles for watering and fertilization notifications  -->
                 <Border Style="{StaticResource SettingsCardStyle}">
                     <VerticalStackLayout Spacing="12">
-                        <!--  IsWateringNotificationEnabled  -->
+                        <!--
+                            IsWateringNotificationEnabled row:
+                            - Label for the setting name (localized)
+                            - Switch bound to IsWateringNotificationEnabled
+                            - EventToCommandBehavior triggers ToggleWateringNotificationCommand with the switch state
+                        -->
                         <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
                             <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[WateringNotification], Source={x:Static utils:LocalizationManager.Instance}}" />
                             <Switch
@@ -129,10 +152,13 @@
                             </Switch>
                         </Grid>
 
-                        <!--  Divider  -->
+                        <!--  Divider between notification items  -->
                         <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}" />
 
-                        <!--  IsFertilizationNotificationEnabled  -->
+                        <!--
+                            IsFertilizationNotificationEnabled row:
+                            - Label and Switch with behavior similar to wateringSwitch
+                        -->
                         <Grid ColumnDefinitions="*,Auto">
                             <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[FertilizationNotification], Source={x:Static utils:LocalizationManager.Instance}}" />
                             <Switch
@@ -152,10 +178,14 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <!--  Appearance Section  -->
-                <Label Style="{StaticResource SettingsSectionHeaderStyle}" Text="{Binding Path=[Appearance], Source={x:Static utils:LocalizationManager.Instance}, FallbackValue='APPEARANCE'}" />
+                <!--  Appearance Section header  -->
 
-                <!--  Language  -->
+                <!--
+                    Language selection card:
+                    - Picker bound to LanguageProvider.All as ItemsSource
+                    - SelectedLanguage bound to view model
+                    - Uses EnumDescriptionConverter to show friendly names
+                -->
                 <Border Style="{StaticResource SettingsCardStyle}">
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto">
                         <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[Language], Source={x:Static utils:LocalizationManager.Instance}}" />
@@ -169,7 +199,12 @@
                     </Grid>
                 </Border>
 
-                <!--  Theme  -->
+                <!--
+                    Theme selection card:
+                    - RadioButton group to choose AppTheme (Unspecified, Dark, Light)
+                    - Uses ThemeRadioTemplate for consistent tile UI
+                    - RadioButton.CheckedChanged handled in code-behind via RadioButton_CheckedChanged
+                -->
                 <Border Style="{StaticResource SettingsCardStyle}">
                     <VerticalStackLayout Spacing="12">
                         <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[Theme], Source={x:Static utils:LocalizationManager.Instance}}" />
@@ -185,6 +220,8 @@
                                     <Setter Property="ControlTemplate" Value="{StaticResource ThemeRadioTemplate}" />
                                 </Style>
                             </Grid.Resources>
+
+                            <!--  Default / Unspecified theme option  -->
                             <RadioButton
                                 CheckedChanged="RadioButton_CheckedChanged"
                                 HorizontalOptions="Center"
@@ -192,12 +229,14 @@
                                 Value="{x:Static am:AppTheme.Unspecified}">
                                 <RadioButton.Content>
                                     <Grid RowDefinitions="4*,1*">
-                                        <Image
-                                            HorizontalOptions="Center"
-                                            Source="{FontImage FontFamily=FontAwesome,
-                                                               Glyph={x:Static local:IconFont.Mobile},
-                                                               Size=32}"
-                                            VerticalOptions="Center" />
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="FontAwesome"
+                                                    Glyph="{x:Static local:IconFont.Mobile}"
+                                                    Size="32" />
+                                            </Image.Source>
+                                        </Image>
                                         <Label
                                             Grid.Row="1"
                                             FontSize="12"
@@ -207,6 +246,8 @@
                                     </Grid>
                                 </RadioButton.Content>
                             </RadioButton>
+
+                            <!--  Dark theme option  -->
                             <RadioButton
                                 Grid.Column="1"
                                 CheckedChanged="RadioButton_CheckedChanged"
@@ -214,13 +255,15 @@
                                 Value="{x:Static am:AppTheme.Dark}">
                                 <RadioButton.Content>
                                     <Grid RowDefinitions="4*,1*">
-                                        <Image
-                                            HorizontalOptions="Center"
-                                            Source="{FontImage FontFamily=FontAwesome,
-                                                               Glyph={x:Static local:IconFont.Lightbulb},
-                                                               Color=Black,
-                                                               Size=32}"
-                                            VerticalOptions="Center" />
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="FontAwesome"
+                                                    Glyph="{x:Static local:IconFont.Lightbulb}"
+                                                    Size="32"
+                                                    Color="Black" />
+                                            </Image.Source>
+                                        </Image>
                                         <Label
                                             Grid.Row="1"
                                             FontSize="12"
@@ -230,6 +273,8 @@
                                     </Grid>
                                 </RadioButton.Content>
                             </RadioButton>
+
+                            <!--  Light theme option  -->
                             <RadioButton
                                 Grid.Column="2"
                                 CheckedChanged="RadioButton_CheckedChanged"
@@ -237,13 +282,16 @@
                                 Value="{x:Static am:AppTheme.Light}">
                                 <RadioButton.Content>
                                     <Grid RowDefinitions="4*,1*">
-                                        <Image
-                                            HorizontalOptions="Center"
-                                            Source="{FontImage FontFamily=FontAwesome,
-                                                               Glyph={x:Static local:IconFont.Lightbulb},
-                                                               Color=White,
-                                                               Size=32}"
-                                            VerticalOptions="Center" />
+                                        <!--  Replaced obsolete FontImage extension with FontImageSource  -->
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="FontAwesome"
+                                                    Glyph="{x:Static local:IconFont.Lightbulb}"
+                                                    Size="32"
+                                                    Color="White" />
+                                            </Image.Source>
+                                        </Image>
                                         <Label
                                             Grid.Row="1"
                                             FontSize="12"
@@ -257,16 +305,19 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <!--  Data Section  -->
-                <Label Style="{StaticResource SettingsSectionHeaderStyle}" Text="{Binding Path=[DataImportExport], Source={x:Static utils:LocalizationManager.Instance}}" />
-
-                <!--  Export and Import  -->
+                <!--
+                    Export and Import card:
+                    - Export button triggers ExportDataCommand
+                    - Import button triggers ImportDataCommand
+                    - Checkbox toggles IsRemoveExistingData which influences import behavior
+                -->
                 <Border Style="{StaticResource SettingsCardStyle}">
                     <VerticalStackLayout Spacing="12">
+                        <!--  Export row: description and action button  -->
                         <Grid ColumnDefinitions="*,Auto">
                             <VerticalStackLayout VerticalOptions="Center">
                                 <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[Export], Source={x:Static utils:LocalizationManager.Instance}}" />
-                                <Label Style="{StaticResource SettingsItemDescriptionStyle}" Text="Export all plant data to a file" />
+                                <!--<Label Style="{StaticResource SettingsItemDescriptionStyle}" Text="Export all plant data to a file" />-->
                             </VerticalStackLayout>
                             <Button
                                 Grid.Column="1"
@@ -279,13 +330,14 @@
                                 VerticalOptions="Center" />
                         </Grid>
 
-                        <!--  Divider  -->
+                        <!--  Divider between export and import  -->
                         <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}" />
 
+                        <!--  Import row: description and action button  -->
                         <Grid ColumnDefinitions="*,Auto">
                             <VerticalStackLayout VerticalOptions="Center">
                                 <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[Import], Source={x:Static utils:LocalizationManager.Instance}}" />
-                                <Label Style="{StaticResource SettingsItemDescriptionStyle}" Text="Import plant data from a file" />
+                                <!--<Label Style="{StaticResource SettingsItemDescriptionStyle}" Text="Import plant data from a file" />-->
                             </VerticalStackLayout>
                             <Button
                                 Grid.Column="1"
@@ -298,7 +350,8 @@
                                 VerticalOptions="Center" />
                         </Grid>
 
-                        <Grid Margin="0,4,0,0" ColumnDefinitions="Auto,*">
+                        <!--  Option to remove existing data when importing  -->
+                        <Grid ColumnDefinitions="Auto,*">
                             <CheckBox
                                 HorizontalOptions="Start"
                                 IsChecked="{Binding IsRemoveExistingData}"
@@ -312,15 +365,14 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <!--  Advanced Section  -->
-                <Label Style="{StaticResource SettingsSectionHeaderStyle}" Text="{Binding Path=[AdvancedOptions], Source={x:Static utils:LocalizationManager.Instance}}" />
-
-                <!--  Log Viewer  -->
+                <!--
+                    Log viewer card:
+                    - Button triggers CheckLogsCommand to show application logs for troubleshooting
+                -->
                 <Border Style="{StaticResource SettingsCardStyle}">
                     <Grid ColumnDefinitions="*,Auto">
                         <VerticalStackLayout VerticalOptions="Center">
-                            <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[ShowLogs], Source={x:Static utils:LocalizationManager.Instance}}" />
-                            <Label Style="{StaticResource SettingsItemDescriptionStyle}" Text="View application logs for troubleshooting" />
+                            <Label Style="{StaticResource SettingsItemLabelStyle}" Text="{Binding Path=[LogsSetting], Source={x:Static utils:LocalizationManager.Instance}}" />
                         </VerticalStackLayout>
                         <Button
                             Grid.Column="1"
@@ -334,11 +386,12 @@
                     </Grid>
                 </Border>
 
-                <!--  Bottom spacing  -->
+                <!--  Bottom spacing to give room below last card  -->
                 <BoxView HeightRequest="20" Color="Transparent" />
             </VerticalStackLayout>
         </ScrollView>
 
+        <!--  Loading overlay component shown when IsLoading is true in the view model  -->
         <components:LoadingOverlayView IsVisible="{Binding IsLoading}" />
     </Grid>
 </views:ContentPageBase>
