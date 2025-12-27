@@ -2,7 +2,7 @@
 
 ## Overview
 
-PlantCare is a .NET MAUI mobile application built with a clean architecture approach, following the MVVM (Model-View-ViewModel) pattern. The application is designed to run on Android, iOS, and Windows platforms, with primary testing on Android devices.
+PlantCare is a .NET MAUI mobile application built with a clean architecture approach, following the MVVM (Model-View-ViewModel) pattern. The application targets .NET 10 and is designed to run on Android, iOS, Windows (and optionally MacCatalyst). Primary manual testing is performed on Android devices.
 
 ## Project Structure
 
@@ -17,93 +17,87 @@ PlantCare/
 
 ### PlantCare.App
 
-The main application project containing UI, ViewModels, Services, and platform-specific code.
+The main application project contains UI, ViewModels, Services, and platform-specific code.
 
-#### Key Directories:
+#### Key Directories
 
-- **Views/** - XAML UI pages
+- `Views/` - XAML UI pages
   - `PlantOverviewView.xaml` - Main plant list view
   - `PlantDetailView.xaml` - Individual plant details
   - `PlantAddEditView.xaml` - Add/Edit plant form
   - `PlantCalendarView.xaml` - Calendar view for care schedules
   - `CareHistoryView.xaml` - Plant care history
   - `SettingsView.xaml` - Application settings
+  - `AboutPage.xaml` - About page
+  - `LogViewerPage.xaml` - Application log viewer
+  - `SingePlantCareHistoryView.xaml` - Single-plant history view
 
-- **ViewModels/** - ViewModels implementing MVVM pattern
+- `ViewModels/` - ViewModels implementing MVVM pattern
   - Base ViewModels: `ViewModelBase`, `PlantViewModelBase`
   - Feature ViewModels: `PlantListOverviewViewModel`, `PlantDetailViewModel`, etc.
   - Uses `CommunityToolkit.Mvvm` for MVVM implementation
 
-- **Services/** - Application services
-  - **DBService/** - Database interaction services
+- `Services/` - Application services
+  - `DBService/` - Database interaction services
     - `IPlantService` / `PlantService` - Plant CRUD operations
-  - **DataExportImport/** - Import/export functionality
-  - **Security/** - Encryption services
-  - **Accessibility/** - Accessibility features
+  - `DataExportImport/` - Import/export functionality
+  - `Security/` - Encryption services (`IEncryptionService`)
+  - `Accessibility/` - Accessibility features
   - `INavigationService` / `NavigationService` - Navigation management
   - `IDialogService` / `DialogService` - User dialogs
-  - `INotificationService` - Local notifications
+  - `INotificationService` - Local notifications (schedules notifications using the configured notification plugin)
   - `IImageOptimizationService` - Image processing and optimization
   - `IAppSettingsService` - Application settings management
 
-- **Models/** - View models and DTOs
+- `Components/` - Reusable XAML components (e.g. `LoadingOverlayView`, `BottomSheetView`, `InAppToastView`, `ShimmerView`, `SkeletonCardView`)
 
-- **Utils/** - Utility classes and helpers
-  - `LocalizationManager` - Multi-language support
-  - `PlantState` - Plant state calculations
+- `Resources/` - Application resources
+  - `Styles/` - XAML styling resources
+  - `Images/` - Image assets
+  - `Fonts/` - Custom fonts
+  - `LocalizationResources.resx` / `LocalizationResources.zh-CN.resx` - Localization strings
+  - `Raw/` - Raw assets
 
-- **Messaging/** - Application-wide messaging system
-  - Uses `WeakReferenceMessenger` from CommunityToolkit.Mvvm
-  - Messages: `PlantAddedMessage`, `PlantModifiedMessage`, `PlantDeletedMessage`, etc.
-
-- **Resources/** - Application resources
-  - **Styles/** - XAML styling resources
-  - **Images/** - Image assets
-  - **Fonts/** - Custom fonts
-  - **LocalizationResources.resx** - Localization strings
-
-- **Platforms/** - Platform-specific implementations
-  - Android/
-  - iOS/
-  - Windows/
+- `Platforms/` - Platform-specific implementations
+  - `Android/`
+  - `iOS/`
+  - `Windows/`
 
 ### PlantCare.Data
 
 Data access layer implementing repository pattern with Entity Framework Core.
 
-#### Key Components:
+#### Key Components
 
-- **DbModels/** - Database entity models
+- `DbModels/` - Database entity models
   - `PlantDbModel` - Plant entity
   - `WateringHistory` - Watering event records
   - `FertilizationHistory` - Fertilization event records
   - `CareHistoryBase` / `EventHistoryBase` - Base classes
 
-- **Models/** - Business models
+- `Models/` - Business models
   - `Plant` - Domain model for plants
   - `CareType` - Enum for care types
 
-- **Repositories/** - Data access repositories
-  - **interfaces/** - Repository contracts
+- `Repositories/` - Data access repositories
+  - `interfaces/` - Repository contracts
     - `IRepository<T>` - Generic repository interface
     - `IPlantRepository` - Plant-specific operations
     - `IWateringHistoryRepository` - Watering history operations
     - `IFertilizationHistoryRepository` - Fertilization history operations
   - `GenericRepository<T>` - Base repository implementation
-  - `PlantRepository` - Plant data access
-  - `WateringHistoryRepository` - Watering history data access
-  - `FertilizationHistoryRepository` - Fertilization history data access
+  - `PlantRepository`, `WateringHistoryRepository`, `FertilizationHistoryRepository`
   - `ApplicationDbContext` - EF Core DbContext
   - `ApplicationDbContextFactory` - Context factory for migrations
 
-- **Migrations/** - EF Core database migrations
+- `Migrations/` - EF Core database migrations
 
 ### PlantCare.App.Tests
 
 Unit test project using xUnit.
 
-- **Services/DBService/** - Service layer tests
-- **Common/** - Test utilities and fixtures
+- `Services/DBService/` - Service layer tests
+- `Common/` - Test utilities and fixtures
   - `ServiceProviderFixture` - DI container setup for tests
   - `ServiceProviderFactory` - Test service configuration
   - `MappingProfile` - AutoMapper configuration for tests
@@ -112,29 +106,13 @@ Unit test project using xUnit.
 
 ### MVVM Pattern
 
-The application strictly follows the MVVM pattern:
+The application follows the MVVM pattern:
 
-- **Model**: Data models and business logic (in PlantCare.Data)
-- **View**: XAML pages (in Views/)
-- **ViewModel**: View logic and data binding (in ViewModels/)
+- `Model`: Data models and business logic (in `PlantCare.Data`)
+- `View`: XAML pages (in `Views/`)
+- `ViewModel`: View logic and data binding (in `ViewModels/`)
 
-#### ViewModel Base Classes
-
-```csharp
-ViewModelBase
-├── PlantViewModelBase
-│   ├── PlantDetailViewModel
-│   └── PlantListItemViewModel
-├── PlantListOverviewViewModel
-├── PlantAddEditViewModel
-├── PlantCalendarViewModel
-└── ...
-```
-
-All ViewModels inherit from `ViewModelBase` which provides:
-- `IsBusy` and `IsLoading` properties
-- `LoadDataWhenViewAppearingAsync()` for view lifecycle
-- Property change notification via `ObservableObject`
+All ViewModels inherit from `ViewModelBase` which provides common properties and lifecycle helpers such as `IsBusy`, `IsLoading`, and `LoadDataWhenViewAppearingAsync()`; property change notification is handled by `ObservableObject` (CommunityToolkit).
 
 ### Repository Pattern
 
@@ -147,65 +125,38 @@ IRepository<T>
 └── IFertilizationHistoryRepository
 ```
 
-Each repository provides:
-- CRUD operations
-- Entity-specific queries
-- Transaction management
+Each repository provides CRUD operations, entity-specific queries, and transaction management.
 
 ### Dependency Injection
 
-The application uses .NET's built-in DI container configured in `MauiProgram.cs`:
+The application uses .NET's built-in DI container configured in `MauiProgram.cs` and registers database contexts, repositories, application services, navigation, and platform services.
 
-```csharp
-ConfigureDatabase()          // DbContext registration
-ConfigureRepositories()      // Repository registrations
-ConfigureAppServices()       // Application services
-ConfigureSecurityServices()  // Security services
-ConfigureAccessibilityServices()  // Accessibility services
-ConfigureViewsAndViewModels()     // View/ViewModel registrations
-ConfigureNavigation()        // Navigation services
-ConfigureDataServices()      // Data import/export services
-ConfigureLogging()          // Logging configuration
-```
+Typical registration steps in `MauiProgram.cs`:
 
-#### Service Lifetimes:
+- Configure database (`ApplicationDbContext` / factory)
+- Register repositories
+- Register app services (plant service, image optimization, notification service, settings, etc.)
+- Register views and viewmodels
+- Configure logging
 
-- **Singleton**: Long-lived services and ViewModels for main views
-  - `PlantService`, `AppSettingsService`, `NavigationService`
-  - `PlantListOverviewViewModel`, `SettingsViewModel`
+#### Service Lifetimes
 
-- **Transient**: New instances for each request
-  - `PlantAddEditViewModel`, `PlantCalendarViewModel`
-  - Data import/export services
-
-- **Scoped**: Per-request lifetime (mainly for repositories)
-  - `IPlantRepository`, `IWateringHistoryRepository`
+- `Singleton`: Long-lived services and some viewmodels (e.g. `PlantService`, `AppSettingsService`, `NavigationService`, `PlantListOverviewViewModel`, `SettingsViewModel`)
+- `Transient`: Short-lived viewmodels and data import/export services (e.g. `PlantAddEditViewModel`, `PlantCalendarViewModel`)
+- `Scoped`: Per-request lifetime used for repositories when appropriate
 
 ### Messaging Pattern
 
-The application uses `WeakReferenceMessenger` for loosely-coupled communication:
+The application uses `WeakReferenceMessenger` (CommunityToolkit.Mvvm) for loosely-coupled communication between components.
 
-```csharp
-// Send message
-WeakReferenceMessenger.Default.Send(new PlantAddedMessage(plantId));
+Example messages used across the app:
 
-// Receive message
-public class MyViewModel : IRecipient<PlantAddedMessage>
-{
-    void IRecipient<PlantAddedMessage>.Receive(PlantAddedMessage message)
-    {
-        // Handle message
-    }
-}
-```
-
-**Key Messages:**
-- `PlantAddedMessage` - New plant created
-- `PlantModifiedMessage` - Plant updated
-- `PlantDeletedMessage` - Plant removed
-- `PlantStateChangedMessage` - Plant care state updated
-- `IsNotificationEnabledMessage` - Notification settings changed
-- `DataImportMessage` - Data imported
+- `PlantAddedMessage`
+- `PlantModifiedMessage`
+- `PlantDeletedMessage`
+- `PlantStateChangedMessage`
+- `IsNotificationEnabledMessage`
+- `DataImportMessage`
 
 ## Data Flow
 
@@ -216,18 +167,13 @@ PlantAddEditView → PlantAddEditViewModel → PlantService → PlantRepository 
                                                 ↓
                                     WeakReferenceMessenger
                                                 ↓
-                                    PlantListOverviewViewModel
-                                                ↓
-                                    Update UI + Schedule Notifications
+                                    PlantListOverviewViewModel → Update UI + Schedule Notifications
 ```
 
 ### Notification Scheduling Flow
 
 ```
-PlantListOverviewViewModel → NotificationService → Plugin.LocalNotification
-                                                           ↓
-                                                   Platform-specific
-                                                   notification APIs
+PlantListOverviewViewModel → NotificationService → Notification plugin → Platform-specific notification APIs
 ```
 
 ### Navigation Flow
@@ -240,9 +186,9 @@ View → ViewModel → NavigationService → Shell Navigation → Target View
 
 ### Local Database
 
-- **Technology**: SQLite via Entity Framework Core
-- **Location**: `FileSystem.AppDataDirectory/plants.db`
-- **Migrations**: Code-first migrations in PlantCare.Data/Migrations
+- `Technology`: SQLite via Entity Framework Core (EF Core)
+- `Location`: `FileSystem.AppDataDirectory/plants.db`
+- `Migrations`: Code-first migrations in `PlantCare.Data/Migrations`
 
 ### Database Schema
 
@@ -270,257 +216,132 @@ FertilizationHistory
 └── CareTime (DateTime)
 ```
 
-**Cascade Delete**: Deleting a plant automatically deletes its history records.
+Cascade delete is configured so deleting a plant removes its history records.
 
 ### Image Storage
 
-- **Full Images**: Stored in `FileSystem.AppDataDirectory` with optimized dimensions
-- **Thumbnails**: Generated automatically for list views
-- **Optimization**: Handled by `IImageOptimizationService`
-- **Default Image**: Embedded resource for plants without photos
+- Full images are stored in `FileSystem.AppDataDirectory` with optimized dimensions.
+- Thumbnails are generated for list views.
+- Image optimization is handled by `IImageOptimizationService` (resize, thumbnail generation, save to app data directory).
+- A default embedded image is used for plants without photos.
 
 ### Application Settings
 
-- **Technology**: .NET MAUI Preferences API
-- **Settings Managed by `IAppSettingsService`**:
-  - Watering notification enabled/disabled
-  - Fertilization notification enabled/disabled
-  - Language preference
-  - Theme settings
+- `Technology`: .NET MAUI Preferences API
+- `IAppSettingsService` manages settings such as watering/fertilization notifications, language preference, and theme.
 
 ## Key Features Implementation
 
 ### 1. Notifications
 
-**Technology**: `Plugin.LocalNotification`
+- `Notification plugin`: `Plugin.LocalNotification` (project uses v13.x)
+- Flow:
+  1. When a plant is added/modified → schedule notifications
+  2. Calculate next watering/fertilization time
+  3. Create `NotificationRequest` with unique ID and schedule it via the notification service
+  4. Handle notification taps to navigate to plant detail
 
-**Flow**:
-1. When plant added/modified → Schedule notifications
-2. Calculate next watering/fertilization time
-3. Create `NotificationRequest` with unique ID
-4. Schedule via `INotificationService`
-5. Handle notification tap → Navigate to plant detail
-
-**Notification ID Strategy**:
-- Watering: `plantId.GetHashCode()`
-- Fertilization: `-plantId.GetHashCode()`
+- Notification ID strategy commonly used in the app:
+  - Watering: `plantId.GetHashCode()`
+  - Fertilization: `-plantId.GetHashCode()`
 
 ### 2. Image Optimization
 
-**Service**: `IImageOptimizationService`
-
-**Process**:
-1. User selects/captures image
-2. Load original image stream
-3. Resize to maximum dimensions (preserving aspect ratio)
-4. Generate thumbnail version
-5. Save both to app data directory
-6. Update plant record with path
+- `IImageOptimizationService` resizes images, preserves aspect ratio, generates thumbnails, and saves images to the app data directory. The plant record stores the image path.
 
 ### 3. Data Import/Export
 
-**Services**: `IDataExportService`, `IDataImportService`
-
-**Export**:
-1. Serialize plants and history to JSON
-2. Copy photos to export directory
-3. Create zip archive
-4. Save to user-selected location
-
-**Import**:
-1. Extract zip archive
-2. Deserialize JSON data
-3. Copy photos to app directory
-4. Insert into database
-5. Broadcast `DataImportMessage`
+- Services: `IDataExportService`, `IDataImportService`
+- Export serializes plants and histories to JSON, copies photos, and creates a zip archive for user export.
+- Import extracts archives, deserializes JSON, copies photos into app storage, inserts records into the database, and broadcasts a `DataImportMessage`.
 
 ### 4. Localization
 
-**Technology**: .resx resource files + `LocalizationManager`
-
-**Supported Languages**:
-- English (default)
-- Chinese (zh-CN)
-
-**Usage**:
-```csharp
-LocalizationManager.Instance["KeyName"]
-```
+- Implemented with `.resx` resource files and a `LocalizationManager`.
+- Supported languages in the repo include English (default) and Chinese (`zh-CN`).
+- Usage: `LocalizationManager.Instance["KeyName"]`
 
 ### 5. Calendar View
 
-**Technology**: XCalendar.Maui
-
-**Features**:
-- Visual calendar with care events
-- Different colors for watering/fertilization
-- Event details on date selection
+- The project currently uses `Plugin.Maui.Calendar` (in the app project) rather than `XCalendar.Maui` referenced previously in documentation. The calendar view displays care events with different colors for watering/fertilization and provides event details on date selection.
 
 ### 6. Care History Tracking
 
-**Implementation**:
-- Separate tables for watering and fertilization history
-- Automatically updated when care action performed
-- Chart visualization using LiveChartsCore.SkiaSharpView.Maui
+- Watering and fertilization history are stored in separate tables and updated when a care action is performed.
+- Charts (where used) rely on `LiveChartsCore.SkiaSharpView.Maui` for visualization.
 
 ## Technology Stack
-
-### Frameworks & Libraries
 
 | Category | Technology | Version | Purpose |
 |----------|-----------|---------|---------|
 | Framework | .NET MAUI | 10.0 | Cross-platform UI framework |
-| Database | Entity Framework Core | 10.0 | ORM for SQLite |
+| Database | Microsoft.EntityFrameworkCore.Sqlite | 10.0.1 | ORM for SQLite |
 | MVVM | CommunityToolkit.Mvvm | 8.4.0 | MVVM helpers and messaging |
 | UI Toolkit | CommunityToolkit.Maui | 13.0.0 | Additional MAUI controls |
 | Mapping | AutoMapper | 12.0.1 | Object-to-object mapping |
-| Notifications | Plugin.LocalNotification | 12.0.0 | Local push notifications |
+| Notifications | Plugin.LocalNotification | 13.0.0 | Local push notifications |
 | Logging | Serilog | 4.3.0 | File-based logging |
 | Charts | LiveChartsCore.SkiaSharpView.Maui | 2.0.0-rc6.1 | Data visualization |
-| Calendar | XCalendar.Maui | 4.6.0 | Calendar UI component |
-| Graphics | SkiaSharp | 3.119.1 | Image processing |
-| Security | System.Security.Cryptography | 10.0.1 | Data encryption |
+| Calendar | Plugin.Maui.Calendar | 2.0.1 | Calendar UI component used in this repo |
+| Graphics | SkiaSharp.Views.Maui.Controls | 3.119.1 | Image/graphics rendering |
+| Drawing | System.Drawing.Common | 10.0.1 | Image manipulation helpers |
+| Security | System.Security.Cryptography.ProtectedData | 10.0.1 | Data encryption helpers |
 | Testing | xUnit | Latest | Unit testing framework |
 
 ### Platform Targets
 
-- **Android**: API 21+ (Android 5.0+)
-- **iOS**: iOS 11.0+
-- **Windows**: Windows 10.0.19041.0+
-- **macCatalyst**: macOS 13.1+ (optional)
+- `Android`: API 21+ (Android 5.0+)
+- `iOS`: iOS 11.0+
+- `Windows`: Windows 10.0.19041.0+ (project may include a slightly newer Windows target in multi-targeting)
+- `MacCatalyst`: macOS 13.1+ (optional)
 
 ## Logging Strategy
 
-**Logger**: Serilog with file sink
-
-**Configuration**:
-```csharp
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .WriteTo.File(LogFilePath, rollingInterval: RollingInterval.Month)
-    .CreateLogger();
-```
-
-**Log Location**: `FileSystem.AppDataDirectory/app-{date}.log`
-
-**Custom Logger**: `IAppLogger<T>` wrapper for dependency injection
-
-**Usage**:
-```csharp
-_logger.LogInformation("Plant {Name} added", plant.Name);
-_logger.LogError(ex, "Error updating plant");
-```
+- `Logger`: Serilog with file sink
+- Configuration example used in app initializes `Log.Logger` and writes rolling logs to the app data directory. Logs are stored under `FileSystem.AppDataDirectory`.
+- A small `IAppLogger<T>` wrapper is available for DI-based logging usage across the app.
 
 ## Navigation Architecture
 
-**Shell-based Navigation**:
+The app uses `Shell` for navigation with tabs for Overview, Calendar, History, and Settings. Routes include (`//Overview`, `//Plant`, `//Edit`, `//Add`, `//Calendar`, `//SinglePlantCareHistory`, `//About`, `//LogViewer`).
 
-The app uses `Shell` for navigation with the following structure:
-
-```
-AppShell
-├── Tab: Home (PlantOverviewView)
-├── Tab: Calendar (PlantCalendarView)
-├── Tab: History (CareHistoryView)
-└── Tab: Settings (SettingsView)
-
-Routes:
-├── //Overview → PlantOverviewView
-├── //Plant → PlantDetailView
-├── //Edit → PlantAddEditView
-├── //Add → PlantAddEditView
-├── //Calendar → PlantCalendarView
-├── //SinglePlantCareHistory → SingePlantCareHistoryView
-├── //About → AboutPage
-└── //LogViewer → LogViewerPage
-```
-
-**Navigation Service**:
-- Centralized navigation logic in `INavigationService`
-- Parameter passing via query attributes
-- Backward navigation support
+A central `INavigationService` encapsulates Shell navigation and parameter passing.
 
 ## Security Considerations
 
 ### Data Encryption
 
-**Service**: `IEncryptionService`
-
-- Sensitive data can be encrypted using platform-specific APIs
-- Uses `System.Security.Cryptography.ProtectedData` where available
+- `IEncryptionService` provides platform-aware encryption for sensitive data. The solution references `System.Security.Cryptography.ProtectedData` for available platforms.
 
 ### Permissions
 
-**Android**:
-- Camera access (for taking photos)
-- External storage (for photo picking)
-- Notifications (for care reminders)
-
-**iOS**:
-- Photo library access
-- Camera access
-- Notification permission
+- `Android`: Camera, storage access (for photo picking), notifications
+- `iOS`: Photo library, camera, notification permission
 
 ## Performance Optimizations
 
-1. **Image Optimization**:
-   - Resize images to reasonable dimensions
-   - Generate thumbnails for list views
-   - Lazy loading of images
-
-2. **Database**:
-   - Efficient queries with EF Core
-   - Cascade deletes configured
-   - Async operations throughout
-
-3. **UI**:
-   - Virtualized collection views
-   - Minimal re-renders with MVVM
-   - Async data loading with loading indicators
-
-4. **Caching**:
-   - Plant list cached in ViewModel
-   - Image paths cached (not reloaded)
+1. Image optimization (resizing, thumbnail generation)
+2. Efficient EF Core queries and async operations
+3. Virtualized collection views and minimized re-renders
+4. Local caching for plant lists and image paths
 
 ## Testing Strategy
 
 ### Unit Tests
 
-Located in `PlantCare.App.Tests`:
-
-- **Service Tests**: Business logic validation
-- **Repository Tests**: Database operations
-- **ViewModel Tests**: UI logic (to be expanded)
-
-**Test Infrastructure**:
-- xUnit test framework
-- Dependency injection for tests
-- In-memory SQLite for repository tests
+Located in `PlantCare.App.Tests` and covering services, repositories, and viewmodels where applicable. Tests use DI and in-memory or test SQLite configurations.
 
 ### Manual Testing
 
-Currently tested on:
-- Android devices (primary platform)
-- iOS (limited testing)
-- Windows (limited testing)
+Primary manual testing occurs on Android devices; iOS and Windows are also verified where available.
 
 ## Future Architecture Considerations
 
-### Potential Improvements
-
-1. **Cloud Sync**: Add optional cloud backup via Azure Mobile Apps or Firebase
-2. **Offline-first**: Already implemented, consider sync conflict resolution
-3. **Plugin Architecture**: Allow third-party plant care modules
-4. **CQRS Pattern**: Separate read/write models for complex operations
-5. **State Management**: Consider centralized state management for larger scale
-
-### Scalability
-
-The current architecture supports:
-- Hundreds of plants (tested)
-- Multiple users (not yet implemented)
-- Plugin extensibility (planned)
+- Cloud sync (optional backup/sync)
+- Conflict resolution for offline-first sync
+- Plugin architecture for extensibility
+- Consider CQRS or centralized state management for larger scale
 
 ## Conclusion
 
-PlantCare follows modern .NET MAUI best practices with clean separation of concerns, testability, and maintainability as core principles. The architecture supports cross-platform development while allowing platform-specific optimizations where needed.
+PlantCare follows .NET MAUI best practices with clean separation of concerns, testability, and maintainability. The repository is actively maintained and targets .NET 10 with modern MAUI libraries and platform integrations.
