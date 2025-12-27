@@ -291,4 +291,13 @@
   <data name="Show" xml:space="preserve">
     <value>显示</value>
   </data>
+  <data name="LastWatering" xml:space="preserve">
+    <value>上次浇水时间</value>
+  </data>
+  <data name="LastFertilization" xml:space="preserve">
+    <value>上次施肥时间</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>通知设置</value>
+  </data>
 </root>
