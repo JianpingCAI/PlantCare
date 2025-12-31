@@ -7,9 +7,12 @@
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     Title="PlantCare.App"
-    Shell.BackgroundColor="{AppThemeBinding Light={StaticResource PageBackgroundColor}, Dark={StaticResource PageBackgroundColorDark}}"
-    Shell.ForegroundColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
-    Shell.TitleColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}">
+    Shell.BackgroundColor="{AppThemeBinding Light={StaticResource PageBackgroundColor},
+                                            Dark={StaticResource PageBackgroundColorDark}}"
+    Shell.ForegroundColor="{AppThemeBinding Light={StaticResource Gray900},
+                                            Dark={StaticResource White}}"
+    Shell.TitleColor="{AppThemeBinding Light={StaticResource Gray900},
+                                       Dark={StaticResource White}}">
     <Shell.Resources>
         <ResourceDictionary>
             <Style TargetType="TabBar">
