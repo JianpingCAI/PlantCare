@@ -1,6 +1,5 @@
 using PlantCare.App.Services;
 using PlantCare.Data;
-using Xunit;
 
 namespace PlantCare.App.Tests.Services;
 

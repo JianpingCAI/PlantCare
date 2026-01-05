@@ -3,7 +3,6 @@ using PlantCare.App.Utils;
 using PlantCare.Data;
 using PlantCare.Data.DbModels;
 using PlantCare.Data.Models;
-using Xunit;
 
 namespace PlantCare.App.Tests.Utils;
 

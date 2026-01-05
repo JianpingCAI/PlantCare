@@ -13,8 +13,6 @@ using Plugin.LocalNotification.EventArgs;
 using PlantCare.App.Services.DBService;
 using PlantCare.Data;
 using PlantCare.App.Utils;
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
 using INotificationService = PlantCare.App.Services.INotificationService;
 
 namespace PlantCare.App.ViewModels;
