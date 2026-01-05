@@ -24,37 +24,176 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
-        MauiAppBuilder builder = MauiApp.CreateBuilder();
+        try
+        {
+            MauiAppBuilder builder = MauiApp.CreateBuilder();
 
-        // Configure Serilog before building
-        ConfigureSerilog();
-
-        builder
-            .UseMauiApp<App>()
-            .UseSkiaSharp()
-            .UseLiveCharts()
-            .ConfigureFonts(fonts =>
+            try
             {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIconsRegular");
-                fonts.AddFont("fa-solid-900.ttf", "FontAwesome");
-            })
-            .UseMauiCommunityToolkit()
-            .UseLocalNotification();
+                ConfigureSerilog();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure Serilog", ex);
+            }
 
-        // Configure application services
-        ConfigureDatabase(builder);
-        ConfigureRepositories(builder);
-        ConfigureAppServices(builder);
-        ConfigureSecurityServices(builder);
-        ConfigureAccessibilityServices(builder);
-        ConfigureViewsAndViewModels(builder);
-        ConfigureNavigation(builder);
-        ConfigureDataServices(builder);
-        ConfigureLogging(builder);
+            try
+            {
+                builder.UseMauiApp<App>();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure MauiApp", ex);
+            }
 
-        return builder.Build();
+            try
+            {
+                builder.UseSkiaSharp();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure SkiaSharp", ex);
+            }
+
+            try
+            {
+                builder.UseLiveCharts();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure LiveCharts", ex);
+            }
+
+            try
+            {
+                builder.ConfigureFonts(fonts =>
+                {
+                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIconsRegular");
+                    fonts.AddFont("fa-solid-900.ttf", "FontAwesome");
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure fonts", ex);
+            }
+
+            try
+            {
+                builder.UseMauiCommunityToolkit();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure Maui Community Toolkit", ex);
+            }
+
+            try
+            {
+#if ANDROID || IOS
+                builder.UseLocalNotification();
+#endif
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure Local Notifications", ex);
+            }
+
+            try
+            {
+                ConfigureDatabase(builder);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure database", ex);
+            }
+
+            try
+            {
+                ConfigureRepositories(builder);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure repositories", ex);
+            }
+
+            try
+            {
+                ConfigureAppServices(builder);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure app services", ex);
+            }
+
+            try
+            {
+                ConfigureSecurityServices(builder);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure security services", ex);
+            }
+
+            try
+            {
+                ConfigureAccessibilityServices(builder);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure accessibility services", ex);
+            }
+
+            try
+            {
+                ConfigureViewsAndViewModels(builder);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure views and view models", ex);
+            }
+
+            try
+            {
+                ConfigureNavigation(builder);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure navigation", ex);
+            }
+
+            try
+            {
+                ConfigureDataServices(builder);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure data services", ex);
+            }
+
+            try
+            {
+                ConfigureLogging(builder);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to configure logging", ex);
+            }
+
+            try
+            {
+                return builder.Build();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to build MauiApp", ex);
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "An error occurred while creating the MauiApp");
+            throw;
+        }
     }
 
     private static void ConfigureSerilog()
@@ -102,6 +241,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IImageOptimizationService, ImageOptimizationService>();
         builder.Services.AddSingleton<IToastService, ToastService>();
         builder.Services.AddSingleton<IInAppToastService, InAppToastService>();
+        builder.Services.AddSingleton<PlantCare.App.Services.INotificationService, NotificationService>();
     }
 
     private static void ConfigureSecurityServices(MauiAppBuilder builder)

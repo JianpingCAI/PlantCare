@@ -15,6 +15,7 @@ using PlantCare.Data;
 using PlantCare.App.Utils;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using INotificationService = PlantCare.App.Services.INotificationService;
 
 namespace PlantCare.App.ViewModels;
 
@@ -60,12 +61,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         WeakReferenceMessenger.Default.Register<PlantCareHistoryChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<DataImportMessage>(this);
 
-        if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
+        if (_notificationService.IsSupported)
         {
             WeakReferenceMessenger.Default.Register<IsNotificationEnabledMessage>(this);
 
-            //_notificationService.NotificationReceiving = OnNotificationReceiving;
-            //_notificationService.NotificationReceived += OnNotificationReceived;
             _notificationService.NotificationActionTapped += OnNotificationActionTapped;
         }
 
@@ -85,7 +84,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         // Cancel any pending search
         _searchCts?.Cancel();
         _searchCts = new CancellationTokenSource();
-        
+
         // Automatically reset plants when search text is cleared
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -212,32 +211,44 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         _logger.LogInformation($"{_allPlantViewModelsCache.Count} plants are loaded.");
 
         // Set up notifications
-        if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
+        if (_notificationService.IsSupported)
         {
+            // Cleanup old delivered notifications
+            await CleanupDeliveredNotificationsAsync(30);
+
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 if (await _notificationService.AreNotificationsEnabled() == false)
                 {
-                    await _notificationService.RequestNotificationPermission();
+                    // Request notification permission with platform-specific options
+                    var permission = new NotificationPermission
+                    {
+#if ANDROID
+                        Android = new AndroidNotificationPermission
+                        {
+                            RequestPermissionToScheduleExactAlarm = true
+                        }
+#endif
+                    };
+
+                    bool result = await _notificationService.RequestNotificationPermission(permission);
+                    if (!result)
+                    {
+                        _logger.LogWarning("User denied notification permission");
+                    }
                 }
             });
 
             IList<NotificationRequest> pendingNotifications = await _notificationService.GetPendingNotificationList();
             if (pendingNotifications.Count == 0)
             {
-                //    _notificationService.CancelAll();
-                //    _logger.LogInformation($"{pendingNotifications.Count} pending notifications cancelled.");
-                //}
-
-                //else
-                //{
                 if (await _settingsService.GetWateringNotificationSettingAsync())
                 {
-                    await ScheduleNotifications(CareType.Watering);
+                    await ScheduleNotificationsAsync(CareType.Watering);
                 }
                 if (await _settingsService.GetFertilizationNotificationSettingAsync())
                 {
-                    await ScheduleNotifications(CareType.Fertilization);
+                    await ScheduleNotificationsAsync(CareType.Fertilization);
                 }
             }
         }
@@ -366,7 +377,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         return Task.Run(() =>
         {
             List<PlantListItemViewModel> filtered = [];
-            
+
             foreach (PlantListItemViewModel item in plants)
             {
                 if (cancellationToken.IsCancellationRequested)
@@ -421,14 +432,14 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             });
 
             // Schedule notifications in parallel (don't await)
-            if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
+            if (_notificationService.IsSupported)
             {
                 Task<int>[] notificationTasks = new[]
                 {
                     ScheduleNotificationAsync(CareType.Watering, CareType.Watering.GetActionName(), newPlantVM),
                     ScheduleNotificationAsync(CareType.Fertilization, CareType.Fertilization.GetActionName(), newPlantVM)
                 };
-                
+
                 // Run notifications in background without blocking
                 _ = Task.WhenAll(notificationTasks).ContinueWith(t =>
                 {
@@ -481,10 +492,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         try
         {
             PlantListItemViewModel? plantVM = Plants.FirstOrDefault(e => e.Id == message.PlantId);
-            if (plantVM is null) { return; }
+            if (plantVM is null)
+            { return; }
 
             Plant? plantDB = await _plantService.GetPlantByIdAsync(message.PlantId);
-            if (plantDB is null) { return; }
+            if (plantDB is null)
+            { return; }
 
             string originalName = plantVM.Name;
 
@@ -528,7 +541,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     async void IRecipient<PlantDeletedMessage>.Receive(PlantDeletedMessage message)
     {
         string? deletedName = null;
-        
+
         try
         {
             await MainThread.InvokeOnMainThreadAsync(() =>
@@ -537,7 +550,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
                 PlantListItemViewModel? deletedPlant = Plants.FirstOrDefault(e => e.Id == message.PlantId);
 
-                if (deletedPlant is null) { return; }
+                if (deletedPlant is null)
+                { return; }
 
                 deletedName = deletedPlant.Name;
 
@@ -559,13 +573,13 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 IsLoading = false;
             });
-            
+
             // Show toast after loading is complete
             if (!string.IsNullOrWhiteSpace(deletedName))
             {
                 // Small delay to ensure loading overlay is fully hidden
                 await Task.Delay(100);
-                
+
                 string deleteMessage = $"{deletedName} {LocalizationManager.Instance[ConstStrings.Deleted] ?? ConstStrings.Deleted}";
                 await _inAppToastService.ShowSuccessAsync(deleteMessage);
             }
@@ -614,9 +628,47 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     #region Notification methods
 
-    private async Task ScheduleNotifications(CareType careType)
+    /// <summary>
+    /// Cleans up delivered notifications older than the specified number of days
+    /// </summary>
+    /// <param name="daysOld">Number of days to keep notifications (default: 7)</param>
+    private async Task CleanupDeliveredNotificationsAsync(int daysOld = 7)
     {
-        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
+        if (!_notificationService.IsSupported)
+        {
+            return;
+        }
+
+        try
+        {
+            IList<NotificationRequest> deliveredNotifications = await _notificationService.GetDeliveredNotificationList();
+            if (deliveredNotifications.Count == 0)
+            {
+                return;
+            }
+
+            // Remove notifications older than the specified number of days
+            DateTime cutoffTime = DateTime.Now.AddDays(-daysOld);
+            int[] oldNotificationIds = deliveredNotifications
+                .Where(n => n.Schedule?.NotifyTime < cutoffTime)
+                .Select(n => n.NotificationId)
+                .ToArray();
+
+            if (oldNotificationIds.Length > 0)
+            {
+                _notificationService.Cancel(oldNotificationIds);
+                _logger.LogInformation($"Cleaned up {oldNotificationIds.Length} old notifications (older than {daysOld} days)");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Failed to cleanup delivered notifications", ex);
+        }
+    }
+
+    private async Task ScheduleNotificationsAsync(CareType careType)
+    {
+        if (!_notificationService.IsSupported)
         {
             return;
         }
@@ -632,7 +684,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task<int> ScheduleNotificationAsync(CareType reminderType, string actionName, PlantListItemViewModel plant)
     {
-        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
+        if (!_notificationService.IsSupported)
         {
             return 0;
         }
@@ -716,7 +768,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 {
                     if (message.IsNotificationEnabled)
                     {
-                        await ScheduleNotifications(CareType.Watering);
+                        await ScheduleNotificationsAsync(CareType.Watering);
                     }
                 }
                 break;
@@ -725,7 +777,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 {
                     if (message.IsNotificationEnabled)
                     {
-                        await ScheduleNotifications(CareType.Fertilization);
+                        await ScheduleNotificationsAsync(CareType.Fertilization);
                     }
                 }
                 break;
@@ -744,17 +796,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
-            //var logMessage = new StringBuilder();
-            //logMessage.AppendLine($"{Environment.NewLine}ActionId {e.ActionId} {DateTime.Now}");
-
             // Notification is cancelled
             if (e.IsDismissed)
             {
-                //logMessage.AppendLine($"{Environment.NewLine}Dismissed {DateTime.Now}");
-                //MainThread.BeginInvokeOnMainThread(() =>
-                //{
                 await _dialogService.Notify("Notification Dismissed", e.Request.Title, "OK");
-                //});
                 return;
             }
 
@@ -763,21 +808,35 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 _logger.LogInformation("Notification tapped ..");
 
-                //logMessage.AppendLine($"{Environment.NewLine}Tapped {DateTime.Now}");
                 if (e.Request is null)
                 {
-                    //MainThread.BeginInvokeOnMainThread(() =>
-                    //{
-                    //    _dialogService.Notify(e.Request.Title, $"No Request", "OK");
-                    //});
+                    _logger.LogWarning("Notification tap event has no request");
                     return;
                 }
 
-                // No need to use NotificationSerializer, you can use your own one.
-                List<string>? list = JsonSerializer.Deserialize<List<string>>(e.Request.ReturningData);
+                if (e.Request.ReturningData == null)
+                {
+                    _logger.LogWarning("Notification tap event has no returning data");
+                    return;
+                }
+
+                // Deserialize notification returning data
+                List<string>? list = null;
+                try
+                {
+                    list = JsonSerializer.Deserialize<List<string>>(e.Request.ReturningData);
+                }
+                catch (System.Text.Json.JsonException ex)
+                {
+                    _logger.LogError("Failed to deserialize notification returning data", ex);
+                    await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error,
+                        "Invalid notification data format", "OK");
+                    return;
+                }
+
                 if (list is null || list.Count != 3)
                 {
-                    //await _dialogService.Notify(e.Request.Title, $"No ReturningData {e.Request.ReturningData}", "OK");
+                    _logger.LogWarning($"Invalid returning data format, expected 3 items, got {list?.Count ?? 0}");
                     return;
                 }
 
@@ -791,27 +850,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
                 return;
             }
-
-            //switch (e.ActionId)
-            //{
-            //    case 100:
-            //        //logMessage.AppendLine($"{Environment.NewLine}Hello {DateTime.Now}");
-
-            //        MainThread.BeginInvokeOnMainThread(() =>
-            //        {
-            //            _dialogService.Notify(e.Request.Title, "Hello Button was Tapped", "OK");
-            //        });
-
-            //        _notificationService.Cancel(e.Request.NotificationId);
-            //        break;
-
-            //    case 101:
-            //        //logMessage.AppendLine($"{Environment.NewLine}Cancel {DateTime.Now}");
-            //        _notificationService.Cancel(e.Request.NotificationId);
-            //        break;
-            //}
-
-            //await File.AppendAllTextAsync(_cacheFilePath, $"{Environment.NewLine}Cancel {DateTime.Now}");
         }
         catch (Exception ex)
         {
@@ -823,6 +861,16 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
     }
 
+    private const int WateringNotificationBase = 1000;
+    private const int FertilizationNotificationBase = 2000;
+
+    /// <summary>
+    /// Provides ~900 different IDs per care type
+    /// </summary>
+    /// <param name="reminderType"></param>
+    /// <param name="plantId"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     private static int GetNotificationId(CareType reminderType, Guid plantId)
     {
         if (plantId == default)
@@ -830,19 +878,15 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             return 0;
         }
 
-        int notificationId = plantId.GetHashCode();
+        // Ensure positive hash code and limit to reasonable range to avoid collisions
+        int hashCode = plantId.GetHashCode() & 0x7FFFFFFF;
 
-        switch (reminderType)
+        return reminderType switch
         {
-            case CareType.Watering:
-                break;
-
-            case CareType.Fertilization:
-                notificationId = -notificationId;
-                break;
-        }
-
-        return notificationId;
+            CareType.Watering => WateringNotificationBase + (hashCode % 900),
+            CareType.Fertilization => FertilizationNotificationBase + (hashCode % 900),
+            _ => throw new ArgumentException($"Unknown care type: {reminderType}")
+        };
     }
 
     private async Task CancelPendingNotificationAsync(Guid plantId, string name)
@@ -858,7 +902,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task CancelPendingNotificationAsync(int noticeId, string name)
     {
-        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
+        if (!_notificationService.IsSupported)
         {
             return;
         }
@@ -874,7 +918,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     private async Task<List<int>> GetPendingNotificationIdsAsync()
     {
-        if (!_notificationService.IsSupported && !DeviceService.IsLocalNotificationSupported())
+        if (!_notificationService.IsSupported)
         {
             return [];
         }
