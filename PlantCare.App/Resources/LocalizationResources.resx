@@ -306,4 +306,16 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Developer" xml:space="preserve">
+    <value>Developer</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>PlantCare helps you take care of your plants by providing reminders and tracks for watering and fertilization.</value>
+  </data>
 </root>

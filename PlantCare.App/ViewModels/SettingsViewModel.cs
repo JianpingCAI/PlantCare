@@ -61,6 +61,8 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     private Language _selectedLanguage = App.AppLanguage;
 
+    public string AppVersion => AppInfo.Current.VersionString;
+
     partial void OnSelectedLanguageChanged(Language value)
     {
         if (!_isSettingsLoaded)

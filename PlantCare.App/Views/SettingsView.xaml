@@ -386,8 +386,57 @@
                     </Grid>
                 </Border>
 
-                <!--  Bottom spacing to give room below last card  -->
-                <BoxView HeightRequest="20" Color="Transparent" />
+                <!--
+                    About card:
+                    - Displays app information (version, description, developer)
+                -->
+                <Border Style="{StaticResource SettingsCardStyle}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            Style="{StaticResource SettingsItemLabelStyle}"
+                            Text="{Binding Path=[About], Source={x:Static utils:LocalizationManager.Instance}}" />
+
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="13"
+                                Style="{StaticResource SettingsItemLabelStyle}"
+                                Text="{Binding Path=[Version], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Label
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                FontSize="13"
+                                Style="{StaticResource BodySmallStyle}"
+                                Text="{Binding AppVersion}"
+                                VerticalTextAlignment="Center" />
+
+                            <Label
+                                Grid.Row="1"
+                                Margin="0,8,0,0"
+                                FontAttributes="Bold"
+                                FontSize="13"
+                                Style="{StaticResource SettingsItemLabelStyle}"
+                                Text="{Binding Path=[Developer], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="8,8,0,0"
+                                FontSize="13"
+                                Style="{StaticResource BodySmallStyle}"
+                                Text="Jianping (cai-jianping@outlook.com)"
+                                VerticalTextAlignment="Center" />
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}" />
+
+                        <Label
+                            FontSize="12"
+                            Style="{StaticResource BodySmallStyle}"
+                            Text="{Binding Path=[AppDescription], Source={x:Static utils:LocalizationManager.Instance}}" />
+                    </VerticalStackLayout>
+                </Border>
             </VerticalStackLayout>
         </ScrollView>
 
@@ -395,3 +444,4 @@
         <components:LoadingOverlayView IsVisible="{Binding IsLoading}" />
     </Grid>
 </views:ContentPageBase>
+
