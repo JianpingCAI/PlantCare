@@ -493,6 +493,15 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to plants in your garden.
+        /// </summary>
+        internal static string PlantsCount {
+            get {
+                return ResourceManager.GetString("PlantsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Existing Data.
         /// </summary>
         internal static string RemoveExistingData {

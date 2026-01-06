@@ -12,53 +12,74 @@
     x:DataType="vm:PlantListOverviewViewModel">
 
     <Shell.TitleView>
-        <Grid Padding="8,0" ColumnDefinitions="auto,auto,*">
+        <Grid
+            Padding="12,0,8,0"
+            ColumnDefinitions="auto,*,auto"
+            ColumnSpacing="12">
+            <!--  App Icon  -->
             <Border
                 HorizontalOptions="Start"
                 Stroke="Transparent"
                 StrokeThickness="0"
                 VerticalOptions="Center">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="40" />
+                    <RoundRectangle CornerRadius="12" />
                 </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow
+                        Brush="{StaticResource Primary}"
+                        Opacity="0.15"
+                        Radius="8"
+                        Offset="0,2" />
+                </Border.Shadow>
                 <Image
-                    HeightRequest="40"
+                    HeightRequest="44"
                     Source="default_plant.png"
-                    WidthRequest="40" />
+                    WidthRequest="44" />
             </Border>
 
-            <HorizontalStackLayout Grid.Column="1" Spacing="4">
+            <!--  Title Section  -->
+            <VerticalStackLayout
+                Grid.Column="1"
+                Spacing="2"
+                VerticalOptions="Center">
                 <Label
-                    Margin="12,0,0,0"
-                    HorizontalOptions="Start"
-                    Style="{StaticResource BodyStyle}"
+                    Style="{StaticResource TitleSmallStyle}"
                     Text="{Binding Path=[MyPlants], Source={x:Static utils:LocalizationManager.Instance}}"
                     VerticalTextAlignment="Center" />
-                <Label
-                    Style="{StaticResource BodyStyle}"
-                    Text="{Binding Plants.Count, StringFormat='({0})'}"
-                    VerticalTextAlignment="Center" />
-            </HorizontalStackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="3">
+                    <Label
+                        Opacity="0.7"
+                        Style="{StaticResource CaptionStyle}"
+                        Text="{Binding Plants.Count}"
+                        VerticalTextAlignment="Center" />
+                    <Label
+                        Opacity="0.7"
+                        Style="{StaticResource CaptionStyle}"
+                        Text="{Binding Path=[PlantsCount], Source={x:Static utils:LocalizationManager.Instance}}"
+                        VerticalTextAlignment="Center" />
+                </StackLayout>
+            </VerticalStackLayout>
 
-            <!--  Add Plant Button with entrance animation  -->
+            <!--  Add Plant Button  -->
             <Button
                 x:Name="fabButton"
                 Grid.Column="2"
-                Margin="0,0,8,0"
+                Margin="0"
                 Command="{Binding AddPlantCommand}"
-                CornerRadius="20"
-                HeightRequest="40"
+                CornerRadius="22"
+                HeightRequest="44"
                 HorizontalOptions="End"
                 Style="{StaticResource FabButtonStyle}"
                 Text="&#xe147;"
                 TextColor="{StaticResource White}"
                 VerticalOptions="Center"
-                WidthRequest="40">
+                WidthRequest="44">
                 <Button.Shadow>
                     <Shadow
                         Brush="{StaticResource Primary}"
                         Opacity="0.3"
-                        Radius="8"
+                        Radius="12"
                         Offset="0,4" />
                 </Button.Shadow>
             </Button>
@@ -67,22 +88,34 @@
 
     <ContentPage.Resources>
         <utils:ProgressToColorConverter x:Key="ProgressToColorConverter" />
+        <utils:LessThanConverter x:Key="LessThanConverter" />
 
-        <Style x:Key="progressBox" TargetType="BoxView">
-            <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
-            <Setter Property="HeightRequest" Value="5" />
-            <Setter Property="VerticalOptions" Value="Center" />
+        <Style x:Key="ProgressIndicatorStyle" TargetType="ProgressBar">
+            <Setter Property="HeightRequest" Value="6" />
+            <Setter Property="ProgressColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Secondary}}" />
+        </Style>
+
+        <Style x:Key="StatusBadgeStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="{StaticResource SuccessColor}" />
+            <Setter Property="Padding" Value="8,4" />
             <Setter Property="HorizontalOptions" Value="End" />
-            <Setter Property="WidthRequest" Value="3" />
+            <Setter Property="VerticalOptions" Value="Start" />
+            <Setter Property="StrokeThickness" Value="0" />
+            <Setter Property="StrokeShape">
+                <RoundRectangle CornerRadius="8" />
+            </Setter>
         </Style>
     </ContentPage.Resources>
 
     <!--  Main Layout  -->
-    <Grid Padding="8,4,8,0">
+    <Grid Padding="12,8,12,0">
 
-        <Grid HorizontalOptions="Fill" RowDefinitions="auto,*">
-            <!--  Enhanced Search Bar for quick filtering  -->
-            <Border Margin="0,4,0,8" Style="{StaticResource EnhancedSearchBarStyle}">
+        <Grid
+            HorizontalOptions="Fill"
+            RowDefinitions="auto,*"
+            RowSpacing="12">
+            <!--  Enhanced Search Bar  -->
+            <Border Margin="0" Style="{StaticResource EnhancedSearchBarStyle}">
                 <SearchBar
                     BackgroundColor="Transparent"
                     CancelButtonColor="{AppThemeBinding Light={StaticResource Gray900},
@@ -116,7 +149,7 @@
                         <Grid>
                             <!--  Show skeleton cards while loading  -->
                             <ScrollView IsVisible="{Binding IsLoading}">
-                                <Grid Padding="4">
+                                <Grid Padding="4" RowSpacing="8">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
@@ -204,86 +237,136 @@
 
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout
-                            HorizontalItemSpacing="8"
+                            HorizontalItemSpacing="12"
                             Orientation="Vertical"
                             Span="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoSpan}"
-                            VerticalItemSpacing="8" />
+                            VerticalItemSpacing="12" />
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:PlantListItemViewModel">
                             <Grid HorizontalOptions="Center">
-                                <!--  Interactive Card with Press Effects  -->
-                                <Border Padding="0,0,0,10" Style="{StaticResource InteractiveCardStyle}">
-                                    <StackLayout Spacing="5">
-                                        <!--  Photo  -->
-                                        <Border
-                                            HorizontalOptions="Center"
-                                            Stroke="Transparent"
-                                            StrokeThickness="0"
-                                            VerticalOptions="Center">
-                                            <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="12" />
-                                            </Border.StrokeShape>
-                                            <Image
-                                                Aspect="AspectFill"
-                                                HeightRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoHeight}"
-                                                HorizontalOptions="Center"
-                                                Source="{Binding ThumbnailPath}"
-                                                VerticalOptions="Center"
-                                                WidthRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoWidth}" />
-                                        </Border>
+                                <!--  Enhanced Plant Card  -->
+                                <Border Padding="0" Style="{StaticResource InteractiveCardStyle}">
+                                    <Grid RowDefinitions="auto,auto,auto">
+                                        <!--  Plant Image Container  -->
+                                        <Grid>
+                                            <!--  Plant Photo  -->
+                                            <Border
+                                                Margin="0"
+                                                HorizontalOptions="Fill"
+                                                Stroke="Transparent"
+                                                StrokeThickness="0"
+                                                VerticalOptions="Fill">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="16,16,0,0" />
+                                                </Border.StrokeShape>
+                                                <Image
+                                                    Aspect="AspectFill"
+                                                    HeightRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoHeight}"
+                                                    HorizontalOptions="Fill"
+                                                    Source="{Binding ThumbnailPath}"
+                                                    VerticalOptions="Fill"
+                                                    WidthRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoWidth}" />
+                                            </Border>
 
-                                        <!--  Plant Name  -->
-                                        <Label
-                                            Margin="0,0,0,0"
-                                            HorizontalTextAlignment="Center"
-                                            LineBreakMode="TailTruncation"
-                                            MaxLines="2"
-                                            Style="{StaticResource TitleSmallStyle}"
-                                            Text="{Binding Name}" />
-
-                                        <!--  Watering Section with Enhanced ProgressBar  -->
-                                        <Grid ColumnDefinitions="auto,*" ColumnSpacing="6">
-                                            <Label
-                                                Grid.Column="0"
-                                                FontFamily="MaterialIconsRegular"
-                                                Style="{StaticResource TitleStyle}"
-                                                Text="&#xe798;"
-                                                TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
-                                                VerticalOptions="Center"
-                                                WidthRequest="20" />
-
-                                            <ProgressBar
-                                                Grid.Column="1"
-                                                Margin="0,0,5,0"
-                                                Progress="{Binding WaterState}"
-                                                ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
-                                                Style="{StaticResource RoundedProgressBarStyle}"
-                                                VerticalOptions="Center" />
+                                            <!--  Status Badge Overlay  -->
+                                            <Border
+                                                Margin="2,2"
+                                                Padding="10,5"
+                                                BackgroundColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
+                                                HorizontalOptions="Start"
+                                                IsVisible="{Binding WaterState, Converter={StaticResource LessThanConverter}, ConverterParameter=0.143}"
+                                                Opacity="0.85"
+                                                StrokeThickness="0"
+                                                VerticalOptions="End">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10" />
+                                                </Border.StrokeShape>
+                                                <Border.Shadow>
+                                                    <Shadow
+                                                        Brush="Black"
+                                                        Opacity="0.2"
+                                                        Radius="6"
+                                                        Offset="0,2" />
+                                                </Border.Shadow>
+                                                <Label
+                                                    FontFamily="MaterialIconsRegular"
+                                                    FontSize="15"
+                                                    Text="&#xe798;"
+                                                    TextColor="{StaticResource White}"
+                                                    VerticalOptions="Center" />
+                                            </Border>
                                         </Grid>
 
-                                        <!--  Fertilization Section with Enhanced ProgressBar  -->
-                                        <Grid ColumnDefinitions="auto,*" ColumnSpacing="6">
+                                        <!--  Plant Info Section  -->
+                                        <VerticalStackLayout
+                                            Grid.Row="1"
+                                            Padding="12"
+                                            Spacing="8">
+
+                                            <!--  Plant Name  -->
                                             <Label
-                                                Grid.Column="0"
-                                                FontFamily="MaterialIconsRegular"
-                                                Style="{StaticResource TitleStyle}"
-                                                Text="&#xe761;"
-                                                TextColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
-                                                VerticalOptions="Center"
-                                                WidthRequest="20" />
+                                                FontFamily="OpenSansSemibold"
+                                                LineBreakMode="TailTruncation"
+                                                MaxLines="2"
+                                                Style="{StaticResource TitleSmallStyle}"
+                                                Text="{Binding Name}" />
 
-                                            <ProgressBar
-                                                Grid.Column="1"
-                                                Margin="0,0,5,0"
-                                                Progress="{Binding FertilizeState}"
-                                                ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
-                                                Style="{StaticResource RoundedProgressBarStyle}"
-                                                VerticalOptions="Center" />
-                                        </Grid>
+                                            <!--  Watering Progress  -->
+                                            <Grid ColumnDefinitions="auto,*" ColumnSpacing="8">
+                                                <Border
+                                                    Padding="6"
+                                                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},
+                                                                                      Dark={StaticResource Gray800}}"
+                                                    StrokeThickness="0">
+                                                    <Border.StrokeShape>
+                                                        <RoundRectangle CornerRadius="8" />
+                                                    </Border.StrokeShape>
+                                                    <Label
+                                                        FontFamily="MaterialIconsRegular"
+                                                        FontSize="16"
+                                                        Text="&#xe798;"
+                                                        TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
+                                                        VerticalOptions="Center" />
+                                                </Border>
 
-                                    </StackLayout>
+                                                <ProgressBar
+                                                    Grid.Column="1"
+                                                    Progress="{Binding WaterState}"
+                                                    ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
+                                                    Style="{StaticResource ProgressIndicatorStyle}"
+                                                    VerticalOptions="Center" />
+                                            </Grid>
+
+                                            <!--  Fertilization Progress  -->
+                                            <Grid ColumnDefinitions="auto,*" ColumnSpacing="8">
+                                                <Border
+                                                    Padding="6"
+                                                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},
+                                                                                      Dark={StaticResource Gray800}}"
+                                                    StrokeThickness="0">
+                                                    <Border.StrokeShape>
+                                                        <RoundRectangle CornerRadius="8" />
+                                                    </Border.StrokeShape>
+                                                    <Label
+                                                        FontFamily="MaterialIconsRegular"
+                                                        FontSize="16"
+                                                        Text="&#xe761;"
+                                                        TextColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
+                                                        VerticalOptions="Center" />
+                                                </Border>
+
+                                                <ProgressBar
+                                                    Grid.Column="1"
+                                                    Progress="{Binding FertilizeState}"
+                                                    ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
+                                                    Style="{StaticResource ProgressIndicatorStyle}"
+                                                    VerticalOptions="Center" />
+                                            </Grid>
+
+                                        </VerticalStackLayout>
+                                    </Grid>
                                 </Border>
                             </Grid>
                         </DataTemplate>

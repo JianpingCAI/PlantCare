@@ -315,6 +315,9 @@
   <data name="Developer" xml:space="preserve">
     <value>Developer</value>
   </data>
+  <data name="PlantsCount" xml:space="preserve">
+    <value>plants in your garden</value>
+  </data>
   <data name="AppDescription" xml:space="preserve">
     <value>PlantCare helps you take care of your plants by providing reminders and tracks for watering and fertilization.</value>
   </data>
