@@ -14,13 +14,19 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <utils:HoursToDayHourStringConverter x:Key="HoursToDayHourStringConverter" />
+            <utils:ProgressToColorConverter x:Key="ProgressToColorConverter" />
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            
+            <Style x:Key="ProgressIndicatorStyle" TargetType="ProgressBar">
+                <Setter Property="HeightRequest" Value="6" />
+                <Setter Property="ProgressColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Secondary}}" />
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid Padding="8,4,8,0">
+    <Grid Padding="16,8,16,16">
         <ScrollView>
-            <StackLayout Spacing="12">
+            <StackLayout Spacing="16">
                 <!--  Photo Section with Edit Button  -->
                 <Grid Margin="0,8,0,0">
                     <Border
@@ -35,6 +41,13 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="150" />
                         </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow
+                                Brush="Black"
+                                Opacity="0.12"
+                                Radius="16"
+                                Offset="0,4" />
+                        </Border.Shadow>
 
                         <Image
                             Aspect="AspectFill"
@@ -45,34 +58,102 @@
                             Source="{Binding PhotoPath}"
                             VerticalOptions="Center" />
                     </Border>
+
+                    <!--  Edit Button  -->
+                    <Button
+                        Margin="0,0,10,0"
+                        Command="{Binding NavigateToEditPlantCommand}"
+                        ContentLayout="Left,8"
+                        CornerRadius="12"
+                        HeightRequest="48"
+                        HorizontalOptions="End"
+                        Style="{StaticResource OutlineButtonStyle}"
+                        Text="{Binding Path=[Edit], Source={x:Static utils:LocalizationManager.Instance}}"
+                        VerticalOptions="End">
+                        <Button.ImageSource>
+                            <FontImageSource
+                                FontFamily="MaterialIconsRegular"
+                                Glyph="&#xe3c9;"
+                                Size="24"
+                                Color="{AppThemeBinding Light={StaticResource Gray900},
+                                        Dark={StaticResource Gray200}}" />
+                        </Button.ImageSource>
+                    </Button>
                 </Grid>
 
-                <!--  Edit Button  -->
-                <Button
-                    Margin="0,0,10,0"
-                    Command="{Binding NavigateToEditPlantCommand}"
-                    ContentLayout="Left,8"
-                    CornerRadius="12"
-                    HeightRequest="48"
-                    HorizontalOptions="End"
-                    Style="{StaticResource OutlineButtonStyle}"
-                    Text="{Binding Path=[Edit], Source={x:Static utils:LocalizationManager.Instance}}"
-                    VerticalOptions="Start">
-                    <Button.ImageSource>
-                        <FontImageSource
-                            FontFamily="MaterialIconsRegular"
-                            Glyph="&#xe3c9;"
-                            Size="24" Color="{AppThemeBinding Light={StaticResource Gray900},
-                        Dark={StaticResource Gray200}}"/>
-                    </Button.ImageSource>
-                    <!--<Button.Shadow>
-                        <Shadow
-                            Brush="{StaticResource Primary}"
-                            Opacity="0.3"
-                            Radius="8"
-                            Offset="0,4" />
-                    </Button.Shadow>-->
-                </Button>
+                <!--  Care Progress Status Card  -->
+                <Border Padding="16" Style="{StaticResource ElevatedCardStyle}">
+                    <VerticalStackLayout Spacing="12">
+                        <!--  Card Title  -->
+                        <Label
+                            Style="{StaticResource TitleSmallStyle}"
+                            Text="{Binding Path=[CareStatus], Source={x:Static utils:LocalizationManager.Instance}}"
+                            HorizontalOptions="Center"
+                            Margin="0,0,0,4" />
+                        
+                        <!--  Watering Progress  -->
+                        <Grid ColumnDefinitions="auto,*" ColumnSpacing="12">
+                            <Border
+                                Padding="8"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},
+                                                                  Dark={StaticResource Gray800}}"
+                                StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label
+                                    FontFamily="MaterialIconsRegular"
+                                    FontSize="20"
+                                    Text="&#xe798;"
+                                    TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
+                                    VerticalOptions="Center" />
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label
+                                    Style="{StaticResource TitleSmallStyle}"
+                                    Text="{Binding Path=[Watering], Source={x:Static utils:LocalizationManager.Instance}}"
+                                    VerticalOptions="Center" />
+                                <ProgressBar
+                                    Progress="{Binding WaterState}"
+                                    ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
+                                    Style="{StaticResource ProgressIndicatorStyle}"
+                                    VerticalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!--  Fertilization Progress  -->
+                        <Grid ColumnDefinitions="auto,*" ColumnSpacing="12">
+                            <Border
+                                Padding="8"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},
+                                                                  Dark={StaticResource Gray800}}"
+                                StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label
+                                    FontFamily="MaterialIconsRegular"
+                                    FontSize="20"
+                                    Text="&#xe761;"
+                                    TextColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
+                                    VerticalOptions="Center" />
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label
+                                    Style="{StaticResource TitleSmallStyle}"
+                                    Text="{Binding Path=[Fertilization], Source={x:Static utils:LocalizationManager.Instance}}"
+                                    VerticalOptions="Center" />
+                                <ProgressBar
+                                    Progress="{Binding FertilizeState}"
+                                    ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
+                                    Style="{StaticResource ProgressIndicatorStyle}"
+                                    VerticalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
 
                 <!--  Basic Information Card  -->
                 <Border Padding="16" Style="{StaticResource ModernCardStyle}">
@@ -85,7 +166,7 @@
                         <!--  Species  -->
                         <Label
                             HorizontalTextAlignment="End"
-                            Style="{StaticResource TitleStyle}"
+                            Style="{StaticResource TitleSmallStyle}"
                             Text="{Binding Path=[Species], Source={x:Static utils:LocalizationManager.Instance}}"
                             VerticalOptions="Center" />
                         <Label
@@ -99,7 +180,7 @@
                         <Label
                             Grid.Row="1"
                             HorizontalTextAlignment="End"
-                            Style="{StaticResource TitleStyle}"
+                            Style="{StaticResource TitleSmallStyle}"
                             Text="{Binding Path=[Age], Source={x:Static utils:LocalizationManager.Instance}}"
                             VerticalOptions="Center" />
                         <Label
@@ -113,7 +194,7 @@
                         <Label
                             Grid.Row="2"
                             HorizontalTextAlignment="End"
-                            Style="{StaticResource TitleStyle}"
+                            Style="{StaticResource TitleSmallStyle}"
                             Text="{Binding Path=[LastWatering], Source={x:Static utils:LocalizationManager.Instance}}"
                             VerticalOptions="Center" />
                         <Label
@@ -123,10 +204,11 @@
                             Text="{Binding LastWatered, StringFormat='{0:MM/dd/yyyy HH:mm}'}"
                             VerticalOptions="Center" />
 
+                        <!--  NextWatering  -->
                         <Label
                             Grid.Row="3"
                             HorizontalTextAlignment="End"
-                            Style="{StaticResource TitleStyle}"
+                            Style="{StaticResource TitleSmallStyle}"
                             Text="{Binding Path=[NextWatering], Source={x:Static utils:LocalizationManager.Instance}}"
                             VerticalOptions="Center" />
                         <Label
@@ -136,10 +218,11 @@
                             Text="{Binding NextWateringTime, StringFormat='{0:MM/dd/yyyy HH:mm}'}"
                             VerticalOptions="Center" />
 
+                        <!--  LastFertilization  -->
                         <Label
                             Grid.Row="4"
                             HorizontalTextAlignment="End"
-                            Style="{StaticResource TitleStyle}"
+                            Style="{StaticResource TitleSmallStyle}"
                             Text="{Binding Path=[LastFertilization], Source={x:Static utils:LocalizationManager.Instance}}"
                             VerticalOptions="Center" />
                         <Label
@@ -149,10 +232,11 @@
                             Text="{Binding LastFertilized, StringFormat='{0:MM/dd/yyyy HH:mm}'}"
                             VerticalOptions="Center" />
 
+                        <!--  NextFertilization  -->
                         <Label
                             Grid.Row="5"
                             HorizontalTextAlignment="End"
-                            Style="{StaticResource TitleStyle}"
+                            Style="{StaticResource TitleSmallStyle}"
                             Text="{Binding Path=[NextFertilization], Source={x:Static utils:LocalizationManager.Instance}}"
                             VerticalOptions="Center" />
                         <Label
@@ -175,7 +259,7 @@
                         <!--  Next watering  -->
                         <Label
                             HorizontalTextAlignment="End"
-                            Style="{StaticResource TitleStyle}"
+                            Style="{StaticResource TitleSmallStyle}"
                             Text="{Binding Path=[TillNextWatering], Source={x:Static utils:LocalizationManager.Instance}}"
                             TextColor="{StaticResource Primary}"
                             VerticalOptions="Center" />
@@ -187,10 +271,11 @@
                             TextColor="{StaticResource Primary}"
                             VerticalOptions="Center" />
 
+                        <!--  Next Fertilization  -->
                         <Label
                             Grid.Row="1"
                             HorizontalTextAlignment="End"
-                            Style="{StaticResource TitleStyle}"
+                            Style="{StaticResource TitleSmallStyle}"
                             Text="{Binding Path=[TillNextFertilization], Source={x:Static utils:LocalizationManager.Instance}}"
                             TextColor="{StaticResource Primary}"
                             VerticalOptions="Center" />

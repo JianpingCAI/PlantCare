@@ -313,58 +313,6 @@
                                                 Style="{StaticResource TitleSmallStyle}"
                                                 Text="{Binding Name}" />
 
-                                            <!--  Watering Progress  -->
-                                            <Grid ColumnDefinitions="auto,*" ColumnSpacing="8">
-                                                <Border
-                                                    Padding="6"
-                                                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},
-                                                                                      Dark={StaticResource Gray800}}"
-                                                    StrokeThickness="0">
-                                                    <Border.StrokeShape>
-                                                        <RoundRectangle CornerRadius="8" />
-                                                    </Border.StrokeShape>
-                                                    <Label
-                                                        FontFamily="MaterialIconsRegular"
-                                                        FontSize="16"
-                                                        Text="&#xe798;"
-                                                        TextColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
-                                                        VerticalOptions="Center" />
-                                                </Border>
-
-                                                <ProgressBar
-                                                    Grid.Column="1"
-                                                    Progress="{Binding WaterState}"
-                                                    ProgressColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
-                                                    Style="{StaticResource ProgressIndicatorStyle}"
-                                                    VerticalOptions="Center" />
-                                            </Grid>
-
-                                            <!--  Fertilization Progress  -->
-                                            <Grid ColumnDefinitions="auto,*" ColumnSpacing="8">
-                                                <Border
-                                                    Padding="6"
-                                                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},
-                                                                                      Dark={StaticResource Gray800}}"
-                                                    StrokeThickness="0">
-                                                    <Border.StrokeShape>
-                                                        <RoundRectangle CornerRadius="8" />
-                                                    </Border.StrokeShape>
-                                                    <Label
-                                                        FontFamily="MaterialIconsRegular"
-                                                        FontSize="16"
-                                                        Text="&#xe761;"
-                                                        TextColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
-                                                        VerticalOptions="Center" />
-                                                </Border>
-
-                                                <ProgressBar
-                                                    Grid.Column="1"
-                                                    Progress="{Binding FertilizeState}"
-                                                    ProgressColor="{Binding FertilizeState, Converter={StaticResource ProgressToColorConverter}}"
-                                                    Style="{StaticResource ProgressIndicatorStyle}"
-                                                    VerticalOptions="Center" />
-                                            </Grid>
-
                                         </VerticalStackLayout>
                                     </Grid>
                                 </Border>

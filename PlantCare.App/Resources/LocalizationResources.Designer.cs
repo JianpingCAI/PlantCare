@@ -160,6 +160,15 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Care Status.
+        /// </summary>
+        internal static string CareStatus {
+            get {
+                return ResourceManager.GetString("CareStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirmation.
         /// </summary>
         internal static string Confirmation {

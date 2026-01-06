@@ -321,4 +321,7 @@
   <data name="AppDescription" xml:space="preserve">
     <value>PlantCare helps you take care of your plants by providing reminders and tracks for watering and fertilization.</value>
   </data>
+  <data name="CareStatus" xml:space="preserve">
+    <value>Care Status</value>
+  </data>
 </root>

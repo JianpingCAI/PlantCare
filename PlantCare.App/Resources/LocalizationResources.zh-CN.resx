@@ -321,4 +321,7 @@
   <data name="AppDescription" xml:space="preserve">
     <value>植物护理通过提供浇水和施肥的提醒和记录来帮助您照顾植物。</value>
   </data>
+  <data name="CareStatus" xml:space="preserve">
+    <value>管理状况</value>
+  </data>
 </root>
