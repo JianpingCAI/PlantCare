@@ -18,454 +18,462 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid Padding="0">
+    <Grid Padding="16">
         <ScrollView>
-            <VerticalStackLayout Spacing="0">
-                <!--  Photo Section  -->
-                <Grid Margin="3" BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray950}}">
-                    <VerticalStackLayout Spacing="12">
-                        <Border
-                            HeightRequest="300"
+            <VerticalStackLayout Spacing="20">
+                <!--  Photo Section with Floating Action Buttons  -->
+                <Grid Margin="0">
+                    <Border
+                        HeightRequest="300"
+                        HorizontalOptions="Center"
+                        MaximumWidthRequest="300"
+                        Stroke="{AppThemeBinding Light={StaticResource Gray200},
+                                                 Dark={StaticResource Gray800}}"
+                        StrokeThickness="2"
+                        Style="{StaticResource ModernCardStyle}"
+                        VerticalOptions="Center"
+                        WidthRequest="300">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="150" />
+                        </Border.StrokeShape>
+
+                        <Image
+                            Aspect="AspectFill"
                             HorizontalOptions="Center"
-                            MaximumWidthRequest="300"
-                            Stroke="{AppThemeBinding Light={StaticResource Gray200},
-                                                     Dark={StaticResource Gray800}}"
-                            StrokeThickness="2"
-                            VerticalOptions="Center"
-                            WidthRequest="300">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="150" />
-                            </Border.StrokeShape>
+                            Source="{Binding PhotoPath}"
+                            VerticalOptions="Center" />
+                    </Border>
 
-                            <Image
-                                Aspect="AspectFill"
-                                HorizontalOptions="Center"
-                                Source="{Binding PhotoPath}"
-                                VerticalOptions="Center" />
-                        </Border>
+                    <!--  Gallery Button (Left Bottom Corner)  -->
+                    <Button
+                        Margin="24,0,0,5"
+                        Command="{Binding UploadImageCommand}"
+                        Style="{StaticResource FabButtonStyle}"
+                        HorizontalOptions="Start"
+                        VerticalOptions="End">
+                        <Button.ImageSource>
+                            <FontImageSource
+                                FontFamily="MaterialIconsRegular"
+                                Glyph="&#xe3f4;"
+                                Size="24"
+                                Color="White" />
+                        </Button.ImageSource>
+                    </Button>
 
-                        <!--  Photo Action Buttons  -->
-                        <Grid Margin="0,8,0,0" ColumnDefinitions="*,12,*">
-                            <Button
-                                Margin="10,0"
-                                Padding="12,0"
-                                Command="{Binding UploadImageCommand}"
-                                HeightRequest="44"
-                                HorizontalOptions="Fill"
-                                Style="{StaticResource OutlineButtonStyle}">
-                                <Button.ImageSource>
-                                    <FontImageSource
-                                        FontFamily="MaterialIconsRegular"
-                                        Glyph="&#xe3f4;"
-                                        Size="24"
-                                        Color="{AppThemeBinding Light={StaticResource Gray900},
-                                                                Dark={StaticResource Gray200}}" />
-                                </Button.ImageSource>
-                                <!--<Button.Text>Gallery</Button.Text>-->
-                            </Button>
-                            <Button
-                                Grid.Column="2"
-                                Margin="10,0"
-                                Padding="12,0"
-                                Command="{Binding TakePhotoCommand}"
-                                HeightRequest="44"
-                                HorizontalOptions="Fill"
-                                Style="{StaticResource OutlineButtonStyle}">
-                                <Button.ImageSource>
-                                    <FontImageSource
-                                        FontFamily="MaterialIconsRegular"
-                                        Glyph="&#xe412;"
-                                        Size="24"
-                                        Color="{AppThemeBinding Light={StaticResource Gray900},
-                                                                Dark={StaticResource Gray200}}" />
-                                </Button.ImageSource>
-                                <!--<Button.Text>Camera</Button.Text>-->
-                            </Button>
-                        </Grid>
-                    </VerticalStackLayout>
+                    <!--  Camera Button (Right Bottom Corner)  -->
+                    <Button
+                        Margin="0,0,24,5"
+                        Command="{Binding TakePhotoCommand}"
+                        Style="{StaticResource FabButtonStyle}"
+                        HorizontalOptions="End"
+                        VerticalOptions="End">
+                        <Button.ImageSource>
+                            <FontImageSource
+                                FontFamily="MaterialIconsRegular"
+                                Glyph="&#xe412;"
+                                Size="24"
+                                Color="White" />
+                        </Button.ImageSource>
+                    </Button>
                 </Grid>
 
-                <!--  Basic Information Section  -->
-                <VerticalStackLayout Padding="16,24,16,16" Spacing="16">
-                    <Label
-                        Margin="0,0,0,8"
-                        Style="{StaticResource TitleStyle}"
-                        Text="{Binding Path=[BasicInformation], Source={x:Static utils:LocalizationManager.Instance}}" />
+                <!--  Basic Information Card  -->
+                <Border Padding="16" Style="{StaticResource ModernCardStyle}">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Style="{StaticResource TitleSmallStyle}" Text="{Binding Path=[BasicInformation], Source={x:Static utils:LocalizationManager.Instance}}" />
 
-                    <!--  Name Field  -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[Name], Source={x:Static utils:LocalizationManager.Instance}}" />
-                        <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
-                            <Entry Placeholder="Enter plant name" Text="{Binding Name, Mode=TwoWay}" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!--  Species Field  -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[Species], Source={x:Static utils:LocalizationManager.Instance}}" />
-                        <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
-                            <Entry Placeholder="Enter species name" Text="{Binding Species, Mode=TwoWay}" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!--  Age Field  -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[Age], Source={x:Static utils:LocalizationManager.Instance}}" />
-                        <Grid ColumnDefinitions="*,12,Auto" ColumnSpacing="0">
+                        <!--  Name Field  -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[Name], Source={x:Static utils:LocalizationManager.Instance}}" />
                             <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
-                                <Entry
-                                    HorizontalTextAlignment="Start"
-                                    Keyboard="Numeric"
-                                    Placeholder="0"
-                                    Text="{Binding Age, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}" />
+                                <Entry Placeholder="Enter plant name" Text="{Binding Name, Mode=TwoWay}" />
                             </Border>
-                            <HorizontalStackLayout Grid.Column="2" Spacing="8">
-                                <Button
-                                    Padding="0"
-                                    Command="{Binding DecrementAgeCommand}"
-                                    FontAttributes="Bold"
-                                    HeightRequest="44"
-                                    Style="{StaticResource OutlineButtonStyle}"
-                                    Text="−"
-                                    WidthRequest="44" />
-                                <Button
-                                    Padding="0"
-                                    Command="{Binding IncrementAgeCommand}"
-                                    FontAttributes="Bold"
-                                    HeightRequest="44"
-                                    Style="{StaticResource OutlineButtonStyle}"
-                                    Text="+"
-                                    WidthRequest="44" />
-                            </HorizontalStackLayout>
-                        </Grid>
-                    </VerticalStackLayout>
-                </VerticalStackLayout>
+                        </VerticalStackLayout>
 
-                <!--  Divider  -->
-                <BoxView
-                    Margin="16,8"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray200},
-                                                      Dark={StaticResource Gray800}}"
-                    HeightRequest="1" />
-
-                <!--  Watering Schedule Section  -->
-                <VerticalStackLayout Padding="16,16,16,16" Spacing="16">
-                    <HorizontalStackLayout Spacing="8">
-                        <Label
-                            FontFamily="MaterialIconsRegular"
-                            Style="{StaticResource DisplaySmallStyle}"
-                            Text="&#xe798;"
-                            TextColor="{StaticResource Primary}"
-                            VerticalOptions="Center" />
-                        <Label
-                            Style="{StaticResource TitleStyle}"
-                            Text="{Binding Path=[WateringSchedule], Source={x:Static utils:LocalizationManager.Instance}}"
-                            VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-
-                    <!--  Watering Interval  -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[WateringInterval], Source={x:Static utils:LocalizationManager.Instance}}" />
-
-                        <Grid
-                            ColumnDefinitions="*,*"
-                            ColumnSpacing="8"
-                            RowDefinitions="Auto,Auto"
-                            RowSpacing="8">
-                            <!--  Days  -->
-                            <VerticalStackLayout Grid.Column="0" Spacing="4">
-                                <Label Style="{StaticResource BodySmallStyle}" Text="Days" />
-                                <Grid ColumnDefinitions="*,12,Auto" ColumnSpacing="0">
-                                    <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
-                                        <Entry
-                                            HorizontalTextAlignment="Center"
-                                            Keyboard="Numeric"
-                                            Placeholder="Days"
-                                            Text="{Binding WateringFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                            VerticalOptions="Center" />
-                                    </Border>
-                                    <HorizontalStackLayout Grid.Column="2" Spacing="8">
-                                        <Button
-                                            Padding="0"
-                                            Command="{Binding DecrementWateringDaysCommand}"
-                                            FontAttributes="Bold"
-                                            HeightRequest="44"
-                                            Style="{StaticResource OutlineButtonStyle}"
-                                            Text="−"
-                                            WidthRequest="44" />
-                                        <Button
-                                            Padding="0"
-                                            Command="{Binding IncrementWateringDaysCommand}"
-                                            FontAttributes="Bold"
-                                            HeightRequest="44"
-                                            Style="{StaticResource OutlineButtonStyle}"
-                                            Text="+"
-                                            WidthRequest="44" />
-                                    </HorizontalStackLayout>
-                                </Grid>
-                            </VerticalStackLayout>
-
-                            <!--  Hours  -->
-                            <VerticalStackLayout Grid.Column="1" Spacing="4">
-                                <Label Style="{StaticResource BodySmallStyle}" Text="Hours" />
-                                <Grid ColumnDefinitions="*,12,Auto" ColumnSpacing="0">
-                                    <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
-                                        <Entry
-                                            HorizontalTextAlignment="Center"
-                                            Keyboard="Numeric"
-                                            Placeholder="Hours"
-                                            Text="{Binding WateringFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                            VerticalOptions="Center" />
-                                    </Border>
-                                    <HorizontalStackLayout Grid.Column="2" Spacing="8">
-                                        <Button
-                                            Padding="0"
-                                            Command="{Binding DecrementWateringHoursCommand}"
-                                            FontAttributes="Bold"
-                                            HeightRequest="44"
-                                            Style="{StaticResource OutlineButtonStyle}"
-                                            Text="−"
-                                            WidthRequest="44" />
-                                        <Button
-                                            Padding="0"
-                                            Command="{Binding IncrementWateringHoursCommand}"
-                                            FontAttributes="Bold"
-                                            HeightRequest="44"
-                                            Style="{StaticResource OutlineButtonStyle}"
-                                            Text="+"
-                                            WidthRequest="44" />
-                                    </HorizontalStackLayout>
-                                </Grid>
-                            </VerticalStackLayout>
-                        </Grid>
-                    </VerticalStackLayout>
-
-                    <!--  Last Watering  -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[ModifyLastWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
-
-                        <Grid ColumnDefinitions="5*,3*,auto" ColumnSpacing="8">
-                            <Border Padding="8,0" Style="{StaticResource InputBorderStyle}">
-                                <DatePicker
-                                    BackgroundColor="Transparent"
-                                    Date="{Binding LastWateredDate, Mode=TwoWay}"
-                                    HorizontalOptions="Fill" />
+                        <!--  Species Field  -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[Species], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
+                                <Entry Placeholder="Enter species name" Text="{Binding Species, Mode=TwoWay}" />
                             </Border>
+                        </VerticalStackLayout>
+
+                        <!--  Age Field  -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[Age], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
+                                    <Entry
+                                        HorizontalTextAlignment="Start"
+                                        Keyboard="Numeric"
+                                        Placeholder="0"
+                                        Text="{Binding Age, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}" />
+                                </Border>
+                                <HorizontalStackLayout
+                                    Grid.Column="1"
+                                    Margin="8,0,0,0"
+                                    Spacing="4">
+                                    <Button
+                                        Padding="0"
+                                        Command="{Binding DecrementAgeCommand}"
+                                        FontAttributes="Bold"
+                                        HeightRequest="36"
+                                        Style="{StaticResource OutlineButtonStyle}"
+                                        Text="−"
+                                        WidthRequest="36" />
+                                    <Button
+                                        Padding="0"
+                                        Command="{Binding IncrementAgeCommand}"
+                                        FontAttributes="Bold"
+                                        HeightRequest="36"
+                                        Style="{StaticResource OutlineButtonStyle}"
+                                        Text="+"
+                                        WidthRequest="36" />
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  Watering Schedule Card  -->
+                <Border Padding="16" Style="{StaticResource ElevatedCardStyle}">
+                    <VerticalStackLayout Spacing="16">
+                        <HorizontalStackLayout Spacing="12">
                             <Border
-                                Grid.Column="1"
-                                Padding="8,0"
-                                Style="{StaticResource InputBorderStyle}">
-                                <TimePicker
-                                    BackgroundColor="Transparent"
-                                    HorizontalOptions="Fill"
-                                    Time="{Binding LastWateredTime, Mode=TwoWay}" />
+                                Padding="8"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                                                  Dark={StaticResource PrimaryDark}}"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label
+                                    FontFamily="MaterialIconsRegular"
+                                    FontSize="20"
+                                    Text="&#xe798;"
+                                    TextColor="White"
+                                    VerticalOptions="Center" />
                             </Border>
+                            <Label
+                                Style="{StaticResource TitleSmallStyle}"
+                                Text="{Binding Path=[WateringSchedule], Source={x:Static utils:LocalizationManager.Instance}}"
+                                VerticalOptions="Center" />
+                        </HorizontalStackLayout>
 
-                            <Button
-                                Grid.Column="2"
-                                Padding="16,0"
-                                Command="{Binding SetCurrentTimeAsLastWateredCommand}"
-                                HeightRequest="36"
-                                HorizontalOptions="Start"
-                                Style="{StaticResource OutlineButtonStyle}"
-                                Text="{Binding Path=[SetAsNow], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        <!--  Watering Interval  -->
+                        <VerticalStackLayout Spacing="12">
+                            <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[WateringInterval], Source={x:Static utils:LocalizationManager.Instance}}" />
 
-                        </Grid>
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                                <!--  Days  -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="8">
+                                    <Label Style="{StaticResource BodySmallStyle}" Text="{Binding Path=[Days], Source={x:Static utils:LocalizationManager.Instance}}" />
+                                    <Grid ColumnDefinitions="2*,Auto">
+                                        <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
+                                            <Entry
+                                                HorizontalTextAlignment="Center"
+                                                Keyboard="Numeric"
+                                                Placeholder="Days"
+                                                Text="{Binding WateringFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
+                                                VerticalOptions="Center" />
+                                        </Border>
+                                        <HorizontalStackLayout
+                                            Grid.Column="1"
+                                            Margin="8,0,0,0"
+                                            Spacing="4">
+                                            <Button
+                                                Padding="0"
+                                                Command="{Binding DecrementWateringDaysCommand}"
+                                                FontAttributes="Bold"
+                                                HeightRequest="36"
+                                                Style="{StaticResource OutlineButtonStyle}"
+                                                Text="−"
+                                                WidthRequest="36" />
+                                            <Button
+                                                Padding="0"
+                                                Command="{Binding IncrementWateringDaysCommand}"
+                                                FontAttributes="Bold"
+                                                HeightRequest="36"
+                                                Style="{StaticResource OutlineButtonStyle}"
+                                                Text="+"
+                                                WidthRequest="36" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </VerticalStackLayout>
+
+                                <!--  Hours  -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="8">
+                                    <Label Style="{StaticResource BodySmallStyle}" Text="{Binding Path=[Hours], Source={x:Static utils:LocalizationManager.Instance}}" />
+                                    <Grid ColumnDefinitions="2*,Auto">
+                                        <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
+                                            <Entry
+                                                HorizontalTextAlignment="Center"
+                                                Keyboard="Numeric"
+                                                Placeholder="Hours"
+                                                Text="{Binding WateringFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
+                                                VerticalOptions="Center" />
+                                        </Border>
+                                        <HorizontalStackLayout
+                                            Grid.Column="1"
+                                            Margin="8,0,0,0"
+                                            Spacing="4">
+                                            <Button
+                                                Padding="0"
+                                                Command="{Binding DecrementWateringHoursCommand}"
+                                                FontAttributes="Bold"
+                                                HeightRequest="36"
+                                                Style="{StaticResource OutlineButtonStyle}"
+                                                Text="−"
+                                                WidthRequest="36" />
+                                            <Button
+                                                Padding="0"
+                                                Command="{Binding IncrementWateringHoursCommand}"
+                                                FontAttributes="Bold"
+                                                HeightRequest="36"
+                                                Style="{StaticResource OutlineButtonStyle}"
+                                                Text="+"
+                                                WidthRequest="36" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </VerticalStackLayout>
+
+                        <!--  Last Watering  -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[ModifyLastWatering], Source={x:Static utils:LocalizationManager.Instance}}" />
+
+                            <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="8">
+                                <Border Padding="8,0" Style="{StaticResource InputBorderStyle}">
+                                    <DatePicker
+                                        BackgroundColor="Transparent"
+                                        Date="{Binding LastWateredDate, Mode=TwoWay}"
+                                        HorizontalOptions="Fill" />
+                                </Border>
+                                <Border
+                                    Grid.Column="1"
+                                    Padding="8,0"
+                                    Style="{StaticResource InputBorderStyle}">
+                                    <TimePicker
+                                        BackgroundColor="Transparent"
+                                        HorizontalOptions="Fill"
+                                        Time="{Binding LastWateredTime, Mode=TwoWay}" />
+                                </Border>
+
+                                <Button
+                                    Grid.Column="2"
+                                    Padding="12,0"
+                                    Command="{Binding SetCurrentTimeAsLastWateredCommand}"
+                                    HeightRequest="40"
+                                    HorizontalOptions="Start"
+                                    Style="{StaticResource OutlineButtonStyle}"
+                                    Text="{Binding Path=[SetAsNow], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            </Grid>
+                        </VerticalStackLayout>
                     </VerticalStackLayout>
-                </VerticalStackLayout>
+                </Border>
 
-                <!--  Divider  -->
-                <BoxView
-                    Margin="16,8"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray200},
-                                                      Dark={StaticResource Gray800}}"
-                    HeightRequest="1" />
-
-                <!--  Fertilization Schedule Section  -->
-                <VerticalStackLayout Padding="16,16,16,16" Spacing="16">
-                    <HorizontalStackLayout Spacing="8">
-                        <Label
-                            FontFamily="MaterialIconsRegular"
-                            Style="{StaticResource DisplaySmallStyle}"
-                            Text="&#xe761;"
-                            TextColor="{StaticResource Secondary}"
-                            VerticalOptions="Center" />
-                        <Label
-                            Style="{StaticResource TitleStyle}"
-                            Text="{Binding Path=[FertilizationSchedule], Source={x:Static utils:LocalizationManager.Instance}}"
-                            VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-
-                    <!--  Fertilization Interval  -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[FertilizationInterval], Source={x:Static utils:LocalizationManager.Instance}}" />
-
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                            <!--  Days  -->
-                            <VerticalStackLayout Grid.Column="0" Spacing="4">
-                                <Label Style="{StaticResource BodySmallStyle}" Text="Days" />
-                                <Grid ColumnDefinitions="*,12,Auto" ColumnSpacing="0">
-                                    <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
-                                        <Entry
-                                            HorizontalTextAlignment="Center"
-                                            Keyboard="Numeric"
-                                            Placeholder="Days"
-                                            Text="{Binding FertilizationFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                            VerticalOptions="Center" />
-                                    </Border>
-                                    <HorizontalStackLayout Grid.Column="2" Spacing="8">
-                                        <Button
-                                            Padding="0"
-                                            Command="{Binding DecrementFertilizationDaysCommand}"
-                                            FontAttributes="Bold"
-                                            HeightRequest="44"
-                                            Style="{StaticResource OutlineButtonStyle}"
-                                            Text="−"
-                                            WidthRequest="44" />
-                                        <Button
-                                            Padding="0"
-                                            Command="{Binding IncrementFertilizationDaysCommand}"
-                                            FontAttributes="Bold"
-                                            HeightRequest="44"
-                                            Style="{StaticResource OutlineButtonStyle}"
-                                            Text="+"
-                                            WidthRequest="44" />
-                                    </HorizontalStackLayout>
-                                </Grid>
-                            </VerticalStackLayout>
-
-                            <!--  Hours  -->
-                            <VerticalStackLayout Grid.Column="1" Spacing="4">
-                                <Label Style="{StaticResource BodySmallStyle}" Text="Hours" />
-                                <Grid ColumnDefinitions="*,12,Auto" ColumnSpacing="0">
-                                    <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
-                                        <Entry
-                                            HorizontalTextAlignment="Center"
-                                            Keyboard="Numeric"
-                                            Placeholder="Hours"
-                                            Text="{Binding FertilizationFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
-                                            VerticalOptions="Center" />
-                                    </Border>
-                                    <HorizontalStackLayout Grid.Column="2" Spacing="8">
-                                        <Button
-                                            Padding="0"
-                                            Command="{Binding DecrementFertilizationHoursCommand}"
-                                            FontAttributes="Bold"
-                                            HeightRequest="44"
-                                            Style="{StaticResource OutlineButtonStyle}"
-                                            Text="−"
-                                            WidthRequest="44" />
-                                        <Button
-                                            Padding="0"
-                                            Command="{Binding IncrementFertilizationHoursCommand}"
-                                            FontAttributes="Bold"
-                                            HeightRequest="44"
-                                            Style="{StaticResource OutlineButtonStyle}"
-                                            Text="+"
-                                            WidthRequest="44" />
-                                    </HorizontalStackLayout>
-                                </Grid>
-                            </VerticalStackLayout>
-                        </Grid>
-                    </VerticalStackLayout>
-
-                    <!--  Last Fertilization  -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[ModifyLastFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
-
-                        <Grid ColumnDefinitions="5*,3*,auto" ColumnSpacing="8">
-                            <Border Padding="8,0" Style="{StaticResource InputBorderStyle}">
-                                <DatePicker
-                                    BackgroundColor="Transparent"
-                                    Date="{Binding LastFertilizationDate, Mode=TwoWay}"
-                                    HorizontalOptions="Fill" />
-                            </Border>
+                <!--  Fertilization Schedule Card  -->
+                <Border Padding="16" Style="{StaticResource ElevatedCardStyle}">
+                    <VerticalStackLayout Spacing="16">
+                        <HorizontalStackLayout Spacing="12">
                             <Border
-                                Grid.Column="1"
-                                Padding="8,0"
-                                Style="{StaticResource InputBorderStyle}">
-                                <TimePicker
-                                    BackgroundColor="Transparent"
-                                    HorizontalOptions="Fill"
-                                    Time="{Binding LastFertilizationTime, Mode=TwoWay}" />
+                                Padding="8"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                                                  Dark={StaticResource PrimaryDark}}"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label
+                                    FontFamily="MaterialIconsRegular"
+                                    FontSize="20"
+                                    Text="&#xe761;"
+                                    TextColor="White"
+                                    VerticalOptions="Center" />
                             </Border>
+                            <Label
+                                Style="{StaticResource TitleSmallStyle}"
+                                Text="{Binding Path=[FertilizationSchedule], Source={x:Static utils:LocalizationManager.Instance}}"
+                                VerticalOptions="Center" />
+                        </HorizontalStackLayout>
 
-                            <Button
-                                Grid.Column="2"
-                                Padding="16,0"
-                                Command="{Binding SetCurrentTimeAsLastFertilizationCommand}"
-                                HeightRequest="36"
-                                HorizontalOptions="Start"
-                                Style="{StaticResource OutlineButtonStyle}"
-                                Text="{Binding Path=[SetAsNow], Source={x:Static utils:LocalizationManager.Instance}}" />
-                        </Grid>
+                        <!--  Fertilization Interval  -->
+                        <VerticalStackLayout Spacing="12">
+                            <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[FertilizationInterval], Source={x:Static utils:LocalizationManager.Instance}}" />
 
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                                <!--  Days  -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="8">
+                                    <Label Style="{StaticResource BodySmallStyle}" Text="{Binding Path=[Days], Source={x:Static utils:LocalizationManager.Instance}}" />
+                                    <Grid ColumnDefinitions="2*,Auto">
+                                        <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
+                                            <Entry
+                                                HorizontalTextAlignment="Center"
+                                                Keyboard="Numeric"
+                                                Placeholder="Days"
+                                                Text="{Binding FertilizationFrequencyDays, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
+                                                VerticalOptions="Center" />
+                                        </Border>
+                                        <HorizontalStackLayout
+                                            Grid.Column="1"
+                                            Margin="8,0,0,0"
+                                            Spacing="4">
+                                            <Button
+                                                Padding="0"
+                                                Command="{Binding DecrementFertilizationDaysCommand}"
+                                                FontAttributes="Bold"
+                                                HeightRequest="36"
+                                                Style="{StaticResource OutlineButtonStyle}"
+                                                Text="−"
+                                                WidthRequest="36" />
+                                            <Button
+                                                Padding="0"
+                                                Command="{Binding IncrementFertilizationDaysCommand}"
+                                                FontAttributes="Bold"
+                                                HeightRequest="36"
+                                                Style="{StaticResource OutlineButtonStyle}"
+                                                Text="+"
+                                                WidthRequest="36" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </VerticalStackLayout>
 
+                                <!--  Hours  -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="8">
+                                    <Label Style="{StaticResource BodySmallStyle}" Text="{Binding Path=[Hours], Source={x:Static utils:LocalizationManager.Instance}}" />
+                                    <Grid ColumnDefinitions="2*,Auto">
+                                        <Border Padding="12,0" Style="{StaticResource InputBorderStyle}">
+                                            <Entry
+                                                HorizontalTextAlignment="Center"
+                                                Keyboard="Numeric"
+                                                Placeholder="Hours"
+                                                Text="{Binding FertilizationFrequencyHours, Mode=TwoWay, Converter={StaticResource StringToIntConverter}}"
+                                                VerticalOptions="Center" />
+                                        </Border>
+                                        <HorizontalStackLayout
+                                            Grid.Column="1"
+                                            Margin="8,0,0,0"
+                                            Spacing="4">
+                                            <Button
+                                                Padding="0"
+                                                Command="{Binding DecrementFertilizationHoursCommand}"
+                                                FontAttributes="Bold"
+                                                HeightRequest="36"
+                                                Style="{StaticResource OutlineButtonStyle}"
+                                                Text="−"
+                                                WidthRequest="36" />
+                                            <Button
+                                                Padding="0"
+                                                Command="{Binding IncrementFertilizationHoursCommand}"
+                                                FontAttributes="Bold"
+                                                HeightRequest="36"
+                                                Style="{StaticResource OutlineButtonStyle}"
+                                                Text="+"
+                                                WidthRequest="36" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </VerticalStackLayout>
+
+                        <!--  Last Fertilization  -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Style="{StaticResource LabelStyle}" Text="{Binding Path=[ModifyLastFertilization], Source={x:Static utils:LocalizationManager.Instance}}" />
+
+                            <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="8">
+                                <Border Padding="8,0" Style="{StaticResource InputBorderStyle}">
+                                    <DatePicker
+                                        BackgroundColor="Transparent"
+                                        Date="{Binding LastFertilizationDate, Mode=TwoWay}"
+                                        HorizontalOptions="Fill" />
+                                </Border>
+                                <Border
+                                    Grid.Column="1"
+                                    Padding="8,0"
+                                    Style="{StaticResource InputBorderStyle}">
+                                    <TimePicker
+                                        BackgroundColor="Transparent"
+                                        HorizontalOptions="Fill"
+                                        Time="{Binding LastFertilizationTime, Mode=TwoWay}" />
+                                </Border>
+
+                                <Button
+                                    Grid.Column="2"
+                                    Padding="12,0"
+                                    Command="{Binding SetCurrentTimeAsLastFertilizationCommand}"
+                                    HeightRequest="40"
+                                    HorizontalOptions="Start"
+                                    Style="{StaticResource OutlineButtonStyle}"
+                                    Text="{Binding Path=[SetAsNow], Source={x:Static utils:LocalizationManager.Instance}}" />
+                            </Grid>
+                        </VerticalStackLayout>
                     </VerticalStackLayout>
-                </VerticalStackLayout>
+                </Border>
 
-                <!--  Divider  -->
-                <BoxView
-                    Margin="16,8"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray200},
-                                                      Dark={StaticResource Gray800}}"
-                    HeightRequest="1" />
+                <!--  Notes Card  -->
+                <Border Padding="16" Style="{StaticResource ModernCardStyle}">
+                    <VerticalStackLayout Spacing="12">
+                        <HorizontalStackLayout Spacing="12">
+                            <Border
+                                Padding="8"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                                                  Dark={StaticResource PrimaryDark}}"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label
+                                    FontFamily="MaterialIconsRegular"
+                                    FontSize="20"
+                                    Text="&#xe24d;"
+                                    TextColor="White"
+                                    VerticalOptions="Center" />
+                            </Border>
+                            <Label
+                                Style="{StaticResource TitleSmallStyle}"
+                                Text="{Binding Path=[Notes], Source={x:Static utils:LocalizationManager.Instance}}"
+                                VerticalOptions="Center" />
+                        </HorizontalStackLayout>
 
-                <!--  Notes Section  -->
-                <VerticalStackLayout Padding="16,16,16,24" Spacing="12">
-                    <HorizontalStackLayout Spacing="8">
-                        <Label
-                            FontFamily="MaterialIconsRegular"
-                            Style="{StaticResource DisplaySmallStyle}"
-                            Text="&#xe24d;"
-                            TextColor="{StaticResource Tertiary}"
-                            VerticalOptions="Center" />
-                        <Label
-                            Style="{StaticResource TitleStyle}"
-                            Text="{Binding Path=[Notes], Source={x:Static utils:LocalizationManager.Instance}}"
-                            VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-
-                    <Border
-                        Padding="12"
-                        HeightRequest="120"
-                        Style="{StaticResource InputBorderStyle}">
-                        <Editor
-                            AutoSize="TextChanges"
-                            BackgroundColor="Transparent"
-                            Placeholder="Add notes about your plant..."
-                            Text="{Binding Notes}" />
-                    </Border>
-                </VerticalStackLayout>
+                        <Border
+                            Padding="12"
+                            HeightRequest="120"
+                            Style="{StaticResource InputBorderStyle}">
+                            <Editor
+                                AutoSize="TextChanges"
+                                BackgroundColor="Transparent"
+                                Placeholder="Add notes about your plant..."
+                                Text="{Binding Notes}" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
 
                 <!--  Validation Errors  -->
-                <VerticalStackLayout Padding="16,0,16,16" BindableLayout.ItemsSource="{Binding Errors}">
+                <VerticalStackLayout Padding="0" BindableLayout.ItemsSource="{Binding Errors}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="dataAnnotations:ValidationResult">
                             <Border
                                 Margin="0,4"
-                                Padding="12"
-                                BackgroundColor="{AppThemeBinding Light=#FFF3E0,
-                                                                  Dark=#5D4037}"
-                                Stroke="{AppThemeBinding Light=#FF6F00,
-                                                         Dark=#FF8A65}"
-                                StrokeThickness="1">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="8" />
-                                </Border.StrokeShape>
-                                <HorizontalStackLayout Spacing="8">
+                                Padding="16"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource DangerColor},
+                                                                  Dark={StaticResource DangerColor}}"
+                                Opacity="0.1"
+                                Style="{StaticResource ModernCardStyle}">
+                                <HorizontalStackLayout Spacing="12">
                                     <Label
                                         FontFamily="MaterialIconsRegular"
-                                        Style="{StaticResource HeadlineSmallStyle}"
+                                        FontSize="24"
                                         Text="&#xe002;"
-                                        TextColor="{AppThemeBinding Light=#FF6F00,
-                                                                    Dark=#FF8A65}"
+                                        TextColor="{StaticResource DangerColor}"
                                         VerticalOptions="Center" />
                                     <Label
                                         Style="{StaticResource BodyStyle}"
                                         Text="{Binding ErrorMessage}"
-                                        TextColor="{AppThemeBinding Light=#E65100,
-                                                                    Dark=#FFAB91}"
+                                        TextColor="{StaticResource DangerColor}"
                                         VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                             </Border>
@@ -475,7 +483,7 @@
 
                 <!--  Save Button  -->
                 <Button
-                    Margin="16,0,16,32"
+                    Margin="0,0,0,16"
                     Command="{Binding SubmitCommand}"
                     FontAttributes="Bold"
                     HeightRequest="52"

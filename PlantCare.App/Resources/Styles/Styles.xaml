@@ -163,8 +163,8 @@
         <Setter Property="FontFamily" Value="MaterialIconsRegular" />
         <Setter Property="FontSize" Value="24" />
         <Setter Property="CornerRadius" Value="30" />
-        <Setter Property="WidthRequest" Value="60" />
-        <Setter Property="HeightRequest" Value="60" />
+        <Setter Property="WidthRequest" Value="50" />
+        <Setter Property="HeightRequest" Value="50" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderWidth" Value="0" />
         <Setter Property="Shadow">

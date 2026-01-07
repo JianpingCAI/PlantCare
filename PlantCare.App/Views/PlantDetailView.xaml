@@ -16,7 +16,7 @@
             <utils:HoursToDayHourStringConverter x:Key="HoursToDayHourStringConverter" />
             <utils:ProgressToColorConverter x:Key="ProgressToColorConverter" />
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
-            
+
             <Style x:Key="ProgressIndicatorStyle" TargetType="ProgressBar">
                 <Setter Property="HeightRequest" Value="6" />
                 <Setter Property="ProgressColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Secondary}}" />
@@ -61,22 +61,29 @@
 
                     <!--  Edit Button  -->
                     <Button
-                        Margin="0,0,10,0"
+                        Margin="0,0,24,10"
+                        Padding="0"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                                          Dark={StaticResource PrimaryDark}}"
                         Command="{Binding NavigateToEditPlantCommand}"
-                        ContentLayout="Left,8"
-                        CornerRadius="12"
+                        CornerRadius="24"
                         HeightRequest="48"
                         HorizontalOptions="End"
-                        Style="{StaticResource OutlineButtonStyle}"
-                        Text="{Binding Path=[Edit], Source={x:Static utils:LocalizationManager.Instance}}"
-                        VerticalOptions="End">
+                        VerticalOptions="End"
+                        WidthRequest="48">
+                        <Button.Shadow>
+                            <Shadow
+                                Brush="{StaticResource Primary}"
+                                Opacity="0.3"
+                                Radius="12"
+                                Offset="0,4" />
+                        </Button.Shadow>
                         <Button.ImageSource>
                             <FontImageSource
                                 FontFamily="MaterialIconsRegular"
                                 Glyph="&#xe3c9;"
                                 Size="24"
-                                Color="{AppThemeBinding Light={StaticResource Gray900},
-                                        Dark={StaticResource Gray200}}" />
+                                Color="White" />
                         </Button.ImageSource>
                     </Button>
                 </Grid>
@@ -86,11 +93,11 @@
                     <VerticalStackLayout Spacing="12">
                         <!--  Card Title  -->
                         <Label
-                            Style="{StaticResource TitleSmallStyle}"
-                            Text="{Binding Path=[CareStatus], Source={x:Static utils:LocalizationManager.Instance}}"
+                            Margin="0,0,0,4"
                             HorizontalOptions="Center"
-                            Margin="0,0,0,4" />
-                        
+                            Style="{StaticResource TitleSmallStyle}"
+                            Text="{Binding Path=[CareStatus], Source={x:Static utils:LocalizationManager.Instance}}" />
+
                         <!--  Watering Progress  -->
                         <Grid ColumnDefinitions="auto,*" ColumnSpacing="12">
                             <Border
