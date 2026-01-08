@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:strings="clr-namespace:PlantCare.App.Resources"
+    xmlns:styles="clr-namespace:PlantCare.App.Resources.Styles"
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     Title="PlantCare.App"
@@ -24,7 +25,6 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-
     <Shell.TitleView>
         <Grid ColumnDefinitions="auto,*">
             <Border
@@ -36,7 +36,13 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="40" />
                 </Border.StrokeShape>
-                <Image HeightRequest="40" Source="default_plant.png" />
+                <Label
+                    FontFamily="MaterialIconsRegular"
+                    FontSize="40"
+                    Text="{x:Static styles:MaterialIconFont.Plant}"
+                    TextColor="{AppThemeBinding Light={StaticResource Primary},
+                                                Dark={StaticResource PrimaryLight}}"
+                    VerticalOptions="Center" />
             </Border>
 
             <Label
@@ -56,29 +62,59 @@
             x:Name="tabHome"
             Title="{Binding Path=[Home], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:PlantOverviewView}"
-            Icon="tab_home.png"
-            Route="overview" />
+            Route="overview">
+            <ShellContent.Icon>
+                <FontImageSource
+                    FontFamily="MaterialIconsRegular"
+                    Glyph="{x:Static styles:MaterialIconFont.PottedPlant}"
+                    Color="{AppThemeBinding Light={StaticResource Primary},
+                                            Dark={StaticResource PrimaryLight}}" />
+            </ShellContent.Icon>
+        </ShellContent>
 
-        <!--  CareSchedule  -->
+        <!--  Care Schedule  -->
         <ShellContent
             x:Name="tabCalendar"
             Title="{Binding Path=[Care], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:PlantCalendarView}"
-            Icon="tab_calender.png"
-            Route="calendar" />
+            Route="calendar">
+            <ShellContent.Icon>
+                <FontImageSource
+                    FontFamily="MaterialIconsRegular"
+                    Glyph="{x:Static styles:MaterialIconFont.CheckDone}"
+                    Color="{AppThemeBinding Light={StaticResource Primary},
+                                            Dark={StaticResource PrimaryLight}}" />
+            </ShellContent.Icon>
+        </ShellContent>
 
+        <!--  History  -->
         <ShellContent
             x:Name="tabHistory"
             Title="{Binding Path=[History], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:CareHistoryView}"
-            Icon="tab_history.png"
-            Route="careHistory" />
+            Route="careHistory">
+            <ShellContent.Icon>
+                <FontImageSource
+                    FontFamily="MaterialIconsRegular"
+                    Glyph="{x:Static styles:MaterialIconFont.EventNote}"
+                    Color="{AppThemeBinding Light={StaticResource Primary},
+                                            Dark={StaticResource PrimaryLight}}" />
+            </ShellContent.Icon>
+        </ShellContent>
 
+        <!--  Settings  -->
         <ShellContent
             x:Name="tabSettings"
             Title="{Binding Path=[Settings], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:SettingsView}"
-            Icon="tab_settings.png"
-            Route="settings" />
+            Route="settings">
+            <ShellContent.Icon>
+                <FontImageSource
+                    FontFamily="MaterialIconsRegular"
+                    Glyph="{x:Static styles:MaterialIconFont.Settings}"
+                    Color="{AppThemeBinding Light={StaticResource Primary},
+                                            Dark={StaticResource PrimaryLight}}" />
+            </ShellContent.Icon>
+        </ShellContent>
     </TabBar>
 </Shell>
