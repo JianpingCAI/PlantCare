@@ -8,7 +8,7 @@
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     x:Name="thisPage"
     x:DataType="vm:SinglePlantCareHistoryViewModel">
-    
+
     <Shell.TitleView>
         <Grid
             Padding="12,0,8,0"
@@ -53,7 +53,7 @@
             </VerticalStackLayout>
         </Grid>
     </Shell.TitleView>
-    
+
     <Grid Padding="5,2,5,0" x:DataType="vm:SinglePlantCareHistoryViewModel">
         <Grid>
             <CollectionView ItemsSource="{Binding TimestampRecords}">
@@ -70,23 +70,27 @@
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="5" />
                             </Border.StrokeShape>
-                            <Grid ColumnDefinitions="*,*">
+                            <Grid ColumnDefinitions="*,auto">
                                 <Label
-                                    Style="{StaticResource HeadlineSmallStyle}"
                                     FontAttributes="Bold"
-                                    HorizontalOptions="End"
+                                    HorizontalOptions="Start"
+                                    Style="{StaticResource HeadlineSmallStyle}"
                                     Text="{Binding Timestamp, StringFormat='{0:MM/dd/yyyy HH:mm}'}" />
                                 <Button
                                     Grid.Column="1"
-                                    Margin="0,0,5,0"
-                                    Padding="0"
+                                    Margin="10,0,5,0"
                                     Command="{Binding Source={x:Reference thisPage}, Path=BindingContext.DeleteRecordCommand}"
                                     CommandParameter="{Binding .}"
-                                    CornerRadius="20"
-                                    FontFamily="MaterialIconsRegular"
-                                    HorizontalOptions="End"
-                                    Text="&#xe92b;"
-                                    VerticalOptions="Center" />
+                                    Style="{StaticResource FabButtonStyle}"
+                                    VerticalOptions="Center">
+                                    <Button.ImageSource>
+                                        <FontImageSource
+                                            FontFamily="MaterialIconsRegular"
+                                            Glyph="&#xe92b;"
+                                            Size="24"
+                                            Color="White" />
+                                    </Button.ImageSource>
+                                </Button>
                             </Grid>
                         </Border>
                     </DataTemplate>
