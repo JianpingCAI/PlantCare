@@ -220,6 +220,9 @@
 		<Compile Update="Views\CareHistoryView.xaml.cs">
 			<DependentUpon>CareHistoryView.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\SplashPage.xaml.cs">
+			<DependentUpon>SplashPage.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -280,6 +283,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\CareHistoryView.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\SplashPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
 

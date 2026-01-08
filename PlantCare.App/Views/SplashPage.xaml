@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PlantCare.App.Views.SplashPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:utils="clr-namespace:PlantCare.App.Utils"
+    BackgroundColor="{StaticResource Primary}"
+    Padding="0"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False"
+    Shell.TitleView="{x:Null}">
+
+    <Grid
+        ColumnDefinitions="*"
+        RowDefinitions="*,Auto,*">
+
+        <!--  Background Gradient  -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Offset="0.0" Color="{StaticResource Primary}" />
+                <GradientStop Offset="0.5" Color="#3D6B24" />
+                <GradientStop Offset="1.0" Color="{StaticResource Secondary}" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!--  Decorative circles  -->
+        <Ellipse
+            x:Name="Circle1"
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="-100,-100,0,0"
+            HeightRequest="250"
+            HorizontalOptions="Start"
+            Opacity="0.1"
+            VerticalOptions="Start"
+            WidthRequest="250">
+            <Ellipse.Fill>
+                <SolidColorBrush Color="{StaticResource White}" />
+            </Ellipse.Fill>
+        </Ellipse>
+
+        <Ellipse
+            x:Name="Circle2"
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="0,0,-80,-80"
+            HeightRequest="200"
+            HorizontalOptions="End"
+            Opacity="0.1"
+            VerticalOptions="End"
+            WidthRequest="200">
+            <Ellipse.Fill>
+                <SolidColorBrush Color="{StaticResource White}" />
+            </Ellipse.Fill>
+        </Ellipse>
+
+        <!--  Main Content  -->
+        <VerticalStackLayout
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.Column="0"
+            Padding="40,20,40,40"
+            HorizontalOptions="Center"
+            Spacing="20"
+            VerticalOptions="FillAndExpand">
+
+            <!--  Spacer for top spacing  -->
+            <BoxView HeightRequest="20" IsVisible="False" />
+
+            <!--  Logo Container with Animation  -->
+            <Border
+                x:Name="LogoBorder"
+                Padding="20"
+                BackgroundColor="{StaticResource White}"
+                HeightRequest="140"
+                HorizontalOptions="Center"
+                StrokeThickness="0"
+                WidthRequest="140">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="70" />
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow
+                        Brush="{StaticResource Black}"
+                        Opacity="0.3"
+                        Radius="20"
+                        Offset="0,10" />
+                </Border.Shadow>
+
+                <Image
+                    x:Name="LogoImage"
+                    Aspect="AspectFit"
+                    HeightRequest="100"
+                    Source="default_plant.png"
+                    WidthRequest="100" />
+            </Border>
+
+            <!--  App Name with Localization  -->
+            <Label
+                x:Name="AppNameLabel"
+                FontAttributes="Bold"
+                FontSize="36"
+                HorizontalOptions="Center"
+                Text="{Binding Path=[AppName], Source={x:Static utils:LocalizationManager.Instance}}"
+                TextColor="{StaticResource White}" />
+
+            <!--  Tagline with Localization  -->
+            <Label
+                x:Name="TaglineLabel"
+                FontSize="16"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                LineBreakMode="WordWrap"
+                MaximumWidthRequest="300"
+                Text="{Binding Path=[SplashTagline], Source={x:Static utils:LocalizationManager.Instance}}"
+                TextColor="{StaticResource White}" />
+
+            <!--  Emoji marker  -->
+            <Label
+                FontSize="28"
+                HorizontalOptions="Center"
+                Text="🌱"
+                TextColor="{StaticResource White}" />
+
+            <!--  Features with Localization  -->
+            <VerticalStackLayout
+                x:Name="FeaturesContainer"
+                Margin="0,10,0,0"
+                HorizontalOptions="Center"
+                Spacing="12">
+
+                <!--  Feature 1  -->
+                <HorizontalStackLayout x:Name="Feature1" Spacing="12">
+                    <Border
+                        BackgroundColor="{StaticResource White}"
+                        HeightRequest="40"
+                        StrokeThickness="0"
+                        WidthRequest="40">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Label
+                            FontFamily="MaterialIconsRegular"
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="&#xe798;"
+                            TextColor="{StaticResource Primary}"
+                            VerticalOptions="Center" />
+                    </Border>
+                    <Label
+                        FontSize="14"
+                        Text="{Binding Path=[SplashFeature1], Source={x:Static utils:LocalizationManager.Instance}}"
+                        TextColor="{StaticResource White}"
+                        VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <!--  Feature 2  -->
+                <HorizontalStackLayout x:Name="Feature2" Spacing="12">
+                    <Border
+                        BackgroundColor="{StaticResource White}"
+                        HeightRequest="40"
+                        StrokeThickness="0"
+                        WidthRequest="40">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Label
+                            FontFamily="MaterialIconsRegular"
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="&#xe616;"
+                            TextColor="{StaticResource Primary}"
+                            VerticalOptions="Center" />
+                    </Border>
+                    <Label
+                        FontSize="14"
+                        Text="{Binding Path=[SplashFeature2], Source={x:Static utils:LocalizationManager.Instance}}"
+                        TextColor="{StaticResource White}"
+                        VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <!--  Feature 3  -->
+                <HorizontalStackLayout x:Name="Feature3" Spacing="12">
+                    <Border
+                        BackgroundColor="{StaticResource White}"
+                        HeightRequest="40"
+                        StrokeThickness="0"
+                        WidthRequest="40">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Label
+                            FontFamily="MaterialIconsRegular"
+                            FontSize="24"
+                            HorizontalOptions="Center"
+                            Text="&#xe8f4;"
+                            TextColor="{StaticResource Primary}"
+                            VerticalOptions="Center" />
+                    </Border>
+                    <Label
+                        FontSize="14"
+                        Text="{Binding Path=[SplashFeature3], Source={x:Static utils:LocalizationManager.Instance}}"
+                        TextColor="{StaticResource White}"
+                        VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <!--  Spacer to push content up and loading indicator down  -->
+            <BoxView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+
+            <!--  Loading Indicator  -->
+            <ActivityIndicator
+                x:Name="LoadingIndicator"
+                HeightRequest="40"
+                HorizontalOptions="Center"
+                IsRunning="True"
+                Color="{StaticResource White}"
+                Margin="0,0,0,10"
+                WidthRequest="40" />
+
+            <!--  Version with Localization  -->
+            <Label
+                x:Name="VersionLabel"
+                FontSize="12"
+                HorizontalOptions="Center"
+                TextColor="{StaticResource White}">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding Path=[Version], Source={x:Static utils:LocalizationManager.Instance}}" />
+                        <Span Text=" 0.8.1" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

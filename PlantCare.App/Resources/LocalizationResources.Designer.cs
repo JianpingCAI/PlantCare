@@ -115,6 +115,15 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MyPlantCare.
+        /// </summary>
+        internal static string AppName {
+            get {
+                return ResourceManager.GetString("AppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average.
         /// </summary>
         internal static string Average {
@@ -579,6 +588,42 @@ namespace PlantCare.App.Resources {
         internal static string Species {
             get {
                 return ResourceManager.GetString("Species", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Track watering and fertilization.
+        /// </summary>
+        internal static string SplashFeature1 {
+            get {
+                return ResourceManager.GetString("SplashFeature1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get care reminders.
+        /// </summary>
+        internal static string SplashFeature2 {
+            get {
+                return ResourceManager.GetString("SplashFeature2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monitor growth history.
+        /// </summary>
+        internal static string SplashFeature3 {
+            get {
+                return ResourceManager.GetString("SplashFeature3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nurture your plants with care and love.
+        /// </summary>
+        internal static string SplashTagline {
+            get {
+                return ResourceManager.GetString("SplashTagline", resourceCulture);
             }
         }
         

@@ -324,4 +324,19 @@
   <data name="CareStatus" xml:space="preserve">
     <value>管理状况</value>
   </data>
+  <data name="AppName" xml:space="preserve">
+    <value>我的植物养护</value>
+  </data>
+  <data name="SplashTagline" xml:space="preserve">
+    <value>跟踪浇水计划</value>
+  </data>
+  <data name="SplashFeature1" xml:space="preserve">
+    <value>跟踪浇水施肥计划</value>
+  </data>
+  <data name="SplashFeature2" xml:space="preserve">
+    <value>获取护理提醒</value>
+  </data>
+  <data name="SplashFeature3" xml:space="preserve">
+    <value>监控生长历史</value>
+  </data>
 </root>

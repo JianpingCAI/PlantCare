@@ -324,4 +324,19 @@
   <data name="CareStatus" xml:space="preserve">
     <value>Care Status</value>
   </data>
+  <data name="AppName" xml:space="preserve">
+    <value>MyPlantCare</value>
+  </data>
+  <data name="SplashTagline" xml:space="preserve">
+    <value>Nurture your plants with care and love</value>
+  </data>
+  <data name="SplashFeature1" xml:space="preserve">
+    <value>Track watering and fertilization</value>
+  </data>
+  <data name="SplashFeature2" xml:space="preserve">
+    <value>Get care reminders</value>
+  </data>
+  <data name="SplashFeature3" xml:space="preserve">
+    <value>Monitor growth history</value>
+  </data>
 </root>

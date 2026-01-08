@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PlantCare.App.Services;
 using PlantCare.App.Services.DBService;
 using PlantCare.App.Utils;
+using PlantCare.App.Views;
 using PlantCare.Data.Repositories;
 using System.Diagnostics;
 
@@ -75,11 +76,8 @@ namespace PlantCare.App
                 await LoadLocalizationLanguageAsync();
 
                 // Add navigation event handlers on main thread
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    RegisterNavigationEventHandlers();
-                });
-
+                // Note: This will be called after SplashPage navigates to AppShell
+                
                 // Global exception handling
                 AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
                 TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
@@ -130,7 +128,12 @@ namespace PlantCare.App
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell());
+            // Show animated splash page first
+            return new Window(new NavigationPage(new SplashPage())
+            {
+                BarBackgroundColor = Colors.Transparent,
+                BarTextColor = Colors.White
+            });
         }
 
         private void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
@@ -240,23 +243,6 @@ namespace PlantCare.App
                         Current.UserAppTheme = AppTheme.Light;
                     }
                 });
-            }
-        }
-
-        private static void RegisterNavigationEventHandlers()
-        {
-            Shell current = Shell.Current;
-            if (current != null)
-            {
-                current.Navigating += (sender, args) =>
-                {
-                    Debug.WriteLine("Navigating to: " + args.Target.Location.ToString());
-                };
-
-                current.Navigated += (sender, args) =>
-                {
-                    Debug.WriteLine("Navigated to: " + args.Current.Location.ToString());
-                };
             }
         }
     }
