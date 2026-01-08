@@ -47,7 +47,7 @@
                     Style="{StaticResource TitleSmallStyle}"
                     Text="{Binding Path=[MyPlants], Source={x:Static utils:LocalizationManager.Instance}}"
                     VerticalTextAlignment="Center" />
-                <StackLayout Orientation="Horizontal" Spacing="3">
+                <HorizontalStackLayout Spacing="3">
                     <Label
                         Opacity="0.7"
                         Style="{StaticResource CaptionStyle}"
@@ -58,7 +58,7 @@
                         Style="{StaticResource CaptionStyle}"
                         Text="{Binding Path=[PlantsCount], Source={x:Static utils:LocalizationManager.Instance}}"
                         VerticalTextAlignment="Center" />
-                </StackLayout>
+                </HorizontalStackLayout>
             </VerticalStackLayout>
 
             <!--  Add Plant Button  -->

@@ -9,8 +9,71 @@
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
-    Title="{Binding Name, StringFormat='{0}'}"
     x:DataType="vm:PlantDetailViewModel">
+    
+    <Shell.TitleView>
+        <Grid
+            Padding="12,0,8,0"
+            ColumnDefinitions="auto,*,auto"
+            ColumnSpacing="12">
+            <!--  Icon  -->
+            <Border
+                HorizontalOptions="Start"
+                Stroke="Transparent"
+                StrokeThickness="0"
+                VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12" />
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow
+                        Brush="{StaticResource Primary}"
+                        Opacity="0.15"
+                        Radius="8"
+                        Offset="0,2" />
+                </Border.Shadow>
+                <Image
+                    HeightRequest="44"
+                    Source="default_plant.png"
+                    WidthRequest="44" />
+            </Border>
+
+            <!--  Title Section  -->
+            <VerticalStackLayout
+                Grid.Column="1"
+                Spacing="2"
+                VerticalOptions="Center">
+                <Label
+                    Style="{StaticResource TitleSmallStyle}"
+                    Text="{Binding Name}"
+                    VerticalTextAlignment="Center" />
+                <Label
+                    Opacity="0.7"
+                    Style="{StaticResource CaptionStyle}"
+                    Text="{Binding Path=[PlantDetails], Source={x:Static utils:LocalizationManager.Instance}}"
+                    VerticalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <!--  Edit Button  -->
+            <Button
+                Grid.Column="2"
+                Margin="0,0,4,0"
+                Padding="10"
+                Command="{Binding NavigateToEditPlantCommand}"
+                HorizontalOptions="End"
+                Style="{StaticResource FabButtonStyle}"
+                VerticalOptions="Center">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="MaterialIconsRegular"
+                        Glyph="&#xe3c9;"
+                        Size="20"
+                        Color="White" />
+                </Button.ImageSource>
+            </Button>
+        </Grid>
+    </Shell.TitleView>
+    
     <ContentPage.Resources>
         <ResourceDictionary>
             <utils:HoursToDayHourStringConverter x:Key="HoursToDayHourStringConverter" />
@@ -27,7 +90,7 @@
     <Grid Padding="16,8,16,16">
         <ScrollView>
             <StackLayout Spacing="16">
-                <!--  Photo Section with Edit Button  -->
+                <!--  Photo Section  -->
                 <Grid Margin="0,8,0,0">
                     <Border
                         HeightRequest="300"
@@ -58,34 +121,6 @@
                             Source="{Binding PhotoPath}"
                             VerticalOptions="Center" />
                     </Border>
-
-                    <!--  Edit Button  -->
-                    <Button
-                        Margin="0,0,24,10"
-                        Padding="0"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
-                                                          Dark={StaticResource PrimaryDark}}"
-                        Command="{Binding NavigateToEditPlantCommand}"
-                        CornerRadius="24"
-                        HeightRequest="48"
-                        HorizontalOptions="End"
-                        VerticalOptions="End"
-                        WidthRequest="48">
-                        <Button.Shadow>
-                            <Shadow
-                                Brush="{StaticResource Primary}"
-                                Opacity="0.3"
-                                Radius="12"
-                                Offset="0,4" />
-                        </Button.Shadow>
-                        <Button.ImageSource>
-                            <FontImageSource
-                                FontFamily="MaterialIconsRegular"
-                                Glyph="&#xe3c9;"
-                                Size="24"
-                                Color="White" />
-                        </Button.ImageSource>
-                    </Button>
                 </Grid>
 
                 <!--  Care Progress Status Card  -->

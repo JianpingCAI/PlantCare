@@ -16,27 +16,38 @@
 
     <!--  Title area: shows page icon and localized title text bound via LocalizationManager  -->
     <Shell.TitleView>
-        <Grid ColumnDefinitions="auto,*">
-            <!--  Circular image container for page icon  -->
+        <Grid
+            Padding="12,0,8,0"
+            ColumnDefinitions="auto,*"
+            ColumnSpacing="12">
+            <!--  Icon  -->
             <Border
-                Margin="5,0,0,0"
                 HorizontalOptions="Start"
                 Stroke="Transparent"
                 StrokeThickness="0"
                 VerticalOptions="Center">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="40" />
+                    <RoundRectangle CornerRadius="12" />
                 </Border.StrokeShape>
-                <Image HeightRequest="40" Source="default_plant.png" />
+                <Border.Shadow>
+                    <Shadow
+                        Brush="{StaticResource Primary}"
+                        Opacity="0.15"
+                        Radius="8"
+                        Offset="0,2" />
+                </Border.Shadow>
+                <Image
+                    HeightRequest="44"
+                    Source="default_plant.png"
+                    WidthRequest="44" />
             </Border>
 
-            <!--  Localized page title label  -->
+            <!--  Title  -->
             <Label
                 Grid.Column="1"
-                Margin="15,0,0,0"
-                HorizontalOptions="Start"
-                Style="{StaticResource BodyStyle}"
+                Style="{StaticResource TitleSmallStyle}"
                 Text="{Binding Path=[Settings], Source={x:Static utils:LocalizationManager.Instance}}"
+                VerticalOptions="Center"
                 VerticalTextAlignment="Center" />
         </Grid>
     </Shell.TitleView>

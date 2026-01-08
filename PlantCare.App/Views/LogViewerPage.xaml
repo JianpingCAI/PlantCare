@@ -4,9 +4,48 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:components="clr-namespace:PlantCare.App.Components"
+    xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     x:DataType="vm:LogViewerViewModel">
+    
+    <Shell.TitleView>
+        <Grid
+            Padding="12,0,8,0"
+            ColumnDefinitions="auto,*"
+            ColumnSpacing="12">
+            <!--  Icon  -->
+            <Border
+                HorizontalOptions="Start"
+                Stroke="Transparent"
+                StrokeThickness="0"
+                VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12" />
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow
+                        Brush="{StaticResource Primary}"
+                        Opacity="0.15"
+                        Radius="8"
+                        Offset="0,2" />
+                </Border.Shadow>
+                <Image
+                    HeightRequest="44"
+                    Source="default_plant.png"
+                    WidthRequest="44" />
+            </Border>
+
+            <!--  Title  -->
+            <Label
+                Grid.Column="1"
+                Style="{StaticResource TitleSmallStyle}"
+                Text="{Binding Path=[ApplicationLogs], Source={x:Static utils:LocalizationManager.Instance}}"
+                VerticalOptions="Center"
+                VerticalTextAlignment="Center" />
+        </Grid>
+    </Shell.TitleView>
+    
     <Grid>
         <Editor
             x:Name="LogEditor"

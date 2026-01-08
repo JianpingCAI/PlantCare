@@ -11,8 +11,45 @@
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     x:Name="thisPage"
-    Title="{Binding Path=[CareCalendar], Source={x:Static utils:LocalizationManager.Instance}}"
     x:DataType="vm:PlantCalendarViewModel">
+    
+    <Shell.TitleView>
+        <Grid
+            Padding="12,0,8,0"
+            ColumnDefinitions="auto,*"
+            ColumnSpacing="12">
+            <!--  Icon  -->
+            <Border
+                HorizontalOptions="Start"
+                Stroke="Transparent"
+                StrokeThickness="0"
+                VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12" />
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow
+                        Brush="{StaticResource Primary}"
+                        Opacity="0.15"
+                        Radius="8"
+                        Offset="0,2" />
+                </Border.Shadow>
+                <Image
+                    HeightRequest="44"
+                    Source="default_plant.png"
+                    WidthRequest="44" />
+            </Border>
+
+            <!--  Title  -->
+            <Label
+                Grid.Column="1"
+                Style="{StaticResource TitleSmallStyle}"
+                Text="{Binding Path=[CareCalendar], Source={x:Static utils:LocalizationManager.Instance}}"
+                VerticalOptions="Center"
+                VerticalTextAlignment="Center" />
+        </Grid>
+    </Shell.TitleView>
+    
     <ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="SeparatorColor">#E0E0E0</Color>
