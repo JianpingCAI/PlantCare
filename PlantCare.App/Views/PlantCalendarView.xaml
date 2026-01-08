@@ -44,7 +44,7 @@
             <Label
                 Grid.Column="1"
                 Style="{StaticResource TitleSmallStyle}"
-                Text="{Binding Path=[CareCalendar], Source={x:Static utils:LocalizationManager.Instance}}"
+                Text="{Binding Path=[CareSchedule], Source={x:Static utils:LocalizationManager.Instance}}"
                 VerticalOptions="Center"
                 VerticalTextAlignment="Center" />
         </Grid>

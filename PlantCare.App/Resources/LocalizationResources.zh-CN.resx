@@ -126,8 +126,8 @@
   <data name="Calendar" xml:space="preserve">
     <value>日历</value>
   </data>
-  <data name="CareCalendar" xml:space="preserve">
-    <value>管理日历</value>
+  <data name="CareSchedule" xml:space="preserve">
+    <value>养护日程</value>
   </data>
   <data name="Confirmation" xml:space="preserve">
     <value>请确认</value>
@@ -328,15 +328,18 @@
     <value>我的植物养护</value>
   </data>
   <data name="SplashTagline" xml:space="preserve">
-    <value>跟踪浇水计划</value>
+    <value>用心呵护，陪伴你的植物成长</value>
   </data>
   <data name="SplashFeature1" xml:space="preserve">
     <value>跟踪浇水施肥计划</value>
   </data>
   <data name="SplashFeature2" xml:space="preserve">
-    <value>获取护理提醒</value>
+    <value>提醒及时护理</value>
   </data>
   <data name="SplashFeature3" xml:space="preserve">
-    <value>监控生长历史</value>
+    <value>关注生长</value>
+  </data>
+  <data name="Care" xml:space="preserve">
+    <value>养护</value>
   </data>
 </root>

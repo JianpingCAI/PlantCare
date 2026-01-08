@@ -160,11 +160,20 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Care Calendar.
+        ///   Looks up a localized string similar to Care.
         /// </summary>
-        internal static string CareCalendar {
+        internal static string Care {
             get {
-                return ResourceManager.GetString("CareCalendar", resourceCulture);
+                return ResourceManager.GetString("Care", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Care Schedule.
+        /// </summary>
+        internal static string CareSchedule {
+            get {
+                return ResourceManager.GetString("CareSchedule", resourceCulture);
             }
         }
         

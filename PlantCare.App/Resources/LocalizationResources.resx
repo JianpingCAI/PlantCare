@@ -126,8 +126,8 @@
   <data name="Calendar" xml:space="preserve">
     <value>Calendar</value>
   </data>
-  <data name="CareCalendar" xml:space="preserve">
-    <value>Care Calendar</value>
+  <data name="CareSchedule" xml:space="preserve">
+    <value>Care Schedule</value>
   </data>
   <data name="Confirmation" xml:space="preserve">
     <value>Confirmation</value>
@@ -338,5 +338,8 @@
   </data>
   <data name="SplashFeature3" xml:space="preserve">
     <value>Monitor growth history</value>
+  </data>
+  <data name="Care" xml:space="preserve">
+    <value>Care</value>
   </data>
 </root>

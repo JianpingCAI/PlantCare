@@ -59,10 +59,10 @@
             Icon="tab_home.png"
             Route="overview" />
 
-        <!--  Calendar  -->
+        <!--  CareSchedule  -->
         <ShellContent
             x:Name="tabCalendar"
-            Title="{Binding Path=[Calendar], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
+            Title="{Binding Path=[Care], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:PlantCalendarView}"
             Icon="tab_calender.png"
             Route="calendar" />
