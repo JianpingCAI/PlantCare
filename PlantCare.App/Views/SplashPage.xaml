@@ -5,15 +5,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
-    BackgroundColor="{StaticResource Primary}"
     Padding="0"
+    BackgroundColor="{StaticResource Primary}"
+    SafeAreaEdges="None"
     Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False"
     Shell.TitleView="{x:Null}">
 
-    <Grid
-        ColumnDefinitions="*"
-        RowDefinitions="*,Auto,*">
+    <Grid ColumnDefinitions="*" RowDefinitions="*,Auto,*">
 
         <!--  Background Gradient  -->
         <Grid.Background>
@@ -212,12 +211,12 @@
             <!--  Loading Indicator  -->
             <ActivityIndicator
                 x:Name="LoadingIndicator"
+                Margin="0,0,0,10"
                 HeightRequest="40"
                 HorizontalOptions="Center"
                 IsRunning="True"
-                Color="{StaticResource White}"
-                Margin="0,0,0,10"
-                WidthRequest="40" />
+                WidthRequest="40"
+                Color="{StaticResource White}" />
 
             <!--  Version with Localization  -->
             <Label
