@@ -160,7 +160,7 @@
     <value>日志</value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>主页</value>
+    <value>植物</value>
   </data>
   <data name="Hours" xml:space="preserve">
     <value>小时</value>
@@ -220,7 +220,7 @@
     <value>主题亮度</value>
   </data>
   <data name="UnattendedOnly" xml:space="preserve">
-    <value>亟需照料</value>
+    <value>待养护</value>
   </data>
   <data name="Watering" xml:space="preserve">
     <value>浇水</value>

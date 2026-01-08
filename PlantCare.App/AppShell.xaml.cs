@@ -1,4 +1,4 @@
-﻿using PlantCare.App.Utils;
+using PlantCare.App.Utils;
 using PlantCare.App.Views;
 
 namespace PlantCare.App
@@ -41,7 +41,7 @@ namespace PlantCare.App
         private void OnLanguageChanged(object? sender, EventArgs e)
         {
             tabHome.Title = LocalizationManager.Instance["Home"];
-            tabCalendar.Title = LocalizationManager.Instance["Calendar"];
+            tabCalendar.Title = LocalizationManager.Instance["Care"];
             tabSettings.Title = LocalizationManager.Instance["Settings"];
             tabHistory.Title = LocalizationManager.Instance["History"];
         }

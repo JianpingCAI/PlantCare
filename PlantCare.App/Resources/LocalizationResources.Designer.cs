@@ -331,7 +331,7 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Home.
+        ///   Looks up a localized string similar to Plants.
         /// </summary>
         internal static string Home {
             get {
@@ -664,7 +664,7 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unattended Only.
+        ///   Looks up a localized string similar to Needs Care.
         /// </summary>
         internal static string UnattendedOnly {
             get {
