@@ -32,7 +32,33 @@ namespace PlantCare.App
             _settingsService = settingsService;
             _serviceProvider = serviceProvider;
 
-            // Initialize app asynchronously to avoid blocking UI thread
+            // Load theme and language synchronously BEFORE UI is rendered
+            // This is critical to prevent MAUI from using system theme as fallback
+            try
+            {
+                AppTheme appTheme = _settingsService.GetThemeSettingAsync().GetAwaiter().GetResult();
+                Current?.UserAppTheme = appTheme;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Theme] Failed to load theme: {ex.Message}");
+                Current?.UserAppTheme = AppTheme.Light;
+            }
+
+            try
+            {
+                Language language = _settingsService.GetLanguageAsync().GetAwaiter().GetResult();
+                LocalizationManager.Instance.SetLanguage(language);
+                AppLanguage = language;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Localization] Failed to load language: {ex.Message}");
+                LocalizationManager.Instance.SetLanguage(Language.English);
+                AppLanguage = Language.English;
+            }
+
+            // Initialize app asynchronously for other operations that don't block UI rendering
             InitializeAppAsync().SafeFireAndForget(ex =>
             {
                 Debug.WriteLine($"[App Initialization] Failed: {ex.Message}");
@@ -61,7 +87,7 @@ namespace PlantCare.App
                     using IServiceScope scope = _serviceProvider.CreateScope();
                     ApplicationDbContext db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     db.Database.Migrate();
-                    
+
 #if DEBUG
                     // Seed test data for development
                     DevelopmentDataSeeder.SeedTestDataIfNeededAsync(db, 10).GetAwaiter().GetResult();
@@ -69,22 +95,13 @@ namespace PlantCare.App
 #endif
                 });
 
-                // Load theme asynchronously
-                await LoadThemeAsync();
-
-                // Load localization asynchronously
-                await LoadLocalizationLanguageAsync();
-
-                // Add navigation event handlers on main thread
-                // Note: This will be called after SplashPage navigates to AppShell
-                
                 // Global exception handling
                 AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
                 TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
-                
+
                 // Validate and regenerate thumbnails on startup (async fire-and-forget)
                 _ = ValidateThumbnailsOnStartupAsync();
-                
+
                 Debug.WriteLine("[App Initialization] Completed successfully");
             }
             catch (Exception ex)
@@ -191,58 +208,6 @@ namespace PlantCare.App
             {
                 // Ignore UI errors during shutdown
                 Debug.WriteLine("[ShowErrorAlert] Could not display alert");
-            }
-        }
-
-        private async Task LoadLocalizationLanguageAsync()
-        {
-            try
-            {
-                Language language = await _settingsService.GetLanguageAsync();
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    LocalizationManager.Instance.SetLanguage(language);
-                    AppLanguage = language;
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Localization] Failed to load language: {ex.Message}");
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    LocalizationManager.Instance.SetLanguage(Language.English);
-                    AppLanguage = Language.English;
-                });
-            }
-        }
-
-        private async Task LoadThemeAsync()
-        {
-            try
-            {
-                AppTheme appTheme = await _settingsService.GetThemeSettingAsync();
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    if (Current is not null)
-                    {
-                        Current.UserAppTheme = appTheme;
-                    }
-                    else
-                    {
-                        Current.UserAppTheme = AppTheme.Light;
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Theme] Failed to load theme: {ex.Message}");
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    if (Current is not null)
-                    {
-                        Current.UserAppTheme = AppTheme.Light;
-                    }
-                });
             }
         }
     }
