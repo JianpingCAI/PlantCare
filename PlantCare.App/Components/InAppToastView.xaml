@@ -21,9 +21,9 @@
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="12" />
             </Border.StrokeShape>
-            <Border.Shadow>
+            <!--<Border.Shadow>
                 <Shadow Brush="Black" Opacity="0.2" Radius="4" Offset="0,2" />
-            </Border.Shadow>
+            </Border.Shadow>-->
             
             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" MinimumWidthRequest="200">
                 <!-- Icon -->

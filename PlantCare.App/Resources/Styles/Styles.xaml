@@ -163,18 +163,18 @@
         <Setter Property="FontFamily" Value="MaterialIconsRegular" />
         <Setter Property="FontSize" Value="24" />
         <Setter Property="CornerRadius" Value="30" />
-        <Setter Property="WidthRequest" Value="50" />
-        <Setter Property="HeightRequest" Value="50" />
+        <Setter Property="WidthRequest" Value="45" />
+        <Setter Property="HeightRequest" Value="45" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderWidth" Value="0" />
-        <Setter Property="Shadow">
+        <!--<Setter Property="Shadow">
             <Shadow
                 Brush="{AppThemeBinding Light={StaticResource Primary},
                                         Dark={StaticResource PrimaryDark}}"
                 Opacity="0.4"
                 Radius="16"
                 Offset="0,6" />
-        </Setter>
+        </Setter>-->
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -592,17 +592,17 @@
     <Style x:Key="InteractiveCardStyle" TargetType="Border">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
         <Setter Property="Stroke" Value="Transparent" />
-        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeThickness" Value="1" />
         <Setter Property="StrokeShape">
-            <RoundRectangle CornerRadius="16" />
+            <RoundRectangle CornerRadius="12" />
         </Setter>
-        <Setter Property="Shadow">
+        <!--<Setter Property="Shadow">
             <Shadow
                 Brush="Black"
                 Opacity="0.06"
                 Radius="8"
                 Offset="0,1" />
-        </Setter>
+        </Setter>-->
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
