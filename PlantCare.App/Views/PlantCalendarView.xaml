@@ -12,7 +12,7 @@
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
     x:Name="thisPage"
     x:DataType="vm:PlantCalendarViewModel">
-    
+
     <Shell.TitleView>
         <Grid
             Padding="12,0,8,0"
@@ -49,7 +49,7 @@
                 VerticalTextAlignment="Center" />
         </Grid>
     </Shell.TitleView>
-    
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="SeparatorColor">#E0E0E0</Color>
@@ -148,20 +148,18 @@
 
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="vm:PlantEvent">
-                                <Grid HorizontalOptions="CenterAndExpand">
-                                    <Border>
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="10" />
-                                        </Border.StrokeShape>
+                                <Grid HorizontalOptions="Center">
+                                    <Border Style="{StaticResource InteractiveCardStyle}">
                                         <Grid RowDefinitions="*,Auto">
                                             <Border StrokeThickness="0">
                                                 <Border.StrokeShape>
-                                                    <RoundRectangle CornerRadius="10" />
+                                                    <RoundRectangle CornerRadius="12,12,0,0" />
                                                 </Border.StrokeShape>
                                                 <Grid>
                                                     <Image
                                                         Aspect="AspectFill"
                                                         HeightRequest="{Binding Source={Reference thisPage}, Path=BindingContext.PhotoHeight}"
+                                                        HorizontalOptions="Fill"
                                                         Source="{Binding PhotoPath}"
                                                         WidthRequest="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoWidth}" />
                                                     <Label

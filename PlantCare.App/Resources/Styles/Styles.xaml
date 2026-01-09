@@ -592,9 +592,9 @@
     <Style x:Key="InteractiveCardStyle" TargetType="Border">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
         <Setter Property="Stroke" Value="Transparent" />
-        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeThickness" Value="0" />
         <Setter Property="StrokeShape">
-            <RoundRectangle CornerRadius="12" />
+            <RoundRectangle CornerRadius="16" />
         </Setter>
         <!--<Setter Property="Shadow">
             <Shadow
@@ -610,17 +610,19 @@
                         <VisualState.Setters>
                             <Setter Property="Scale" Value="1" />
                             <Setter Property="Opacity" Value="1" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="PointerOver">
                         <VisualState.Setters>
                             <Setter Property="Scale" Value="1.02" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#F5F5F5, Dark=#2A2A2A}" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Pressed">
                         <VisualState.Setters>
                             <Setter Property="Scale" Value="0.98" />
-                            <Setter Property="Opacity" Value="0.9" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#EBEBEB, Dark=#1F1F1F}" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
