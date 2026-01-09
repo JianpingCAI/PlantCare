@@ -70,7 +70,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         DeviceDisplay.MainDisplayInfoChanged += OnDeviceDisplay_MainDisplayInfoChanged;
     }
 
-    public ObservableCollection<PlantListItemViewModel> Plants { get; } = [];
+    [ObservableProperty]
+    private ObservableCollection<PlantListItemViewModel> _plants = [];
 
     [ObservableProperty]
     private string _searchText = string.Empty;
@@ -195,15 +196,18 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         await MainThread.InvokeOnMainThreadAsync(() =>
         {
-            Plants.Clear();
             // Cache
             _allPlantViewModelsCache.Clear();
+
+            List<PlantListItemViewModel> newPlantVMs = new(plantListDatabase.Count);
             foreach (Plant plantDB in plantListDatabase)
             {
                 PlantListItemViewModel plantVM = MapToViewModel(plantDB);
                 _allPlantViewModelsCache.Add(plantVM);
-                Plants.Add(plantVM);
+                newPlantVMs.Add(plantVM);
             }
+
+            Plants = new ObservableCollection<PlantListItemViewModel>(newPlantVMs);
         });
 
         _logger.LogInformation($"{_allPlantViewModelsCache.Count} plants are loaded.");
@@ -310,11 +314,9 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    Plants.Clear();
-                    foreach (PlantListItemViewModel plant in searchedPlants)
-                    {
-                        Plants.Add(plant);
-                    }
+                    // Batch update: clear and add all at once to minimize UI updates
+
+                    Plants = new ObservableCollection<PlantListItemViewModel>(searchedPlants);
                 });
             }
         }

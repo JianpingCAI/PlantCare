@@ -599,9 +599,9 @@
         <Setter Property="Shadow">
             <Shadow
                 Brush="Black"
-                Opacity="0.08"
-                Radius="12"
-                Offset="0,2" />
+                Opacity="0.06"
+                Radius="8"
+                Offset="0,1" />
         </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>

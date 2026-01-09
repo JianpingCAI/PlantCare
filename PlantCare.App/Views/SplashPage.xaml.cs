@@ -133,21 +133,21 @@ public partial class SplashPage : ContentPage
             // Staggered slide in from left
             await Task.Delay(400);
 
-            var feature1Task = Task.WhenAll(
+            Task<bool[]> feature1Task = Task.WhenAll(
                 Feature1.TranslateToAsync(0, 0, (uint)AnimationDuration, Easing.CubicOut),
                 Feature1.FadeToAsync(1, (uint)AnimationDuration, Easing.CubicOut)
             );
 
             await Task.Delay(FeatureDelayMs);
 
-            var feature2Task = Task.WhenAll(
+            Task<bool[]> feature2Task = Task.WhenAll(
                 Feature2.TranslateToAsync(0, 0, (uint)AnimationDuration, Easing.CubicOut),
                 Feature2.FadeToAsync(1, (uint)AnimationDuration, Easing.CubicOut)
             );
 
             await Task.Delay(FeatureDelayMs);
 
-            var feature3Task = Task.WhenAll(
+            Task<bool[]> feature3Task = Task.WhenAll(
                 Feature3.TranslateToAsync(0, 0, (uint)AnimationDuration, Easing.CubicOut),
                 Feature3.FadeToAsync(1, (uint)AnimationDuration, Easing.CubicOut)
             );
