@@ -12,11 +12,13 @@ public class MappingProfileTests
 
     public MappingProfileTests()
     {
-        var config = new MapperConfiguration(cfg =>
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddAutoMapper(cfg =>
         {
             cfg.AddProfile<MappingProfile>();
         });
-        _mapper = config.CreateMapper();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        _mapper = serviceProvider.GetRequiredService<IMapper>();
     }
 
     [Fact]

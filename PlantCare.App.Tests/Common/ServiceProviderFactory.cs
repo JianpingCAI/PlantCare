@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PlantCare.App.Services.DBService;
 using PlantCare.App.Utils;
 using PlantCare.Data.Repositories;
@@ -18,7 +18,10 @@ namespace PlantCare.App.Tests.Common
             services.AddScoped<IWateringHistoryRepository, WateringHistoryRepository>();
             services.AddScoped<IFertilizationHistoryRepository, FertilizationHistoryRepository>();
 
-            services.AddAutoMapper(typeof(MappingProfile));
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddMaps(typeof(MappingProfile).Assembly);
+            });
         }
     }
 
