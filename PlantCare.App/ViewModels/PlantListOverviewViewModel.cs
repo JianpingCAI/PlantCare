@@ -512,6 +512,18 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
                     InsertPlant(plantVM);
                 }
+
+                // Update cache with the same reordering logic
+                int cacheIndex = _allPlantViewModelsCache.FindIndex(x => x.Id == plantVM.Id);
+                if (cacheIndex >= 0)
+                {
+                    _allPlantViewModelsCache[cacheIndex] = plantVM;
+                    // Re-sort cache if name changed
+                    if (originalName.CompareTo(plantVM.Name) != 0)
+                    {
+                        _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
+                    }
+                }
             });
 
 

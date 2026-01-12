@@ -22,8 +22,27 @@ public class GenericRepository<T> : IRepository<T> where T : class
         return await _dbSet.ToListAsync();
     }
 
+    /// <summary>
+    /// Note: It uses DbSet.FindAsync(), which can return a cached entity from the context's change tracker without fetching the latest data from the database.
+    /// When an entity is updated in one part of the application and then immediately queried in another, it may return the old cached version.
+    /// The fix is to ensure that GetByIdAsync() always gets fresh data from the database by detaching any tracked entity first or by explicitly reloading from the database.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task<T?> GetByIdAsync(Guid id)
     {
+        // First, check if there's a tracked entity with this ID and refresh it from the database
+        var trackedEntity = _dbSet.Local.FirstOrDefault(e =>
+            _context.Entry(e).Property("Id").CurrentValue?.Equals(id) ?? false);
+
+        if (trackedEntity != null)
+        {
+            // Reload the tracked entity from the database to ensure fresh data
+            await _context.Entry(trackedEntity).ReloadAsync();
+            return trackedEntity;
+        }
+
+        // If not tracked, fetch from database
         return await _dbSet.FindAsync(id);
     }
 
