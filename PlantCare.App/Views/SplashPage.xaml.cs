@@ -217,13 +217,19 @@ public partial class SplashPage : ContentPage
             await this.FadeToAsync(0, 400, Easing.CubicIn);
 
             // Navigate to AppShell (main app)
-            Application.Current.MainPage = new AppShell();
+            if (Application.Current?.Windows.Count > 0)
+            {
+                Application.Current.Windows[0].Page = new AppShell();
+            }
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"[SplashPage] Navigation error: {ex.Message}");
             // Fallback: direct navigation without animation
-            Application.Current.MainPage = new AppShell();
+            if (Application.Current?.Windows.Count > 0)
+            {
+                Application.Current.Windows[0].Page = new AppShell();
+            }
         }
     }
 }
