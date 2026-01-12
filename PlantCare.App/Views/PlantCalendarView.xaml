@@ -148,53 +148,52 @@
 
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="vm:PlantEvent">
-                                <Grid HorizontalOptions="Center">
-                                    <Border Style="{StaticResource InteractiveCardStyle}">
-                                        <Grid RowDefinitions="*,Auto">
-                                            <Border StrokeThickness="0">
-                                                <Border.StrokeShape>
-                                                    <RoundRectangle CornerRadius="12,12,0,0" />
-                                                </Border.StrokeShape>
-                                                <Grid>
-                                                    <Image
-                                                        Aspect="AspectFill"
-                                                        HeightRequest="{Binding Source={Reference thisPage}, Path=BindingContext.PhotoHeight}"
-                                                        HorizontalOptions="Fill"
-                                                        Source="{Binding PhotoPath}"
-                                                        WidthRequest="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoWidth}" />
-                                                    <Label
-                                                        Background="DarkSeaGreen"
-                                                        HorizontalOptions="Fill"
-                                                        HorizontalTextAlignment="Center"
-                                                        Opacity="0.75"
-                                                        Style="{StaticResource BodyStyle}"
-                                                        Text="{Binding Name}"
-                                                        VerticalOptions="End" />
-                                                </Grid>
-                                            </Border>
-                                            <Label
-                                                FontFamily="MaterialIconsRegular"
-                                                HorizontalOptions="End"
-                                                IsVisible="{Binding IsSelected}"
-                                                Style="{StaticResource HeadlineSmallStyle}"
-                                                Text="&#xe86c;"
-                                                TextColor="Green"
-                                                VerticalOptions="Start" />
-                                            <HorizontalStackLayout Grid.Row="1">
+                                <Border Style="{StaticResource InteractiveCardStyle}">
+                                    <Grid RowDefinitions="*,Auto">
+                                        <Border StrokeThickness="0">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="12,12,0,0" />
+                                            </Border.StrokeShape>
+                                            <Grid>
+                                                <Image
+                                                    Aspect="AspectFill"
+                                                    HeightRequest="{Binding Source={Reference thisPage}, Path=BindingContext.PhotoHeight}"
+                                                    HorizontalOptions="Fill"
+                                                    Source="{Binding PhotoPath}"
+                                                    WidthRequest="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoWidth}" />
                                                 <Label
-                                                    Margin="0,5,0,0"
-                                                    FontFamily="MaterialIconsRegular"
-                                                    Style="{StaticResource DisplaySmallStyle}"
-                                                    Text="{Binding ReminderType, Converter={StaticResource ReminderTypeIconConverter}}"
-                                                    TextColor="{Binding Color}" />
-                                                <Label
-                                                    FontAttributes="Bold"
+                                                    Background="DarkSeaGreen"
+                                                    HorizontalOptions="Fill"
+                                                    HorizontalTextAlignment="Center"
+                                                    Opacity="0.75"
                                                     Style="{StaticResource BodyStyle}"
-                                                    Text="{Binding ScheduledTime, StringFormat='{0:MM/dd HH:mm}'}" />
-                                            </HorizontalStackLayout>
-                                        </Grid>
-                                    </Border>
-                                </Grid>
+                                                    Text="{Binding Name}"
+                                                    VerticalOptions="End" />
+                                            </Grid>
+                                        </Border>
+                                        <Label
+                                            Margin="5"
+                                            FontFamily="MaterialIconsRegular"
+                                            HorizontalOptions="End"
+                                            IsVisible="{Binding IsSelected}"
+                                            Style="{StaticResource BodyStyle}"
+                                            Text="&#xe86c;"
+                                            TextColor="Green"
+                                            VerticalOptions="Start" />
+                                        <HorizontalStackLayout Grid.Row="1">
+                                            <Label
+                                                Margin="5"
+                                                FontFamily="MaterialIconsRegular"
+                                                Style="{StaticResource BodyStyle}"
+                                                Text="{Binding ReminderType, Converter={StaticResource ReminderTypeIconConverter}}"
+                                                TextColor="{Binding Color}" />
+                                            <Label
+                                                FontAttributes="Bold"
+                                                Style="{StaticResource BodyStyle}"
+                                                Text="{Binding ScheduledTime, StringFormat='{0:MM/dd HH:mm}'}" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>

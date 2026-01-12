@@ -231,67 +231,65 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:PlantListItemViewModel">
-                            <Grid HorizontalOptions="Center">
-                                <!--  Enhanced Plant Card  -->
-                                <Border Padding="0" Style="{StaticResource InteractiveCardStyle}">
-                                    <Grid RowDefinitions="auto,auto">
-                                        <!--  Plant Image Container  -->
-                                        <Grid>
-                                            <!--  Plant Photo  -->
-                                            <Border
-                                                Margin="0"
+                            <!--  Enhanced Plant Card  -->
+                            <Border Padding="0" Style="{StaticResource InteractiveCardStyle}">
+                                <Grid RowDefinitions="auto,auto">
+                                    <!--  Plant Image Container  -->
+                                    <Grid>
+                                        <!--  Plant Photo  -->
+                                        <Border
+                                            Margin="0"
+                                            HorizontalOptions="Fill"
+                                            Stroke="Transparent"
+                                            StrokeThickness="0"
+                                            VerticalOptions="Fill">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="12,12,0,0" />
+                                            </Border.StrokeShape>
+                                            <Image
+                                                Aspect="AspectFill"
+                                                HeightRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoHeight}"
                                                 HorizontalOptions="Fill"
-                                                Stroke="Transparent"
-                                                StrokeThickness="0"
-                                                VerticalOptions="Fill">
-                                                <Border.StrokeShape>
-                                                    <RoundRectangle CornerRadius="12,12,0,0" />
-                                                </Border.StrokeShape>
-                                                <Image
-                                                    Aspect="AspectFill"
-                                                    HeightRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoHeight}"
-                                                    HorizontalOptions="Fill"
-                                                    Source="{Binding ThumbnailPath}"
-                                                    VerticalOptions="Fill"
-                                                    WidthRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoWidth}" />
-                                            </Border>
+                                                Source="{Binding ThumbnailPath}"
+                                                VerticalOptions="Fill"
+                                                WidthRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoWidth}" />
+                                        </Border>
 
-                                            <!--  Status Badge Overlay  -->
-                                            <Border
-                                                Margin="2,2"
-                                                Padding="10,5"
-                                                BackgroundColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
-                                                HorizontalOptions="Start"
-                                                IsVisible="{Binding WaterState, Converter={StaticResource LessThanConverter}, ConverterParameter=0.143}"
-                                                Opacity="0.85"
-                                                StrokeThickness="0"
-                                                VerticalOptions="End">
-                                                <Border.StrokeShape>
-                                                    <RoundRectangle CornerRadius="10" />
-                                                </Border.StrokeShape>
-                                                <Label
-                                                    FontFamily="MaterialIconsRegular"
-                                                    FontSize="15"
-                                                    Text="&#xe798;"
-                                                    TextColor="{StaticResource White}"
-                                                    VerticalOptions="Center" />
-                                            </Border>
-                                        </Grid>
-
-                                        <!--  Plant Name  -->
-                                        <Label
-                                            Grid.Row="1"
-                                            Padding="10,0"
-                                            FontFamily="OpenSansRegular"
-                                            HorizontalOptions="Center"
-                                            LineBreakMode="TailTruncation"
-                                            MaxLines="1"
-                                            Style="{StaticResource BodyStyle}"
-                                            Text="{Binding Name}" />
-
+                                        <!--  Status Badge Overlay  -->
+                                        <Border
+                                            Margin="2,2"
+                                            Padding="10,5"
+                                            BackgroundColor="{Binding WaterState, Converter={StaticResource ProgressToColorConverter}}"
+                                            HorizontalOptions="Start"
+                                            IsVisible="{Binding WaterState, Converter={StaticResource LessThanConverter}, ConverterParameter=0.143}"
+                                            Opacity="0.85"
+                                            StrokeThickness="0"
+                                            VerticalOptions="End">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <Label
+                                                FontFamily="MaterialIconsRegular"
+                                                FontSize="15"
+                                                Text="&#xe798;"
+                                                TextColor="{StaticResource White}"
+                                                VerticalOptions="Center" />
+                                        </Border>
                                     </Grid>
-                                </Border>
-                            </Grid>
+
+                                    <!--  Plant Name  -->
+                                    <Label
+                                        Grid.Row="1"
+                                        Padding="10,0"
+                                        FontFamily="OpenSansRegular"
+                                        HorizontalOptions="Center"
+                                        LineBreakMode="TailTruncation"
+                                        MaxLines="1"
+                                        Style="{StaticResource BodyStyle}"
+                                        Text="{Binding Name}" />
+
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

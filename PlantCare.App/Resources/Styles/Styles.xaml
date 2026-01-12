@@ -619,9 +619,9 @@
                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#F5F5F5, Dark=#2A2A2A}" />
                         </VisualState.Setters>
                     </VisualState>
-                    <VisualState x:Name="Pressed">
+                    <VisualState x:Name="Selected">
                         <VisualState.Setters>
-                            <Setter Property="Scale" Value="0.98" />
+                            <Setter Property="Scale" Value="0.95" />
                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#EBEBEB, Dark=#1F1F1F}" />
                         </VisualState.Setters>
                     </VisualState>
