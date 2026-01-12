@@ -14,7 +14,7 @@
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
-		<PackageVersion>0.8.1</PackageVersion>		<!-- Define PackageVersion here -->
+		<PackageVersion>0.8.2</PackageVersion>		<!-- Define PackageVersion here -->
 		
 		<!--<OutputType>Exe</OutputType>-->
 		<OutputType Condition="'$(TargetFramework)' != 'net10.0'">Exe</OutputType> <!--for unit tests-->
@@ -31,8 +31,8 @@
 		<ApplicationId>com.companyname.plantcare.app</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>0.8.1</ApplicationDisplayVersion>
-		<ApplicationVersion>9</ApplicationVersion>
+		<ApplicationDisplayVersion>0.8.2</ApplicationDisplayVersion>
+		<ApplicationVersion>10</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
@@ -45,7 +45,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-android|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<!-- <ApplicationDisplayVersion>0.8.1</ApplicationDisplayVersion> -->
+		<!-- <ApplicationDisplayVersion>0.8.2</ApplicationDisplayVersion> -->
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
@@ -56,28 +56,28 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-ios|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<!-- <ApplicationDisplayVersion>0.8.1</ApplicationDisplayVersion> -->
+		<!-- <ApplicationDisplayVersion>0.8.2</ApplicationDisplayVersion> -->
 		<!-- <ApplicationVersion>8</ApplicationVersion> -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-maccatalyst|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<!-- <ApplicationDisplayVersion>0.8.1</ApplicationDisplayVersion> -->
+		<!-- <ApplicationDisplayVersion>0.8.2</ApplicationDisplayVersion> -->
 		<!-- <ApplicationVersion>8</ApplicationVersion> -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows10.0.19041.0|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<!-- <ApplicationDisplayVersion>0.8.1</ApplicationDisplayVersion> -->
+		<!-- <ApplicationDisplayVersion>0.8.2</ApplicationDisplayVersion> -->
 		<!-- <ApplicationVersion>8</ApplicationVersion> -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<!-- <ApplicationDisplayVersion>0.8.1</ApplicationDisplayVersion> -->
+		<!-- <ApplicationDisplayVersion>0.8.2</ApplicationDisplayVersion> -->
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -95,32 +95,32 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-ios|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<!-- <ApplicationDisplayVersion>0.8.1</ApplicationDisplayVersion> -->
+		<!-- <ApplicationDisplayVersion>0.8.2</ApplicationDisplayVersion> -->
 		<!-- <ApplicationVersion>8</ApplicationVersion> -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-maccatalyst|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<!-- <ApplicationDisplayVersion>0.8.1</ApplicationDisplayVersion> -->
+		<!-- <ApplicationDisplayVersion>0.8.2</ApplicationDisplayVersion> -->
 		<!-- <ApplicationVersion>8</ApplicationVersion> -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows10.0.19041.0|AnyCPU'">
 		<ApplicationTitle>MyPlantCare</ApplicationTitle>
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
-		<!-- <ApplicationDisplayVersion>0.8.1</ApplicationDisplayVersion> -->
+		<!-- <ApplicationDisplayVersion>0.8.2</ApplicationDisplayVersion> -->
 		<!-- <ApplicationVersion>8</ApplicationVersion> -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0|AnyCPU'">
-		<!-- <ApplicationDisplayVersion>0.8.1</ApplicationDisplayVersion> -->
+		<!-- <ApplicationDisplayVersion>0.8.2</ApplicationDisplayVersion> -->
 		<!-- <ApplicationVersion>8</ApplicationVersion> -->
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0|AnyCPU'">
-		<!-- <ApplicationDisplayVersion>0.8.1</ApplicationDisplayVersion> -->
+		<!-- <ApplicationDisplayVersion>0.8.2</ApplicationDisplayVersion> -->
 		<!-- <ApplicationVersion>8</ApplicationVersion> -->
 		<ApplicationId>com.jianping.myplantcare.app</ApplicationId>
 	</PropertyGroup>

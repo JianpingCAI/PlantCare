@@ -227,7 +227,7 @@
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="{Binding Path=[Version], Source={x:Static utils:LocalizationManager.Instance}}" />
-                        <Span Text=" 0.8.1" />
+                        <Span Text=" 0.8.2" />
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
