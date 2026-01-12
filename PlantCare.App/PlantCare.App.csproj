@@ -253,6 +253,12 @@
 		<MauiXaml Update="Components\SkeletonCardView.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Components\SkeletonCareHistoryCard.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\SkeletonGridCard.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Resources\Styles\Typography.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

@@ -157,64 +157,55 @@
                                     </Grid.ColumnDefinitions>
 
                                     <!--  Row 1  -->
-                                    <components:SkeletonCardView
+                                    <components:SkeletonGridCard
                                         Grid.Row="0"
                                         Grid.Column="0"
-                                        Margin="4"
-                                        ImageHeight="{Binding PhotoHeight}"
-                                        ImageWidth="{Binding PhotoWidth}" />
-                                    <components:SkeletonCardView
+                                        PhotoHeight="{Binding PhotoHeight}"
+                                        PhotoWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonGridCard
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Margin="4"
-                                        ImageHeight="{Binding PhotoHeight}"
-                                        ImageWidth="{Binding PhotoWidth}" />
-                                    <components:SkeletonCardView
+                                        PhotoHeight="{Binding PhotoHeight}"
+                                        PhotoWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonGridCard
                                         Grid.Row="0"
                                         Grid.Column="2"
-                                        Margin="4"
-                                        ImageHeight="{Binding PhotoHeight}"
-                                        ImageWidth="{Binding PhotoWidth}" />
+                                        PhotoHeight="{Binding PhotoHeight}"
+                                        PhotoWidth="{Binding PhotoWidth}" />
 
                                     <!--  Row 2  -->
-                                    <components:SkeletonCardView
+                                    <components:SkeletonGridCard
                                         Grid.Row="1"
                                         Grid.Column="0"
-                                        Margin="4"
-                                        ImageHeight="{Binding PhotoHeight}"
-                                        ImageWidth="{Binding PhotoWidth}" />
-                                    <components:SkeletonCardView
+                                        PhotoHeight="{Binding PhotoHeight}"
+                                        PhotoWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonGridCard
                                         Grid.Row="1"
                                         Grid.Column="1"
-                                        Margin="4"
-                                        ImageHeight="{Binding PhotoHeight}"
-                                        ImageWidth="{Binding PhotoWidth}" />
-                                    <components:SkeletonCardView
+                                        PhotoHeight="{Binding PhotoHeight}"
+                                        PhotoWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonGridCard
                                         Grid.Row="1"
                                         Grid.Column="2"
-                                        Margin="4"
-                                        ImageHeight="{Binding PhotoHeight}"
-                                        ImageWidth="{Binding PhotoWidth}" />
+                                        PhotoHeight="{Binding PhotoHeight}"
+                                        PhotoWidth="{Binding PhotoWidth}" />
 
                                     <!--  Row 3  -->
-                                    <components:SkeletonCardView
+                                    <components:SkeletonGridCard
                                         Grid.Row="2"
                                         Grid.Column="0"
-                                        Margin="4"
-                                        ImageHeight="{Binding PhotoHeight}"
-                                        ImageWidth="{Binding PhotoWidth}" />
-                                    <components:SkeletonCardView
+                                        PhotoHeight="{Binding PhotoHeight}"
+                                        PhotoWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonGridCard
                                         Grid.Row="2"
                                         Grid.Column="1"
-                                        Margin="4"
-                                        ImageHeight="{Binding PhotoHeight}"
-                                        ImageWidth="{Binding PhotoWidth}" />
-                                    <components:SkeletonCardView
+                                        PhotoHeight="{Binding PhotoHeight}"
+                                        PhotoWidth="{Binding PhotoWidth}" />
+                                    <components:SkeletonGridCard
                                         Grid.Row="2"
                                         Grid.Column="2"
-                                        Margin="4"
-                                        ImageHeight="{Binding PhotoHeight}"
-                                        ImageWidth="{Binding PhotoWidth}" />
+                                        PhotoHeight="{Binding PhotoHeight}"
+                                        PhotoWidth="{Binding PhotoWidth}" />
                                 </Grid>
                             </ScrollView>
 
