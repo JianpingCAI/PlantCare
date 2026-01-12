@@ -31,8 +31,8 @@ namespace PlantCare.App.ViewModels
         [ObservableProperty]
         private string _plantName = string.Empty;
 
-        //[ObservableProperty]
-        public ObservableCollection<TimeStampRecord> TimestampRecords { get; } = [];
+        [ObservableProperty]
+        public ObservableCollection<TimeStampRecord> _timestampRecords = [];
 
         async void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
         {
@@ -42,7 +42,6 @@ namespace PlantCare.App.ViewModels
 
                 PlantCareType = null;
                 PlantName = string.Empty;
-                TimestampRecords.Clear();
 
                 if (!query.TryGetValue("careType", out object? careTypeObject))
                 {
@@ -69,11 +68,13 @@ namespace PlantCare.App.ViewModels
                 }
                 if (recordsObject != null && recordsObject is List<TimeStampRecord> records)
                 {
-                    foreach (TimeStampRecord record in records)
-                    {
-                        TimestampRecords.Add(record);
-                    }
+                    TimestampRecords = new ObservableCollection<TimeStampRecord>(records.OrderByDescending(r => r.Timestamp));
                 }
+                else
+                {
+                    TimestampRecords = [];
+                }
+
             }
             catch (Exception ex)
             {
