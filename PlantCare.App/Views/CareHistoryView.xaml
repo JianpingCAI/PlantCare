@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:components="clr-namespace:PlantCare.App.Components"
     xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:utils="clr-namespace:PlantCare.App.Utils"
     xmlns:views="clr-namespace:PlantCare.App.Views"
     xmlns:vm="clr-namespace:PlantCare.App.ViewModels"
@@ -80,11 +81,173 @@
 
             <!--  Empty State View  -->
             <CollectionView.EmptyView>
-                <components:EmptyStateView
-                    Title="No Care History"
-                    HasAction="False"
-                    IconSource="default_plant.png"
-                    Message="Your plant care history will appear here once you start tracking plant care" />
+                <Grid>
+                    <!--  Show skeleton cards while loading  -->
+                    <ScrollView IsVisible="{Binding IsLoading}">
+                        <Grid Padding="5" RowSpacing="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!--  Skeleton Card 1  -->
+                            <Border
+                                Grid.Row="0"
+                                Margin="0,2,0,2"
+                                StrokeThickness="1">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="5" />
+                                </Border.StrokeShape>
+                                <Grid ColumnDefinitions="*,auto" HorizontalOptions="Fill">
+                                    <!--  Left side - Chart placeholder  -->
+                                    <Grid Padding="12">
+                                        <VerticalStackLayout Spacing="8">
+                                            <components:ShimmerView
+                                                ShimmerHeight="14"
+                                                ShimmerWidth="80"
+                                                CornerRadius="4"
+                                                HorizontalOptions="Start"
+                                                ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                            <components:ShimmerView
+                                                ShimmerHeight="60"
+                                                CornerRadius="4"
+                                                ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                            <components:ShimmerView
+                                                ShimmerHeight="14"
+                                                ShimmerWidth="120"
+                                                CornerRadius="4"
+                                                HorizontalOptions="Start"
+                                                ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <!--  Right side - Photo placeholder  -->
+                                    <Border
+                                        Grid.Column="1"
+                                        StrokeThickness="1"
+                                        VerticalOptions="Center"
+                                        Margin="0,12,12,12">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="5" />
+                                        </Border.StrokeShape>
+                                        <components:ShimmerView
+                                            ShimmerHeight="120"
+                                            ShimmerWidth="90"
+                                            CornerRadius="5"
+                                            ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                            <!--  Skeleton Card 2  -->
+                            <Border
+                                Grid.Row="1"
+                                Margin="0,2,0,2"
+                                StrokeThickness="1">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="5" />
+                                </Border.StrokeShape>
+                                <Grid ColumnDefinitions="*,auto" HorizontalOptions="Fill">
+                                    <!--  Left side - Chart placeholder  -->
+                                    <Grid Padding="12">
+                                        <VerticalStackLayout Spacing="8">
+                                            <components:ShimmerView
+                                                ShimmerHeight="14"
+                                                ShimmerWidth="80"
+                                                CornerRadius="4"
+                                                HorizontalOptions="Start"
+                                                ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                            <components:ShimmerView
+                                                ShimmerHeight="60"
+                                                CornerRadius="4"
+                                                ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                            <components:ShimmerView
+                                                ShimmerHeight="14"
+                                                ShimmerWidth="120"
+                                                CornerRadius="4"
+                                                HorizontalOptions="Start"
+                                                ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <!--  Right side - Photo placeholder  -->
+                                    <Border
+                                        Grid.Column="1"
+                                        StrokeThickness="1"
+                                        VerticalOptions="Center"
+                                        Margin="0,12,12,12">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="5" />
+                                        </Border.StrokeShape>
+                                        <components:ShimmerView
+                                            ShimmerHeight="120"
+                                            ShimmerWidth="90"
+                                            CornerRadius="5"
+                                            ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                            <!--  Skeleton Card 3  -->
+                            <Border
+                                Grid.Row="2"
+                                Margin="0,2,0,2"
+                                StrokeThickness="1">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="5" />
+                                </Border.StrokeShape>
+                                <Grid ColumnDefinitions="*,auto" HorizontalOptions="Fill">
+                                    <!--  Left side - Chart placeholder  -->
+                                    <Grid Padding="12">
+                                        <VerticalStackLayout Spacing="8">
+                                            <components:ShimmerView
+                                                ShimmerHeight="14"
+                                                ShimmerWidth="80"
+                                                CornerRadius="4"
+                                                HorizontalOptions="Start"
+                                                ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                            <components:ShimmerView
+                                                ShimmerHeight="60"
+                                                CornerRadius="4"
+                                                ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                            <components:ShimmerView
+                                                ShimmerHeight="14"
+                                                ShimmerWidth="120"
+                                                CornerRadius="4"
+                                                HorizontalOptions="Start"
+                                                ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <!--  Right side - Photo placeholder  -->
+                                    <Border
+                                        Grid.Column="1"
+                                        StrokeThickness="1"
+                                        VerticalOptions="Center"
+                                        Margin="0,12,12,12">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="5" />
+                                        </Border.StrokeShape>
+                                        <components:ShimmerView
+                                            ShimmerHeight="120"
+                                            ShimmerWidth="90"
+                                            CornerRadius="5"
+                                            ShimmerColor="{AppThemeBinding Light=#E8E8E8, Dark=#3A3A3A}" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </ScrollView>
+
+                    <!--  Show empty state when not loading and no care history  -->
+                    <components:EmptyStateView
+                        Title="No Care History"
+                        HasAction="False"
+                        IconSource="default_plant.png"
+                        IsVisible="{Binding IsLoading, Converter={toolkit:InvertedBoolConverter}}"
+                        Message="Your plant care history will appear here once you start tracking plant care" />
+                </Grid>
             </CollectionView.EmptyView>
 
             <CollectionView.ItemsLayout>
@@ -101,7 +264,7 @@
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="5" />
                             </Border.StrokeShape>
-                            <Grid ColumnDefinitions="*,auto" HorizontalOptions="FillAndExpand">
+                            <Grid ColumnDefinitions="*,auto" HorizontalOptions="Fill">
                                 <!--  Photo  -->
                                 <Border
                                     Grid.Column="1"
@@ -133,7 +296,7 @@
                                         HeightRequest="90"
                                         IsVisible="{Binding Source={x:Reference radioFertilization}, Path=IsChecked}"
                                         Series="{Binding FertilizationTimestampsSeries}"
-                                        VerticalOptions="EndAndExpand"
+                                        VerticalOptions="Fill"
                                         XAxes="{Binding XAxesFertilization}" />
 
                                     <!--  Plant Name  -->
