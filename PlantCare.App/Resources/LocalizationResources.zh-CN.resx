@@ -342,4 +342,10 @@
   <data name="Care" xml:space="preserve">
     <value>养护</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="AddFailed" xml:space="preserve">
+    <value>出现错误，不能添加新的植物</value>
+  </data>
 </root>

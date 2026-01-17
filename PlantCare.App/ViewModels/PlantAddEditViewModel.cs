@@ -113,7 +113,7 @@ namespace PlantCare.App.ViewModels
         [Required]
         [Range(0, 24)]
         //[NotifyPropertyChangedFor(nameof(NextWateringTime))]
-        [NotifyPropertyChangedFor(nameof(WateringFrequencyInHours))]
+        [NotifyPropertyChangedFor(nameof(FertilizationFrequencyInHours))]
         private int _fertilizationFrequencyHours = 0;
 
         public int FertilizationFrequencyInHours => 24 * FertilizationFrequencyDays + FertilizationFrequencyHours;
@@ -270,9 +270,15 @@ namespace PlantCare.App.ViewModels
                         PlantDbModel plant = MapViewModelToDBModel(isExistingPlant: false);
                         Id = await _plantService.CreatePlantAsync(plant);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        await _dialogService.Notify("Failed", "Adding the plant failed.");
+                        await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, e.Message);
+                    }
+
+                    if (Id == default)
+                    {
+                        await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, LocalizationManager.Instance[ConstStrings.AddFailed] ?? "Adding the plant failed.");
+                        return;
                     }
 
                     WeakReferenceMessenger.Default.Send(new PlantAddedMessage(Id));

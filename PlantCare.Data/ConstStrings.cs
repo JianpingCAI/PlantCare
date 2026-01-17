@@ -1,4 +1,4 @@
-﻿namespace PlantCare.Data;
+namespace PlantCare.Data;
 
 public static class ConstStrings
 {
@@ -22,6 +22,7 @@ public static class ConstStrings
     public const string Yes = "Yes";
     public const string Error = "Error";
     public const string Added = "Added";
+    public const string AddFailed = "AddFailed";
     public const string Deleted = "Deleted";
     public const string Updated = "Updated";
     public const string PickPhoto = "PickPhoto";

@@ -79,6 +79,15 @@ namespace PlantCare.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adding the plant failed..
+        /// </summary>
+        internal static string AddFailed {
+            get {
+                return ResourceManager.GetString("AddFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No plants found. Add a new plant to get started!.
         /// </summary>
         internal static string AddMyPlants {
@@ -273,6 +282,15 @@ namespace PlantCare.App.Resources {
         internal static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
             }
         }
         
