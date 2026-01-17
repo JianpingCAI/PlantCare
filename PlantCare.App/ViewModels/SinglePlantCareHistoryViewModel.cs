@@ -38,7 +38,7 @@ namespace PlantCare.App.ViewModels
         {
             try
             {
-                IsLoading = true;
+                await SetLoadingStateAsync(true);
 
                 PlantCareType = null;
                 PlantName = string.Empty;
@@ -82,7 +82,7 @@ namespace PlantCare.App.ViewModels
             }
             finally
             {
-                IsLoading = false;
+                await SetLoadingStateAsync(false);
             }
         }
 
@@ -94,9 +94,10 @@ namespace PlantCare.App.ViewModels
                 return;
             }
 
-            IsBusy = true;
             try
             {
+                await SetBusyStateAsync(true);
+
                 //Debug.WriteLine($"{record.Timestamp}, {record.HistoryId}");
                 bool isConfirmed = await _dialogService.Ask(
                                         LocalizationManager.Instance[ConstStrings.Confirm] ?? "Confirm",
@@ -140,7 +141,7 @@ namespace PlantCare.App.ViewModels
             }
             finally
             {
-                IsBusy = false;
+                await SetBusyStateAsync(false);
             }
         }
 

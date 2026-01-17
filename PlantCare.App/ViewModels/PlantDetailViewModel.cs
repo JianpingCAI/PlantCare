@@ -49,8 +49,8 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
 
         try
         {
-            IsBusy = true;
-            IsLoading = true;
+            await SetBusyStateAsync(true);
+            await SetLoadingStateAsync(true);
 
             bool isConfirmed = await _dialogService.Ask(
                 LocalizationManager.Instance[ConstStrings.Confirm] ?? "Confirm",
@@ -74,11 +74,8 @@ public partial class PlantDetailViewModel(IPlantService plantService, INavigatio
         }
         finally
         {
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                IsBusy = false;
-                IsLoading = false;
-            });
+            await SetLoadingStateAsync(false);
+            await SetBusyStateAsync(false);
         }
     }
 

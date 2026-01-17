@@ -63,6 +63,8 @@ public partial class CareHistoryViewModel : ViewModelBase
     {
         try
         {
+            await SetLoadingStateAsync(true);
+
             List<PlantCareHistory> careHistoryList = await _plantService.GetAllPlantsWithCareHistoryAsync();
             List<PlantCareHistoryWithPlot> careHistoryWithPlots = await Task.Run(() =>
             {
@@ -123,6 +125,10 @@ public partial class CareHistoryViewModel : ViewModelBase
         {
             await _dialogService.Notify(LocalizationManager.Instance[ConstStrings.Error] ?? ConstStrings.Error, ex.Message);
         }
+        finally
+        {
+            await SetLoadingStateAsync(false);
+        }
     }
 
     private string GetFrequencyInfo(List<DateTime> timestamps)
@@ -156,10 +162,10 @@ public partial class CareHistoryViewModel : ViewModelBase
             return;
         }
 
-        IsBusy = true;
-
         try
         {
+            await SetBusyStateAsync(true);
+
             if (SelectedPlant != null)
             {
                 List<TimeStampRecord> timestampRecords = IsWateringHistory ? SelectedPlant.WateringTimestamps : SelectedPlant.FertilizationTimestamps;
@@ -173,7 +179,7 @@ public partial class CareHistoryViewModel : ViewModelBase
         }
         finally
         {
-            IsBusy = false;
+            await SetBusyStateAsync(false);
         }
     }
 

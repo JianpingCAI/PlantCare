@@ -248,11 +248,11 @@
                                             </Border.StrokeShape>
                                             <Image
                                                 Aspect="AspectFill"
-                                                HeightRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoHeight}"
+                                                HeightRequest="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoHeight}"
                                                 HorizontalOptions="Fill"
                                                 Source="{Binding ThumbnailPath}"
                                                 VerticalOptions="Fill"
-                                                WidthRequest="{Binding Source={RelativeSource AncestorType={x:Type vm:PlantListOverviewViewModel}}, Path=PhotoWidth}" />
+                                                WidthRequest="{Binding Source={x:Reference thisPage}, Path=BindingContext.PhotoWidth}" />
                                         </Border>
 
                                         <!--  Status Badge Overlay  -->

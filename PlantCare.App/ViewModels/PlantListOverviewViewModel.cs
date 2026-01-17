@@ -80,24 +80,21 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     partial void OnSearchTextChanged(string value)
     {
-        // Cancel any pending search
         _searchCts?.Cancel();
         _searchCts = new CancellationTokenSource();
 
-        // Automatically reset plants when search text is cleared
         if (string.IsNullOrWhiteSpace(value))
         {
             Task.Run(async () =>
             {
                 try
                 {
-                    await Task.Delay(100, _searchCts.Token); // Small debounce for clear
-                    IsLoading = true;
+                    await Task.Delay(100, _searchCts.Token);
+                    await SetLoadingStateAsync(true);
                     await ResetPlantsAsync();
                 }
                 catch (TaskCanceledException)
                 {
-                    // Search was cancelled - this is expected
                 }
                 catch (Exception ex)
                 {
@@ -105,16 +102,12 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 }
                 finally
                 {
-                    await MainThread.InvokeOnMainThreadAsync(() =>
-                    {
-                        IsLoading = false;
-                    });
+                    await SetLoadingStateAsync(false);
                 }
             });
         }
         else
         {
-            // Debounce search by 300ms
             Task.Run(async () =>
             {
                 try
@@ -124,7 +117,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 }
                 catch (TaskCanceledException)
                 {
-                    // Search was cancelled - this is expected
                 }
                 catch (Exception ex)
                 {
@@ -147,6 +139,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
+            await SetBusyStateAsync(true);
             // Navigate to details view with selected plant
             if (SelectedPlant is not null)
             {
@@ -161,7 +154,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            IsBusy = false;
+            await SetBusyStateAsync(false);
         }
     }
 
@@ -281,6 +274,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
+            await SetBusyStateAsync(true);
             await _navigationService.GoToAddPlant(Plants.Count + 1);
         }
         catch (Exception ex)
@@ -289,7 +283,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            IsBusy = false;
+            await SetBusyStateAsync(false);
         }
     }
 
@@ -305,24 +299,21 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
-            await MainThread.InvokeOnMainThreadAsync(() => IsLoading = true);
+            await SetLoadingStateAsync(true);
 
-            // Search from cache, not from already filtered Plants collection
             List<PlantListItemViewModel> searchedPlants = await SearchPlantsByNameAsync(_allPlantViewModelsCache, searchText, cancellationToken);
 
             if (!cancellationToken.IsCancellationRequested)
             {
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    // Batch update: clear and add all at once to minimize UI updates
-
                     Plants = new ObservableCollection<PlantListItemViewModel>(searchedPlants);
                 });
             }
         }
         finally
         {
-            await MainThread.InvokeOnMainThreadAsync(() => IsLoading = false);
+            await SetLoadingStateAsync(false);
         }
     }
 
@@ -336,12 +327,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
-            IsBusy = true;
-            IsLoading = true;
+            await SetBusyStateAsync(true);
+            await SetLoadingStateAsync(true);
 
             if (!string.IsNullOrEmpty(SearchText))
             {
-                // Use the cache, not the already filtered Plants collection
                 List<PlantListItemViewModel> searchedPlants = await SearchPlantsByNameAsync(_allPlantViewModelsCache, SearchText, CancellationToken.None);
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
@@ -364,11 +354,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                IsLoading = false;
-                IsBusy = false;
-            });
+            await SetLoadingStateAsync(false);
+            await SetBusyStateAsync(false);
         }
     }
 
@@ -410,17 +397,14 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
-            // Fetch plant from database on background thread
             Plant? plantDB = await _plantService.GetPlantByIdAsync(message.PlantId);
             if (plantDB is null)
             {
                 return;
             }
 
-            // Create ViewModel on background thread
             PlantListItemViewModel newPlantVM = MapToViewModel(plantDB);
 
-            // Only update UI on main thread
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 IsLoading = true;
@@ -431,7 +415,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
             });
 
-            // Schedule notifications in parallel (don't await)
             if (_notificationService.IsSupported)
             {
                 Task<int>[] notificationTasks = new[]
@@ -440,7 +423,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                     ScheduleNotificationAsync(CareType.Fertilization, CareType.Fertilization.GetActionName(), newPlantVM)
                 };
 
-                // Run notifications in background without blocking
                 _ = Task.WhenAll(notificationTasks).ContinueWith(t =>
                 {
                     if (t.IsFaulted && t.Exception != null)
@@ -458,12 +440,8 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            // Delay loading indicator dismissal slightly to avoid flicker
             await Task.Delay(100);
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                IsLoading = false;
-            });
+            await SetLoadingStateAsync(false);
         }
     }
 
@@ -488,9 +466,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             return;
         }
 
-        IsLoading = true;
         try
         {
+            await SetLoadingStateAsync(true);
+
             PlantListItemViewModel? plantVM = Plants.FirstOrDefault(e => e.Id == message.PlantId);
             if (plantVM is null)
             { return; }
@@ -505,7 +484,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
             {
                 UpdatePlantViewModel(plantVM, plantDB);
 
-                // Reorder needed if name changed
                 if (originalName.CompareTo(plantVM.Name) != 0)
                 {
                     Plants.Remove(plantVM);
@@ -513,12 +491,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                     InsertPlant(plantVM);
                 }
 
-                // Update cache with the same reordering logic
                 int cacheIndex = _allPlantViewModelsCache.FindIndex(x => x.Id == plantVM.Id);
                 if (cacheIndex >= 0)
                 {
                     _allPlantViewModelsCache[cacheIndex] = plantVM;
-                    // Re-sort cache if name changed
                     if (originalName.CompareTo(plantVM.Name) != 0)
                     {
                         _allPlantViewModelsCache.Sort((x, y) => x.Name.CompareTo(y.Name));
@@ -539,10 +515,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                IsLoading = false;
-            });
+            await SetLoadingStateAsync(false);
         }
     }
 
@@ -581,10 +554,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                IsLoading = false;
-            });
+            await SetLoadingStateAsync(false);
 
             // Show toast after loading is complete
             if (!string.IsNullOrWhiteSpace(deletedName))
@@ -613,7 +583,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
-            IsBusy = false;
+            await SetBusyStateAsync(true);
 
             if (Plants.Count == 0)
             {
@@ -632,7 +602,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         finally
         {
             IsPlantStatesRefreshing = false;
-            IsBusy = false;
+            await SetBusyStateAsync(false);
         }
     }
 
@@ -905,10 +875,11 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
     {
         if (_notificationService.IsSupported && DeviceService.IsLocalNotificationSupported())
         {
-            int noticeId = plantId.GetHashCode();
+            int wateringId = GetNotificationId(CareType.Watering, plantId);
+            int fertilizationId = GetNotificationId(CareType.Fertilization, plantId);
 
-            await CancelPendingNotificationAsync(noticeId, name);
-            await CancelPendingNotificationAsync(-noticeId, name);
+            await CancelPendingNotificationAsync(wateringId, name);
+            await CancelPendingNotificationAsync(fertilizationId, name);
         }
     }
 
@@ -990,7 +961,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
         try
         {
-            IsLoading = true;
+            await SetLoadingStateAsync(true);
 
             PlantListItemViewModel? updatePlant = Plants.FirstOrDefault(x => x.Id == message.PlantId);
             if (updatePlant is null)
@@ -1042,7 +1013,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            IsLoading = false;
+            await SetLoadingStateAsync(false);
         }
     }
 
@@ -1085,9 +1056,10 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
 
     async void IRecipient<DataImportMessage>.Receive(DataImportMessage message)
     {
-        IsLoading = true;
         try
         {
+            await SetLoadingStateAsync(true);
+
             Plants.Clear();
             await LoadDataWhenViewAppearingAsync();
         }
@@ -1097,7 +1069,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
         }
         finally
         {
-            IsLoading = false;
+            await SetLoadingStateAsync(false);
         }
     }
 

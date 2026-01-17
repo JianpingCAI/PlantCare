@@ -196,7 +196,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         try
         {
-            IsLoading = true;
+            await SetLoadingStateAsync(true);
 
 #if ANDROID
             // On Android, use FileSaver instead of FolderPicker for better compatibility
@@ -295,7 +295,7 @@ public partial class SettingsViewModel : ViewModelBase
         }
         finally
         {
-            IsLoading = false;
+            await SetLoadingStateAsync(false);
         }
     }
 
@@ -322,7 +322,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         try
         {
-            IsLoading = true;
+            await SetLoadingStateAsync(true);
 
             FilePickerFileType zipFileType = new(new Dictionary<DevicePlatform, IEnumerable<string>>
                                                   {
@@ -371,7 +371,7 @@ public partial class SettingsViewModel : ViewModelBase
         }
         finally
         {
-            IsLoading = false;
+            await SetLoadingStateAsync(false);
         }
     }
 
@@ -380,7 +380,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         try
         {
-            IsLoading = true;
+            await SetLoadingStateAsync(true);
 
             await _navigationService.GotoLogsViewer();
         }
@@ -390,7 +390,7 @@ public partial class SettingsViewModel : ViewModelBase
         }
         finally
         {
-            IsLoading = false;
+            await SetLoadingStateAsync(false);
         }
     }
 }

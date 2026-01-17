@@ -259,8 +259,8 @@ namespace PlantCare.App.ViewModels
                     return;
                 }
 
-                IsLoading = true;
-                IsBusy = true;
+                await SetLoadingStateAsync(true);
+                await SetBusyStateAsync(true);
 
                 // Add/Create a plant
                 if (Id == default)
@@ -332,11 +332,8 @@ namespace PlantCare.App.ViewModels
             }
             finally
             {
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    IsLoading = false;
-                    IsBusy = false;
-                });
+                await SetLoadingStateAsync(false);
+                await SetBusyStateAsync(false);
             }
         }
 
@@ -349,7 +346,7 @@ namespace PlantCare.App.ViewModels
         {
             try
             {
-                IsLoading = true;
+                await SetLoadingStateAsync(true);
                 FileResult? photoFileResult = await FilePicker.PickAsync(new PickOptions
                 {
                     FileTypes = FilePickerFileType.Images,
@@ -369,7 +366,7 @@ namespace PlantCare.App.ViewModels
                         sourceStream, 
                         fileName);
 
-                    await MainThread.InvokeOnMainThreadAsync(() => { PhotoPath = localFilePath; });
+                    await SetPropertyAsync(v => PhotoPath = v, localFilePath);
                 }
             }
             catch (Exception ex)
@@ -378,7 +375,7 @@ namespace PlantCare.App.ViewModels
             }
             finally
             {
-                IsLoading = false;
+                await SetLoadingStateAsync(false);
             }
         }
 
@@ -387,7 +384,7 @@ namespace PlantCare.App.ViewModels
         {
             try
             {
-                IsLoading = true;
+                await SetLoadingStateAsync(true);
 
                 if (MediaPicker.Default.IsCaptureSupported)
                 {
@@ -406,7 +403,7 @@ namespace PlantCare.App.ViewModels
                             sourceStream, 
                             fileName);
 
-                        await MainThread.InvokeOnMainThreadAsync(() => { PhotoPath = localFilePath; });
+                        await SetPropertyAsync(v => PhotoPath = v, localFilePath);
                     }
                 }
             }
@@ -416,7 +413,7 @@ namespace PlantCare.App.ViewModels
             }
             finally
             {
-                IsLoading = false;
+                await SetLoadingStateAsync(false);
             }
         }
 
