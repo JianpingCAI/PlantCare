@@ -307,7 +307,7 @@
     <Style x:Key="SettingsItemDescriptionStyle" TargetType="Label">
         <Setter Property="FontFamily" Value="OpenSansRegular" />
         <Setter Property="FontSize" Value="13" />
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray500}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
         <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
@@ -596,13 +596,13 @@
         <Setter Property="StrokeShape">
             <RoundRectangle CornerRadius="16" />
         </Setter>
-        <!--<Setter Property="Shadow">
+        <Setter Property="Shadow">
             <Shadow
                 Brush="Black"
                 Opacity="0.06"
                 Radius="8"
                 Offset="0,1" />
-        </Setter>-->
+        </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -621,8 +621,8 @@
                     </VisualState>
                     <VisualState x:Name="Selected">
                         <VisualState.Setters>
-                            <Setter Property="Scale" Value="0.95" />
-                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#EBEBEB, Dark=#1F1F1F}" />
+                            <Setter Property="Scale" Value="0.98" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#F0F7F2, Dark=#24352A}" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>

@@ -70,6 +70,9 @@
                 HorizontalOptions="End"
                 Style="{StaticResource FabButtonStyle}"
                 VerticalOptions="Center">
+                <SemanticProperties.Description>
+                    Add a new plant
+                </SemanticProperties.Description>
                 <Button.ImageSource>
                     <FontImageSource
                         FontFamily="MaterialIconsRegular"
@@ -119,6 +122,7 @@
                     PlaceholderColor="{AppThemeBinding Light={StaticResource Gray600},
                                                        Dark={StaticResource Gray400}}"
                     SearchCommand="{Binding SearchCommand}"
+                    SemanticProperties.Description="Search your plants by name"
                     Text="{Binding SearchText}"
                     TextColor="{AppThemeBinding Light={StaticResource Gray900},
                                                 Dark={StaticResource White}}"
@@ -232,8 +236,11 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:PlantListItemViewModel">
                             <!--  Enhanced Plant Card  -->
-                            <Border Padding="0" Style="{StaticResource InteractiveCardStyle}">
-                                <Grid RowDefinitions="auto,auto">
+                            <Border
+                                Padding="0"
+                                SemanticProperties.Description="{Binding Name}"
+                                Style="{StaticResource InteractiveCardStyle}">
+                                <Grid RowDefinitions="auto,auto" RowSpacing="4">
                                     <!--  Plant Image Container  -->
                                     <Grid>
                                         <!--  Plant Photo  -->
@@ -280,7 +287,7 @@
                                     <!--  Plant Name  -->
                                     <Label
                                         Grid.Row="1"
-                                        Padding="10,0"
+                                        Padding="10,8,10,10"
                                         FontFamily="OpenSansRegular"
                                         HorizontalOptions="Center"
                                         LineBreakMode="TailTruncation"

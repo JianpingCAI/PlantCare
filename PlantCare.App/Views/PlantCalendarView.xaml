@@ -60,6 +60,9 @@
                 Style="{StaticResource FabButtonStyle}"
                 Text="&#xe877;"
                 VerticalOptions="Center">
+                <SemanticProperties.Description>
+                    Mark selected reminders as done
+                </SemanticProperties.Description>
                 <Button.Shadow>
                     <Shadow
                         Brush="{StaticResource Primary}"
@@ -83,9 +86,9 @@
             <Color x:Key="ContentTextColor">Black</Color>
             <Color x:Key="PageTextColor">Black</Color>
 
-            <Color x:Key="CalendarPrimaryColor">#E00000</Color>
+            <Color x:Key="CalendarPrimaryColor">#2D5016</Color>
             <Color x:Key="CalendarBackgroundColor">White</Color>
-            <Color x:Key="CalendarTertiaryColor">#FFA0A0</Color>
+            <Color x:Key="CalendarTertiaryColor">#A8D5BA</Color>
             <Color x:Key="CalendarPrimaryTextColor">White</Color>
             <Color x:Key="CalendarBackgroundTextColor">Black</Color>
 
@@ -114,13 +117,17 @@
             <Grid Grid.ColumnSpan="2" ColumnDefinitions="*,*">
                 <!--  Show Unattended  -->
                 <HorizontalStackLayout HorizontalOptions="Start">
-                    <CheckBox IsChecked="{Binding IsShowUnattendedOnly, Mode=TwoWay}" />
+                    <CheckBox
+                        IsChecked="{Binding IsShowUnattendedOnly, Mode=TwoWay}"
+                        SemanticProperties.Description="Show unattended care reminders only" />
                     <Label Style="{StaticResource BodyStyle}" Text="{Binding Path=[UnattendedOnly], Source={x:Static utils:LocalizationManager.Instance}}" />
                 </HorizontalStackLayout>
 
                 <!--  Show Calendar  -->
                 <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
-                    <CheckBox IsChecked="{Binding IsShowCalendar, Mode=TwoWay}" />
+                    <CheckBox
+                        IsChecked="{Binding IsShowCalendar, Mode=TwoWay}"
+                        SemanticProperties.Description="Show calendar" />
                     <Label
                         Margin="0,0,5,0"
                         Style="{StaticResource BodyStyle}"
@@ -144,7 +151,7 @@
                 IsVisible="{Binding SelectedDate, Converter={toolkit:IsNotNullConverter}}"
                 Style="{StaticResource BodyStyle}"
                 Text="{Binding SelectedDate, StringFormat='{0:MM/dd}'}"
-                TextColor="DeepSkyBlue" />
+                TextColor="{StaticResource Primary}" />
 
             <!--  Plant Events  -->
             <Grid
@@ -169,7 +176,9 @@
 
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="vm:PlantEvent">
-                                <Border Style="{StaticResource InteractiveCardStyle}">
+                                <Border
+                                    SemanticProperties.Description="{Binding Name}"
+                                    Style="{StaticResource InteractiveCardStyle}">
                                     <Grid RowDefinitions="*,Auto">
                                         <Border StrokeThickness="0">
                                             <Border.StrokeShape>
@@ -249,7 +258,11 @@
                         HorizontalOptions="End"
                         Style="{StaticResource HeadlineSmallStyle}"
                         Text="&#xead0;"
-                        WidthRequest="60" />
+                        WidthRequest="60">
+                        <SemanticProperties.Description>
+                            Hide calendar
+                        </SemanticProperties.Description>
+                    </Button>
 
                     <plugin:Calendar
                         x:Name="PluginCalendar"

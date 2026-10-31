@@ -60,6 +60,7 @@
         <!--  Home  -->
         <ShellContent
             x:Name="tabHome"
+            AutomationProperties.Name="Home"
             Title="{Binding Path=[Home], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:PlantOverviewView}"
             Route="overview">
@@ -75,6 +76,7 @@
         <!--  Care Schedule  -->
         <ShellContent
             x:Name="tabCalendar"
+            AutomationProperties.Name="Care schedule"
             Title="{Binding Path=[Care], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:PlantCalendarView}"
             Route="calendar">
@@ -90,6 +92,7 @@
         <!--  History  -->
         <ShellContent
             x:Name="tabHistory"
+            AutomationProperties.Name="Care history"
             Title="{Binding Path=[History], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:CareHistoryView}"
             Route="careHistory">
@@ -105,6 +108,7 @@
         <!--  Settings  -->
         <ShellContent
             x:Name="tabSettings"
+            AutomationProperties.Name="Settings"
             Title="{Binding Path=[Settings], Source={x:Static utils:LocalizationManager.Instance}, Mode=OneTime}"
             ContentTemplate="{DataTemplate views:SettingsView}"
             Route="settings">
