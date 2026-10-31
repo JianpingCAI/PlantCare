@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using PlantCare.App.Messaging;
 using PlantCare.Data.Models;
 using Plugin.LocalNotification;
-using Plugin.LocalNotification.AndroidOption;
+using Plugin.LocalNotification.Core.Models;
 using System.Text.Json;
 using Plugin.LocalNotification.EventArgs;
 using PlantCare.App.Services.DBService;
@@ -216,15 +216,7 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 if (await _notificationService.AreNotificationsEnabled() == false)
                 {
                     // Request notification permission with platform-specific options
-                    var permission = new NotificationPermission
-                    {
-#if ANDROID
-                        Android = new AndroidNotificationPermission
-                        {
-                            RequestPermissionToScheduleExactAlarm = true
-                        }
-#endif
-                    };
+                    var permission = new NotificationPermission();
 
                     bool result = await _notificationService.RequestNotificationPermission(permission);
                     if (!result)
@@ -711,7 +703,6 @@ public partial class PlantListOverviewViewModel : ViewModelBase,
                 Title = title,
                 Description = $"Scheduled {reminderType} Time: {scheduledTime}",
                 ReturningData = serializeReturningData,
-                Group = AndroidOptions.DefaultGroupId,
                 Schedule =
                 {
                     NotifyTime = scheduledTime,

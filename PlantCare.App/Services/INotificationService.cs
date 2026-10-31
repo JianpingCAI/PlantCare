@@ -1,4 +1,5 @@
 using Plugin.LocalNotification;
+using Plugin.LocalNotification.Core.Models;
 using Plugin.LocalNotification.EventArgs;
 
 namespace PlantCare.App.Services;

@@ -1,4 +1,5 @@
 using Plugin.LocalNotification;
+using Plugin.LocalNotification.Core.Models;
 using Plugin.LocalNotification.EventArgs;
 
 namespace PlantCare.App.Services;
@@ -115,7 +116,7 @@ public class NotificationService : INotificationService, IDisposable
 
         try
         {
-            return await LocalNotificationCenter.Current.AreNotificationsEnabled();
+            return await LocalNotificationCenter.Current.AreNotificationsEnabled(new NotificationPermission());
         }
         catch
         {
@@ -132,7 +133,7 @@ public class NotificationService : INotificationService, IDisposable
 
         try
         {
-            return await LocalNotificationCenter.Current.RequestNotificationPermission();
+            return await LocalNotificationCenter.Current.RequestNotificationPermission(new NotificationPermission());
         }
         catch
         {

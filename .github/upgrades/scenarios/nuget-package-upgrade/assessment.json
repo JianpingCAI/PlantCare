@@ -1,0 +1,931 @@
+{
+  "settings": {
+    "components": {
+      "code": true,
+      "binaries": false
+    },
+    "targetId": ""
+  },
+  "analysisStartTime": "2026-10-31T04:03:10.7396806Z",
+  "analysisEndTime": "2026-10-31T04:03:10.9116671Z",
+  "privacyModeHelpUrl": "https://go.microsoft.com/fwlink/?linkid=2270980",
+  "stats": {
+    "summary": {
+      "projects": 3,
+      "issues": 1,
+      "incidents": 33,
+      "effort": 0
+    },
+    "charts": {
+      "severity": {
+        "Mandatory": 0,
+        "Optional": 0,
+        "Potential": 0,
+        "Information": 33
+      },
+      "category": {
+        "Pkg": 33
+      }
+    }
+  },
+  "projects": [
+    {
+      "path": "PlantCare.App\\PlantCare.App.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "PlantCare.App",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net10.0",
+          "net10.0-android",
+          "net10.0-ios",
+          "net10.0-windows10.0.26100.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "isTestProject": false,
+        "numberOfFiles": 104,
+        "numberOfCodeFiles": 102,
+        "linesTotal": 10927,
+        "linesOfCode": 10225,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "2818f349-af72-43c3-94ac-ec3c2c5e55a3",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027AutoMapper\u0027 16.2.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "AutoMapper, 16.2.0",
+              "protected": "AutoMapper, 16.2.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "AutoMapper, 16.2.0",
+            "protectedSnippet": "AutoMapper, 16.2.0",
+            "label": "AutoMapper 16.2.0",
+            "properties": {
+              "PackageId": "AutoMapper",
+              "PackageVersion": "16.2.0",
+              "PackageNewVersion": "16.2.0",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "a031fd54-6f17-44a0-8d85-8b8d6595d1ec",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027CommunityToolkit.Maui\u0027 15.0.1 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "CommunityToolkit.Maui, 15.0.1",
+              "protected": "CommunityToolkit.Maui, 15.0.1"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "CommunityToolkit.Maui, 15.0.1",
+            "protectedSnippet": "CommunityToolkit.Maui, 15.0.1",
+            "label": "CommunityToolkit.Maui 15.0.1",
+            "properties": {
+              "PackageId": "CommunityToolkit.Maui",
+              "PackageVersion": "15.0.1",
+              "PackageNewVersion": "15.0.1",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "035127c7-6e5e-44b6-913c-d818810d95a8",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027CommunityToolkit.Maui.Core\u0027 15.0.1 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "CommunityToolkit.Maui.Core, 15.0.1",
+              "protected": "CommunityToolkit.Maui.Core, 15.0.1"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "CommunityToolkit.Maui.Core, 15.0.1",
+            "protectedSnippet": "CommunityToolkit.Maui.Core, 15.0.1",
+            "label": "CommunityToolkit.Maui.Core 15.0.1",
+            "properties": {
+              "PackageId": "CommunityToolkit.Maui.Core",
+              "PackageVersion": "15.0.1",
+              "PackageNewVersion": "15.0.1",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "5dd5a709-3078-408f-8efa-05bf346ff616",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027CommunityToolkit.Mvvm\u0027 8.4.2 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "CommunityToolkit.Mvvm, 8.4.2",
+              "protected": "CommunityToolkit.Mvvm, 8.4.2"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "CommunityToolkit.Mvvm, 8.4.2",
+            "protectedSnippet": "CommunityToolkit.Mvvm, 8.4.2",
+            "label": "CommunityToolkit.Mvvm 8.4.2",
+            "properties": {
+              "PackageId": "CommunityToolkit.Mvvm",
+              "PackageVersion": "8.4.2",
+              "PackageNewVersion": "8.4.2",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "a3a4dcc8-4782-4abb-895d-1a9427c1151c",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027LiveChartsCore.SkiaSharpView.Maui\u0027 2.0.5 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "LiveChartsCore.SkiaSharpView.Maui, 2.0.5",
+              "protected": "LiveChartsCore.SkiaSharpView.Maui, 2.0.5"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "LiveChartsCore.SkiaSharpView.Maui, 2.0.5",
+            "protectedSnippet": "LiveChartsCore.SkiaSharpView.Maui, 2.0.5",
+            "label": "LiveChartsCore.SkiaSharpView.Maui 2.0.5",
+            "properties": {
+              "PackageId": "LiveChartsCore.SkiaSharpView.Maui",
+              "PackageVersion": "2.0.5",
+              "PackageNewVersion": "2.0.5",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "7ed3deb8-646d-4146-9dec-32d38dc1d68b",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Microsoft.Extensions.DependencyInjection\u0027 10.0.14 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.Extensions.DependencyInjection, 10.0.14",
+              "protected": "Microsoft.Extensions.DependencyInjection, 10.0.14"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "Microsoft.Extensions.DependencyInjection, 10.0.14",
+            "protectedSnippet": "Microsoft.Extensions.DependencyInjection, 10.0.14",
+            "label": "Microsoft.Extensions.DependencyInjection 10.0.14",
+            "properties": {
+              "PackageId": "Microsoft.Extensions.DependencyInjection",
+              "PackageVersion": "10.0.14",
+              "PackageNewVersion": "10.0.14",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "f16539dc-3ce4-4b78-8c08-0de2af0dd2b7",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Microsoft.Extensions.Hosting.Abstractions\u0027 10.0.14 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.Extensions.Hosting.Abstractions, 10.0.14",
+              "protected": "Microsoft.Extensions.Hosting.Abstractions, 10.0.14"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "Microsoft.Extensions.Hosting.Abstractions, 10.0.14",
+            "protectedSnippet": "Microsoft.Extensions.Hosting.Abstractions, 10.0.14",
+            "label": "Microsoft.Extensions.Hosting.Abstractions 10.0.14",
+            "properties": {
+              "PackageId": "Microsoft.Extensions.Hosting.Abstractions",
+              "PackageVersion": "10.0.14",
+              "PackageNewVersion": "10.0.14",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "86d47176-08f3-4ed3-b0a8-191a377392b6",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Microsoft.Extensions.Logging.Debug\u0027 10.0.14 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.Extensions.Logging.Debug, 10.0.14",
+              "protected": "Microsoft.Extensions.Logging.Debug, 10.0.14"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "Microsoft.Extensions.Logging.Debug, 10.0.14",
+            "protectedSnippet": "Microsoft.Extensions.Logging.Debug, 10.0.14",
+            "label": "Microsoft.Extensions.Logging.Debug 10.0.14",
+            "properties": {
+              "PackageId": "Microsoft.Extensions.Logging.Debug",
+              "PackageVersion": "10.0.14",
+              "PackageNewVersion": "10.0.14",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "e89c4d6c-bc88-418e-976f-6dbd79be4b81",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Microsoft.Maui.Controls\u0027 10.0.120 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.Maui.Controls, 10.0.120",
+              "protected": "Microsoft.Maui.Controls, 10.0.120"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "Microsoft.Maui.Controls, 10.0.120",
+            "protectedSnippet": "Microsoft.Maui.Controls, 10.0.120",
+            "label": "Microsoft.Maui.Controls 10.0.120",
+            "properties": {
+              "PackageId": "Microsoft.Maui.Controls",
+              "PackageVersion": "10.0.120",
+              "PackageNewVersion": "10.0.120",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "86eac0ff-dd80-47d8-87b9-7215dde29c55",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Microsoft.Maui.Controls.Compatibility\u0027 10.0.120 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.Maui.Controls.Compatibility, 10.0.120",
+              "protected": "Microsoft.Maui.Controls.Compatibility, 10.0.120"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "Microsoft.Maui.Controls.Compatibility, 10.0.120",
+            "protectedSnippet": "Microsoft.Maui.Controls.Compatibility, 10.0.120",
+            "label": "Microsoft.Maui.Controls.Compatibility 10.0.120",
+            "properties": {
+              "PackageId": "Microsoft.Maui.Controls.Compatibility",
+              "PackageVersion": "10.0.120",
+              "PackageNewVersion": "10.0.120",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "ba69fdeb-ee45-4921-a5e1-9f72dcf9777c",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Plugin.LocalNotification\u0027 13.0.0; proposed upgrade to 14.1.2.",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Plugin.LocalNotification, 13.0.0",
+              "protected": "Plugin.LocalNotification, 13.0.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "Plugin.LocalNotification, 13.0.0",
+            "protectedSnippet": "Plugin.LocalNotification, 13.0.0",
+            "label": "Plugin.LocalNotification 13.0.0",
+            "properties": {
+              "PackageId": "Plugin.LocalNotification",
+              "PackageVersion": "13.0.0",
+              "PackageNewVersion": "14.1.2",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "6ec3a703-a7e2-4e1e-8b9e-a300411b071b",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Plugin.Maui.Calendar\u0027 3.1.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Plugin.Maui.Calendar, 3.1.0",
+              "protected": "Plugin.Maui.Calendar, 3.1.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "Plugin.Maui.Calendar, 3.1.0",
+            "protectedSnippet": "Plugin.Maui.Calendar, 3.1.0",
+            "label": "Plugin.Maui.Calendar 3.1.0",
+            "properties": {
+              "PackageId": "Plugin.Maui.Calendar",
+              "PackageVersion": "3.1.0",
+              "PackageNewVersion": "3.1.0",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "652d1e29-f5ee-43ea-8cf7-beefd6620820",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Serilog\u0027 4.4.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Serilog, 4.4.0",
+              "protected": "Serilog, 4.4.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "Serilog, 4.4.0",
+            "protectedSnippet": "Serilog, 4.4.0",
+            "label": "Serilog 4.4.0",
+            "properties": {
+              "PackageId": "Serilog",
+              "PackageVersion": "4.4.0",
+              "PackageNewVersion": "4.4.0",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "aede5dc7-29ee-4cb3-bf3d-4a3dca48ec53",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Serilog.Extensions.Logging\u0027 10.0.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Serilog.Extensions.Logging, 10.0.0",
+              "protected": "Serilog.Extensions.Logging, 10.0.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "Serilog.Extensions.Logging, 10.0.0",
+            "protectedSnippet": "Serilog.Extensions.Logging, 10.0.0",
+            "label": "Serilog.Extensions.Logging 10.0.0",
+            "properties": {
+              "PackageId": "Serilog.Extensions.Logging",
+              "PackageVersion": "10.0.0",
+              "PackageNewVersion": "10.0.0",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "d712037f-7900-4a6e-9c36-31fc04d80e0c",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Serilog.Sinks.File\u0027 7.0.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Serilog.Sinks.File, 7.0.0",
+              "protected": "Serilog.Sinks.File, 7.0.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "Serilog.Sinks.File, 7.0.0",
+            "protectedSnippet": "Serilog.Sinks.File, 7.0.0",
+            "label": "Serilog.Sinks.File 7.0.0",
+            "properties": {
+              "PackageId": "Serilog.Sinks.File",
+              "PackageVersion": "7.0.0",
+              "PackageNewVersion": "7.0.0",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "87b10085-e1a6-46d3-8830-d2cdf5e914d9",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027SkiaSharp.Views.Maui.Controls\u0027 4.154.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "SkiaSharp.Views.Maui.Controls, 4.154.0",
+              "protected": "SkiaSharp.Views.Maui.Controls, 4.154.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "SkiaSharp.Views.Maui.Controls, 4.154.0",
+            "protectedSnippet": "SkiaSharp.Views.Maui.Controls, 4.154.0",
+            "label": "SkiaSharp.Views.Maui.Controls 4.154.0",
+            "properties": {
+              "PackageId": "SkiaSharp.Views.Maui.Controls",
+              "PackageVersion": "4.154.0",
+              "PackageNewVersion": "4.154.0",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "09d85bfe-4bf0-48d7-910e-ef769d1ac5f9",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027System.Drawing.Common\u0027 10.0.14 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Drawing.Common, 10.0.14",
+              "protected": "System.Drawing.Common, 10.0.14"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "System.Drawing.Common, 10.0.14",
+            "protectedSnippet": "System.Drawing.Common, 10.0.14",
+            "label": "System.Drawing.Common 10.0.14",
+            "properties": {
+              "PackageId": "System.Drawing.Common",
+              "PackageVersion": "10.0.14",
+              "PackageNewVersion": "10.0.14",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "287b448a-3b4b-40f9-934d-a9e220697233",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027System.Security.Cryptography.ProtectedData\u0027 10.0.14 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Security.Cryptography.ProtectedData, 10.0.14",
+              "protected": "System.Security.Cryptography.ProtectedData, 10.0.14"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "System.Security.Cryptography.ProtectedData, 10.0.14",
+            "protectedSnippet": "System.Security.Cryptography.ProtectedData, 10.0.14",
+            "label": "System.Security.Cryptography.ProtectedData 10.0.14",
+            "properties": {
+              "PackageId": "System.Security.Cryptography.ProtectedData",
+              "PackageVersion": "10.0.14",
+              "PackageNewVersion": "10.0.14",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "b2a68c68-fb1c-4fbc-83f6-25489f279657",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027AutoMapper\u0027 16.2.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App\\PlantCare.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "AutoMapper, 16.2.0",
+              "protected": "AutoMapper, 16.2.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App\\PlantCare.App.csproj",
+            "snippet": "AutoMapper, 16.2.0",
+            "protectedSnippet": "AutoMapper, 16.2.0",
+            "label": "AutoMapper 16.2.0",
+            "properties": {
+              "PackageId": "AutoMapper",
+              "PackageVersion": "16.2.0",
+              "PackageNewVersion": "16.2.0",
+              "PackageReplacements": null
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "PlantCare.App.Tests",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net10.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "isTestProject": true,
+        "numberOfFiles": 8,
+        "numberOfCodeFiles": 6,
+        "linesTotal": 3063,
+        "linesOfCode": 424,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "6308c22f-ad9e-4505-baef-d06d1417ba2a",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027AutoMapper\u0027 16.2.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "AutoMapper, 16.2.0",
+              "protected": "AutoMapper, 16.2.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+            "snippet": "AutoMapper, 16.2.0",
+            "protectedSnippet": "AutoMapper, 16.2.0",
+            "label": "AutoMapper 16.2.0",
+            "properties": {
+              "PackageId": "AutoMapper",
+              "PackageVersion": "16.2.0",
+              "PackageNewVersion": "16.2.0",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "f4dd6e02-6da0-462b-ba59-5fc809754290",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027CommunityToolkit.Maui\u0027 15.0.1 (included in this upgrade).",
+          "projectPath": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "CommunityToolkit.Maui, 15.0.1",
+              "protected": "CommunityToolkit.Maui, 15.0.1"
+            },
+            "kind": "File",
+            "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+            "snippet": "CommunityToolkit.Maui, 15.0.1",
+            "protectedSnippet": "CommunityToolkit.Maui, 15.0.1",
+            "label": "CommunityToolkit.Maui 15.0.1",
+            "properties": {
+              "PackageId": "CommunityToolkit.Maui",
+              "PackageVersion": "15.0.1",
+              "PackageNewVersion": "15.0.1",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "bb475229-c3d1-4bc7-9dec-548ba4132cd2",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027CommunityToolkit.Mvvm\u0027 8.4.2 (included in this upgrade).",
+          "projectPath": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "CommunityToolkit.Mvvm, 8.4.2",
+              "protected": "CommunityToolkit.Mvvm, 8.4.2"
+            },
+            "kind": "File",
+            "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+            "snippet": "CommunityToolkit.Mvvm, 8.4.2",
+            "protectedSnippet": "CommunityToolkit.Mvvm, 8.4.2",
+            "label": "CommunityToolkit.Mvvm 8.4.2",
+            "properties": {
+              "PackageId": "CommunityToolkit.Mvvm",
+              "PackageVersion": "8.4.2",
+              "PackageNewVersion": "8.4.2",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "8a4182c8-7b1c-4b8c-a8f2-0ad4ca3f8302",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Plugin.LocalNotification\u0027 13.0.0; proposed upgrade to 14.1.2.",
+          "projectPath": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Plugin.LocalNotification, 13.0.0",
+              "protected": "Plugin.LocalNotification, 13.0.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+            "snippet": "Plugin.LocalNotification, 13.0.0",
+            "protectedSnippet": "Plugin.LocalNotification, 13.0.0",
+            "label": "Plugin.LocalNotification 13.0.0",
+            "properties": {
+              "PackageId": "Plugin.LocalNotification",
+              "PackageVersion": "13.0.0",
+              "PackageNewVersion": "14.1.2",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "66cf203f-cfc6-401f-9b8a-a6e4baffb53b",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027AutoMapper\u0027 16.2.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "AutoMapper, 16.2.0",
+              "protected": "AutoMapper, 16.2.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+            "snippet": "AutoMapper, 16.2.0",
+            "protectedSnippet": "AutoMapper, 16.2.0",
+            "label": "AutoMapper 16.2.0",
+            "properties": {
+              "PackageId": "AutoMapper",
+              "PackageVersion": "16.2.0",
+              "PackageNewVersion": "16.2.0",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "a7f9b862-930f-4dea-bd0f-846cdece449d",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027coverlet.collector\u0027 10.1.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "coverlet.collector, 10.1.0",
+              "protected": "coverlet.collector, 10.1.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+            "snippet": "coverlet.collector, 10.1.0",
+            "protectedSnippet": "coverlet.collector, 10.1.0",
+            "label": "coverlet.collector 10.1.0",
+            "properties": {
+              "PackageId": "coverlet.collector",
+              "PackageVersion": "10.1.0",
+              "PackageNewVersion": "10.1.0",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "4c61bbc3-0fff-4928-9a57-047a18f7ebf1",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Microsoft.EntityFrameworkCore.InMemory\u0027 10.0.14 (included in this upgrade).",
+          "projectPath": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.EntityFrameworkCore.InMemory, 10.0.14",
+              "protected": "Microsoft.EntityFrameworkCore.InMemory, 10.0.14"
+            },
+            "kind": "File",
+            "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+            "snippet": "Microsoft.EntityFrameworkCore.InMemory, 10.0.14",
+            "protectedSnippet": "Microsoft.EntityFrameworkCore.InMemory, 10.0.14",
+            "label": "Microsoft.EntityFrameworkCore.InMemory 10.0.14",
+            "properties": {
+              "PackageId": "Microsoft.EntityFrameworkCore.InMemory",
+              "PackageVersion": "10.0.14",
+              "PackageNewVersion": "10.0.14",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "1db570b2-f3bf-423d-ac8c-b2e8d60e1152",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Microsoft.NET.Test.Sdk\u0027 18.11.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.NET.Test.Sdk, 18.11.0",
+              "protected": "Microsoft.NET.Test.Sdk, 18.11.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+            "snippet": "Microsoft.NET.Test.Sdk, 18.11.0",
+            "protectedSnippet": "Microsoft.NET.Test.Sdk, 18.11.0",
+            "label": "Microsoft.NET.Test.Sdk 18.11.0",
+            "properties": {
+              "PackageId": "Microsoft.NET.Test.Sdk",
+              "PackageVersion": "18.11.0",
+              "PackageNewVersion": "18.11.0",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "754c7b63-9a24-4d88-9d71-3995eb2b11bd",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Moq\u0027 4.21.0 (included in this upgrade).",
+          "projectPath": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Moq, 4.21.0",
+              "protected": "Moq, 4.21.0"
+            },
+            "kind": "File",
+            "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+            "snippet": "Moq, 4.21.0",
+            "protectedSnippet": "Moq, 4.21.0",
+            "label": "Moq 4.21.0",
+            "properties": {
+              "PackageId": "Moq",
+              "PackageVersion": "4.21.0",
+              "PackageNewVersion": "4.21.0",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "aa7c3019-0eb9-4873-9509-90be904be25b",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027xunit\u0027 2.9.3 (included in this upgrade).",
+          "projectPath": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "xunit, 2.9.3",
+              "protected": "xunit, 2.9.3"
+            },
+            "kind": "File",
+            "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+            "snippet": "xunit, 2.9.3",
+            "protectedSnippet": "xunit, 2.9.3",
+            "label": "xunit 2.9.3",
+            "properties": {
+              "PackageId": "xunit",
+              "PackageVersion": "2.9.3",
+              "PackageNewVersion": "2.9.3",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "ee6a7cfb-3099-4ff1-a59f-b3c1f8faa851",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027xunit.runner.visualstudio\u0027 4.0.1 (included in this upgrade).",
+          "projectPath": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "xunit.runner.visualstudio, 4.0.1",
+              "protected": "xunit.runner.visualstudio, 4.0.1"
+            },
+            "kind": "File",
+            "path": "PlantCare.App.Tests\\PlantCare.App.Tests.csproj",
+            "snippet": "xunit.runner.visualstudio, 4.0.1",
+            "protectedSnippet": "xunit.runner.visualstudio, 4.0.1",
+            "label": "xunit.runner.visualstudio 4.0.1",
+            "properties": {
+              "PackageId": "xunit.runner.visualstudio",
+              "PackageVersion": "4.0.1",
+              "PackageNewVersion": "4.0.1",
+              "PackageReplacements": null
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "PlantCare.Data\\PlantCare.Data.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "PlantCare.Data",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net10.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "isTestProject": false,
+        "numberOfFiles": 33,
+        "numberOfCodeFiles": 33,
+        "linesTotal": 2241,
+        "linesOfCode": 2241,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "1d5baa62-11d0-4f3c-a8fb-08c578489eb6",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Microsoft.EntityFrameworkCore.Proxies\u0027 10.0.14 (included in this upgrade).",
+          "projectPath": "PlantCare.Data\\PlantCare.Data.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.EntityFrameworkCore.Proxies, 10.0.14",
+              "protected": "Microsoft.EntityFrameworkCore.Proxies, 10.0.14"
+            },
+            "kind": "File",
+            "path": "PlantCare.Data\\PlantCare.Data.csproj",
+            "snippet": "Microsoft.EntityFrameworkCore.Proxies, 10.0.14",
+            "protectedSnippet": "Microsoft.EntityFrameworkCore.Proxies, 10.0.14",
+            "label": "Microsoft.EntityFrameworkCore.Proxies 10.0.14",
+            "properties": {
+              "PackageId": "Microsoft.EntityFrameworkCore.Proxies",
+              "PackageVersion": "10.0.14",
+              "PackageNewVersion": "10.0.14",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "ee38b224-9b3f-436f-919e-ecb353d6f0b4",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Microsoft.EntityFrameworkCore.Sqlite\u0027 10.0.14 (included in this upgrade).",
+          "projectPath": "PlantCare.Data\\PlantCare.Data.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.EntityFrameworkCore.Sqlite, 10.0.14",
+              "protected": "Microsoft.EntityFrameworkCore.Sqlite, 10.0.14"
+            },
+            "kind": "File",
+            "path": "PlantCare.Data\\PlantCare.Data.csproj",
+            "snippet": "Microsoft.EntityFrameworkCore.Sqlite, 10.0.14",
+            "protectedSnippet": "Microsoft.EntityFrameworkCore.Sqlite, 10.0.14",
+            "label": "Microsoft.EntityFrameworkCore.Sqlite 10.0.14",
+            "properties": {
+              "PackageId": "Microsoft.EntityFrameworkCore.Sqlite",
+              "PackageVersion": "10.0.14",
+              "PackageNewVersion": "10.0.14",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "cc6d69ea-9c3c-4758-b7d4-2075ca05adf2",
+          "ruleId": "Pkg.0001",
+          "description": "Project references \u0027Microsoft.EntityFrameworkCore.Tools\u0027 10.0.14 (included in this upgrade).",
+          "projectPath": "PlantCare.Data\\PlantCare.Data.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.EntityFrameworkCore.Tools, 10.0.14",
+              "protected": "Microsoft.EntityFrameworkCore.Tools, 10.0.14"
+            },
+            "kind": "File",
+            "path": "PlantCare.Data\\PlantCare.Data.csproj",
+            "snippet": "Microsoft.EntityFrameworkCore.Tools, 10.0.14",
+            "protectedSnippet": "Microsoft.EntityFrameworkCore.Tools, 10.0.14",
+            "label": "Microsoft.EntityFrameworkCore.Tools 10.0.14",
+            "properties": {
+              "PackageId": "Microsoft.EntityFrameworkCore.Tools",
+              "PackageVersion": "10.0.14",
+              "PackageNewVersion": "10.0.14",
+              "PackageReplacements": null
+            }
+          }
+        }
+      ],
+      "features": []
+    }
+  ],
+  "rules": {
+    "Pkg.0001": {
+      "id": "Pkg.0001",
+      "isFeature": false,
+      "description": "Project references a package included in this upgrade.\n\nThe project references one of the packages being upgraded. This finding records the reference (current and proposed version) so the assessment lists every affected project even when no breaking API changes were detected.",
+      "label": "Project references an upgraded package",
+      "severity": "Information",
+      "effort": 0
+    }
+  }
+}
