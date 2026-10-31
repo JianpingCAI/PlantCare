@@ -125,12 +125,21 @@ See [docs/DATABASE_SCHEMA.md](docs/DATABASE_SCHEMA.md) for complete schema docum
 
 Comprehensive documentation is available in the `docs/` folder:
 
+### Core Documentation
 - **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - Technical architecture and design patterns
 - **[SETUP_DEVELOPMENT.md](docs/SETUP_DEVELOPMENT.md)** - Development environment setup guide
 - **[API_DOCUMENTATION.md](docs/API_DOCUMENTATION.md)** - Internal API and service documentation
 - **[DATABASE_SCHEMA.md](docs/DATABASE_SCHEMA.md)** - Database schema and migrations
+- **[DATABASE_AUTO_SEED_SOLUTION.md](docs/DATABASE_AUTO_SEED_SOLUTION.md)** - Auto-seed test data during development
 - **[TESTING.md](docs/TESTING.md)** - Testing strategy and guide
 - **[CHANGELOG.md](docs/CHANGELOG.md)** - Version history and changes
+
+### Tutorials & Guides
+- **[TUTORIAL_ONSEARCHTEXTCHANGED_BINDING.md](docs/TUTORIAL_ONSEARCHTEXTCHANGED_BINDING.md)** - Complete tutorial on how partial method binding works with CommunityToolkit.Mvvm
+
+### Technical Fixes
+- **[FIX_SEARCHBAR_CLOSE_BUTTON.md](docs/FIX_SEARCHBAR_CLOSE_BUTTON.md)** - SearchBar close button implementation and refactoring
+- **[CLEANUP_SUMMARY.md](docs/CLEANUP_SUMMARY.md)** - Database persistence solution cleanup summary
 
 ## Testing
 

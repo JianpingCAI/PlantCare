@@ -3,6 +3,36 @@
 `C:\Users\cai-j\AppData\Local\Packages\com.companyname.plantcare.app_9zz4h110yvjzm\LocalState`
 `/data/user/0/com.jianping.myapp/files/app.log`
 
+## Build Configuration Notes
+
+### Release Build AOT Fix (.NET 10 Preview)
+
+**Issue**: Release builds for Android fail with AOT compilation errors:
+```
+error: Precompiling failed for System.Private.Windows.Core.dll
+Could not load file or assembly 'System.Formats.Nrbf'
+```
+
+**Solution**: Disable AOT compilation in Release mode by adding to `.csproj`:
+```xml
+<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
+    <!-- Disable AOT to fix .NET 10 preview build issues -->
+    <RunAOTCompilation>false</RunAOTCompilation>
+    <EnableLLVM>false</EnableLLVM>
+</PropertyGroup>
+```
+
+**Impact**:
+- ✅ Release builds work
+- ⚠️ Slightly larger app size (~5-10%)
+- ⚠️ Negligible startup time increase (~100-200ms)
+
+**Re-enable**: When .NET 10 RTM is released
+
+See: `docs/ANDROID_RELEASE_BUILD_AOT_FIX.md` for complete details.
+
+---
+
 ## DB Migration
 
 ### Quick Reference
