@@ -16,7 +16,7 @@
     <Shell.TitleView>
         <Grid
             Padding="12,0,8,0"
-            ColumnDefinitions="auto,*"
+            ColumnDefinitions="auto,*,auto"
             ColumnSpacing="12">
             <!--  Icon  -->
             <Border
@@ -47,6 +47,27 @@
                 Text="{Binding Path=[CareSchedule], Source={x:Static utils:LocalizationManager.Instance}}"
                 VerticalOptions="Center"
                 VerticalTextAlignment="Center" />
+
+            <!--  Floating 'Done' button  -->
+            <Button
+                Grid.Column="2"
+                Margin="0,0,4,0"
+                Command="{Binding SetSelectedRemindersDoneCommand}"
+                CornerRadius="50"
+                FontFamily="MaterialIconsRegular"
+                HorizontalOptions="End"
+                IsEnabled="{Binding IsSetRemindersDoneEnabled}"
+                Style="{StaticResource FabButtonStyle}"
+                Text="&#xe877;"
+                VerticalOptions="Center">
+                <Button.Shadow>
+                    <Shadow
+                        Brush="{StaticResource Primary}"
+                        Opacity="0.3"
+                        Radius="8"
+                        Offset="0,4" />
+                </Button.Shadow>
+            </Button>
         </Grid>
     </Shell.TitleView>
 
@@ -198,26 +219,6 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </RefreshView>
-
-                <!--  Floating 'Done' button  -->
-                <Button
-                    Margin="0,0,20,20"
-                    Command="{Binding SetSelectedRemindersDoneCommand}"
-                    CornerRadius="50"
-                    FontFamily="MaterialIconsRegular"
-                    HorizontalOptions="End"
-                    IsEnabled="{Binding IsSetRemindersDoneEnabled}"
-                    Style="{StaticResource FabButtonStyle}"
-                    Text="&#xe877;"
-                    VerticalOptions="End">
-                    <Button.Shadow>
-                        <Shadow
-                            Brush="{StaticResource Primary}"
-                            Opacity="0.3"
-                            Radius="8"
-                            Offset="0,4" />
-                    </Button.Shadow>
-                </Button>
             </Grid>
 
             <!--  Calendar  -->
